@@ -339,7 +339,7 @@ public class DateTimeUtilsTests : BaseTest
 		bool success = DateTimeUtils.TryParseTimeSpan("invalid", out TimeSpan result);
 
 		Assert.That(success, Is.False);
-		Assert.That(result, Is.EqualTo(default(TimeSpan)));
+		Assert.That(result, Is.EqualTo(TimeSpan.Zero));
 	}
 
 	[Test]

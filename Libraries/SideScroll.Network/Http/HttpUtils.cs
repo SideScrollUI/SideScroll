@@ -5,27 +5,44 @@ using System.Text;
 
 namespace SideScroll.Network.Http;
 
+/// <summary>
+/// Static helpers for making HTTP GET and HEAD requests with automatic retries,
+/// optional download-progress reporting, and structured call logging.
+/// </summary>
 public static class HttpUtils
 {
+	/// <summary>Gets or sets the read buffer size in bytes used when streaming content with progress reporting.</summary>
 	public static int ReadBufferSize { get; set; } = 100_000;
+
+	/// <summary>Gets or sets the maximum number of retry attempts for a request before returning <c>null</c>.</summary>
 	public static int MaxAttempts { get; set; } = 5;
+
+	/// <summary>Gets or sets the base delay between retry attempts; doubled on each subsequent attempt.</summary>
 	public static TimeSpan BaseRetryDelay { get; set; } = TimeSpan.FromMilliseconds(500); // < ^ MaxAttempts
 
+	/// <summary>Gets or sets the shared <see cref="HttpClient"/> used for HEAD requests.</summary>
 	public static HttpClient Client { get; set; } = new();
 
+	/// <summary>Tracks download progress for a streaming HTTP GET request.</summary>
 	public class HttpGetProgress
 	{
+		/// <summary>Gets or sets the number of bytes downloaded so far.</summary>
 		public long Downloaded { get; set; }
+
+		/// <summary>Gets or sets the total content length in bytes.</summary>
 		public long TotalLength { get; set; }
 
+		/// <summary>Gets the download completion percentage (0–100).</summary>
 		public double Percent => 100.0 * Downloaded / TotalLength;
 	}
 
+	/// <summary>Synchronously fetches <paramref name="uri"/> and returns the response body as an ASCII string, or <c>null</c> on failure.</summary>
 	public static string? GetString(Call call, string uri)
 	{
 		return Task.Run(() => GetStringAsync(call, uri)).GetAwaiter().GetResult();
 	}
 
+	/// <summary>Asynchronously fetches <paramref name="uri"/> and returns the response body as an ASCII string, or <c>null</c> on failure.</summary>
 	public static async Task<string?> GetStringAsync(Call call, string uri)
 	{
 		var response = await GetBytesAsync(call, uri);
@@ -36,11 +53,13 @@ public static class HttpUtils
 		return Encoding.ASCII.GetString(bytes);
 	}
 
+	/// <summary>Synchronously fetches <paramref name="uri"/> and returns a <see cref="ViewHttpResponse"/>, or <c>null</c> on failure.</summary>
 	public static ViewHttpResponse? GetBytes(Call call, string uri, TimeSpan? timeout = null, IProgress<HttpGetProgress>? progress = null)
 	{
 		return Task.Run(() => GetBytesAsync(call, uri, timeout, progress)).GetAwaiter().GetResult();
 	}
 
+	/// <summary>Asynchronously fetches <paramref name="uri"/> and returns a <see cref="ViewHttpResponse"/>, or <c>null</c> on failure after all retry attempts.</summary>
 	public static async Task<ViewHttpResponse?> GetBytesAsync(Call call, string uri, TimeSpan? timeout = null, IProgress<HttpGetProgress>? progress = null)
 	{
 		using CallTimer getCall = call.Timer("Get Uri", new Tag("Uri", uri));
@@ -126,11 +145,13 @@ public static class HttpUtils
 		return memoryStream.ToArray();
 	}
 
+	/// <summary>Synchronously sends an HTTP HEAD request to <paramref name="uri"/> and returns the response, or <c>null</c> on failure.</summary>
 	public static HttpResponseMessage? GetHead(Call call, string uri)
 	{
 		return Task.Run(() => GetHeadAsync(call, uri)).GetAwaiter().GetResult();
 	}
 
+	/// <summary>Asynchronously sends an HTTP HEAD request to <paramref name="uri"/> and returns the response, or <c>null</c> on failure after all retry attempts.</summary>
 	public static async Task<HttpResponseMessage?> GetHeadAsync(Call call, string uri)
 	{
 		using CallTimer headCall = call.Timer("Head Uri", new Tag("Uri", uri));
@@ -173,31 +194,44 @@ public static class HttpUtils
 	}
 }
 
+/// <summary>Captures the result of an HTTP GET request including status, headers, raw bytes, and elapsed time.</summary>
 public class ViewHttpResponse
 {
+	/// <summary>Gets or sets the request URI.</summary>
 	[HiddenColumn]
 	public string? Uri { get; set; }
+
+	/// <summary>Gets or sets the filename extracted from the last URI path segment.</summary>
 	public string? Filename { get; set; }
 
+	/// <summary>Gets the response body decoded as an ASCII string.</summary>
 	[HiddenColumn]
 	public string Body => Encoding.ASCII.GetString(Bytes!);
 
+	/// <summary>Gets the HTTP status code of the response.</summary>
 	public HttpStatusCode? Status => Response?.StatusCode;
 
+	/// <summary>Gets or sets the raw response bytes.</summary>
 	[HiddenRow]
 	public byte[]? Bytes { get; set; }
+
+	/// <summary>Gets or sets the elapsed time of the request in milliseconds.</summary>
 	public double Milliseconds { get; set; }
 
+	/// <summary>Gets or sets an optional parsed view object derived from the response body.</summary>
 	[HiddenColumn, Hide(null)]
 	public object? View { get; set; }
 
+	/// <summary>Gets or sets the underlying <see cref="HttpResponseMessage"/> from the request.</summary>
 	[HiddenColumn]
 	public HttpResponseMessage? Response { get; set; }
 
 	public override string? ToString() => Filename;
 
+	/// <summary>Initializes an empty <see cref="ViewHttpResponse"/>.</summary>
 	public ViewHttpResponse() { }
 
+	/// <summary>Initializes a <see cref="ViewHttpResponse"/> from an existing response message and byte payload.</summary>
 	public ViewHttpResponse(HttpResponseMessage response, byte[] bytes)
 	{
 		Response = response;

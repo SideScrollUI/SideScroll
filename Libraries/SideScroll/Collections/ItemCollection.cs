@@ -90,6 +90,7 @@ public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComp
 
 	public override string ToString() => Label ?? "[" + Count.ToString("N0") + "]";
 
+	/// <summary>Initializes an empty <see cref="ItemCollection{T}"/>.</summary>
 	public ItemCollection() { }
 
 	/// <summary>

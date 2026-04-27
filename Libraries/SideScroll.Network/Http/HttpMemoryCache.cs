@@ -30,6 +30,7 @@ public class HttpMemoryCache
 	/// </summary>
 	public MemoryCache MemoryCache { get; }
 
+	/// <summary>Gets or sets the JSON deserialization options used when parsing fetched responses.</summary>
 	public JsonSerializerOptions JsonSerializerOptions { get; set; } = new()
 	{
 		IncludeFields = true,

@@ -32,6 +32,7 @@ public class TaskInstance : INotifyPropertyChanged
 	/// Event raised when a message should be displayed to the user
 	/// </summary>
 	public event EventHandler<ShowMessageEventArgs>? OnShowMessage;
+	
 	//public event EventHandler<EventArgs> OnComplete;
 
 	/// <summary>
@@ -473,7 +474,7 @@ public class TaskInstance : INotifyPropertyChanged
 			Task = Creator.StartTask(Call);
 
 			// ContinueWith works whether the task is already completed, running, or not yet started
-			Task.ContinueWith(_ => SetFinished());
+			Task.ContinueWith(_ => SetFinished(), CancelToken);
 		}
 		else
 		{

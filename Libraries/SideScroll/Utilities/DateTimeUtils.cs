@@ -30,7 +30,7 @@ public static class DateTimeUtils
 	/// </remarks>
 	public static bool TryParseTimeSpan(string? text, out TimeSpan timeSpan)
 	{
-		timeSpan = default;
+		timeSpan = TimeSpan.Zero;
 
 		if (text == null) return false;
 

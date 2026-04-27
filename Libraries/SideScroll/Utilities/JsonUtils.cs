@@ -28,12 +28,10 @@ public static class JsonUtils
 	/// <returns>The formatted JSON text, or the original text if formatting fails</returns>
 	public static string Format(string text)
 	{
-		if (TryFormat(text, out string? json)) return json;
-
-		return text;
+		return TryFormat(text, out string? json) ? json : text;
 	}
 
-	private static readonly JsonSerializerOptions _jsonSerializerOptions = new()
+	private static readonly JsonSerializerOptions JsonSerializerOptions = new()
 	{
 		WriteIndented = true,
 	};
@@ -44,13 +42,13 @@ public static class JsonUtils
 	/// <returns>True if the text was successfully formatted; otherwise, false</returns>
 	public static bool TryFormat(string text, [NotNullWhen(true)] out string? json)
 	{
-		json = default;
+		json = null;
 		if (!IsJson(text)) return false;
 
 		try
 		{
 			using JsonDocument document = JsonDocument.Parse(text);
-			json = JsonSerializer.Serialize(document.RootElement, _jsonSerializerOptions);
+			json = JsonSerializer.Serialize(document.RootElement, JsonSerializerOptions);
 			return true;
 		}
 		catch (Exception)
@@ -59,7 +57,7 @@ public static class JsonUtils
 		}
 	}
 
-	private static readonly JsonSerializerOptions _jsonSerializerUnescapedOptions = new()
+	private static readonly JsonSerializerOptions JsonSerializerUnescapedOptions = new()
 	{
 		WriteIndented = true,
 		// Don't escape unicode chars such as apostrophe
@@ -74,14 +72,14 @@ public static class JsonUtils
 	/// <returns>True if the text was successfully formatted; otherwise, false</returns>
 	public static bool TryFormatUnescaped(string text, [NotNullWhen(true)] out string? json)
 	{
-		json = default;
+		json = null;
 		if (!IsJson(text)) return false;
 
 		try
 		{
 			// First try parsing as-is (handles valid JSON with structural whitespace)
 			using JsonDocument document = JsonDocument.Parse(text);
-			json = JsonSerializer.Serialize(document.RootElement, _jsonSerializerUnescapedOptions);
+			json = JsonSerializer.Serialize(document.RootElement, JsonSerializerUnescapedOptions);
 			return true;
 		}
 		catch (JsonException)
@@ -92,7 +90,7 @@ public static class JsonUtils
 			{
 				string escaped = EscapeUnescapedControlCharactersInStrings(text);
 				using JsonDocument document = JsonDocument.Parse(escaped);
-				json = JsonSerializer.Serialize(document.RootElement, _jsonSerializerUnescapedOptions);
+				json = JsonSerializer.Serialize(document.RootElement, JsonSerializerUnescapedOptions);
 				return true;
 			}
 			catch (Exception)

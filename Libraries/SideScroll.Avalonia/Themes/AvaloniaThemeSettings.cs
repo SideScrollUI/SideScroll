@@ -11,9 +11,12 @@ using System.Text.Json.Serialization;
 
 namespace SideScroll.Avalonia.Themes;
 
+/// <summary>Marks a theme property with one or more Avalonia resource dictionary key names used to read and write the value.
+/// Initializes the attribute with the given resource key names.</summary>
 [AttributeUsage(AttributeTargets.Property)]
 public class ResourceKeyAttribute(params string[] names) : Attribute
 {
+	/// <summary>Gets the Avalonia resource dictionary key names associated with this property.</summary>
 	public string[] Names => names;
 }
 
@@ -68,6 +71,7 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 
 	public override string? ToString() => Name;
 
+	/// <summary>Returns the list of all theme section objects (font, toolbar, chart, etc.) for enumeration.</summary>
 	public List<object> GetSections() =>
 	[
 		Font,
@@ -84,8 +88,10 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 		Chart,
 	];
 
+	/// <summary>Returns all <see cref="ListProperty"/> entries for every property in this settings object.</summary>
 	public IEnumerable<ListProperty> GetProperties() => ListProperty.Create(this);
 
+	/// <summary>Applies changed property values from <paramref name="newSettings"/> to this instance, notifying listeners for each modified value.</summary>
 	public void Update(AvaloniaThemeSettings newSettings)
 	{
 		using var newProperties = newSettings.GetProperties().GetEnumerator();
@@ -109,6 +115,7 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 		}
 	}
 
+	/// <summary>Reads all <see cref="ResourceKeyAttribute"/>-decorated properties from the current running theme and stores them on this settings object.</summary>
 	public void LoadFromCurrent()
 	{
 		Font.FontFamily = SideScrollTheme.ContentControlThemeFontFamily.Name;
@@ -137,12 +144,14 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 		}
 	}
 
+	/// <summary>Returns <c>true</c> if any <see cref="ResourceKeyAttribute"/>-decorated property has a <c>null</c> value.</summary>
 	public bool HasNullValue()
 	{
 		return GetProperties()
 			.Any(property => property.GetCustomAttribute<ResourceKeyAttribute>() != null && property.Value == null);
 	}
 
+	/// <summary>Temporarily switches to this settings object's theme variant to read and fill any <c>null</c> <see cref="ResourceKeyAttribute"/> properties from the current theme.</summary>
 	public void FillMissingValues()
 	{
 		var original = Application.Current!.RequestedThemeVariant;
@@ -168,6 +177,7 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 		Application.Current.RequestedThemeVariant = original;
 	}
 
+	/// <summary>Builds an Avalonia <see cref="ResourceDictionary"/> from this settings object, mapping each <see cref="ResourceKeyAttribute"/> property to its corresponding resource key(s).</summary>
 	public ResourceDictionary CreateDictionary()
 	{
 		var dictionary = new ResourceDictionary
@@ -219,7 +229,7 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 		return dictionary;
 	}
 
-	// Multiple Variants with the same name will give different results, so always use the actual ones
+	/// <summary>Returns the <see cref="ThemeVariant"/> matching <see cref="Variant"/>, always using the canonical Light/Dark singletons so that multiple variants with the same name give consistent results.</summary>
 	public ThemeVariant GetVariant()
 	{
 		return Variant switch

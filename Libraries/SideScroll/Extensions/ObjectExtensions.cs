@@ -54,7 +54,7 @@ public static class ObjectExtensions
 
 		int maxFormatLength = maxLength ?? DefaultMaxFormattedLength;
 
-		if (type.IsPrimitive == false)
+		if (!type.IsPrimitive)
 		{
 			if (obj is DateTime dateTime)
 			{
@@ -160,14 +160,13 @@ public static class ObjectExtensions
 	/// </summary>
 	public static string EnumerableToString(this IEnumerable enumerable)
 	{
-		var strings = new List<string?>();
+		List<string?> strings = [];
 		foreach (var item in enumerable)
 		{
 			strings.Add(item.ToString());
 		}
 
-		string joined = string.Join(", ", strings);
-		return joined;
+		return string.Join(", ", strings);
 		//return "[" + joined + "]";
 	}
 
@@ -205,7 +204,7 @@ public static class ObjectExtensions
 		if (obj is string text)
 			return text;
 
-		if (type.IsPrimitive == false)
+		if (!type.IsPrimitive)
 		{
 			if (obj is DateTime dateTime)
 			{
@@ -243,12 +242,9 @@ public static class ObjectExtensions
 		foreach (PropertyInfo propertyInfo in properties)
 		{
 			object? propertyValue = propertyInfo.GetValue(obj);
-			if (propertyValue != null)
-			{
-				string? toString = propertyValue.ToUniqueString();
-				if (toString != null)
-					return toString;
-			}
+			string? toString = propertyValue?.ToUniqueString();
+			if (toString != null)
+				return toString;
 		}
 
 		// Return first non-null field value
@@ -256,12 +252,9 @@ public static class ObjectExtensions
 		foreach (FieldInfo fieldInfo in fields)
 		{
 			object? fieldValue = fieldInfo.GetValue(obj);
-			if (fieldValue != null)
-			{
-				string? toString = fieldValue.ToUniqueString();
-				if (toString != null)
-					return toString;
-			}
+			string? toString = fieldValue?.ToUniqueString();
+			if (toString != null)
+				return toString;
 		}
 
 		return null;

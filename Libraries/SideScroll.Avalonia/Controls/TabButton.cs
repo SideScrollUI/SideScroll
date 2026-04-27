@@ -8,6 +8,7 @@ namespace SideScroll.Avalonia.Controls;
 /// </summary>
 public class TabButton : Button
 {
+	/// <summary>Initializes a new <see cref="TabButton"/> with the given optional text label.</summary>
 	public TabButton(string? label = null)
 	{
 		Content = label;

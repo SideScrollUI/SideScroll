@@ -52,6 +52,7 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 
 	public override string ToString() => DataRepoView.ToString();
 
+	/// <summary>Initializes a new <see cref="DataViewCollection{TDataType,TViewType}"/> backed by <paramref name="dataRepoView"/>, using <paramref name="loadParams"/> when constructing each view item, and performs an initial load.</summary>
 	public DataViewCollection(DataRepoView<TDataType> dataRepoView, params object?[] loadParams)
 	{
 		DataRepoView = dataRepoView;

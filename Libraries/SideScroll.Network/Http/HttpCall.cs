@@ -3,19 +3,29 @@ using System.Text;
 
 namespace SideScroll.Network.Http;
 
+/// <summary>
+/// A simple HTTP GET helper that retries failed requests up to <see cref="MaxAttempts"/> times
+/// with an exponential-style delay between attempts.
+/// </summary>
 public class HttpCall(Call call)
 {
+	/// <summary>Gets or sets the maximum number of download attempts before throwing.</summary>
 	public static int MaxAttempts { get; set; } = 4;
+
+	/// <summary>Gets or sets the base sleep duration in milliseconds between retry attempts.</summary>
 	public static int SleepMilliseconds { get; set; } = 500; // < ^ MaxAttempts
 
+	/// <summary>Gets the logging call context used for timing and diagnostics.</summary>
 	public Call Call => call;
 
+	/// <summary>Fetches <paramref name="uri"/> and returns the response body as an ASCII string.</summary>
 	public virtual async Task<string?> GetStringAsync(string uri, string? accept = null)
 	{
 		byte[] bytes = await GetResponseAsync(uri, accept);
 		return Encoding.ASCII.GetString(bytes);
 	}
 
+	/// <summary>Fetches <paramref name="uri"/> and returns the raw response bytes.</summary>
 	public virtual async Task<byte[]> GetBytesAsync(string uri)
 	{
 		return await GetResponseAsync(uri);

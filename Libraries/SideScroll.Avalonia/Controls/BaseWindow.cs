@@ -21,7 +21,7 @@ namespace SideScroll.Avalonia.Controls;
 public class BaseWindow : Window
 {
 	/// <summary>The extra border width compensated for on Windows when using a custom title bar.</summary>
-	public static int WindowsBorderWidth = 7;
+	public static int WindowsBorderWidth { get; set; } = 7;
 
 	/// <summary>Gets or sets the default minimum window width in pixels.</summary>
 	public static int DefaultMinWidth { get; set; } = 700;

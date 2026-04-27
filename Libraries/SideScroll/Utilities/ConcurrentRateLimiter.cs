@@ -82,18 +82,16 @@ public class ConcurrentRateLimiter : IDisposable
 
 			double elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
 			int tokensToRelease = (int)(elapsedSeconds * rps); // Calculate tokens based on elapsed time
+			if (tokensToRelease <= 0) continue;
+			
+			stopwatch.Restart(); // Reset the stopwatch after releasing tokens
 
-			if (tokensToRelease > 0)
+			for (int i = 0; i < tokensToRelease; i++)
 			{
-				stopwatch.Restart(); // Reset the stopwatch after releasing tokens
+				if (!_requestTimestamps.TryDequeue(out _))
+					break;
 
-				for (int i = 0; i < tokensToRelease; i++)
-				{
-					if (!_requestTimestamps.TryDequeue(out _))
-						break;
-
-					_rateSemaphore?.Release();
-				}
+				_rateSemaphore?.Release();
 			}
 		}
 	}

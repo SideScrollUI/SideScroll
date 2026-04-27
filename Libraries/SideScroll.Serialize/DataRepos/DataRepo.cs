@@ -11,7 +11,10 @@ namespace SideScroll.Serialize.DataRepos;
 [Unserialized]
 public class DataRepo
 {
+	/// <summary>Gets the default group ID used when no explicit group is specified.</summary>
 	public const string DefaultGroupId = ".Default";
+
+	/// <summary>Gets the filename of the primary index file within a group directory.</summary>
 	public const string PrimaryIndexFileName = "Primary.sidx";
 
 	/// <summary>
@@ -33,6 +36,7 @@ public class DataRepo
 
 	public override string ToString() => RepoPath;
 
+	/// <summary>Initializes a new <see cref="DataRepo"/> at the given path, with an optional name seed for group hashing and an option to use JSON serialization.</summary>
 	public DataRepo(string repoPath, string? repoName = null, bool useJson = false)
 	{
 		RepoPath = repoPath;

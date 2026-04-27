@@ -3,28 +3,43 @@ using System.Text;
 
 namespace SideScroll.Network.Http;
 
+/// <summary>
+/// An append-only file-backed HTTP response cache that stores raw bytes indexed by URI,
+/// using a separate binary index file and a data file for efficient lookups.
+/// </summary>
 public class HttpCache : IDisposable
 {
+	/// <summary>Gets the current file format version written to new cache files.</summary>
 	public const uint LatestVersion = 1;
 
+	/// <summary>Gets or sets the file format version read from an existing cache.</summary>
 	public uint CurrentVersion = 1;
 
+	/// <summary>Metadata for a single cached HTTP response entry.</summary>
 	public class Entry
 	{
+		/// <summary>Gets or sets the URI of the cached resource.</summary>
 		public string? Uri { get; set; }
 
+		/// <summary>Gets or sets the byte offset of this entry's data in the data file.</summary>
 		public long Offset { get; set; }
+
+		/// <summary>Gets or sets the size in bytes of this entry's data.</summary>
 		public int Size { get; set; }
 
+		/// <summary>Gets or sets the time this entry was downloaded.</summary>
 		public DateTime Downloaded { get; set; }
 
 		public override string? ToString() => Uri;
 	}
 
+	/// <summary>An <see cref="Entry"/> that also holds a reference to its owning <see cref="HttpCache"/> so its content can be lazily loaded.</summary>
 	public class LoadableEntry : Entry
 	{
+		/// <summary>Gets or sets the cache that owns this entry.</summary>
 		public HttpCache? Cache { get; set; }
 
+		/// <summary>Gets the cached response body decoded as ASCII text.</summary>
 		[HiddenColumn]
 		public string? Text => Cache?.GetString(Uri!);
 
@@ -36,7 +51,10 @@ public class HttpCache : IDisposable
 		}*/
 	}
 
+	/// <summary>Gets the base directory path where the index and data files are stored.</summary>
 	public string BasePath { get; }
+
+	/// <summary>Gets the current total size in bytes of the data file.</summary>
 	public long Size => _dataStream.Length;
 
 	private readonly Dictionary<string, Entry> _cache = [];
@@ -52,6 +70,7 @@ public class HttpCache : IDisposable
 
 	public override string ToString() => BasePath;
 
+	/// <summary>Opens or creates the cache files at <paramref name="basePath"/>, loading any existing index entries.</summary>
 	public HttpCache(string basePath, bool writeable)
 	{
 		BasePath = basePath;
@@ -72,6 +91,7 @@ public class HttpCache : IDisposable
 		LoadIndex();
 	}
 
+	/// <summary>Releases the index and data file streams.</summary>
 	protected virtual void Dispose(bool disposing)
 	{
 		if (_disposed)
@@ -90,6 +110,7 @@ public class HttpCache : IDisposable
 		_disposed = true;
 	}
 
+	/// <summary>Releases the index and data file streams.</summary>
 	public void Dispose()
 	{
 		Dispose(true);
@@ -128,8 +149,10 @@ public class HttpCache : IDisposable
 		}
 	}
 
+	/// <summary>Gets a snapshot list of all cached entries.</summary>
 	public List<Entry> Entries => _cache.Values.ToList();
 
+	/// <summary>Gets a snapshot list of all entries as <see cref="LoadableEntry"/> instances with a reference back to this cache.</summary>
 	public List<LoadableEntry> LoadableEntries =>
 		_cache.Values.Select(entry => new LoadableEntry
 		{
@@ -141,6 +164,7 @@ public class HttpCache : IDisposable
 		})
 			.ToList();
 
+	/// <summary>Appends the response bytes for <paramref name="uri"/> to the cache, ignoring the call if the URI is already cached.</summary>
 	public void AddEntry(string uri, byte[] bytes)
 	{
 		lock (_entryLock)
@@ -176,11 +200,13 @@ public class HttpCache : IDisposable
 		}
 	}
 
+	/// <summary>Returns <c>true</c> if a response for <paramref name="uri"/> exists in the cache.</summary>
 	public bool ContainsKey(string uri)
 	{
 		return _cache.ContainsKey(uri);
 	}
 
+	/// <summary>Reads and returns the raw bytes for the cached response for <paramref name="uri"/>, or <c>null</c> if not found.</summary>
 	public byte[]? GetBytes(string uri)
 	{
 		lock (_entryLock)
@@ -196,6 +222,7 @@ public class HttpCache : IDisposable
 		}
 	}
 
+	/// <summary>Returns the cached response for <paramref name="uri"/> decoded as an ASCII string.</summary>
 	public string GetString(string uri)
 	{
 		byte[] bytes = GetBytes(uri)!;
@@ -203,47 +230,3 @@ public class HttpCache : IDisposable
 		return text;
 	}
 }
-/*
-Serialize Cache for HTTP
-	append only cache?
-		how to remove items from cache?
-	just a Dictionary<string, string>
-		Dictionary<key,entry>
-			Entry
-				offset
-				size
-			Have to write out entire dictionary again if modified
-			cleanup very rarely?
-			write out rarely?
-			List<Entry>
-		unused entries?
-		crash protection
-			write out new files and replace originals
-	where to store indices?
-		separate file?
-			.idx/.log
-		header area at beginning of file?
-
-	need to store nodes
-	nosql database?
-	Header
-		URI
-		offset
-		size
-	
-	compress
-
-Use Serializer?
-	Current serialize everything
-		Load cache loads everything
-			(uses too much memory)
-				Change serializer to only load header
-					Useful for analyzing .sidescroll files
-					How to only load specific objects
-						New wrapper class
-							Reference<T>
-						Only load a subset of TypeRepo entries
-			Make sure to unload
-	Future
-		Smart Serializer that uses references to detect changes
-*/

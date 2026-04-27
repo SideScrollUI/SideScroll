@@ -1,12 +1,18 @@
 namespace SideScroll.Network.Http;
 
+/// <summary>Configuration key for a pooled <see cref="HttpClient"/> instance.</summary>
 public record HttpClientConfig(string? Accept = null, TimeSpan? Timeout = null)
 {
+	/// <summary>Gets whether this configuration represents the default client (no Accept header or custom timeout).</summary>
 	public bool IsDefault => Accept == null && Timeout == null;
 }
 
 // todo: Figure out a way to reuse default client and inject in request
 // alternative: HttpClientFactory
+/// <summary>
+/// Manages a pool of <see cref="HttpClient"/> instances keyed by <see cref="HttpClientConfig"/>,
+/// returning the default shared client when no custom settings are needed.
+/// </summary>
 public static class HttpClientManager
 {
 	private static readonly HttpClientHandler _handler = new()
@@ -18,6 +24,7 @@ public static class HttpClientManager
 
 	private static readonly Dictionary<string, HttpClient> _clients = [];
 
+	/// <summary>Returns a shared <see cref="HttpClient"/> matching the given <paramref name="config"/>, creating and caching a new one if needed.</summary>
 	public static HttpClient GetClient(HttpClientConfig config)
 	{
 		if (config.IsDefault) return _defaultClient;

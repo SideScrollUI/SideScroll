@@ -18,7 +18,7 @@ public static class XmlUtils
 	/// <returns>True if the text was successfully formatted; otherwise, false</returns>
 	public static bool TryFormat(string text, [NotNullWhen(true)] out string? formatted)
 	{
-		formatted = default;
+		formatted = null;
 		text = text.TrimStart();
 		if (!text.StartsWith('<')) return false;
 

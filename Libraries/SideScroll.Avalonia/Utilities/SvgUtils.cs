@@ -80,7 +80,7 @@ public static class SvgUtils
 	/// </summary>
 	public static bool TryGetSvgImage(Call call, string path, [NotNullWhen(true)] out IImage? image)
 	{
-		image = default;
+		image = null;
 
 		if (!path.ToLower().EndsWith(".svg")) return false;
 

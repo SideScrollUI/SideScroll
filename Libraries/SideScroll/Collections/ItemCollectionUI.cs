@@ -75,6 +75,7 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 
 	private readonly object _lock = new();
 
+	/// <summary>Initializes an empty <see cref="ItemCollectionUI{T}"/>.</summary>
 	public ItemCollectionUI() { }
 
 	/// <summary>

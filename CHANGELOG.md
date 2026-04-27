@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Summary Docs for SideScroll.Network
 
 ### Fixed
 - Fixed JSON serialization not handling primary constuctors with readonly properties

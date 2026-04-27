@@ -37,7 +37,7 @@ public class NamedItemCollection<TCollection, TValue>
 	/// <summary>
 	/// Retrieves all public static properties and fields from the collection type that match the value type
 	/// </summary>
-	public static List<KeyValuePair<MemberInfo, TValue>> GetItems()
+	private static List<KeyValuePair<MemberInfo, TValue>> GetItems()
 	{
 		Type collectionType = typeof(TCollection);
 		Type elementType = typeof(TValue);

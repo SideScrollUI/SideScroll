@@ -166,7 +166,7 @@ public class Serializer : IDisposable
 	/// </summary>
 	public record ObjectsLoaded
 	{
-		public string Name { get; init; } = default!;
+		public required string Name { get; init; }
 		public int Loaded { get; init; }
 	}
 

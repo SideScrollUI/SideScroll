@@ -24,6 +24,7 @@ public class ScreenCaptureToolbar : TabControlToolbar
 	/// <summary>Gets the close snapshot button.</summary>
 	public ToolbarButton ButtonClose { get; }
 
+	/// <summary>Initializes a new <see cref="ScreenCaptureToolbar"/>, adding platform-appropriate copy, save, open-folder, and close buttons.</summary>
 	public ScreenCaptureToolbar()
 	{
 		OSPlatform platform = ProcessUtils.GetOSPlatform();
