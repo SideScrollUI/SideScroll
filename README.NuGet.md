@@ -27,7 +27,9 @@ SideScroll is designed for navigating complex data hierarchies with speed and de
 
 **Try SideScroll in your browser:** [https://sidescrollui.github.io/SideScroll/](https://sidescrollui.github.io/SideScroll/)
 
-The demo runs entirely in WebAssembly using Avalonia's browser support—no installation required!
+**Try the VideoGamesDB sample:** [https://sidescrollui.github.io/VideoGamesDB/](https://sidescrollui.github.io/VideoGamesDB/)
+
+The demos run entirely in WebAssembly using Avalonia's browser support—no installation required!
 
 > **Note:** The browser version is experimental. For the best performance and full features, use the desktop application.
 
