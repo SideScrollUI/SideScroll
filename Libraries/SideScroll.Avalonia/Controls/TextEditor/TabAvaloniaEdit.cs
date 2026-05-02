@@ -37,8 +37,11 @@ public class TabTextEditor : AvaloniaEdit.TextEditor
 /// <summary>Specifies the syntax highlighting mode for a <see cref="TabAvaloniaEdit"/>.</summary>
 public enum TextType
 {
+	/// <summary>No syntax highlighting is applied.</summary>
 	Default,
+	/// <summary>JSON syntax highlighting is applied.</summary>
 	Json,
+	/// <summary>XML syntax highlighting is applied.</summary>
 	Xml,
 }
 
@@ -63,6 +66,7 @@ public class TabAvaloniaEdit : Border
 	/// <summary>Gets or sets the current text type, used to apply syntax highlighting.</summary>
 	public TextType TextType { get; set; }
 
+	/// <summary>Initializes the editor with default settings, creating the inner AvaloniaEdit text editor control.</summary>
 	public TabAvaloniaEdit()
 	{
 		MinWidth = 50; // WordWrap causes freezing below certain values

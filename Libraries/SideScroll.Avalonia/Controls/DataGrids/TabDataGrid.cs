@@ -368,7 +368,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 			// Group up any new items after the 1st one
 			if (TabModel.AutoSelectNew && SearchControl!.Text.IsNullOrEmpty())
 			{
-				_selectItemEnabled = true;
+				SelectItemEnabled = true;
 				object? item = e.NewItems![0];
 				// don't update the selection too often or we'll slow things down
 				if (!_notifyItemChangedStopwatch.IsRunning || _notifyItemChangedStopwatch.ElapsedMilliseconds > 1000)
@@ -406,11 +406,12 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		_autoSelectAction = null;
 	}
 
-	protected bool _selectItemEnabled;
+	/// <summary>Gets or sets whether automatic item selection on collection changes is enabled.</summary>
+	protected bool SelectItemEnabled { get; set; }
 
 	private void SetSelectedItem(object? selectedItem, NotifyCollectionChangedAction? action)
 	{
-		if (!_selectItemEnabled) return;
+		if (!SelectItemEnabled) return;
 
 		if (action != NotifyCollectionChangedAction.Replace)
 		{
@@ -1031,7 +1032,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		{
 			if (value == null)
 			{
-				_selectItemEnabled = false;
+				SelectItemEnabled = false;
 			}
 
 			// don't reselect if already selected				

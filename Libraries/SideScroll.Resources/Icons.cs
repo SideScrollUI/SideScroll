@@ -3,10 +3,15 @@ using System.Reflection;
 
 namespace SideScroll.Resources;
 
+/// <summary>
+/// Provides access to SideScroll icon resources as embedded SVG files.
+/// </summary>
 public static class Icons
 {
+	/// <summary>The embedded resource path prefix for icon files.</summary>
 	public const string IconPath = "SideScroll.Resources.Icons";
 
+	/// <summary>Gets the assembly containing the icon resources.</summary>
 	public static Assembly Assembly => Assembly.GetExecutingAssembly();
 
 	public class Svg : NamedItemCollection<Svg, ResourceView>

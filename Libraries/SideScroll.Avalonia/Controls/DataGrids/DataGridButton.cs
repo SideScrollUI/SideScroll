@@ -14,6 +14,7 @@ public class DataGridButton : Button
 	private IDisposable? _isPointerOverSub;
 	private IDisposable? _parentSub;
 
+	/// <summary>Initializes the button with an optional text label.</summary>
 	public DataGridButton(string? label = null)
 	{
 		Content = label;

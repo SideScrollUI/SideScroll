@@ -6,6 +6,9 @@ using SideScroll.Avalonia.Extensions;
 
 namespace SideScroll.Avalonia.Themes;
 
+/// <summary>
+/// Provides static accessors for all SideScroll UI brush and style resources, resolved from the current Avalonia application resource dictionary.
+/// </summary>
 public static class SideScrollTheme
 {
 	public static SolidColorBrush TabBackground => GetBrush("TabBackgroundBrush");
@@ -122,10 +125,13 @@ public static class SideScrollTheme
 	public static FontFamily MonospaceFontFamily => GetFontFamily("MonospaceFontFamily");
 	public static FontWeight MonospaceFontWeight => GetFontWeight("MonospaceFontWeight");
 
+	/// <summary>Gets the currently active Avalonia theme variant (e.g., Light or Dark).</summary>
 	public static ThemeVariant ThemeVariant => Application.Current!.ActualThemeVariant;
 
+	/// <summary>Gets the Source Code Pro font family resource.</summary>
 	public static FontFamily SourceCodeProFont => GetFontFamily("SourceCodeProFont");
 
+	/// <summary>Retrieves a raw theme resource by name, searching the active theme dictionary first, then the global resources.</summary>
 	public static object GetResource(string name)
 	{
 		if (Application.Current!.Resources.ThemeDictionaries.TryGetValue(ThemeVariant, out IThemeVariantProvider? provider))
@@ -144,16 +150,19 @@ public static class SideScrollTheme
 		throw new Exception($"Resource not found: {name}");
 	}
 
+	/// <summary>Retrieves an Avalonia <see cref="Color"/> resource by name.</summary>
 	public static Color GetColor(string colorName)
 	{
 		return (Color)GetResource(colorName);
 	}
 
+	/// <summary>Retrieves a <see cref="SolidColorBrush"/> resource by name.</summary>
 	public static SolidColorBrush GetBrush(string brushName)
 	{
 		return (SolidColorBrush)GetResource(brushName);
 	}
 
+	/// <summary>Retrieves the effective <see cref="Color"/> of a brush resource, accounting for the brush's opacity.</summary>
 	public static Color GetBrushColor(string brushName)
 	{
 		var brush = (SolidColorBrush)GetResource(brushName);
@@ -162,6 +171,7 @@ public static class SideScrollTheme
 		return brush.Color.WithAlpha((byte)(brush.Color.A * brush.Opacity));
 	}
 
+	/// <summary>Retrieves a numeric resource by name, unwrapping <see cref="Thickness"/> or <see cref="CornerRadius"/> to their primary dimension.</summary>
 	public static double GetDouble(string name)
 	{
 		object obj = GetResource(name);
@@ -179,6 +189,7 @@ public static class SideScrollTheme
 		}
 	}
 
+	/// <summary>Retrieves a <see cref="FontFamily"/> resource by name.</summary>
 	public static FontFamily GetFontFamily(string name)
 	{
 		if (Application.Current!.TryGetResource(name, ThemeVariant, out object? value))
@@ -189,6 +200,7 @@ public static class SideScrollTheme
 		throw new Exception($"FontFamily not found: {name}");
 	}
 
+	/// <summary>Retrieves a <see cref="FontWeight"/> resource by name.</summary>
 	public static FontWeight GetFontWeight(string name)
 	{
 		if (Application.Current!.TryGetResource(name, ThemeVariant, out object? value))
@@ -199,6 +211,7 @@ public static class SideScrollTheme
 		throw new Exception($"FontWeight not found: {name}");
 	}
 
+	/// <summary>Retrieves a <see cref="Thickness"/> resource by name.</summary>
 	public static Thickness GetThickness(string name)
 	{
 		if (Application.Current!.TryGetResource(name, ThemeVariant, out object? value))
@@ -209,6 +222,7 @@ public static class SideScrollTheme
 		throw new Exception($"Thickness not found: {name}");
 	}
 
+	/// <summary>Populates <see cref="FontTheme.FontFamilies"/> with the bundled fonts merged with all system fonts, for use in the font selection UI.</summary>
 	public static void InitializeFonts()
 	{
 		FontTheme.FontFamilies =

@@ -14,6 +14,7 @@ public class ToolbarButton : TabImageButton
 	/// <summary>Gets the toolbar that owns this button.</summary>
 	public TabControlToolbar Toolbar { get; }
 
+	/// <summary>Initializes the button from a <see cref="ToolButton"/> definition, wiring up its action, hotkey, and flyout.</summary>
 	public ToolbarButton(TabControlToolbar toolbar, ToolButton toolButton) :
 		base(toolButton.Tooltip, toolButton.ImageResource, toolButton.Label)
 	{
@@ -46,6 +47,7 @@ public class ToolbarButton : TabImageButton
 		}
 	}
 
+	/// <summary>Initializes the button directly with an image resource and tooltip, without a <see cref="ToolButton"/> definition.</summary>
 	public ToolbarButton(TabControlToolbar toolbar, string tooltip, IResourceView imageResource, double? iconSize = null, string? label = null, bool updateIconColors = true) :
 		base(tooltip, imageResource, label, iconSize, updateIconColors)
 	{

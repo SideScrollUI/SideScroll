@@ -5,6 +5,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SideScroll.Avalonia.Themes;
 
+/// <summary>
+/// Base class for a named group of related theme properties that each map to one or more Avalonia resource keys.
+/// </summary>
 public class ThemeSection : INotifyPropertyChanged
 {
 	public event PropertyChangedEventHandler? PropertyChanged;
@@ -15,6 +18,7 @@ public class ThemeSection : INotifyPropertyChanged
 	}
 }
 
+/// <summary>Theme section for tab background, splitter, header, separator, context menu, progress bar, and scroll-button colors.</summary>
 public class TabTheme : ThemeSection
 {
 	public override string ToString() => "Tab";
@@ -85,6 +89,7 @@ public class TabTheme : ThemeSection
 	public Color? ButtonBorderPointerOver { get; set; }
 }
 
+/// <summary>Theme section for tab title bar background, foreground, border, and button colors.</summary>
 public class TitleTheme : ThemeSection
 {
 	public override string ToString() => "Title";
@@ -123,6 +128,7 @@ public class TitleTheme : ThemeSection
 }
 
 
+/// <summary>Theme section for font family selection and font size settings used throughout the UI.</summary>
 public class FontTheme : ThemeSection
 {
 	public override string ToString() => "Font";
@@ -155,6 +161,7 @@ public class FontTheme : ThemeSection
 	public double ControlContentFontSize { get; set; } = 14;
 }
 
+/// <summary>Theme section for toolbar background, separator, label, text box, and icon colors.</summary>
 public class ToolbarTheme : ThemeSection
 {
 	public override string ToString() => "Toolbar";
@@ -202,6 +209,7 @@ public class ToolbarTheme : ThemeSection
 	public Color? RadioButtonForegroundPointerOver { get; set; }
 }
 
+/// <summary>Theme section for tooltip and flyout background, foreground, border, and font-size settings.</summary>
 public class ToolTipTheme : ThemeSection
 {
 	public override string ToString() => "Tool Tip";
@@ -219,6 +227,7 @@ public class ToolTipTheme : ThemeSection
 	public double FontSize { get; set; } = 14;
 }
 
+/// <summary>Theme section for scroll bar track, thumb, and button colors.</summary>
 public class ScrollBarTheme : ThemeSection
 {
 	public override string ToString() => "Scroll Bar";
@@ -258,6 +267,7 @@ public class ScrollBarTheme : ThemeSection
 	public Color? ButtonArrowForegroundPointerOver { get; set; }
 }
 
+/// <summary>Theme section for data grid column header, row, cell, selection, and button colors.</summary>
 public class DataGridTheme : ThemeSection
 {
 	public override string ToString() => "Data Grid";
@@ -352,6 +362,7 @@ public class DataGridTheme : ThemeSection
 }
 
 // Button, including TabTextButton
+/// <summary>Theme section for button and toggle-button background, foreground, border, and warning-accent colors.</summary>
 public class ButtonTheme : ThemeSection
 {
 	public override string ToString() => "Button";
@@ -412,6 +423,7 @@ public class ButtonTheme : ThemeSection
 	public Color? WarningBorderPointerOver { get; set; }
 }
 
+/// <summary>Theme section for label, text box, combo box, check box, and radio-button colors.</summary>
 public class TextControlTheme : ThemeSection
 {
 	public override string ToString() => "Text Control";
@@ -572,6 +584,7 @@ public class TextControlTheme : ThemeSection
 	public Color? ErrorTextForeground { get; set; }
 }
 
+/// <summary>Theme section for the read-only text area background, foreground, and border colors.</summary>
 public class TextAreaTheme : ThemeSection
 {
 	public override string ToString() => "Text Area";
@@ -586,6 +599,7 @@ public class TextAreaTheme : ThemeSection
 	public Color? Border { get; set; }
 }
 
+/// <summary>Theme section for the AvaloniaEdit text editor background, foreground, selection, and syntax highlight colors.</summary>
 public class TextEditorTheme : ThemeSection
 {
 	public override string ToString() => "Text Editor";
@@ -664,6 +678,7 @@ public class TextEditorTheme : ThemeSection
 	//public Color? Border { get; set; }
 }
 
+/// <summary>Theme section for chart background, axis labels, grid lines, legend, tooltip, and border colors.</summary>
 public class ChartTheme : ThemeSection
 {
 	public override string ToString() => "Chart";
@@ -702,6 +717,7 @@ public class ChartTheme : ThemeSection
 	public ChartColorsTheme Colors { get; set; } = new();
 }
 
+/// <summary>Theme section for the individual series palette colors used in charts.</summary>
 public class ChartColorsTheme : ThemeSection
 {
 	public override string ToString() => "Chart Colors";

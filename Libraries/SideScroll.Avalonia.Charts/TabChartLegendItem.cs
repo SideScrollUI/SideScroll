@@ -35,6 +35,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 	/// <summary>Gets the text block displaying the series total value, or <c>null</c> if totals are not shown.</summary>
 	public TabTextBlock? TextBlockTotal { get; protected set; }
 
+	/// <summary>Gets the polygon shape used as the color swatch checkbox for this legend item.</summary>
 	protected Polygon? Polygon;
 
 	private int _index;
@@ -73,6 +74,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 	public override string? ToString() => ChartSeries.ToString();
 
+	/// <summary>Initializes the legend item with the parent legend and the chart series it represents.</summary>
 	protected TabChartLegendItem(TabChartLegend<TSeries> legend, ChartSeries<TSeries> chartSeries)
 	{
 		Legend = legend;
@@ -208,7 +210,9 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 		Children.Add(TextBlockTotal);
 	}
 
-	protected bool _highlight;
+	private bool _highlight;
+
+	/// <summary>Gets or sets whether this legend item is highlighted (hovered). When highlighted, the series color is shown at full intensity and others are faded.</summary>
 	public bool Highlight
 	{
 		get => _highlight;

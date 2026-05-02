@@ -166,7 +166,10 @@ public class Serializer : IDisposable
 	/// </summary>
 	public record ObjectsLoaded
 	{
+		/// <summary>Gets the type name of the loaded objects.</summary>
 		public required string Name { get; init; }
+
+		/// <summary>Gets the number of objects loaded for this type.</summary>
 		public int Loaded { get; init; }
 	}
 

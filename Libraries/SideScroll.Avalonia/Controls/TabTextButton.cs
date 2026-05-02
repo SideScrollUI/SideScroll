@@ -10,6 +10,7 @@ public class TabTextButton : Button
 {
 	protected override Type StyleKeyOverride => typeof(Button);
 
+	/// <summary>Initializes the button with an optional label and accent style.</summary>
 	public TabTextButton(string? label = null, AccentType accentType = default)
 	{
 		Content = label;

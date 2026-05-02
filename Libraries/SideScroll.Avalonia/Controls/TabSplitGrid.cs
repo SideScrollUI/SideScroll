@@ -11,8 +11,11 @@ namespace SideScroll.Avalonia.Controls;
 /// <summary>Controls the type of separator inserted between items in a <see cref="TabSplitGrid"/>.</summary>
 public enum SeparatorType
 {
+	/// <summary>No separator is inserted between items.</summary>
 	None,
+	/// <summary>A draggable <see cref="GridSplitter"/> is inserted between items.</summary>
 	Splitter,
+	/// <summary>A fixed-height spacer border is inserted between items.</summary>
 	Spacer,
 }
 
@@ -52,6 +55,7 @@ public class TabSplitGrid : Grid
 		public GridLength GridLength { get; set; }
 	}
 
+	/// <summary>Initializes the split grid with stretch alignment and focusable enabled.</summary>
 	public TabSplitGrid()
 	{
 		HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -139,6 +143,7 @@ public class TabSplitGrid : Grid
 		InvalidateMeasure();
 	}
 
+	/// <summary>Inserts a new row definition at the specified index with the given height.</summary>
 	protected RowDefinition InsertRowDefinition(GridLength gridLength, int index)
 	{
 		var rowDefinition = new RowDefinition(gridLength);
@@ -158,8 +163,10 @@ public class TabSplitGrid : Grid
 		Children.Add(control);
 	}
 
-	// Avalonia GridSplitter hardcodes neighbors in it's OnAttachedToVisualTree
-	// Reattach them whenever we change neighbors
+	/// <summary>
+	/// Removes and re-adds all grid splitters to force Avalonia to re-bind neighbor rows.
+	/// Needed because Avalonia's <see cref="GridSplitter"/> hardcodes its neighbors in <c>OnAttachedToVisualTree</c>.
+	/// </summary>
 	protected void ReattachSplitters()
 	{
 		foreach (var gridSplitter in GridSplitters)
@@ -188,6 +195,7 @@ public class TabSplitGrid : Grid
 		}
 	}
 
+	/// <summary>Inserts a horizontal <see cref="GridSplitter"/> at the specified row index.</summary>
 	protected void AddHorizontalGridSplitter(int rowIndex)
 	{
 		//AddRowDefinition(false, rowIndex);
@@ -203,6 +211,7 @@ public class TabSplitGrid : Grid
 		Children.Add(gridSplitter);
 	}
 
+	/// <summary>Inserts a vertical <see cref="GridSplitter"/> at the specified column index.</summary>
 	protected void AddVerticalGridSplitter(int columnIndex)
 	{
 		TabSplitter gridSplitter = new()
@@ -215,6 +224,7 @@ public class TabSplitGrid : Grid
 		Children.Add(gridSplitter);
 	}
 
+	/// <summary>Inserts a fixed-height spacer border at the specified row index.</summary>
 	protected void AddRowSpacer(int rowIndex)
 	{
 		//if (Children.Count <= 1)
@@ -231,6 +241,7 @@ public class TabSplitGrid : Grid
 		Children.Add(border);
 	}
 
+	/// <summary>Removes stale controls (those no longer in the current set) along with their row definitions.</summary>
 	protected void RemoveControls(Dictionary<object, Control> controls)
 	{
 		var hashedControls = GridControls.Values.ToHashSet();
@@ -250,6 +261,7 @@ public class TabSplitGrid : Grid
 		}
 	}
 
+	/// <summary>Adds any new controls from the ordered list that are not yet children of this grid.</summary>
 	protected void AddControls(List<Control> orderedControls)
 	{
 		//RowDefinitions.Clear();

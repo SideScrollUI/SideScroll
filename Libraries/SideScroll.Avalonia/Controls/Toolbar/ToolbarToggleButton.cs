@@ -50,6 +50,7 @@ public class ToolbarToggleButton : ToolbarButton
 		SetImage();
 	}
 
+	/// <summary>Updates the button's displayed image based on the current checked state.</summary>
 	protected void SetImage()
 	{
 		SetImage(IsChecked ? OnImageResource : OffImageResource);

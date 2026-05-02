@@ -21,49 +21,80 @@ public class ResourceKeyAttribute(params string[] names) : Attribute
 }
 
 // Todo: Add TypeRepo for Avalonia Color serialization
+/// <summary>
+/// Stores all user-configurable theme colors, fonts, and sizes for a named Avalonia theme variant.
+/// </summary>
 [PrivateData]
 public class AvaloniaThemeSettings : INotifyPropertyChanged
 {
+	/// <summary>Gets or sets the display name of this theme preset.</summary>
 	[Required, StringLength(50)]
 	public string? Name { get; set; }
 
+	/// <summary>Gets the list of available theme variant names (Light and Dark).</summary>
 	public static List<string> Variants =>
 	[
 		"Light",
 		"Dark",
 	];
 
+	/// <summary>Gets or sets the theme variant this preset targets (e.g., "Light" or "Dark").</summary>
 	[ReadOnly(true)]
 	public string? Variant { get; set; }
 
+	/// <summary>Gets or sets the version of the theme format.</summary>
 	[JsonIgnore, Hidden]
 	public Version? Version { get; set; }
 
+	/// <summary>Gets or sets the timestamp when this theme was last modified.</summary>
 	[JsonIgnore, Hidden]
 	public DateTime? ModifiedAt { get; set; }
 
+	/// <summary>Gets or sets the font theme section.</summary>
 	[Inline]
 	public FontTheme Font { get; set; } = new();
+
+	/// <summary>Gets or sets the tab theme section.</summary>
 	[Inline]
 	public TabTheme Tab { get; set; } = new();
+
+	/// <summary>Gets or sets the title bar theme section.</summary>
 	[Inline]
 	public TitleTheme Title { get; set; } = new();
+
+	/// <summary>Gets or sets the toolbar theme section.</summary>
 	[Inline]
 	public ToolbarTheme Toolbar { get; set; } = new();
+
+	/// <summary>Gets or sets the tooltip theme section.</summary>
 	[Inline]
 	public ToolTipTheme ToolTip { get; set; } = new();
+
+	/// <summary>Gets or sets the scroll bar theme section.</summary>
 	[Inline]
 	public ScrollBarTheme ScrollBar { get; set; } = new();
+
+	/// <summary>Gets or sets the data grid theme section.</summary>
 	[Inline]
 	public DataGridTheme DataGrid { get; set; } = new();
+
+	/// <summary>Gets or sets the button theme section.</summary>
 	[Inline]
 	public ButtonTheme Button { get; set; } = new();
+
+	/// <summary>Gets or sets the text control theme section.</summary>
 	[Inline]
 	public TextControlTheme TextControl { get; set; } = new();
+
+	/// <summary>Gets or sets the text area theme section.</summary>
 	[Inline]
 	public TextAreaTheme TextArea { get; set; } = new();
+
+	/// <summary>Gets or sets the text editor theme section.</summary>
 	[Inline]
 	public TextEditorTheme TextEditor { get; set; } = new();
+
+	/// <summary>Gets or sets the chart theme section.</summary>
 	[Inline]
 	public ChartTheme Chart { get; set; } = new();
 

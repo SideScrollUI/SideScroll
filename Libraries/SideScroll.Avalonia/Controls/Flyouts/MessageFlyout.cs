@@ -9,6 +9,7 @@ namespace SideScroll.Avalonia.Controls.Flyouts;
 /// </summary>
 public class MessageFlyout : Flyout
 {
+	/// <summary>Initializes the flyout with the given message text.</summary>
 	public MessageFlyout(string text)
 	{
 		Placement = PlacementMode.Bottom;

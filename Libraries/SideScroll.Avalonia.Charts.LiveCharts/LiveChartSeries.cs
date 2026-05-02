@@ -46,6 +46,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 
 	public override string ToString() => ListSeries.ToString();
 
+	/// <summary>Initializes the series, converts the source data to <see cref="LiveChartPoint"/> instances, and subscribes to collection changes.</summary>
 	public LiveChartSeries(TabLiveChart chart, ListSeries listSeries, Color color)
 	{
 		Chart = chart;

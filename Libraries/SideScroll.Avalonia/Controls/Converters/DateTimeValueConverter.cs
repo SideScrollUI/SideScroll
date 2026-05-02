@@ -9,7 +9,10 @@ namespace SideScroll.Avalonia.Controls.Converters;
 /// <summary>Converts between a <see cref="DateTime"/> or <see cref="TimeSpan"/> property value and a time-of-day string, with round-trip fidelity for <see cref="TabDateTimePicker"/>.</summary>
 public class DateTimeValueConverter : IValueConverter
 {
+	/// <summary>Gets or sets the raw time text from the last convert-back pass, used for round-trip fidelity.</summary>
 	protected string? PreviousTimeText { get; set; }
+
+	/// <summary>Gets or sets the last converted <see cref="DateTime"/> value, used to preserve the date component when only time changes.</summary>
 	protected DateTime? PreviousDateTime { get; set; }
 
 	/// <summary>Converts a <see cref="DateTime"/> to a formatted time-of-day string for display in a date-time picker.</summary>

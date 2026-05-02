@@ -39,6 +39,7 @@ public abstract class TabChartLegend<TSeries> : Grid
 
 	public override string? ToString() => ChartView.ToString();
 
+	/// <summary>Initializes the legend, creating the scroll viewer and wrap panel layout.</summary>
 	protected TabChartLegend(TabChart<TSeries> tabChart)
 	{
 		TabChart = tabChart;

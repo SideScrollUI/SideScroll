@@ -54,6 +54,7 @@ public class BaseWindow : Window
 
 	private readonly DispatcherTimer _cleanupDispatcherTimer;
 
+	/// <summary>Initializes the window with the given project, applying settings and starting the cleanup timer.</summary>
 	public BaseWindow(Project project)
 	{
 		if (project.UserSettings.EnableCustomTitleBar == true)
@@ -80,6 +81,7 @@ public class BaseWindow : Window
 		_cleanupDispatcherTimer.Start();
 	}
 
+	/// <summary>Initializes the window by loading a project from the given settings.</summary>
 	public BaseWindow(ProjectSettings settings) :
 		this(Project.Load(settings))
 	{

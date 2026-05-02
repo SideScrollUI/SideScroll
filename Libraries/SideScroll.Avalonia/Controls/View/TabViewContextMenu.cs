@@ -52,7 +52,7 @@ public class TabViewContextMenu : ContextMenu, IDisposable
 		// Putting the CheckBox in the Header also works, but doesn't align the checkbox to the left of the text
 		_checkboxAutoSelect = new CheckBox
 		{
-			IsChecked = TabInstance!.Project.UserSettings.AutoSelect,
+			IsChecked = TabInstance.Project.UserSettings.AutoSelect,
 		};
 		var menuItemAutoSelect = new TabMenuItem
 		{

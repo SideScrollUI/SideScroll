@@ -7,8 +7,12 @@ using System.IO.Compression;
 
 namespace SideScroll.Tabs.Tools.FileViewer;
 
+/// <summary>
+/// Tab that displays the contents of a ZIP archive file.
+/// </summary>
 public class TabZipFile : ITab, IFileTypeView
 {
+	/// <summary>Gets or sets the path to the ZIP file.</summary>
 	public string? Path { get; set; }
 
 	public TabInstance Create() => new Instance(this);
@@ -147,39 +151,53 @@ public class TabZipFile : ITab, IFileTypeView
 	}
 }
 
-// Base class for zip entries
+/// <summary>
+/// Abstract base class for entries within a ZIP archive.
+/// </summary>
 [Unserialized]
 public abstract class ZipNodeView(string fullPath) : IHasLinks
 {
+	/// <summary>Gets the display name of the entry.</summary>
 	public abstract string Name { get; }
 
+	/// <summary>Gets the uncompressed size in bytes, or <c>null</c> if not applicable.</summary>
 	[StyleValue, Formatter(typeof(ByteFormatter))]
 	public abstract long? Size { get; }
 
+	/// <summary>Gets the time elapsed since the entry was last modified, or <c>null</c> if unavailable.</summary>
 	[StyleValue, Formatted]
 	public abstract TimeSpan? Modified { get; }
 
+	/// <summary>Gets whether this entry can be navigated into.</summary>
 	[Hidden]
 	public abstract bool HasLinks { get; }
 
+	/// <summary>Gets the full path of this entry within the archive.</summary>
 	[HiddenColumn]
 	public string FullPath { get; } = fullPath;
 
+	/// <summary>Gets or sets the inner tab used to display this entry's content.</summary>
 	[InnerValue, Unserialized, HiddenColumn]
 	public ITab? Tab { get; set; }
 
 	public override string ToString() => Name;
 }
 
-// Represents a directory within a zip file
+/// <summary>
+/// Represents a directory within a ZIP archive.
+/// </summary>
 public class ZipDirectoryView : ZipNodeView, IHasLinks
 {
 	public override string Name { get; }
 	public override long? Size => null;
+
+	/// <summary>Gets the last write time of the directory entry.</summary>
 	public DateTime? LastWriteTime { get; }
+
 	public override TimeSpan? Modified => LastWriteTime?.Age();
 	public override bool HasLinks => true;
 
+	/// <summary>Gets the list of child entries within this directory.</summary>
 	[InnerValue, HiddenColumn]
 	public List<ZipNodeView> Children { get; } = [];
 
@@ -190,25 +208,34 @@ public class ZipDirectoryView : ZipNodeView, IHasLinks
 	}
 }
 
-// Represents a file within a zip file
+/// <summary>
+/// Represents a file within a ZIP archive.
+/// </summary>
 public class ZipFileView(ZipArchiveEntry entry) : ZipNodeView(entry.FullName)
 {
 	public override string Name { get; } = Path.GetFileName(entry.FullName);
 	public override long? Size { get; } = entry.Length;
+
+	/// <summary>Gets the last write time of the file entry.</summary>
 	public DateTime? LastWriteTime { get; } = entry.LastWriteTime.DateTime;
+
 	public override TimeSpan? Modified => LastWriteTime?.Age();
 	public override bool HasLinks => false;
 
+	/// <summary>Gets the compressed size of the file in bytes.</summary>
 	[HiddenColumn]
 	public long CompressedSize { get; } = entry.CompressedLength;
 }
 
-// Tab for displaying a zip directory's contents
+/// <summary>
+/// Tab for displaying a ZIP directory's contents.
+/// </summary>
 [PrivateData]
 public class TabZipDirectory(ZipDirectoryView directoryView) : ITab
 {
 	private readonly ZipDirectoryView _directoryView = directoryView;
 
+	/// <summary>Gets the full path of the directory within the archive.</summary>
 	public string Path => _directoryView.FullPath;
 
 	public override string ToString() => Path;

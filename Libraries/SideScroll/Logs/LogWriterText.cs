@@ -1,8 +1,14 @@
 namespace SideScroll.Logs;
 
+/// <summary>
+/// Subscribes to a <see cref="Log"/> and writes each log entry as a timestamped line to a text file.
+/// </summary>
 public class LogWriterText : IDisposable
 {
+	/// <summary>Gets the log that is being written to the file.</summary>
 	public Log Log { get; }
+
+	/// <summary>Gets the path of the output text file.</summary>
 	public string SaveFilePath { get; }
 
 	private readonly StreamWriter _textStreamWriter;
@@ -11,6 +17,7 @@ public class LogWriterText : IDisposable
 
 	public override string ToString() => SaveFilePath;
 
+	/// <summary>Initializes a new instance, creates the output file, and subscribes to log events.</summary>
 	public LogWriterText(Log log, string saveFilePath)
 	{
 		Log = log;
@@ -39,6 +46,7 @@ public class LogWriterText : IDisposable
 		_textStreamWriter.Flush();
 	}
 
+	/// <summary>Releases managed resources when <paramref name="disposing"/> is <c>true</c>.</summary>
 	protected virtual void Dispose(bool disposing)
 	{
 		if (_disposed)
@@ -57,6 +65,7 @@ public class LogWriterText : IDisposable
 		_disposed = true;
 	}
 
+	/// <summary>Disposes the writer, unsubscribes from log events, and closes the output file.</summary>
 	public virtual void Dispose()
 	{
 		Dispose(true);

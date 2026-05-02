@@ -10,6 +10,7 @@ public class ToolbarTextBox : TextBox
 {
 	protected override Type StyleKeyOverride => typeof(TextBox);
 
+	/// <summary>Initializes the text box with optional initial text.</summary>
 	public ToolbarTextBox(string text = "")
 	{
 		Text = text;

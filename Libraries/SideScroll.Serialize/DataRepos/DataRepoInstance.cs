@@ -70,6 +70,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 
 	public override string ToString() => GroupId;
 
+	/// <summary>Initializes the repository instance for the given group, optionally adding an index.</summary>
 	public DataRepoInstance(DataRepo dataRepo, string groupId, bool indexed = false, int? maxItems = null)
 	{
 		DataRepo = dataRepo;

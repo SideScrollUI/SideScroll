@@ -41,6 +41,7 @@ public class TabViewTasks : Grid, IDisposable
 
 	public override string ToString() => TabInstance.Model.Name;
 
+	/// <summary>Initializes the tasks panel for the given tab instance.</summary>
 	public TabViewTasks(TabInstance tabInstance)
 	{
 		TabInstance = tabInstance;

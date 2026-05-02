@@ -7,8 +7,10 @@ using SideScroll.Utilities;
 
 namespace SideScroll.Tabs.Tools.FileViewer;
 
+/// <summary>Marker interface for tab types that display a file, exposing the file path.</summary>
 public interface IFileTypeView
 {
+	/// <summary>Gets or sets the path of the file being displayed.</summary>
 	string? Path { get; set; }
 }
 

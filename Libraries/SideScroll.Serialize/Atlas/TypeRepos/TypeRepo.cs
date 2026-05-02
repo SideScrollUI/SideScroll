@@ -51,6 +51,7 @@ public interface IPreloadRepo
 public abstract class TypeRepo : IDisposable
 {
 	// Should we switch this to List<Type> instead?
+	/// <summary>Gets or sets the ordered list of repo creators used to select the appropriate <see cref="TypeRepo"/> for each type.</summary>
 	public static List<IRepoCreator> RepoCreators { get; set; } =
 	[
 		new TypeRepoUnknown.Creator(),

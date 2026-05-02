@@ -68,6 +68,7 @@ public class ScreenCapture : Grid
 		return snapshotButton;
 	}
 
+	/// <summary>Initializes the screen capture panel for the given viewer and target control.</summary>
 	public ScreenCapture(TabViewer tabViewer, Control control)
 	{
 		TabViewer = tabViewer;

@@ -29,6 +29,7 @@ public class TabViewTitle : Border, IDisposable
 	/// <summary>Gets the container grid that holds the title text and status indicators.</summary>
 	public Grid ContainerGrid { get; }
 
+	/// <summary>Gets or sets the title text displayed in this view header.</summary>
 	public string Label
 	{
 		get => _label;
@@ -40,6 +41,7 @@ public class TabViewTitle : Border, IDisposable
 	}
 	private string _label;
 
+	/// <summary>Initializes the title for the given tab view, trimming the label to its first line.</summary>
 	public TabViewTitle(TabView tabView, string? label = null)
 	{
 		TabView = tabView;

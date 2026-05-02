@@ -20,6 +20,7 @@ public class BaseView : UserControl
 	/// <summary>Gets the root tab viewer hosted in this view.</summary>
 	public TabViewer TabViewer { get; protected set; }
 
+	/// <summary>Initializes the view with the given project, setting up fonts and the tab viewer.</summary>
 	public BaseView(Project project)
 	{
 		SideScrollInit.Initialize();
@@ -30,6 +31,7 @@ public class BaseView : UserControl
 		LoadProject(project);
 	}
 
+	/// <summary>Initializes the view by loading a project from the given settings.</summary>
 	public BaseView(ProjectSettings settings) :
 		this(Project.Load(settings))
 	{

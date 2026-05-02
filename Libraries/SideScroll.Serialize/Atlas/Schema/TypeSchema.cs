@@ -196,8 +196,10 @@ public class TypeSchema
 	/// </summary>
 	public const BindingFlags BindingAttributes = BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
 
+	/// <summary>Returns the type name.</summary>
 	public override string ToString() => Name;
 
+	/// <summary>Initializes a new schema by reflecting on the given runtime type.</summary>
 	public TypeSchema(Type type, Serializer serializer)
 	{
 		Type = type;
@@ -215,6 +217,7 @@ public class TypeSchema
 		}
 	}
 
+	/// <summary>Initializes a new schema by deserializing it from the binary reader.</summary>
 	public TypeSchema(Log log, Serializer serializer, BinaryReader reader)
 	{
 		Load(log, serializer, reader);

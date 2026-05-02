@@ -24,6 +24,7 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 	/// <summary>Gets or sets whether cell text wraps when it exceeds the column width.</summary>
 	public bool WordWrap { get; set; }
 
+	/// <summary>Initializes the column bound to the given data grid and data column.</summary>
 	public DataGridBoundTextColumn(DataGrid dataGrid, DataColumn dataColumn)
 	{
 		DataGrid = dataGrid;

@@ -49,6 +49,7 @@ public class Tag
 	[HiddenColumn]
 	public TagType Type { get; set; }
 
+	/// <summary>Returns a formatted string representation of the tag as <c>[ Name = Value ]</c>.</summary>
 	public override string ToString()
 	{
 		string? text = Value.Formatted(MaxValueLength);
@@ -60,14 +61,17 @@ public class Tag
 		return "[ " + Name + " = " + text + " ]";
 	}
 
+	/// <summary>Initializes an empty tag with no name or value.</summary>
 	public Tag() { }
 
+	/// <summary>Initializes a tag using the object's string representation as both name and value.</summary>
 	public Tag(object value)
 	{
 		Name = value?.ToString() ?? "(null)";
 		Value = value;
 	}
 
+	/// <summary>Initializes a tag as a copy of another tag.</summary>
 	public Tag(Tag tag)
 	{
 		Name = tag.Name;
@@ -75,6 +79,7 @@ public class Tag
 		Type = tag.Type;
 	}
 
+	/// <summary>Initializes a tag with the given name, value, and optional tag type.</summary>
 	public Tag(string name, object? value, TagType type = TagType.Default)
 	{
 		Name = name;

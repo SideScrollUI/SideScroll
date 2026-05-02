@@ -19,6 +19,7 @@ public class TabTextArea : Border
 	/// <summary>Gets the text block that renders the content.</summary>
 	public TextBlock TextBlock { get; }
 
+	/// <summary>Initializes the text area with optional display text.</summary>
 	public TabTextArea(string? text = null)
 	{
 		Text = text ?? "";

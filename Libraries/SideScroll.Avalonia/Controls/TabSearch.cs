@@ -26,6 +26,7 @@ public class TabSearch : Grid
 		set => TextBoxSearch.Text = value;
 	}
 
+	/// <summary>Initializes the search bar, creating the text box and clear button.</summary>
 	public TabSearch()
 	{
 		ColumnDefinitions = new ColumnDefinitions("*");

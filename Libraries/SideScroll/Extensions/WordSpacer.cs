@@ -298,7 +298,10 @@ public class WordSpacer
 		/// <summary>
 		/// Gets whether this token can be merged with numbers and lowercase letters
 		/// </summary>
-		public bool IsNumberLowerCompatible => TokenType == TokenType.NumberLower || TokenType == TokenType.Number || TokenType == TokenType.LowerString;
+		public bool IsNumberLowerCompatible =>
+			TokenType == TokenType.NumberLower ||
+			TokenType == TokenType.Number ||
+			TokenType == TokenType.LowerString;
 
 		/// <summary>
 		/// Determines the token type for a character

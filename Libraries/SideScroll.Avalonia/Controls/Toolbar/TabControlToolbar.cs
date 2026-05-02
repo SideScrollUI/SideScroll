@@ -262,6 +262,7 @@ public class TabControlToolbar : Grid, IDisposable
 /// <summary>A non-wrapping text block styled for use in a toolbar.</summary>
 public class ToolbarTextBlock : TextBlock
 {
+	/// <summary>Initializes the text block with optional display text.</summary>
 	public ToolbarTextBlock(string text = "")
 	{
 		Text = text;
@@ -279,6 +280,7 @@ public class ToolbarRadioButton : RadioButton
 {
 	protected override Type StyleKeyOverride => typeof(RadioButton);
 
+	/// <summary>Initializes the radio button with optional display text.</summary>
 	public ToolbarRadioButton(string text = "")
 	{
 		Foreground = SideScrollTheme.ToolbarLabelForeground;
