@@ -8,13 +8,13 @@ namespace SideScroll.Avalonia.Samples;
 
 public class SampleMainWindow : BaseWindow
 {
-	public SampleMainWindow() : base(Project.Load<SampleUserSettings>(SampleProjectSettings.Settings))
+	public SampleMainWindow() : base(Project.Load<SampleUserSettings>(SampleProjectSettings.Default))
 	{
-		LoadTab(new TabAvaloniaSamples());
+		Icon = new WindowIcon(Assets.Icons.SideScroll.Stream);
 
 		LiveChartCreator.Register();
 		TabViewer.Toolbar?.AddRightControls();
 
-		Icon = new WindowIcon(Assets.Icons.SideScroll.Stream);
+		LoadTab(new TabAvaloniaSamples());
 	}
 }

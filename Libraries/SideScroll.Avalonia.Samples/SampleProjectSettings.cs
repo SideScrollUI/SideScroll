@@ -3,13 +3,23 @@ using SideScroll.Tabs.Settings;
 
 namespace SideScroll.Avalonia.Samples;
 
-public static class SampleProjectSettings
+public class SampleProjectSettings : ProjectSettings
 {
-	public static ProjectSettings Settings => new()
+	public override SampleUserSettings DefaultUserSettings => new()
+	{
+		EnableCustomTitleBar = DefaultEnableCustomTitlebar,
+		DataSettings = new()
+		{
+			AppDataPath = DefaultAppDataPath,
+			LocalDataPath = DefaultLocalDataPath,
+		},
+	};
+
+	public static SampleProjectSettings Default => new()
 	{
 		Name = "SideScroll",
 		LinkType = "sidescroll",
-		Version = ProjectSettings.ProgramVersion(),
+		Version = ProgramVersion(),
 		DataVersion = new Version(0, 17, 0),
 		CustomTitleIcon = Logo.Svg.SideScrollTranslucent,
 	};

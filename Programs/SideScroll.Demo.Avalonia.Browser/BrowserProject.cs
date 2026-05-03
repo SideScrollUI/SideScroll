@@ -22,8 +22,8 @@ public class BrowserProject(ProjectSettings projectSettings, UserSettings userSe
 	/// </summary>
 	public static BrowserProject Load()
 	{
-		var projectSettings = SampleProjectSettings.Settings;
-		var defaultUserSettings = new SampleUserSettings();
+		var projectSettings = SampleProjectSettings.Default;
+		var defaultUserSettings = projectSettings.DefaultUserSettings;
 
 		// Create a temporary project to access Data.App for loading previously saved UserSettings
 		var tempProject = new BrowserProject(projectSettings, defaultUserSettings);

@@ -7,11 +7,11 @@ namespace SideScroll.Avalonia.Samples;
 
 public class SampleMainView : BaseView
 {
-	public SampleMainView() : base(Project.Load(SampleProjectSettings.Settings))
+	public SampleMainView() : base(Project.Load(SampleProjectSettings.Default))
 	{
-		LoadTab(new TabAvaloniaSamples());
-
 		LiveChartCreator.Register();
 		TabViewer.Toolbar?.AddRightControls();
+
+		LoadTab(new TabAvaloniaSamples());
 	}
 }

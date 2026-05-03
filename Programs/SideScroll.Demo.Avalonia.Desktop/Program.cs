@@ -21,7 +21,7 @@ internal static class Program
 		}
 		catch (Exception e)
 		{
-			var settings = SampleProjectSettings.Settings;
+			var settings = SampleProjectSettings.Default;
 			LogUtils.Save(settings.ExceptionsPath, settings.Name!, e);
 			return 1;
 		}
