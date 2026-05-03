@@ -29,8 +29,8 @@ public class SampleMembers
 	[Item]
 	public bool BoolMethod() => false;
 
-	public string? StringProperty => "Properties will show in both Rows and Columns by default, and will be cached the first time they're needed";
-	public string? StringField = "Fields only show as Rows and not in Columns";
+	public string StringProperty => "Properties will show in both Rows and Columns by default, and will be cached the first time they're needed";
+	public string StringField = "Fields only show as Rows and not in Columns";
 	[Item]
 	public string StringMethod() => "Method results will be cached the first time they're needed";
 

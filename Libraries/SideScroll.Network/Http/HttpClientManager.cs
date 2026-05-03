@@ -41,7 +41,7 @@ public static class HttpClientManager
 				client.DefaultRequestHeaders.Add("Accept", config.Accept);
 			}
 
-			if (config.Timeout is TimeSpan timeout)
+			if (config.Timeout is { } timeout)
 			{
 				client.Timeout = timeout;
 			}

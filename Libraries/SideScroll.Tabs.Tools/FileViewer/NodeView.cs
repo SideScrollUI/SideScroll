@@ -89,16 +89,15 @@ public abstract class NodeView : IHasLinks, INotifyPropertyChanged
 
 	private void UpdateDataRepo()
 	{
-		if (FileSelectorOptions?.DataRepoFavorites is DataRepoView<NodeView> dataRepoFavorites)
+		if (FileSelectorOptions?.DataRepoFavorites is not { } dataRepoFavorites) return;
+
+		if (_favorite)
 		{
-			if (_favorite)
-			{
-				dataRepoFavorites.Save(null, Path, this);
-			}
-			else
-			{
-				dataRepoFavorites.Delete(null, Path);
-			}
+			dataRepoFavorites.Save(null, Path, this);
+		}
+		else
+		{
+			dataRepoFavorites.Delete(null, Path);
 		}
 	}
 

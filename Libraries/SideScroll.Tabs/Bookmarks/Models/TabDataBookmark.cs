@@ -112,7 +112,7 @@ public class TabDataBookmark
 			if (dataKey != null && row.DataValue != null)
 			{
 				// Interfaces and base classes need to specify a type
-				if (DataRepoType is Type type)
+				if (DataRepoType is { } type)
 				{
 					project.Data.App.Save(type, DataRepoGroupId, dataKey, row.DataValue);
 				}

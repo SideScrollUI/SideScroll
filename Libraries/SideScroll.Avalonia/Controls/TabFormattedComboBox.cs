@@ -46,7 +46,7 @@ public class TabFormattedComboBox : ComboBox
 
 		InitializeComponent();
 
-		if (property.GetCustomAttribute<ToolTipAttribute>() is ToolTipAttribute toolTipAttribute)
+		if (property.GetCustomAttribute<ToolTipAttribute>() is { } toolTipAttribute)
 		{
 			ToolTip.SetTip(this, toolTipAttribute.Text);
 		}

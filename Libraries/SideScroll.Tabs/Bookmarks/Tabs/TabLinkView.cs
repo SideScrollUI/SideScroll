@@ -42,7 +42,7 @@ public class TabLinkView(LinkedBookmark linkedBookmark, Project project) : ITabC
 
 	public static TabInstance Create(LinkedBookmark linkedBookmark, Project project, ITab iTab)
 	{
-		Type tabType = linkedBookmark.Bookmark.TabType ?? throw new ArgumentNullException("Bookmark.Type");
+		Type tabType = linkedBookmark.Bookmark.TabType ?? throw new ArgumentNullException("linkedBookmark.Bookmark.TabType");
 
 		if (!typeof(ITab).IsAssignableFrom(tabType))
 		{

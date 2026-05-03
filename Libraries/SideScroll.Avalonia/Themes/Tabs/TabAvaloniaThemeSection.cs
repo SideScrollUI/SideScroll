@@ -84,7 +84,7 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 				}
 			}
 
-			if (GetSamples() is object obj)
+			if (GetSamples() is { } obj)
 			{
 				SelectedItems = new List<ListItem>
 				{

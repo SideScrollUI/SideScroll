@@ -315,7 +315,7 @@ public class TabBookmark
 	/// </summary>
 	public bool TryGetValue(string label, [NotNullWhen(true)] out TabBookmark? childBookmarkNode)
 	{
-		if (SelectedRowViews.FirstOrDefault(t => t.SelectedRow.ToString() == label) is SelectedRowView selectedRowView)
+		if (SelectedRowViews.FirstOrDefault(t => t.SelectedRow.ToString() == label) is { } selectedRowView)
 		{
 			childBookmarkNode = selectedRowView.TabBookmark;
 			return true;

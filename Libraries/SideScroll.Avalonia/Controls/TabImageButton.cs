@@ -72,7 +72,7 @@ public class TabImageButton : Button, IDisposable
 
 	/// <summary>Gets the pointer-hover icon tint color, taken from <see cref="ImageColorView"/> when available, otherwise the theme highlight default.</summary>
 	protected virtual Color? HighlightColor => (ImageResource as ImageColorView)?.HighlightColor ?? SideScrollTheme.IconForegroundHighlight.Color;
-	
+
 	/// <summary>Gets the disabled-state icon tint color from the current theme.</summary>
 	protected virtual Color? DisabledColor => SideScrollTheme.IconForegroundDisabled.Color;
 
@@ -282,7 +282,7 @@ public class TabImageButton : Button, IDisposable
 		if (CallActionAsync != null)
 		{
 			taskInstance = StartTaskAsync();
-			if (!UseBackgroundThread && taskInstance?.Task is Task task)
+			if (!UseBackgroundThread && taskInstance?.Task is { } task)
 			{
 				await task;
 			}

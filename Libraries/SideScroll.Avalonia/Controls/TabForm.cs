@@ -137,7 +137,7 @@ public class TabForm : Border, IValidationControl
 		Control? lastControl = null;
 		foreach (ListProperty property in properties)
 		{
-			if (property.GetCustomAttribute<HeaderAttribute>() is HeaderAttribute headerAttribute)
+			if (property.GetCustomAttribute<HeaderAttribute>() is { } headerAttribute)
 			{
 				AddHeader(headerAttribute.Text);
 			}
@@ -256,7 +256,7 @@ public class TabForm : Border, IValidationControl
 		int rowIndex = ContainerGrid.RowDefinitions.Count;
 
 		if (rowIndex > 0 && columnIndex > 0 &&
-			ContainerGrid.Children.LastOrDefault() is Control lastControl && Grid.GetColumn(lastControl) < columnIndex)
+			ContainerGrid.Children.LastOrDefault() is { } lastControl && Grid.GetColumn(lastControl) < columnIndex)
 		{
 			rowIndex--; // Reuse previous row
 		}

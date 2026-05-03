@@ -165,7 +165,7 @@ public class ScreenCapture : Grid
 			SuggestedFileName = $"{TabViewer.Project.Name}.{FileUtils.TimestampString}.png",
 			FileTypeChoices = [FilePickerFileTypes.ImagePng],
 		});
-		if (result?.TryGetLocalPath() is string path)
+		if (result?.TryGetLocalPath() is { } path)
 		{
 			_lastSavePath = path;
 			bitmap.Save(path);

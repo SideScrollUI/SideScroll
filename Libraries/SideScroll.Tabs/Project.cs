@@ -190,7 +190,7 @@ public class ProjectDataRepos(ProjectSettings projectSettings, UserSettings user
 	/// Gets the link-specific path component, either a hashed link ID or "Default"
 	/// </summary>
 	protected string LinkPath =>
-		DataSettings.LinkId is string linkId ?
+		DataSettings.LinkId is { } linkId ?
 			Paths.Combine("Links", linkId.HashSha256ToBase32()) :
 			"Default";
 }

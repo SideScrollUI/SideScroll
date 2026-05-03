@@ -52,7 +52,7 @@ public class EditValueConverter : IValueConverter
 			return dateTime.Format(TimeFormatType.Microsecond);
 		}
 
-		if (value.GetType().IsPrimitive == false && targetType == typeof(string))
+		if (!value.GetType().IsPrimitive && targetType == typeof(string))
 			return value.Formatted();
 
 		try

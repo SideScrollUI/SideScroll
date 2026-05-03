@@ -38,13 +38,13 @@ public static class ObjectUtils
 
 		Type type = obj.GetType();
 		var keyProperties = type.GetPropertiesWithAttribute<DataKeyAttribute>();
-		if (keyProperties.FirstOrDefault() is PropertyInfo propertyInfo)
+		if (keyProperties.FirstOrDefault() is { } propertyInfo)
 		{
 			return propertyInfo.GetValue(obj)?.ToUniqueString();
 		}
 
 		var keyFields = type.GetFieldsWithAttribute<DataKeyAttribute>();
-		if (keyFields.FirstOrDefault() is FieldInfo fieldInfo)
+		if (keyFields.FirstOrDefault() is { } fieldInfo)
 		{
 			return fieldInfo.GetValue(obj)?.ToUniqueString();
 		}
@@ -63,13 +63,13 @@ public static class ObjectUtils
 		Type type = obj.GetType();
 
 		var valueProperties = type.GetPropertiesWithAttribute<DataValueAttribute>();
-		if (valueProperties.FirstOrDefault() is PropertyInfo propertyInfo)
+		if (valueProperties.FirstOrDefault() is { } propertyInfo)
 		{
 			return propertyInfo.GetValue(obj);
 		}
 
 		var valueFields = type.GetFieldsWithAttribute<DataValueAttribute>();
-		if (valueFields.FirstOrDefault() is FieldInfo fieldInfo)
+		if (valueFields.FirstOrDefault() is { } fieldInfo)
 		{
 			return fieldInfo.GetValue(obj);
 		}

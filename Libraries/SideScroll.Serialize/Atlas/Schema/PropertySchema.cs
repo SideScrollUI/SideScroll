@@ -58,7 +58,7 @@ public class PropertySchema : MemberSchema
 	/// </summary>
 	private bool GetIsReadable()
 	{
-		if (PropertyInfo.CanRead == false)
+		if (!PropertyInfo.CanRead)
 			return false;
 
 		if (PropertyInfo.GetIndexParameters().Length > 0)

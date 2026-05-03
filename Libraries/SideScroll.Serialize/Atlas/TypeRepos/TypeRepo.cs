@@ -624,7 +624,7 @@ public abstract class TypeRepo : IDisposable
 		if (objectIndex >= ObjectsLoaded.Length)
 			return null;
 
-		if (ObjectsLoaded[objectIndex] is object existingObject)
+		if (ObjectsLoaded[objectIndex] is { } existingObject)
 			return existingObject;
 
 		ObjectsLoadedCount++;
@@ -638,7 +638,7 @@ public abstract class TypeRepo : IDisposable
 	/// </summary>
 	public object? LoadFullObject(int objectIndex)
 	{
-		if (ObjectsLoaded[objectIndex] is object existingObject)
+		if (ObjectsLoaded[objectIndex] is { } existingObject)
 			return existingObject;
 
 		object? obj = CreateObject(objectIndex);

@@ -39,7 +39,7 @@ public class FileProbeContext
 
 	/// <summary>Gets the lower-case file extension (without the leading dot) of the file being probed.</summary>
 	public string Extension { get; }
-	
+
 	/// <summary>Gets the total size of the file in bytes.</summary>
 	public long FileSize { get; }
 
@@ -150,7 +150,7 @@ public static class FileTypeDetector
 				fileSize = stream.Length;
 				int bytesToRead = (int)Math.Min(DefaultHeaderSize, fileSize);
 				headerBytes = new byte[bytesToRead];
-				stream.Read(headerBytes, 0, bytesToRead);
+				stream.ReadExactly(headerBytes, 0, bytesToRead);
 			}
 
 			var context = new FileProbeContext(filePath, headerBytes, extension, fileSize);

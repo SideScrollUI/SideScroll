@@ -372,7 +372,7 @@ public class ObjectJsonConverter : JsonConverter<object>
 			JsonValueKind.Number => jsonDoc.RootElement.TryGetInt32(out int i) ? i :
 									jsonDoc.RootElement.TryGetInt64(out long l) ? l :
 									jsonDoc.RootElement.TryGetDouble(out double d) ? d :
-									(object)jsonDoc.RootElement.GetDecimal(),
+									jsonDoc.RootElement.GetDecimal(),
 			JsonValueKind.String => jsonDoc.RootElement.GetString(),
 			JsonValueKind.Array => jsonDoc.RootElement.Deserialize<List<object?>>(options),
 			JsonValueKind.Object => jsonDoc.RootElement.Deserialize<Dictionary<string, object?>>(options),
@@ -429,7 +429,7 @@ public class TypeJsonConverter : JsonConverter<Type>
 {
 	public override Type? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 	{
-		if (reader.GetString() is string typeName)
+		if (reader.GetString() is { } typeName)
 		{
 			return Type.GetType(typeName, throwOnError: false);
 		}
@@ -449,7 +449,7 @@ public class TimeZoneInfoJsonConverter : JsonConverter<TimeZoneInfo>
 {
 	public override TimeZoneInfo? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 	{
-		if (reader.GetString() is string timeZoneId)
+		if (reader.GetString() is { } timeZoneId)
 		{
 			return TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
 		}

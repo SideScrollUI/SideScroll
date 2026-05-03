@@ -177,7 +177,7 @@ public static class TypeExtensions
 			name = type.FullName!;
 		}
 
-		if (type.Assembly.GetName().Name is string assemblyName)
+		if (type.Assembly.GetName().Name is { } assemblyName)
 		{
 			name += ", " + assemblyName;
 		}

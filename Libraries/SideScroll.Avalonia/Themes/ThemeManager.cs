@@ -104,7 +104,7 @@ public class ThemeManager
 
 		// Don't replace user modified themes, but update them to add new resources
 		if (!isHybridFound ||
-			GetUpdatedTheme(variant) is not AvaloniaThemeSettings existingThemeSettings ||
+			GetUpdatedTheme(variant) is not { } existingThemeSettings ||
 			(existingThemeSettings.ModifiedAt == null && existingThemeSettings.Version != Project.Version))
 		{
 			DataRepoThemes.Save(call, defaultTheme);
@@ -127,7 +127,7 @@ public class ThemeManager
 			}
 		}
 
-		if (GetUpdatedTheme(themeSettings.Name) is not AvaloniaThemeSettings existingThemeSettings ||
+		if (GetUpdatedTheme(themeSettings.Name) is not { } existingThemeSettings ||
 			(existingThemeSettings.ModifiedAt == null && existingThemeSettings.Version != Project.Version))
 		{
 			DataRepoThemes.Save(call, themeSettings);

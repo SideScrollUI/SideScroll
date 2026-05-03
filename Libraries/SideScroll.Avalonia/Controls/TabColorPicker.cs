@@ -76,8 +76,8 @@ public class TabColorPicker : ColorPicker
 		{
 			// Update when focus lost
 			if (e.NewValue is false &&
-				_prevSelectedIndex is int selectedIndex &&
-				_prevColorModel is ColorModel colorModel)
+				_prevSelectedIndex is { } selectedIndex &&
+				_prevColorModel is { } colorModel)
 			{
 				Dispatcher.UIThread.Post(() =>
 				{
@@ -105,7 +105,7 @@ public class TabColorPicker : ColorPicker
 	// Force control to update
 	private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
 	{
-		if (e.PropertyName == Property?.Name && Property?.Value is object obj)
+		if (e.PropertyName == Property?.Name && Property?.Value is { } obj)
 		{
 			SetCurrentValue(ColorProperty, obj);
 		}

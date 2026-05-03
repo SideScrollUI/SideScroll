@@ -620,7 +620,7 @@ public class TypeSchema
 		// Check deprecated names
 		foreach (MemberInfo memberInfo in Type!.GetMembers(BindingAttributes))
 		{
-			if (memberInfo.GetCustomAttribute<DeprecatedNameAttribute>() is DeprecatedNameAttribute attribute &&
+			if (memberInfo.GetCustomAttribute<DeprecatedNameAttribute>() is { } attribute &&
 				attribute.Names.Contains(name))
 			{
 				return memberInfo;

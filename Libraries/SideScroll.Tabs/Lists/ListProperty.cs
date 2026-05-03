@@ -231,7 +231,7 @@ public class ListProperty : ListMember, IPropertyIsEditable
 		{
 			if (listProperty.GetCustomAttribute<InlineAttribute>() != null)
 			{
-				if (listProperty.Value is object value)
+				if (listProperty.Value is { } value)
 				{
 					ItemCollection<ListProperty> inlinedProperties = Create(value, includeBaseTypes);
 					newProperties.AddRange(inlinedProperties);

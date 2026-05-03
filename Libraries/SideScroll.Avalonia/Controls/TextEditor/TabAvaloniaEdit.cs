@@ -169,7 +169,7 @@ public class TabAvaloniaEdit : Border
 	/// <summary>Switches the editor font to the configured monospace font family.</summary>
 	public void EnableMonospace()
 	{
-		if (SideScrollTheme.MonospaceFontFamily is FontFamily fontFamily)
+		if (SideScrollTheme.MonospaceFontFamily is { } fontFamily)
 		{
 			TextEditor.FontFamily = fontFamily;
 			TextEditor.FontWeight = SideScrollTheme.MonospaceFontWeight;
@@ -286,7 +286,7 @@ public class TabAvaloniaEdit : Border
 	private void ListProperty_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
 	{
 		if (e.PropertyName == nameof(ListProperty.ValueText) &&
-			ListProperty?.ValueText?.ToString() is string value &&
+			ListProperty?.ValueText?.ToString() is { } value &&
 			value != TextEditor.Text)
 		{
 			TextEditor.Text = value;

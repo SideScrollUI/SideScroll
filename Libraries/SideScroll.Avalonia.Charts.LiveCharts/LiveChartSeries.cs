@@ -9,7 +9,6 @@ using SideScroll.Utilities;
 using SkiaSharp;
 using System.Collections;
 using System.Collections.Specialized;
-using System.Reflection;
 
 namespace SideScroll.Avalonia.Charts.LiveCharts;
 
@@ -142,7 +141,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 				if (ListSeries.XPropertyInfo?.PropertyType == typeof(DateTime))
 				{
 					var startTime = new DateTime((long)liveChartPoint.X!, DateTimeKind.Utc);
-					if (ListSeries.PeriodDuration is TimeSpan timeSpan)
+					if (ListSeries.PeriodDuration is { } timeSpan)
 					{
 						string timeText = DateTimeUtils.FormatTimeRange(startTime, startTime.Add(timeSpan), false);
 						lines.Add($"Time: {timeText}");
@@ -184,7 +183,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 		// Faster than using ItemSource?
 		foreach (object obj in iList)
 		{
-			if (ListSeries.XPropertyInfo is PropertyInfo xPropertyInfo)
+			if (ListSeries.XPropertyInfo is { } xPropertyInfo)
 			{
 				object? xObj = xPropertyInfo.GetValue(obj);
 				if (xObj is DateTime dateTime)
@@ -202,7 +201,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 			}
 
 			double? y = null;
-			if (ListSeries.YPropertyInfo is PropertyInfo yPropertyInfo)
+			if (ListSeries.YPropertyInfo is { } yPropertyInfo)
 			{
 				object? value = yPropertyInfo.GetValue(obj);
 				if (value != null)
@@ -221,7 +220,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 			}
 
 			double? yCoordinate = null;
-			if (y != null && Chart.ChartView.LogBase is double logBase)
+			if (y != null && Chart.ChartView.LogBase is { } logBase)
 			{
 				if (y.Value == 0)
 				{

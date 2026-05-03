@@ -73,7 +73,7 @@ public class MacosTitleButtons : TemplatedControl
 			else
 			{
 				window.WindowState = WindowState.Normal;
-				if (_normalBounds is Rect rect)
+				if (_normalBounds is { } rect)
 				{
 					window.Width = rect.Width;
 					window.Height = rect.Height;

@@ -74,7 +74,7 @@ public class DateTimeValueConverter : IValueConverter
 	{
 		// Debug.WriteLine($"SetDate {dateTime}");
 
-		if (PreviousDateTime is DateTime prevDateTime)
+		if (PreviousDateTime is { } prevDateTime)
 		{
 			// use the same Kind as the original
 			dateTime = DateTime.SpecifyKind(dateTime, prevDateTime.Kind);
@@ -103,7 +103,7 @@ public class DateTimeValueConverter : IValueConverter
 			return new BindingNotification(new DataValidationException(""), BindingErrorType.DataValidationError);
 		}
 
-		if (PreviousDateTime is not DateTime dateTime)
+		if (PreviousDateTime is not { } dateTime)
 		{
 			dateTime = TimeZoneView.Now.Date;
 		}

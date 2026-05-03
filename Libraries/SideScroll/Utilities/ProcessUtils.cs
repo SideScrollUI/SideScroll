@@ -103,8 +103,8 @@ public static class ProcessUtils
 	{
 		// Select file instead if in folder path
 		// Trying to open a file will use the default app to open it
-		if (Path.GetDirectoryName(folder) is string directoryName &&
-			Path.GetFileName(folder) is string fileName &&
+		if (Path.GetDirectoryName(folder) is { } directoryName &&
+			Path.GetFileName(folder) is { } fileName &&
 			!File.GetAttributes(folder).HasFlag(FileAttributes.Directory))
 		{
 			folder = directoryName;

@@ -81,7 +81,7 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 	{
 		Indices indices = Load(call);
 
-		if (indices.Items.FirstOrDefault(item => item.Key == key) is Item existingItem)
+		if (indices.Items.FirstOrDefault(item => item.Key == key) is { } existingItem)
 		{
 			return existingItem;
 		}
@@ -100,7 +100,7 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 
 	private void PruneMaxItems(Call call, Indices indices)
 	{
-		if (MaxItems is int maxItems)
+		if (MaxItems is { } maxItems)
 		{
 			while (indices.Items.Count > maxItems)
 			{

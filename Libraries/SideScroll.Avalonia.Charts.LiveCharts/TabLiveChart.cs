@@ -74,10 +74,10 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 	public int MaxFindDistance { get; set; } = 20;
 
 	/// <summary>Gets the underlying LiveCharts <see cref="CartesianChart"/> control.</summary>
-	public CartesianChart Chart { get; private set; }
+	public CartesianChart Chart { get; }
 
 	/// <summary>Gets the legend panel displayed beside or below the chart.</summary>
-	public TabChartLegend<ISeries> Legend { get; private set; }
+	public TabChartLegend<ISeries> Legend { get; }
 
 	/// <summary>Gets or sets the X axis configuration.</summary>
 	public Axis XAxis { get; set; }
@@ -85,7 +85,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 	public Axis YAxis { get; set; } // left/right?
 
 	/// <summary>Gets the list of LiveChart series wrappers for each data series.</summary>
-	public List<LiveChartSeries> LiveChartSeries { get; private set; } = [];
+	public List<LiveChartSeries> LiveChartSeries { get; } = [];
 
 	/// <summary>Gets the chart series the pointer is currently hovering over, or <c>null</c> when not hovering.</summary>
 	public ChartSeries<ISeries>? HoverSeries { get; private set; }
@@ -301,7 +301,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 	public Axis CreateYAxis() // AxisPosition axisPosition = AxisPosition.Left)
 	{
 		Axis axis;
-		if (ChartView.LogBase is double logBase)
+		if (ChartView.LogBase is { } logBase)
 		{
 			axis = new LogarithmicAxis(logBase)
 			{
@@ -426,15 +426,15 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 			Stroke = new SolidColorPaint(color.WithAlpha(200), (float)chartAnnotation.StrokeThickness),
 		};
 
-		if (chartAnnotation.X is double x)
+		if (chartAnnotation.X is { } x)
 		{
 			section.Xj = x;
 			section.Xi = x;
 		}
 
-		if (chartAnnotation.Y is double y)
+		if (chartAnnotation.Y is { } y)
 		{
-			if (ChartView.LogBase is double logBase)
+			if (ChartView.LogBase is { } logBase)
 			{
 				y = Math.Log(y, logBase);
 			}
@@ -583,7 +583,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 			minimum = minValue.Value;
 		}
 
-		if (ChartView.LogBase is double logBase)
+		if (ChartView.LogBase is { } logBase)
 		{
 			// Log 0 can return infinity, which is difficult to render
 			double safeMinimum = minimum > 0 ? minimum : 1;
@@ -624,7 +624,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 			if (difference > 0)
 			{
 				double separators = MaxSeparators;
-				if (Chart.Bounds.Height is double height && height > 0)
+				if (Chart.Bounds.Height is double height and > 0)
 				{
 					separators = Math.Clamp(height / MinSeparatorDistance, 1, MaxSeparators);
 				}
@@ -683,7 +683,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 
 			foreach (var dataPoint in series.LineSeries.Values!)
 			{
-				if (dataPoint.Y is double y && !double.IsNaN(y))
+				if (dataPoint.Y is { } y && !double.IsNaN(y))
 				{
 					if (XAxis != null && (dataPoint.X < XAxis.MinLimit || dataPoint.X > XAxis.MaxLimit))
 						continue;
@@ -713,7 +713,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 	/// <summary>Selects the series that owns the given chart point and raises the selection-changed event.</summary>
 	public void SelectPoint(ChartPoint chartPoint)
 	{
-		if (chartPoint.Context.Series.Name is string name)
+		if (chartPoint.Context.Series.Name is { } name)
 		{
 			if (IdxNameToChartSeries.TryGetValue(name, out var series))
 			{
@@ -823,7 +823,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 			ChartPoint? hitPoint = FindClosestPoint(new LvcPoint(point.X, point.Y), MaxFindDistance);
 			if (hitPoint != null)
 			{
-				if (hitPoint.Context.Series.Name is string name)
+				if (hitPoint.Context.Series.Name is { } name)
 				{
 					Legend.HighlightSeries(name);
 					if (IdxNameToChartSeries.TryGetValue(name, out ChartSeries<ISeries>? series))

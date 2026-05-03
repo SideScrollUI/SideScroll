@@ -195,7 +195,7 @@ public class TimeRangeValue : ITags
 		var sorted = input.OrderBy(p => p.StartTime);
 
 		// Merge continuous points with the same value together to improve storage speeds
-		var merged = new List<TimeRangeValue>();
+		List<TimeRangeValue> merged = [];
 		TimeRangeValue? prevPoint = null;
 		foreach (TimeRangeValue timeRangeValue in sorted)
 		{

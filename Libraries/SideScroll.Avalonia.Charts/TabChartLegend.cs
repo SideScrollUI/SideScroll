@@ -192,7 +192,7 @@ public abstract class TabChartLegend<TSeries> : Grid
 	{
 		int selectedCount = LegendItems.Count(item => item.IsSelected);
 
-		if (legendItem.IsSelected == false || selectedCount > 1)
+		if (!legendItem.IsSelected || selectedCount > 1)
 		{
 			SetAllVisible(false);
 			legendItem.IsSelected = true;

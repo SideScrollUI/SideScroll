@@ -51,7 +51,7 @@ public class LiveChartTooltip(TabLiveChart liveChart) : SKDefaultTooltip
 			};
 
 		TextSize = chart.View.TooltipTextSize;
-		if (chart.View.TooltipTextPaint is Paint toolTipTextPaint) FontPaint = toolTipTextPaint;
+		if (chart.View.TooltipTextPaint is { } toolTipTextPaint) FontPaint = toolTipTextPaint;
 
 		Geometry.Wedge = Wedge;
 		Geometry.WedgeThickness = 3;
@@ -228,13 +228,5 @@ public class LiveChartTooltip(TabLiveChart liveChart) : SKDefaultTooltip
 					YProperty);
 			_animationAdded = true;
 		}
-	}
-
-	/// <summary>Hides the tooltip for the given chart.</summary>
-	public override void Hide(Chart chart)
-	{
-		base.Hide(chart);
-
-		// Write code here to add custom behavior when the tooltip is hidden.
 	}
 }

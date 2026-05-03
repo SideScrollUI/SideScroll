@@ -40,7 +40,7 @@ public class TabComboBox : ComboBox
 
 		InitializeComponent();
 
-		if (property.GetCustomAttribute<ToolTipAttribute>() is ToolTipAttribute toolTipAttribute)
+		if (property.GetCustomAttribute<ToolTipAttribute>() is { } toolTipAttribute)
 		{
 			ToolTip.SetTip(this, toolTipAttribute.Text);
 		}
@@ -89,7 +89,7 @@ public class TabComboBox : ComboBox
 	private void SelectDefaultValue()
 	{
 		using var enumerator = Items.GetEnumerator();
-		if ((Property?.Object != null && SelectedItem != null) || enumerator.MoveNext() == false) return;
+		if ((Property?.Object != null && SelectedItem != null) || !enumerator.MoveNext()) return;
 
 		// Check for null value match
 		object? value = Property!.Value;

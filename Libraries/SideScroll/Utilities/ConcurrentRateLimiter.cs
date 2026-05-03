@@ -40,7 +40,7 @@ public class ConcurrentRateLimiter : IDisposable
 
 		_concurrencySemaphore = new SemaphoreSlim(MaxConcurrentRequests, MaxConcurrentRequests);
 
-		if (MaxRequestsPerSecond is int rps && rps > 0)
+		if (MaxRequestsPerSecond is { } rps and > 0)
 		{
 			_rateSemaphore = new SemaphoreSlim(rps, rps);
 			_tokenRefillTask = Task.Run(() => RefillTokensAsync(_cts.Token));
@@ -65,7 +65,7 @@ public class ConcurrentRateLimiter : IDisposable
 
 	private async Task RefillTokensAsync(CancellationToken cancellationToken)
 	{
-		if (MaxRequestsPerSecond is not int rps || rps <= 0)
+		if (MaxRequestsPerSecond is not ({ } rps and > 0))
 			return;
 
 		var stopwatch = Stopwatch.StartNew();
@@ -83,7 +83,7 @@ public class ConcurrentRateLimiter : IDisposable
 			double elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
 			int tokensToRelease = (int)(elapsedSeconds * rps); // Calculate tokens based on elapsed time
 			if (tokensToRelease <= 0) continue;
-			
+
 			stopwatch.Restart(); // Reset the stopwatch after releasing tokens
 
 			for (int i = 0; i < tokensToRelease; i++)

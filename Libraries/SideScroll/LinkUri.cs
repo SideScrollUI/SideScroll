@@ -140,6 +140,6 @@ public class LinkUri
 			parts.Add("0");
 		}
 
-		return new Version(string.Join(".", parts));
+		return new Version(string.Join('.', parts));
 	}
 }

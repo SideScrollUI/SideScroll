@@ -71,7 +71,7 @@ public class DataRepoIndexLocalStorage<T>(DataRepoInstance<T> dataRepoInstance, 
 	{
 		Indices indices = Load(call);
 
-		if (indices.Items.FirstOrDefault(item => item.Key == key) is Item existingItem)
+		if (indices.Items.FirstOrDefault(item => item.Key == key) is { } existingItem)
 		{
 			return existingItem;
 		}
@@ -88,7 +88,7 @@ public class DataRepoIndexLocalStorage<T>(DataRepoInstance<T> dataRepoInstance, 
 
 	private void PruneMaxItemsFromLocalStorage(Call call, Indices indices)
 	{
-		if (MaxItems is not int maxItems) return;
+		if (MaxItems is not { } maxItems) return;
 
 		while (indices.Items.Count > maxItems)
 		{

@@ -127,11 +127,11 @@ public class TabTextBox : TextBox
 			MaxHeight = TabForm.ControlMaxHeight;
 		}
 
-		if (property.GetCustomAttribute<ToolTipAttribute>() is ToolTipAttribute toolTipAttribute)
+		if (property.GetCustomAttribute<ToolTipAttribute>() is { } toolTipAttribute)
 		{
 			ToolTip.SetTip(this, toolTipAttribute.Text);
 		}
-		else if (property.GetCustomAttribute<RangeAttribute>() is RangeAttribute rangeAttribute)
+		else if (property.GetCustomAttribute<RangeAttribute>() is { } rangeAttribute)
 		{
 			ToolTip.SetTip(this, $"{rangeAttribute.Minimum} - {rangeAttribute.Maximum}");
 		}
@@ -199,7 +199,7 @@ public class TabTextBox : TextBox
 		get => base.Text;
 		set
 		{
-			if (value is string s && s.StartsWith('{') && s.Contains('\n'))
+			if (value is { } s && s.StartsWith('{') && s.Contains('\n'))
 			{
 				FontFamily = SideScrollTheme.MonospaceFontFamily; // Use monospaced font for Json
 			}

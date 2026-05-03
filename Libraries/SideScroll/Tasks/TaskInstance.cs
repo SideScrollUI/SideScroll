@@ -32,7 +32,7 @@ public class TaskInstance : INotifyPropertyChanged
 	/// Event raised when a message should be displayed to the user
 	/// </summary>
 	public event EventHandler<ShowMessageEventArgs>? OnShowMessage;
-	
+
 	//public event EventHandler<EventArgs> OnComplete;
 
 	/// <summary>
@@ -424,7 +424,7 @@ public class TaskInstance : INotifyPropertyChanged
 	/// </summary>
 	protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 	{
-		if (Creator?.Context is SynchronizationContext context)
+		if (Creator?.Context is { } context)
 		{
 			context.Post(NotifyPropertyChangedContext, propertyName);
 		}
@@ -445,7 +445,7 @@ public class TaskInstance : INotifyPropertyChanged
 	/// </summary>
 	public void ShowMessage(string message)
 	{
-		if (Creator?.Context is SynchronizationContext context)
+		if (Creator?.Context is { } context)
 		{
 			context.Post(ShowMessageContext, message);
 		}

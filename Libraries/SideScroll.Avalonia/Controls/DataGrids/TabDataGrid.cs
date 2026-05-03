@@ -615,7 +615,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		bool showHeader = propertyColumns.Count != 1 && !typeof(IListPair).IsAssignableFrom(ElementType);
 		if (List is IItemCollection itemCollection)
 		{
-			if (itemCollection.ColumnName is string columnName)
+			if (itemCollection.ColumnName is { } columnName)
 			{
 				propertyColumns[0].Label = columnName;
 			}
@@ -886,11 +886,11 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	protected object? GetDefaultSelectedItem()
 	{
 		string defaultItemText;
-		if (List is IItemCollection itemCollection && itemCollection.DefaultSelectedItem is object defaultItem)
+		if (List is IItemCollection itemCollection && itemCollection.DefaultSelectedItem is { } defaultItem)
 		{
 			defaultItemText = defaultItem.ToUniqueString()!;
 		}
-		else if (TabModel.DefaultSelectedItem is object defaultModelItem)
+		else if (TabModel.DefaultSelectedItem is { } defaultModelItem)
 		{
 			defaultItemText = defaultModelItem.ToUniqueString()!;
 		}
@@ -934,7 +934,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 			firstValidObject ??= obj;
 
 			Type type = value.GetType();
-			if (TabUtils.ObjectHasLinks(value, true) && type.IsEnum == false)
+			if (TabUtils.ObjectHasLinks(value, true) && !type.IsEnum)
 			{
 				if (TabInstance.IsOwnerObject(obj.GetInnerValue())) // stops self referencing loops
 					return null;

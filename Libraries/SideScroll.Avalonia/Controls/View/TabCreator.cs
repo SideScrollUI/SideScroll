@@ -49,10 +49,10 @@ public static class TabCreator
 		label = labelOverride ?? label; // Update label before comparing bookmarks
 
 		TabBookmark? tabBookmark = null; // Also assigned to child TabView's, tabView.Instance.TabBookmark = tabBookmark;
-		if (parentTabInstance.TabBookmark is TabBookmark parentTabBookmark && parentTabBookmark.TabDatas != null)
+		if (parentTabInstance.TabBookmark is { } parentTabBookmark && parentTabBookmark.TabDatas != null)
 		{
 			string dataKey = new SelectedRow(obj).ToString() ?? label;
-			if (parentTabBookmark.SelectedRowViews.FirstOrDefault(s => s.ToString() == dataKey) is SelectedRowView selectedRowView)
+			if (parentTabBookmark.SelectedRowViews.FirstOrDefault(s => s.ToString() == dataKey) is { } selectedRowView)
 			{
 				tabBookmark = selectedRowView.TabBookmark;
 
@@ -114,10 +114,7 @@ public static class TabCreator
 		if (value is ITab iTab)
 		{
 			// Custom controls implement ITab
-			TabInstance? childTabInstance = parentTabInstance.CreateChildTab(iTab);
-			if (childTabInstance == null)
-				return null;
-
+			TabInstance childTabInstance = parentTabInstance.CreateChildTab(iTab);
 			childTabInstance.TabBookmark ??= tabBookmark;
 			//childTabInstance.Reinitialize(); // todo: fix, called in TabView
 			childTabInstance.Model.Name = label;

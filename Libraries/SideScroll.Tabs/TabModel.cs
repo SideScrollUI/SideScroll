@@ -260,7 +260,7 @@ public class TabModel
 	/// <returns>A TabModel instance if the object has links or is an enum, otherwise null</returns>
 	public static TabModel? Create(string name, object obj)
 	{
-		if (TabUtils.ObjectHasLinks(obj) == false && obj is not Enum)
+		if (!TabUtils.ObjectHasLinks(obj) && obj is not Enum)
 			return null;
 
 		var tabModel = new TabModel(name);
@@ -443,9 +443,7 @@ public class TabModel
 		}
 		catch (Exception e)
 		{
-			Debug.WriteLine("Failed to add Dictionary",
-				new Tag("Exception", e),
-				new Tag("Dictionary", dictionary));
+			Debug.WriteLine($"Failed to add Dictionary: {e}");
 		}
 
 		if (Object is IComparable)
@@ -524,9 +522,9 @@ public class TabModel
 		// skip over single items that will take up lots of room (always show ListItems though)
 		Skippable = false;
 
-		if (ItemList[0].Count == 1 && ItemList[0][0] is object firstItem)
+		if (ItemList[0].Count == 1 && ItemList[0][0] is { } firstItem)
 		{
-			if (ItemList[0] is IItemCollection itemCollection && !itemCollection.Skippable)
+			if (ItemList[0] is IItemCollection { Skippable: false })
 				return;
 
 			var skippableAttribute = firstItem.GetType().GetCustomAttribute<SkippableAttribute>();

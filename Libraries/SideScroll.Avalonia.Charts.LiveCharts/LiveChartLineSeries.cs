@@ -48,7 +48,7 @@ public class LiveChartLineSeries(LiveChartSeries liveChartSeries) : LineSeries<L
 	/// <summary>Gets the <see cref="SideScroll.Avalonia.Charts.LiveCharts.LiveChartSeries"/> that owns this native series.</summary>
 	public LiveChartSeries LiveChartSeries => liveChartSeries;
 
-	public override string? ToString() => LiveChartSeries.ToString();
+	public override string ToString() => LiveChartSeries.ToString();
 
 	/// <summary>Exposes the base <c>Fetch</c> implementation publicly so the tooltip and hit-test logic can enumerate rendered points.</summary>
 	public new IEnumerable<ChartPoint> Fetch(Chart chart) => base.Fetch(chart);

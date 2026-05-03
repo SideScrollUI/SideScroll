@@ -63,7 +63,7 @@ public class TaskDelegateParams : TaskCreator
 		}
 		catch (Exception e)
 		{
-			if (call.TaskInstance is TaskInstance taskInstance)
+			if (call.TaskInstance is { } taskInstance)
 			{
 				taskInstance.Errored = true;
 				taskInstance.Message = e.Message;

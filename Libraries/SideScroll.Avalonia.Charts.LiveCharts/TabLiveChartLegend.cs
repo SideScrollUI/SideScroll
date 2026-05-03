@@ -29,7 +29,7 @@ public class TabLiveChartLegend(TabLiveChart liveChart)
 		};
 		LegendItems.Add(legendItem);
 
-		if (chartSeries.LineSeries.Name is string name)
+		if (chartSeries.LineSeries.Name is { } name)
 		{
 			IdxLegendItems.Add(name, legendItem);
 		}

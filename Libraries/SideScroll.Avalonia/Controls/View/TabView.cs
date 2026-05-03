@@ -376,7 +376,7 @@ public class TabView : Grid, IDisposable
 
 	private void GridSplitter_DragCompleted(object? sender, VectorEventArgs e)
 	{
-		if (_isDragging == false)
+		if (!_isDragging)
 			return;
 		_isDragging = false;
 
@@ -422,7 +422,7 @@ public class TabView : Grid, IDisposable
 		if (_containerGrid == null)
 			return;
 
-		if (TabViewSettings.Width is double splitterDistance && splitterDistance > MinDesiredSplitterDistance)
+		if (TabViewSettings.Width is { } splitterDistance and > MinDesiredSplitterDistance)
 		{
 			_containerGrid.ColumnDefinitions[0].Width = new GridLength((int)splitterDistance);
 			if (_parentContainerBorder != null)
@@ -718,11 +718,11 @@ public class TabView : Grid, IDisposable
 	{
 		get
 		{
-			if (IsArrangeValid == false)
+			if (!IsArrangeValid)
 				return false;
 
 			// Only add children if they'll be visible
-			if (IsVisible == false)
+			if (!IsVisible)
 				return false;
 
 			if (_tabChildControls == null) // TabTasks hiding can sometimes trigger this, todo: figure out why
@@ -824,13 +824,13 @@ public class TabView : Grid, IDisposable
 		}
 		else
 		{
-			if (CustomTabControls.FirstOrDefault() is ITabSelector tabSelector)
+			if (CustomTabControls.FirstOrDefault() is { } tabSelector)
 			{
 				Instance.SelectedItems = tabSelector.SelectedItems;
 			}
 		}
 
-		if (ShowChildren == false)
+		if (!ShowChildren)
 		{
 			_updateChildControls = true;
 			AddDispatchLoader();

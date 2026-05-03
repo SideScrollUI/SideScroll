@@ -85,7 +85,7 @@ public class TabItemCollection
 			return selectedRow.Object;
 
 		// Try to find a matching Row Index and Key first
-		if (selectedRow.RowIndex is int rowIndex && rowIndex >= 0 && rowIndex < Items.Count)
+		if (selectedRow.RowIndex is { } rowIndex and >= 0 && rowIndex < Items.Count)
 		{
 			object rowObject = Items[rowIndex]!;
 			var currentSelectedRow = new SelectedRow(rowObject);

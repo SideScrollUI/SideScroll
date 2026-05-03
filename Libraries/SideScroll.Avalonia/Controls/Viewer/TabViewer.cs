@@ -145,7 +145,7 @@ public class TabViewer : Grid
 
 	private void AddToolbar()
 	{
-		if (Project.ProjectSettings.ShowToolbar == false)
+		if (!Project.ProjectSettings.ShowToolbar)
 			return;
 
 		// TabViewerToolbar has a null Background to allow drag/drop to work
@@ -245,8 +245,6 @@ public class TabViewer : Grid
 		try
 		{
 			Bookmark bookmark = await Project.Linker.GetLinkAsync(call, linkUri, checkVersion);
-			if (bookmark == null)
-				return null;
 
 			AvaloniaUtils.ShowFlyout(buttonImport, flyout, "Link retrieved, importing");
 
@@ -461,7 +459,7 @@ public class TabViewer : Grid
 	/// <summary>Navigates to the previous bookmark in the navigator history.</summary>
 	public void SeekBackward()
 	{
-		if (Project.Navigator.SeekBackward() is Bookmark bookmark)
+		if (Project.Navigator.SeekBackward() is { } bookmark)
 		{
 			TabView!.Instance.SelectBookmark(bookmark.TabBookmark);
 		}
@@ -470,7 +468,7 @@ public class TabViewer : Grid
 	/// <summary>Navigates to the next bookmark in the navigator history.</summary>
 	public void SeekForward()
 	{
-		if (Project.Navigator.SeekForward() is Bookmark bookmark)
+		if (Project.Navigator.SeekForward() is { } bookmark)
 		{
 			TabView!.Instance.SelectBookmark(bookmark.TabBookmark);
 		}

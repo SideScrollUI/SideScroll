@@ -25,7 +25,7 @@ public class TabCheckBox : CheckBox
 	{
 		IsEnabled = property.IsEditable;
 
-		if (property.GetCustomAttribute<ToolTipAttribute>() is ToolTipAttribute toolTipAttribute)
+		if (property.GetCustomAttribute<ToolTipAttribute>() is { } toolTipAttribute)
 		{
 			ToolTip.SetTip(this, toolTipAttribute.Text);
 		}

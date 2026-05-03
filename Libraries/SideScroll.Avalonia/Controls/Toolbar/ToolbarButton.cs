@@ -36,7 +36,7 @@ public class ToolbarButton : TabImageButton
 			HotKey = keyGesture;
 		}
 
-		if (toolButton.IsEnabledBinding is PropertyBinding propertyBinding)
+		if (toolButton.IsEnabledBinding is { } propertyBinding)
 		{
 			BindIsEnabled(propertyBinding.Path, propertyBinding.Object);
 		}

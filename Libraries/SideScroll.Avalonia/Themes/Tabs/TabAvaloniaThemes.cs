@@ -34,7 +34,7 @@ public class TabAvaloniaThemes : ITab
 			model.Editing = true;
 			model.MinDesiredWidth = 200;
 
-			LoadSavedItems(call, model);
+			LoadSavedItems(model);
 		}
 
 		public override void LoadUI(Call call, TabModel model)
@@ -49,7 +49,7 @@ public class TabAvaloniaThemes : ITab
 			model.AddObject(toolbar);
 		}
 
-		private void LoadSavedItems(Call call, TabModel model)
+		private void LoadSavedItems(TabModel model)
 		{
 			_dataRepoThemes = ThemeManager.Instance!.DataRepoThemes;
 			DataRepoInstance = _dataRepoThemes;

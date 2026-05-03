@@ -163,7 +163,7 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 
 	/// <summary>Reflection info for the property used as the X-axis value, or <c>null</c> if not set.</summary>
 	protected PropertyInfo? XAxisPropertyInfo { get; set; }
-	
+
 	/// <summary>Gets whether the X axis should use DateTime formatting, based on the series X property type or a configured time window.</summary>
 	public bool UseDateTimeAxis => (XAxisPropertyInfo?.PropertyType == typeof(DateTime)) ||
 									(ChartView.TimeWindow != null);
@@ -295,7 +295,7 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 	/// <summary>Saves the current color and selection state of <paramref name="chartSeries"/> so it can be restored on reload.</summary>
 	protected void UpdateSeriesInfo(ChartSeries<TSeries> chartSeries)
 	{
-		if (chartSeries.ListSeries.Name is string name)
+		if (chartSeries.ListSeries.Name is { } name)
 		{
 			IdxSeriesInfo[name] = chartSeries.GetInfo();
 		}

@@ -90,9 +90,9 @@ public static class AvaloniaUtils
 		var menuItemPaste = new TabMenuItem("_Paste");
 		menuItemPaste.Click += async delegate
 		{
-			if (await ClipboardUtils.TryGetTextAsync(comboBox) is string clipboardText)
+			if (await ClipboardUtils.TryGetTextAsync(comboBox) is { } clipboardText)
 			{
-				if (comboBox.Items.FirstOrDefault(i => i?.ToString() == clipboardText) is object matchingItem)
+				if (comboBox.Items.FirstOrDefault(i => i?.ToString() == clipboardText) is { } matchingItem)
 				{
 					comboBox.SelectedItem = matchingItem;
 				}
@@ -125,7 +125,7 @@ public static class AvaloniaUtils
 		var menuItemPaste = new TabMenuItem("_Paste");
 		menuItemPaste.Click += async delegate
 		{
-			if (await ClipboardUtils.TryGetTextAsync(colorPicker) is string clipboardText &&
+			if (await ClipboardUtils.TryGetTextAsync(colorPicker) is { } clipboardText &&
 				Color.TryParse(clipboardText, out Color color))
 			{
 				colorPicker.Color = color;
@@ -212,7 +212,7 @@ public static class AvaloniaUtils
 
 		if (value == null) return true;
 
-		if (listProperty.GetCustomAttribute<StringLengthAttribute>() is StringLengthAttribute stringLengthAttribute)
+		if (listProperty.GetCustomAttribute<StringLengthAttribute>() is { } stringLengthAttribute)
 		{
 			if (!stringLengthAttribute.IsValid(value))
 			{
@@ -221,7 +221,7 @@ public static class AvaloniaUtils
 			}
 		}
 
-		if (listProperty.GetCustomAttribute<RangeAttribute>() is RangeAttribute rangeAttribute)
+		if (listProperty.GetCustomAttribute<RangeAttribute>() is { } rangeAttribute)
 		{
 			dynamic minValue = rangeAttribute.Minimum;
 			if (value < minValue)

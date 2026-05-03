@@ -59,7 +59,7 @@ public static class DataGridExtensions
 		Binding binding = (Binding)column.Binding;
 		string propertyName = binding.Path;
 		Type type = item.GetType();
-		if (type.GetProperty(propertyName) is PropertyInfo propertyInfo)
+		if (type.GetProperty(propertyName) is { } propertyInfo)
 		{
 			object? obj = propertyInfo.GetValue(item);
 			string? value = GetFormattedCellText(column, obj);

@@ -154,7 +154,7 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 
 		foreach (ListProperty listProperty in GetProperties())
 		{
-			if (listProperty.GetCustomAttribute<ResourceKeyAttribute>() is not ResourceKeyAttribute attribute) continue;
+			if (listProperty.GetCustomAttribute<ResourceKeyAttribute>() is not { } attribute) continue;
 
 			string resourceName = attribute.Names.First();
 			if (listProperty.UnderlyingType == typeof(Color))
@@ -190,7 +190,7 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 
 		foreach (ListProperty listProperty in GetProperties())
 		{
-			if (listProperty.GetCustomAttribute<ResourceKeyAttribute>() is not ResourceKeyAttribute attribute) continue;
+			if (listProperty.GetCustomAttribute<ResourceKeyAttribute>() is not { } attribute) continue;
 
 			if (listProperty.Value != null) continue;
 
@@ -221,7 +221,7 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 
 		foreach (ListMember listProperty in GetProperties())
 		{
-			if (listProperty.GetCustomAttribute<ResourceKeyAttribute>() is not ResourceKeyAttribute attribute) continue;
+			if (listProperty.GetCustomAttribute<ResourceKeyAttribute>() is not { } attribute) continue;
 
 			object? value = listProperty.Value;
 			foreach (string name in attribute.Names)

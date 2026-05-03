@@ -257,7 +257,7 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 		{
 			if (listMember.GetCustomAttribute<InlineAttribute>() != null)
 			{
-				if (listMember.Value is object value)
+				if (listMember.Value is { } value)
 				{
 					ItemCollection<ListMember> inlinedProperties = Create(value, includeBaseTypes, includeStatic);
 					newMembers.AddRange(inlinedProperties);
