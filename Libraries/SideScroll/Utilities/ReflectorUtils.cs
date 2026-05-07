@@ -8,7 +8,7 @@ namespace SideScroll.Utilities;
 /// <remarks>
 /// Based on: https://stackoverflow.com/questions/366332/best-way-to-get-sub-properties-using-getproperty
 /// </remarks>
-public static class ReflectorUtil
+public static class ReflectorUtils
 {
 	/// <summary>
 	/// Follows a property path on an object to retrieve a nested value
@@ -53,14 +53,14 @@ public static class ReflectorUtil
 					{
 						if (iType.IsGenericType && iType.GetGenericTypeDefinition() == typeof(IDictionary<,>))
 						{
-							obj = typeof(ReflectorUtil).GetMethod("GetDictionaryElement")!
+							obj = typeof(ReflectorUtils).GetMethod(nameof(GetDictionaryElement))!
 								.MakeGenericMethod(iType.GetGenericArguments())
 								.Invoke(null, [obj, index]);
 							break;
 						}
 						if (iType.IsGenericType && iType.GetGenericTypeDefinition() == typeof(IList<>))
 						{
-							obj = typeof(ReflectorUtil).GetMethod("GetListElement")!
+							obj = typeof(ReflectorUtils).GetMethod(nameof(GetListElement))!
 								.MakeGenericMethod(iType.GetGenericArguments())
 								.Invoke(null, [obj, index]);
 							break;
@@ -73,5 +73,22 @@ public static class ReflectorUtil
 			else return null;
 		}
 		return obj;
+	}
+
+	/// <summary>
+	/// Gets an element from a dictionary by converting the index to the appropriate key type
+	/// </summary>
+	public static TValue GetDictionaryElement<TKey, TValue>(IDictionary<TKey, TValue> dict, object index)
+	{
+		TKey key = (TKey)Convert.ChangeType(index, typeof(TKey), null);
+		return dict[key];
+	}
+
+	/// <summary>
+	/// Gets an element from a list by index
+	/// </summary>
+	public static T GetListElement<T>(IList<T> list, object index)
+	{
+		return list[Convert.ToInt32(index)];
 	}
 }

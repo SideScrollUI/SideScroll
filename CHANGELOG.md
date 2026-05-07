@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed JSON serialization not handling primary constuctors with readonly properties
   - This fixes Links not saving or loading correctly in Browsers
+- Fixed DataTable Clipboard copying
 
 ### Changed
 

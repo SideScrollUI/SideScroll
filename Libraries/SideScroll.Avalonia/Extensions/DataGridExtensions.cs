@@ -239,7 +239,7 @@ public static class DataGridExtensions
 				{
 					Binding binding = (Binding)boundColumn.Binding;
 					string propertyPath = binding.Path;
-					object? obj = ReflectorUtil.FollowPropertyPath(item, propertyPath);
+					object? obj = ReflectorUtils.FollowPropertyPath(item, propertyPath);
 					string? value = GetFormattedCellText(boundColumn, obj, maxLength);
 					value = value?.Replace('\n', ' '); // remove newlines
 					stringCells.Add(value ?? "");
