@@ -474,7 +474,8 @@ public class TaskInstance : INotifyPropertyChanged
 			Task = Creator.StartTask(Call);
 
 			// ContinueWith works whether the task is already completed, running, or not yet started
-			Task.ContinueWith(_ => SetFinished(), CancelToken);
+			// Don't pass CancelToken, SetFinished is short and required
+			Task.ContinueWith(_ => SetFinished());
 		}
 		else
 		{
