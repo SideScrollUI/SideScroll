@@ -8,7 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Summary Docs for SideScroll.Network
+
+### Fixed
+
+### Changed
+
+## [0.18] - 2026-05-12
+
+### Added
+- Summary Docs for SideScroll.Network and Avalonia Controls
 
 ### Fixed
 - Fixed JSON serialization not handling primary constuctors with readonly properties
@@ -16,6 +24,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed DataTable Clipboard copying
 
 ### Changed
+- Updated to Avalonia 11.3.15
+- Updated to LiveChartsCore.SkiaSharpView.Avalonia 2.0.2
+- Updated to Microsoft.NET.Test.Sdk 18.5.1
+- Updated to NUnit 4.5.1
+- Migrated from old Avalonia.Svg.Skia to new Svg.Controls.Skia.Avalonia 11.3.9.5
 
 ## [0.17] - 2026-04-18
 
