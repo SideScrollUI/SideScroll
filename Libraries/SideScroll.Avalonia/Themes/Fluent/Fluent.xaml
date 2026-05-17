@@ -178,6 +178,8 @@
           <SolidColorBrush x:Key="FlyoutPresenterBackground" Color="#ff595994" />
           <SolidColorBrush x:Key="FlyoutPresenterForeground" Color="#ffe1e3f2" />
           <SolidColorBrush x:Key="FlyoutBorderThemeBrush" Color="#a82e2e82" />
+          
+          <x:Double x:Key="FlyoutThemeMinWidth">50</x:Double>
 
           <!-- ToolTip -->
           

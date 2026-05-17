@@ -138,6 +138,41 @@ using (var task = call.StartTask(items.Count, "ProcessItems"))
 call.Log.AddDebug("Cache hit", new Tag("Key", cacheKey));
 ```
 
+## Primary Constructor Property Pattern
+
+When a class uses a **primary constructor** and needs to expose a parameter as a property,
+prefer the expression-bodied form over the auto-property-with-initializer form.
+
+### ✅ CORRECT: Expression-bodied property delegates to the captured field
+```csharp
+public class TabSchema(ITab? rootTab = null) : ITab
+{
+    // Directly exposes the captured primary-constructor field — no duplication
+    public ITab? RootTab => rootTab;
+}
+```
+
+### ❌ AVOID: Auto-property with initializer copies to a second backing field
+```csharp
+public class TabSchema(ITab? rootTab = null) : ITab
+{
+    // Creates a SECOND backing field and copies rootTab into it — wasteful
+    public ITab? RootTab { get; } = rootTab;
+}
+```
+
+### Why This Matters:
+- The compiler already captures `rootTab` as an implicit field when it is referenced anywhere in the class body.
+- `{ get; } = rootTab` allocates an **additional** backing field and copies the reference at construction time — two fields holding the same value.
+- `=> rootTab` delegates directly to that one captured field: no extra memory, no copy, and it clearly signals "this property *is* the constructor parameter."
+
+### Quick Decision Rule:
+| Situation | Use |
+|-----------|-----|
+| Exposing a primary-constructor parameter | `public T Foo => foo;` |
+| Property needs its own independent state (not from a parameter) | `public T Foo { get; } = new();` |
+| Mutable property (needs `set`) | `public T Foo { get; set; } = foo;` |
+
 ## General Principles
 
 1. **Check for existing virtual methods** before using `new`

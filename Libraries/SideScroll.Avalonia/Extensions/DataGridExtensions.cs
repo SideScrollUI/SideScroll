@@ -18,7 +18,7 @@ public static class DataGridExtensions
 	/// <summary>
 	/// Maximum length for cell values when exporting to string or CSV
 	/// </summary>
-	public static int MaxValueLength { get; set; } = 2000;
+	public static int MaxValueLength { get; set; } = 10_000;
 
 	/// <summary>
 	/// Converts all values from a specific column to a string table (one value per line)

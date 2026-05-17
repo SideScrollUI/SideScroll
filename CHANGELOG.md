@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Changed
+- Updated to LiveChartsCore.SkiaSharpView.Avalonia 2.0.4
+- Increased DataGridExtensions.MaxValueLength from 2,000 to 10,000
+- Set FlyoutThemeMinWidth to 50 in Fluent Dark theme
 
 ## [0.18] - 2026-05-12
 
