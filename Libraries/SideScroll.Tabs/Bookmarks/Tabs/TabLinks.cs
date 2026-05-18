@@ -16,6 +16,7 @@ public class TabLinks : ITab
 			{
 				new("Imported", new TabLinkCollection(linkManager.Imported)),
 				new("Created", new TabLinkCollection(linkManager.Created)),
+				new("Schema", new TabSchema()),
 			};
 		}
 	}

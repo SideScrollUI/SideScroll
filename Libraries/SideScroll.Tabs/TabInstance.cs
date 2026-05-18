@@ -318,6 +318,14 @@ public class TabInstance : IDisposable
 	public bool StaticModel { get; set; }
 
 	/// <summary>
+	/// Whether this tab is being loaded by a <see cref="SideScroll.Tabs.Viewer.HeadlessTabViewer"/>
+	/// rather than the live Avalonia UI.
+	/// Tabs can check this flag to skip slow or UI-only operations (e.g. <c>Thread.Sleep</c>,
+	/// network calls, animations) that are not needed for headless schema traversal.
+	/// </summary>
+	public bool IsHeadless { get; set; }
+
+	/// <summary>
 	/// Whether to show all tasks or only tasks with errors
 	/// </summary>
 	public bool ShowTasks { get; set; }

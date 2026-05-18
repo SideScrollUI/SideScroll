@@ -29,7 +29,10 @@ public class TabSampleLoadAsync : ITab
 
 			call.Log.Add("Sleeping", new Tag("Milliseconds", DelayMs));
 
-			await Task.Delay(DelayMs);
+			if (!IsHeadless)
+			{
+				await Task.Delay(DelayMs);
+			}
 
 			model.AddObject("Finished");
 
