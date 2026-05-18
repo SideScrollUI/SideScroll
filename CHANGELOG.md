@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Theming for ComboBoxForegroundPressed
 
 ### Fixed
 - Fixed TabModel.AddObject() fill not being passed for text controls

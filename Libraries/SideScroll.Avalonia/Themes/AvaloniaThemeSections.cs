@@ -526,6 +526,9 @@ public class TextControlTheme : ThemeSection
 	[Header("ComboBox"), ResourceKey("ComboBoxBackgroundPressed")]
 	public Color? ComboBoxBackgroundPressed { get; set; }
 
+	[ResourceKey("ComboBoxForegroundFocusedPressed")]
+	public Color? ComboBoxForegroundPressed { get; set; }
+
 	[ResourceKey("ComboBoxDropDownBackground")]
 	public Color? ComboBoxDropDownBackground { get; set; }
 
