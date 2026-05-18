@@ -85,8 +85,6 @@ public class DataGridPropertyTextColumn : DataGridTextColumn
 		CanUserSort = TableUtils.IsTypeSortable(propertyInfo.PropertyType);
 
 		WordWrap = (PropertyInfo.GetCustomAttribute<WordWrapAttribute>() != null);
-
-		//CellStyleClasses = new Classes()
 	}
 
 	/// <summary>Scans the first <see cref="MaxRowScanProperties"/> items to infer <see cref="HideAttribute"/> visibility and enable word-wrap for long strings.</summary>

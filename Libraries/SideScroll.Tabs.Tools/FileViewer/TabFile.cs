@@ -31,7 +31,7 @@ public class TabFile(FileView fileView) : ITab
 	/// <summary>
 	/// Registers a tab type for specific file extensions.
 	/// </summary>
-	public static void RegisterType<T>(params string[] extensions) where T : new()
+	public static void RegisterType<T>(params string[] extensions) where T : IFileTypeView, new()
 	{
 		foreach (string extension in extensions)
 		{

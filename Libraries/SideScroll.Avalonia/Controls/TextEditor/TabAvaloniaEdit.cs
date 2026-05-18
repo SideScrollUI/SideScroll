@@ -86,14 +86,11 @@ public class TabAvaloniaEdit : Border
 			MaxWidth = 3000,
 			MaxHeight = 2000,
 			Background = Brushes.Transparent,
-			Foreground = SideScrollTheme.TextEditorForegroundBrush,
 			WordWrap = true,
 			HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled, // WordWrap requires Disabled
 			VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
 			Padding = new Thickness(6),
 			FontSize = 14,
-			//BorderThickness = new Thickness(1),
-			//BorderBrush = Brushes.Black,
 		};
 		TextEditor.Options.AllowScrollBelowDocument = false; // Breaks top alignment
 		containerGrid.Children.Add(TextEditor);

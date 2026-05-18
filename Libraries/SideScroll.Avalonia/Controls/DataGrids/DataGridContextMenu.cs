@@ -27,11 +27,6 @@ public class DataGridContextMenu : ContextMenu, IDisposable
 	{
 		DataGrid = dataGrid;
 
-		Initialize();
-	}
-
-	private void Initialize()
-	{
 		var list = new AvaloniaList<object>();
 
 		var menuItemCopyCellContents = new TabMenuItem("Copy - _Cell Contents");

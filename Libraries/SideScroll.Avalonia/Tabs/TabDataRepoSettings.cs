@@ -45,8 +45,8 @@ public class TabDataRepoSettings(UserSettings userSettings) : ITab
 				new("All", allVersions),
 			};
 
-			model.Actions = new List<TaskCreator>
-			{
+			model.Actions =
+			[
 				new TaskDelegate("Delete Repos - Current Version", DeleteRepos)
 				{
 					Flyout = new ConfirmationFlyoutConfig(
@@ -61,7 +61,7 @@ public class TabDataRepoSettings(UserSettings userSettings) : ITab
 						"Delete"),
 					AccentType = AccentType.Warning,
 				}
-			};
+			];
 		}
 
 		private void DeleteRepos(Call call)

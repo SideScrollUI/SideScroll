@@ -78,10 +78,10 @@ public class TabView : Grid, IDisposable
 	}
 
 	/// <summary>Gets or sets the actions control displaying the tab's available actions.</summary>
-	public TabViewActions? TabActions { get; set; }
+	public TabViewActions? TabActions { get; protected set; }
 
 	/// <summary>Gets or sets the tasks control that shows running and queued background tasks.</summary>
-	public TabViewTasks? TabTasks { get; set; }
+	public TabViewTasks? TabTasks { get; protected set; }
 
 	/// <summary>Gets the list of data grid selectors that drive child tab selection.</summary>
 	public List<ITabDataSelector> TabDatas { get; } = [];
@@ -492,7 +492,7 @@ public class TabView : Grid, IDisposable
 		}
 		else if (obj is string text)
 		{
-			AddControlString(text);
+			AddControlString(text, tabObject.Fill);
 		}
 		else if (tabObject is TabFormObject formObject)
 		{
@@ -563,7 +563,7 @@ public class TabView : Grid, IDisposable
 	}
 
 	/// <summary>Adds a read-only, word-wrapped text box displaying <paramref name="text"/> to the parent panel.</summary>
-	protected void AddControlString(string text)
+	protected void AddControlString(string text, bool fill = false)
 	{
 		TextBox textBox = new()
 		{
@@ -583,7 +583,7 @@ public class TabView : Grid, IDisposable
 		textBox.Resources.Add("TextControlBackgroundReadOnlyBrush", Brushes.Transparent);
 
 		AvaloniaUtils.AddContextMenu(textBox);
-		_tabParentControls!.AddControl(textBox, false, SeparatorType.Spacer);
+		_tabParentControls!.AddControl(textBox, fill, SeparatorType.Spacer);
 	}
 
 	/// <summary>Marks the tab as needing a reload on its next load call.</summary>
