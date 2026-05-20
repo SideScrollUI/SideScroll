@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Theming for ComboBoxForegroundPressed
 
 ### Fixed
+- Fixed creating a leaf tab link from an existing link
+- Fixed json link viewing exceptions blocking the link tab from showing
 - Fixed TabModel.AddObject() fill not being passed for text controls
 
 ### Changed

@@ -7,7 +7,7 @@ using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Tabs.Bookmarks.Tabs;
 
-public class TabLinkedBookmark(LinkedBookmark linkedBookmark, LinkCollection linkCollection) : ITab
+public class TabLinkedBookmark(LinkedBookmark linkedBookmark, LinkCollection linkCollection) : ITabContainer
 {
 	public event EventHandler<EventArgs>? OnDelete;
 
@@ -25,6 +25,9 @@ public class TabLinkedBookmark(LinkedBookmark linkedBookmark, LinkCollection lin
 
 	[Formatted]
 	public TimeSpan? Age => Bookmark.CreatedTime?.Age();
+
+	[HiddenColumn]
+	public ITab? Tab => Bookmark.TabBookmark.Tab;
 
 	public override string ToString() => Bookmark.ToString();
 
@@ -51,7 +54,15 @@ public class TabLinkedBookmark(LinkedBookmark linkedBookmark, LinkCollection lin
 			toolbar.ButtonCopyLinkToClipboard.Action = CopyLinkToClipboard;
 			model.AddObject(toolbar);
 
-			string json = tab.Bookmark.ToJson();
+			string json;
+			try
+			{
+				json = tab.Bookmark.ToJson();
+			}
+			catch (Exception e)
+			{
+				json = e.Message;
+			}
 
 			model.Items = new List<ListItem>
 			{
