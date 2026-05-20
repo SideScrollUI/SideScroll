@@ -91,6 +91,38 @@ public class ToStringAttribute : Attribute;
 public class TabRootAttribute : Attribute;
 
 /// <summary>
+/// Enables searching child items when filtering. By default, only top-level items are searched.
+/// </summary>
+/// <remarks>
+/// <b>Apply to:</b> Classes, structs, or properties.
+/// <para>
+/// When applied to an item type or a property, the filter will also search nested child items.
+/// The search depth is controlled by <c>TabModel.MaxSearchDepth</c> on the starting tab.
+/// Without this attribute, filtering only searches the immediate items in the list.
+/// </para>
+/// </remarks>
+/// <example>
+/// <code>
+/// [Searchable]
+/// public class Order
+/// {
+///     public string Name { get; set; } = "";
+///     public List&lt;OrderItem&gt; Items { get; set; } = new();
+/// }
+/// 
+/// public class Invoice
+/// {
+///     public string Number { get; set; } = "";
+/// 
+///     [Searchable]
+///     public Address BillingAddress { get; set; }
+/// }
+/// </code>
+/// </example>
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Property)]
+public class SearchableAttribute : Attribute;
+
+/// <summary>
 /// Allows the tab to be automatically collapsed when it contains only a single item.
 /// </summary>
 /// <param name="value">Whether to allow auto-collapsing (default: true).</param>

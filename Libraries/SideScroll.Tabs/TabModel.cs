@@ -590,17 +590,28 @@ public class TabModel
 					SelectedRow selectedRow = new(obj);
 					tabDataBookmark.SelectedRows.Add(new(selectedRow));
 				}
-				else if (depth >= 0)
+				else
 				{
-					TabModel? tabModel = Create(obj.Formatted() ?? "", obj);
-					if (tabModel != null)
+					// [Searchable] on the item type or a visible property enables child search.
+					// It boosts the effective depth up to MaxSearchDepth - 1 so that children are
+					// searched even when the user has not typed a "+N" depth prefix in the filter.
+					bool isSearchable = obj.GetType().GetCustomAttribute<SearchableAttribute>() != null
+						|| visibleProperties.Any(p => p.GetCustomAttribute<SearchableAttribute>() != null);
+
+					int childDepth = isSearchable ? Math.Max(depth, MaxSearchDepth - 1) : depth;
+
+					if (childDepth >= 0)
 					{
-						TabBookmark childNode = tabModel.FindMatches(filter, depth);
-						if (childNode.SelectedRows.Count > 0)
+						TabModel? tabModel = Create(obj.Formatted() ?? "", obj);
+						if (tabModel != null)
 						{
-							childNode.TabModel = tabModel;
-							SelectedRow selectedRow = new(obj);
-							tabDataBookmark.SelectedRows.Add(new(selectedRow, childNode));
+							TabBookmark childNode = tabModel.FindMatches(filter, childDepth);
+							if (childNode.SelectedRows.Count > 0)
+							{
+								childNode.TabModel = tabModel;
+								SelectedRow selectedRow = new(obj);
+								tabDataBookmark.SelectedRows.Add(new(selectedRow, childNode));
+							}
 						}
 					}
 				}
