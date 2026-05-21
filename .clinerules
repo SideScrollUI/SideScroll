@@ -143,7 +143,7 @@ call.Log.AddDebug("Cache hit", new Tag("Key", cacheKey));
 When a class uses a **primary constructor** and needs to expose a parameter as a property,
 prefer the expression-bodied form over the auto-property-with-initializer form.
 
-### ✅ CORRECT: Expression-bodied property delegates to the captured field
+### ✅ PREFERRED: Expression-bodied property delegates to the captured field
 ```csharp
 public class TabSchema(ITab? rootTab = null) : ITab
 {
@@ -152,24 +152,33 @@ public class TabSchema(ITab? rootTab = null) : ITab
 }
 ```
 
-### ❌ AVOID: Auto-property with initializer copies to a second backing field
+### ⚠️ CAUTION: Auto-property with initializer copies to a separate readonly backing field
 ```csharp
 public class TabSchema(ITab? rootTab = null) : ITab
 {
-    // Creates a SECOND backing field and copies rootTab into it — wasteful
+    // Copies rootTab into its own readonly backing field at construction time
     public ITab? RootTab { get; } = rootTab;
 }
 ```
 
 ### Why This Matters:
-- The compiler already captures `rootTab` as an implicit field when it is referenced anywhere in the class body.
-- `{ get; } = rootTab` allocates an **additional** backing field and copies the reference at construction time — two fields holding the same value.
-- `=> rootTab` delegates directly to that one captured field: no extra memory, no copy, and it clearly signals "this property *is* the constructor parameter."
+- When the parameter is referenced elsewhere in the class body (methods, other properties, etc.), the compiler captures it as an implicit mutable field. In that case, `{ get; } = rootTab` creates a **second** backing field — one captured field and one readonly property backing field, both holding the same value.
+- If `{ get; } = rootTab` is the **only** reference to the parameter, no captured field is created and both patterns produce exactly one backing field.
+- **Mutability trade-off**: `=> rootTab` exposes the captured variable directly. If any method in the class reassigns the parameter (e.g. `rootTab = null`), the property value silently changes. `{ get; } = rootTab` copies the value into a `readonly` field, making the property truly immutable after construction.
+
+```csharp
+public class TabSchema(ITab? rootTab = null) : ITab
+{
+    public ITab? RootTab => rootTab;       // Reflects any internal reassignment
+    public void Reset() => rootTab = null; // Silently mutates RootTab!
+}
+```
 
 ### Quick Decision Rule:
 | Situation | Use |
 |-----------|-----|
-| Exposing a primary-constructor parameter | `public T Foo => foo;` |
+| Exposing a primary-constructor parameter (no internal reassignment) | `public T Foo => foo;` |
+| Immutable property from a parameter that may be reassigned internally | `public T Foo { get; } = foo;` |
 | Property needs its own independent state (not from a parameter) | `public T Foo { get; } = new();` |
 | Mutable property (needs `set`) | `public T Foo { get; set; } = foo;` |
 

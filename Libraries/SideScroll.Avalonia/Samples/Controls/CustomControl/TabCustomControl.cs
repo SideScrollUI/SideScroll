@@ -29,7 +29,7 @@ public class TabCustomControl : ITab
 			_toolbar.ButtonNew.Add(New);
 			_toolbar.ButtonSave.Add(Save);
 			_toolbar.ButtonSearch.Add(SearchUI);
-			_toolbar.ButtonCopyClipBoard.Add(CopyClipBoardUI);
+			_toolbar.ButtonCopyToClipboard.Add(CopyToClipboardUI);
 			model.AddObject(_toolbar);
 
 			_planets ??= [.. SolarSystem.Sample.Planets];
@@ -68,7 +68,7 @@ public class TabCustomControl : ITab
 			_toolbar!.TextBoxStatus.Text = "Finished";
 		}
 
-		private void CopyClipBoardUI(Call call)
+		private void CopyToClipboardUI(Call call)
 		{
 			CopyToClipboard(SelectedItems);
 		}

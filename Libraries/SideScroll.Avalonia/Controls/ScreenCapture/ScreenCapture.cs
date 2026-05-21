@@ -93,7 +93,7 @@ public class ScreenCapture : Grid
 	private void AddToolbar()
 	{
 		ScreenCaptureToolbar toolbar = new();
-		toolbar.ButtonCopyClipboard?.AddAsync(CopyClipboardAsync);
+		toolbar.ButtonCopyToClipboard?.AddAsync(CopyToClipboardAsync);
 		toolbar.ButtonSave.AddAsync(SaveAsync);
 		toolbar.ButtonOpenFolder.Add(OpenFolder);
 		toolbar.ButtonClose.Add(Close);
@@ -129,7 +129,7 @@ public class ScreenCapture : Grid
 		_contentGrid.PointerMoved += ScreenCapture_PointerMoved;
 	}
 
-	private async Task CopyClipboardAsync(Call call)
+	private async Task CopyToClipboardAsync(Call call)
 	{
 		_clipboardBitmap?.Dispose();
 		_clipboardBitmap = null;
@@ -237,7 +237,7 @@ public class ScreenCapture : Grid
 		if (_startPoint == null)
 			return;
 
-		await CopyClipboardAsync(new Call());
+		await CopyToClipboardAsync(new Call());
 
 		_startPoint = null;
 	}

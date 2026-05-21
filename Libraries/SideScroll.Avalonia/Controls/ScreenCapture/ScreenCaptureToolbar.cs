@@ -13,7 +13,7 @@ public class ScreenCaptureToolbar : TabControlToolbar
 	protected override Type StyleKeyOverride => typeof(TabControlToolbar);
 
 	/// <summary>Gets the copy-to-clipboard button, or <c>null</c> on Linux where clipboard bitmap support is unavailable.</summary>
-	public ToolbarButton? ButtonCopyClipboard { get; }
+	public ToolbarButton? ButtonCopyToClipboard { get; }
 
 	/// <summary>Gets the save-to-file button.</summary>
 	public ToolbarButton ButtonSave { get; }
@@ -30,7 +30,7 @@ public class ScreenCaptureToolbar : TabControlToolbar
 		OSPlatform platform = ProcessUtils.GetOSPlatform();
 		if (platform != OSPlatform.Linux)
 		{
-			ButtonCopyClipboard = AddButton("Copy to Clipboard", Icons.Svg.Copy);
+			ButtonCopyToClipboard = AddButton("Copy to Clipboard", Icons.Svg.Copy);
 		}
 		ButtonSave = AddButton("Save", Icons.Svg.Save);
 

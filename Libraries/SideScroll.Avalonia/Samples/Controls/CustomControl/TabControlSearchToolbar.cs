@@ -20,7 +20,7 @@ public class TabControlSearchToolbar : TabControlToolbar
 	public ToolbarButton ButtonSearch { get; }
 	public ToolbarButton ButtonLoadNext { get; }
 
-	public ToolbarButton ButtonCopyClipBoard { get; }
+	public ToolbarButton ButtonCopyToClipboard { get; }
 
 	public TabSearch Search { get; }
 
@@ -45,7 +45,7 @@ public class TabControlSearchToolbar : TabControlToolbar
 		ButtonLoadNext.IsEnabled = false;
 
 		AddSeparator();
-		ButtonCopyClipBoard = AddButton("Copy to Clipboard", ImageColorView.CreateAlternate(Icons.Svg.Copy));
+		ButtonCopyToClipboard = AddButton("Copy to Clipboard", ImageColorView.CreateAlternate(Icons.Svg.Copy));
 
 		AddSeparator();
 		Search = new TabSearch

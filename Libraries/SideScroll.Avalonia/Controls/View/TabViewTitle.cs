@@ -85,7 +85,7 @@ public class TabViewTitle : Border, IDisposable
 	{
 		var contextMenu = new TabViewContextMenu(TabView, TabInstance);
 
-		// Copy Title Text to ClipBoard
+		// Copy Title Text to Clipboard
 		var menuItemCopy = new TabMenuItem("_Copy");
 		menuItemCopy.Click += async delegate
 		{
