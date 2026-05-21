@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Fixed
+
+### Changed
+
+## [0.19] - 2026-05-20
+
+### Added
 - Theming for ComboBoxForegroundPressed
 
 ### Fixed
