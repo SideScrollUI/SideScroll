@@ -331,4 +331,36 @@ public class SerializeClassTests : SerializeBaseTest
 		Assert.That(base64.Length, Is.GreaterThanOrEqualTo(400));
 		Assert.That(base64.Length, Is.LessThanOrEqualTo(440));
 	}
+
+	public struct StructTest
+	{
+		public int value;
+	}
+
+	[Test, Description("Serialize Struct")]
+	public void SerializeStruct()
+	{
+		var input = new StructTest { value = 5 };
+
+		_serializer.Save(Call, input);
+		StructTest output = _serializer.Load<StructTest>(Call);
+
+		Assert.That(output, Is.EqualTo(input));
+	}
+
+	public class ObjectField
+	{
+		public object Object = 2;
+	}
+
+	[Test, Description("Serialize object field")]
+	public void SerializeObjectField()
+	{
+		var input = new ObjectField();
+
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<ObjectField>(Call);
+
+		Assert.That(output, Is.Not.Null);
+	}
 }

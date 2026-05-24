@@ -2,7 +2,7 @@ using SideScroll.Serialize.Atlas.Schema;
 
 namespace SideScroll.Serialize.Atlas.TypeRepos;
 
-public class TypeRepoDecimal(Serializer serializer, TypeSchema typeSchema) : TypeRepo(serializer, typeSchema)
+public class TypeRepoUri(Serializer serializer, TypeSchema typeSchema) : TypeRepo(serializer, typeSchema)
 {
 	public class Creator : IRepoCreator
 	{
@@ -10,7 +10,7 @@ public class TypeRepoDecimal(Serializer serializer, TypeSchema typeSchema) : Typ
 		{
 			if (CanAssign(typeSchema.Type))
 			{
-				return new TypeRepoDecimal(serializer, typeSchema);
+				return new TypeRepoUri(serializer, typeSchema);
 			}
 			return null;
 		}
@@ -18,12 +18,12 @@ public class TypeRepoDecimal(Serializer serializer, TypeSchema typeSchema) : Typ
 
 	public static bool CanAssign(Type? type)
 	{
-		return type == typeof(decimal);
+		return type == typeof(Uri);
 	}
 
 	public override void SaveObject(BinaryWriter writer, object obj)
 	{
-		writer.Write((decimal)obj);
+		writer.Write(((Uri)obj).OriginalString);
 	}
 
 	protected override object? CreateObject(int objectIndex)
@@ -31,7 +31,7 @@ public class TypeRepoDecimal(Serializer serializer, TypeSchema typeSchema) : Typ
 		long position = Reader!.BaseStream.Position;
 		Reader.BaseStream.Position = ObjectOffsets![objectIndex];
 
-		object obj = Reader.ReadDecimal();
+		object obj = new Uri(Reader.ReadString(), UriKind.RelativeOrAbsolute);
 		Reader.BaseStream.Position = position;
 
 		ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs

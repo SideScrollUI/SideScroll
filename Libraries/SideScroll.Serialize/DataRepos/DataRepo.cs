@@ -82,9 +82,9 @@ public class DataRepo
 	/// <summary>
 	/// Loads an indexed repository view with all items
 	/// </summary>
-	public virtual DataRepoView<T> LoadIndexedView<T>(Call call, string groupId, bool ascending = true)
+	public virtual DataRepoView<T> LoadIndexedView<T>(Call call, string groupId, bool ascending = true, int? maxItems = null)
 	{
-		var view = new DataRepoView<T>(this, groupId, true);
+		var view = new DataRepoView<T>(this, groupId, true, maxItems);
 		view.LoadAllIndexed(call, ascending);
 		return view;
 	}

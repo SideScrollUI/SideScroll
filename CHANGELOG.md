@@ -8,8 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added Atlas Serializer support for `Guid`, `Uri`, `DateOnly`, and `TimeOnly`
 
 ### Fixed
+- Fixed Atlas Serializer Decimal Member Handling with other Object Members
 
 ### Changed
 

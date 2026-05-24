@@ -30,6 +30,10 @@ public class TypeSchema
 		typeof(TimeZoneInfo),
 		typeof(Type),
 		typeof(Version),
+		typeof(Guid),
+		typeof(Uri),
+		typeof(DateOnly),
+		typeof(TimeOnly),
 		typeof(object),
 	];
 
