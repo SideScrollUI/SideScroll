@@ -99,13 +99,13 @@ public class TabSampleFilter : ITab
 				{
 					items.Add(new TestPropertySearchableItem("Item " + i, i)
 					{
-						SearchableChild = new TestFilterItem(characters[i].ToString(), i),
-						NonSearchableChild = new TestFilterItem(characters[i + 7].ToString(), i + 7),
+						SearchableChild = new TestFilterItem(new string(characters[i], 3), i),
+						NonSearchableChild = new TestFilterItem(new string(characters[i + 7], 3), i + 7),
 					});
 				}
 
 				model.Items = items;
-				model.MaxSearchDepth = 1;
+				model.MaxSearchDepth = 3;
 				model.ShowSearch = true;
 			}
 		}
@@ -137,9 +137,10 @@ public class TabSampleFilter : ITab
 	/// </summary>
 	public record TestPropertySearchableItem(string Text, int Number)
 	{
-		[Searchable]
+		[Searchable, HiddenColumn]
 		public TestFilterItem? SearchableChild { get; set; }
 
+		[HiddenColumn]
 		public TestFilterItem? NonSearchableChild { get; set; }
 
 		public override string ToString() => Text;

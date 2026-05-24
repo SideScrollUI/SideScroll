@@ -1124,14 +1124,23 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 			if (_filter.RootNode != null)
 			{
-				if (_filter.Depth > 0)
+				if (TabModel.MaxSearchDepth > 0)
 				{
 					// create a new collection because this one might have multiple lists
-					TabModel tabModel = TabModel.Create(this.TabModel.Name, List!)!;
-					TabBookmark bookmarkNode = tabModel.FindMatches(_filter, _filter.Depth);
-					TabInstance.FilterBookmarkNode = bookmarkNode;
-					CollectionView!.Filter = FilterPredicate;
-					TabInstance.SelectBookmark(bookmarkNode);
+					TabModel? tabModel = TabModel.Create(TabModel.Name, List!);
+					if (tabModel != null)
+					{
+						TabBookmark bookmarkNode = tabModel.FindMatches(_filter, TabModel.MaxSearchDepth);
+						TabInstance.FilterBookmarkNode = bookmarkNode;
+						CollectionView!.Filter = FilterPredicate;
+						CollectionView.Refresh();
+
+						// This only works for the first level
+						TabInstance.SelectItem(bookmarkNode.SelectedRows.FirstOrDefault()?.Object);
+
+						// Doesn't work, resets filter
+						// TabInstance.SelectBookmark(bookmarkNode);
+					}
 				}
 				else
 				{
@@ -1157,7 +1166,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	{
 		if (TabInstance.FilterBookmarkNode != null)
 		{
-			return TabInstance.FilterBookmarkNode.SelectedRows.Contains(obj);
+			return TabInstance.FilterBookmarkNode.SelectedRows.Contains(new SelectedRow(obj));
 		}
 		else
 		{

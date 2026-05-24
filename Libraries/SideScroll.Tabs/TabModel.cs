@@ -178,7 +178,7 @@ public class TabModel
 	/// <summary>
 	/// Maximum depth to search when filtering
 	/// </summary>
-	public int MaxSearchDepth { get; set; } = 0;
+	public int MaxSearchDepth { get; set; }
 
 	/// <summary>
 	/// Collection of available actions for the tab
@@ -570,48 +570,49 @@ public class TabModel
 	/// </summary>
 	/// <param name="filter">The filter to apply when searching</param>
 	/// <param name="depth">Maximum depth to search nested objects. Limited by MaxSearchDepth</param>
-	public TabBookmark FindMatches(Filter filter, int depth)
+	/// <param name="searchableOnly">If set only [Searchable] members will be checked</param>
+	public TabBookmark FindMatches(Filter filter, int depth, bool searchableOnly = false)
 	{
 		TabBookmark tabBookmark = new();
 
-		depth = Math.Min(depth, MaxSearchDepth);
 		depth--;
 		foreach (IList iList in ItemList)
 		{
 			List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleElementProperties(iList);
 
-			TabDataBookmark tabDataBookmark = new();
+			TabDataBookmark tabDataBookmark = new() { Filter = filter.FilterText };
 			tabBookmark.TabDatas.Add(tabDataBookmark);
 
 			foreach (object obj in iList)
 			{
+				if (searchableOnly && obj is ListMember listMember &&
+					listMember.GetCustomAttribute<SearchableAttribute>() == null)
+				{
+					continue;
+				}
+
 				if (filter.Matches(obj, visibleProperties))
 				{
 					SelectedRow selectedRow = new(obj);
 					tabDataBookmark.SelectedRows.Add(new(selectedRow));
 				}
-				else
+				else if (depth >= 0)
 				{
-					// [Searchable] on the item type or a visible property enables child search.
-					// It boosts the effective depth up to MaxSearchDepth - 1 so that children are
-					// searched even when the user has not typed a "+N" depth prefix in the filter.
-					bool isSearchable = obj.GetType().GetCustomAttribute<SearchableAttribute>() != null
-						|| visibleProperties.Any(p => p.GetCustomAttribute<SearchableAttribute>() != null);
+					// Class-level [Searchable] enables child search up to MaxSearchDepth without an
+					// explicit depth prefix. Explicit depth (depth >= 0) always enables child search.
+					Type objType = obj.GetType();
+					bool classSearchable = objType.GetCustomAttribute<SearchableAttribute>() != null;
 
-					int childDepth = isSearchable ? Math.Max(depth, MaxSearchDepth - 1) : depth;
-
-					if (childDepth >= 0)
+					TabModel? tabModel = Create(obj.Formatted() ?? "", obj);
+					if (tabModel != null)
 					{
-						TabModel? tabModel = Create(obj.Formatted() ?? "", obj);
-						if (tabModel != null)
+						TabBookmark childNode = tabModel.FindMatches(filter, depth, !classSearchable);
+						if (childNode.SelectedRows.Count > 0)
 						{
-							TabBookmark childNode = tabModel.FindMatches(filter, childDepth);
-							if (childNode.SelectedRows.Count > 0)
-							{
-								childNode.TabModel = tabModel;
-								SelectedRow selectedRow = new(obj);
-								tabDataBookmark.SelectedRows.Add(new(selectedRow, childNode));
-							}
+							tabModel.MaxSearchDepth = depth;
+							childNode.TabModel = tabModel;
+							SelectedRow selectedRow = new(obj);
+							tabDataBookmark.SelectedRows.Add(new(selectedRow, childNode));
 						}
 					}
 				}
