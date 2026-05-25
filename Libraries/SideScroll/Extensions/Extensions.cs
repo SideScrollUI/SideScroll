@@ -24,13 +24,13 @@ public static class SideScrollExtensions
 	/// <summary>
 	/// Merges items from newList into iList, adding only items that don't already exist
 	/// </summary>
-	public static void Merge(this IList iList, IList newList)
+	public static void Merge(this IList list, IList newItems)
 	{
-		foreach (object item in newList)
+		foreach (object item in newItems)
 		{
-			if (!iList.Contains(item))
+			if (!list.Contains(item))
 			{
-				iList.Add(item);
+				list.Add(item);
 			}
 		}
 	}

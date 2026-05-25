@@ -340,9 +340,9 @@ public class TabModel
 			return;
 		}
 
-		if (obj is IList iList)
+		if (obj is IList list)
 		{
-			if (AddList(iList, type))
+			if (AddList(list, type))
 				return;
 		}
 
@@ -482,12 +482,12 @@ public class TabModel
 
 		Type elementType = GetElementType(type);
 		Type genericType = typeof(ItemCollection<>).MakeGenericType(elementType);
-		IList iList = (IList)Activator.CreateInstance(genericType)!;
+		IList list = (IList)Activator.CreateInstance(genericType)!;
 		foreach (var item in enumerable)
 		{
-			iList.Add(item);
+			list.Add(item);
 		}
-		ItemList.Add(iList);
+		ItemList.Add(list);
 	}
 
 	// merge with GetElementTypeForAll?
@@ -576,14 +576,17 @@ public class TabModel
 		TabBookmark tabBookmark = new();
 
 		depth--;
-		foreach (IList iList in ItemList)
+		foreach (IList list in ItemList)
 		{
-			List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleElementProperties(iList);
+			List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleElementProperties(list);
 
-			TabDataBookmark tabDataBookmark = new() { Filter = filter.FilterText };
+			TabDataBookmark tabDataBookmark = new()
+			{
+				Filter = filter.FilterText
+			};
 			tabBookmark.TabDatas.Add(tabDataBookmark);
 
-			foreach (object obj in iList)
+			foreach (object obj in list)
 			{
 				if (searchableOnly && obj is ListMember listMember &&
 					listMember.GetCustomAttribute<SearchableAttribute>() == null)

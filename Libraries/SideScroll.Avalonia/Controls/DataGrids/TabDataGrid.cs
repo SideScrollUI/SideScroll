@@ -95,9 +95,9 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		set
 		{
 			List = value;
-			/*if (collectionView != null && iList is ICollection)
+			/*if (collectionView != null && List is ICollection)
 			{
-				var collection = (ICollection)iList;
+				var collection = (ICollection)List;
 				collectionView.DeferRefresh();
 				collection.Clear();
 
@@ -131,14 +131,14 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	}
 
 	/// <summary>Initializes a new <see cref="TabDataGrid"/> for the given list, optionally generating columns automatically and applying saved settings.</summary>
-	public TabDataGrid(TabInstance tabInstance, IList iList, bool autoGenerateColumns = true, TabDataSettings? tabDataSettings = null, TabModel? model = null)
+	public TabDataGrid(TabInstance tabInstance, IList list, bool autoGenerateColumns = true, TabDataSettings? tabDataSettings = null, TabModel? model = null)
 	{
 		TabInstance = tabInstance;
 		TabModel = model ?? TabInstance.Model;
-		List = iList;
+		List = list;
 		AutoGenerateColumns = autoGenerateColumns;
 		TabDataSettings = tabDataSettings ?? new TabDataSettings();
-		Debug.Assert(iList != null);
+		Debug.Assert(list != null);
 
 		ColumnDefinitions = new ColumnDefinitions("*");
 		RowDefinitions = new RowDefinitions("Auto,*");

@@ -176,12 +176,12 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 		return lines;
 	}
 
-	private List<LiveChartPoint> GetDataPoints(ListSeries listSeries, IList iList)
+	private List<LiveChartPoint> GetDataPoints(ListSeries listSeries, IList sourceList)
 	{
 		double x = DataPoints.Count;
 		List<LiveChartPoint> chartPoints = [];
 		// Faster than using ItemSource?
-		foreach (object obj in iList)
+		foreach (object obj in sourceList)
 		{
 			if (ListSeries.XPropertyInfo is { } xPropertyInfo)
 			{

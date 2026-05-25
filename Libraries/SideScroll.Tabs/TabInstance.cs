@@ -702,8 +702,8 @@ public class TabInstance : IDisposable
 	{
 		for (int i = 0; i < model.ItemList.Count; i++)
 		{
-			IList iList = model.ItemList[i];
-			Type listType = iList.GetType();
+			IList list = model.ItemList[i];
+			Type listType = list.GetType();
 			Type? elementType = listType.GetElementTypeForAll();
 			if (elementType == null) continue;
 
@@ -711,7 +711,7 @@ public class TabInstance : IDisposable
 			TabDataColumns dataColumns = new(tabDataSettings.ColumnNameOrder);
 			List<TabPropertyColumn> propertyColumns = dataColumns.GetPropertyColumns(elementType);
 			int itemCount = 0;
-			foreach (object obj in iList)
+			foreach (object obj in list)
 			{
 				if (obj != null)
 				{
@@ -728,12 +728,12 @@ public class TabInstance : IDisposable
 					break;
 			}
 
-			if (iList is ItemCollection<ListProperty> propertyList)
+			if (list is ItemCollection<ListProperty> propertyList)
 			{
 				model.ItemList[i] = ListProperty.Sort(propertyList);
 			}
 
-			if (iList is ItemCollection<ListMember> memberList)
+			if (list is ItemCollection<ListMember> memberList)
 			{
 				model.ItemList[i] = ListMember.Sort(memberList);
 			}
@@ -760,9 +760,9 @@ public class TabInstance : IDisposable
 		}
 
 		// Set the context to the UI for items that support it
-		foreach (IList iList in model.ItemList)
+		foreach (IList list in model.ItemList)
 		{
-			if (iList is IContext context)
+			if (list is IContext context)
 			{
 				context.InitializeContext(true);
 			}
