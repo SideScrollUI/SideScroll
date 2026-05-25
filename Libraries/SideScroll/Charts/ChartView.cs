@@ -201,24 +201,24 @@ public class ChartView
 	/// <summary>
 	/// Creates multiple series by grouping data by the specified dimension properties
 	/// </summary>
-	/// <param name="iList">The source data list</param>
+	/// <param name="sourceList">The source data list</param>
 	/// <param name="xPropertyName">The property name for X-axis values</param>
 	/// <param name="yPropertyName">The property name for Y-axis values</param>
 	/// <param name="dimensionPropertyNames">Property names to group by, creating separate series for each unique combination</param>
-	public void AddDimensions(IList iList, string xPropertyName, string yPropertyName, params string[] dimensionPropertyNames)
+	public void AddDimensions(IList sourceList, string xPropertyName, string yPropertyName, params string[] dimensionPropertyNames)
 	{
-		SourceList = iList;
+		SourceList = sourceList;
 		_xPropertyName = xPropertyName;
 		_yPropertyName = yPropertyName;
 
-		Type elementType = iList.GetType().GetElementTypeForAll()!;
+		Type elementType = sourceList.GetType().GetElementTypeForAll()!;
 
 		_dimensionPropertyInfos = dimensionPropertyNames
 			.Select(name => elementType.GetProperty(name)!)
 			.ToList();
 
 		_dimensions = [];
-		foreach (var obj in iList)
+		foreach (var obj in sourceList)
 		{
 			AddDimensionValue(obj);
 		}

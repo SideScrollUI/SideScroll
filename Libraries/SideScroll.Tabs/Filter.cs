@@ -353,12 +353,12 @@ public class Filter
 	/// <summary>
 	/// Determines whether any items in the list match the filter
 	/// </summary>
-	public bool Matches(IList iList)
+	public bool Matches(IList list)
 	{
-		Type listType = iList.GetType();
+		Type listType = list.GetType();
 		Type elementType = listType.GetGenericArguments()[0]; // dictionaries?
 		List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleProperties(elementType);
-		return Matches(iList, visibleProperties);
+		return Matches(list, visibleProperties);
 	}
 
 	/// <summary>

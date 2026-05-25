@@ -178,7 +178,7 @@ public class TabModel
 	/// <summary>
 	/// Maximum depth to search when filtering
 	/// </summary>
-	public int MaxSearchDepth { get; set; } = 0;
+	public int MaxSearchDepth { get; set; }
 
 	/// <summary>
 	/// Collection of available actions for the tab
@@ -340,9 +340,9 @@ public class TabModel
 			return;
 		}
 
-		if (obj is IList iList)
+		if (obj is IList list)
 		{
-			if (AddList(iList, type))
+			if (AddList(list, type))
 				return;
 		}
 
@@ -482,12 +482,12 @@ public class TabModel
 
 		Type elementType = GetElementType(type);
 		Type genericType = typeof(ItemCollection<>).MakeGenericType(elementType);
-		IList iList = (IList)Activator.CreateInstance(genericType)!;
+		IList list = (IList)Activator.CreateInstance(genericType)!;
 		foreach (var item in enumerable)
 		{
-			iList.Add(item);
+			list.Add(item);
 		}
-		ItemList.Add(iList);
+		ItemList.Add(list);
 	}
 
 	// merge with GetElementTypeForAll?
@@ -570,21 +570,30 @@ public class TabModel
 	/// </summary>
 	/// <param name="filter">The filter to apply when searching</param>
 	/// <param name="depth">Maximum depth to search nested objects. Limited by MaxSearchDepth</param>
-	public TabBookmark FindMatches(Filter filter, int depth)
+	/// <param name="searchableOnly">If set only [Searchable] members will be checked</param>
+	public TabBookmark FindMatches(Filter filter, int depth, bool searchableOnly = false)
 	{
 		TabBookmark tabBookmark = new();
 
-		depth = Math.Min(depth, MaxSearchDepth);
 		depth--;
-		foreach (IList iList in ItemList)
+		foreach (IList list in ItemList)
 		{
-			List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleElementProperties(iList);
+			List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleElementProperties(list);
 
-			TabDataBookmark tabDataBookmark = new();
+			TabDataBookmark tabDataBookmark = new()
+			{
+				Filter = filter.FilterText
+			};
 			tabBookmark.TabDatas.Add(tabDataBookmark);
 
-			foreach (object obj in iList)
+			foreach (object obj in list)
 			{
+				if (searchableOnly && obj is ListMember listMember &&
+					listMember.GetCustomAttribute<SearchableAttribute>() == null)
+				{
+					continue;
+				}
+
 				if (filter.Matches(obj, visibleProperties))
 				{
 					SelectedRow selectedRow = new(obj);
@@ -592,12 +601,18 @@ public class TabModel
 				}
 				else if (depth >= 0)
 				{
+					// Class-level [Searchable] enables child search up to MaxSearchDepth without an
+					// explicit depth prefix. Explicit depth (depth >= 0) always enables child search.
+					Type objType = obj.GetType();
+					bool classSearchable = objType.GetCustomAttribute<SearchableAttribute>() != null;
+
 					TabModel? tabModel = Create(obj.Formatted() ?? "", obj);
 					if (tabModel != null)
 					{
-						TabBookmark childNode = tabModel.FindMatches(filter, depth);
+						TabBookmark childNode = tabModel.FindMatches(filter, depth, !classSearchable);
 						if (childNode.SelectedRows.Count > 0)
 						{
+							tabModel.MaxSearchDepth = depth;
 							childNode.TabModel = tabModel;
 							SelectedRow selectedRow = new(obj);
 							tabDataBookmark.SelectedRows.Add(new(selectedRow, childNode));
