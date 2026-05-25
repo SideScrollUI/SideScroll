@@ -152,9 +152,10 @@ public class Filter
 	/// Supports depth prefix (+N), quoted strings, AND (&amp;), OR (|), and parentheses for grouping.
 	/// </summary>
 	/// <param name="filterText">The filter expression to parse (e.g., "+3 foo &amp; bar | baz")</param>
-	public Filter(string? filterText)
+	public Filter(string? filterText, int depth = 0)
 	{
 		FilterText = filterText ?? "";
+		Depth = depth;
 
 		Match match = _regex.Match(FilterText);
 		if (!match.Success)

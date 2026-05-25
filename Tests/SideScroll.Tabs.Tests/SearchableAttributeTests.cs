@@ -70,15 +70,17 @@ public class SearchableAttributeTests : BaseTest
 
 	private static TabModel CreateModel(System.Collections.IList items, int maxSearchDepth = 1)
 	{
-		var model = new TabModel("Test");
-		model.Items = items;
-		model.MaxSearchDepth = maxSearchDepth;
+		var model = new TabModel("Test")
+		{
+			Items = items,
+			MaxSearchDepth = maxSearchDepth
+		};
 		return model;
 	}
 
-	private static int CountMatches(TabModel model, string filterText)
+	private static int CountMatches(TabModel model, string filterText, int depth = 0)
 	{
-		var filter = new Filter(filterText);
+		var filter = new Filter(filterText, depth);
 		TabBookmark bookmark = model.FindMatches(filter, filter.Depth);
 		return bookmark.SelectedRows.Count;
 	}
@@ -92,8 +94,8 @@ public class SearchableAttributeTests : BaseTest
 	{
 		List<PlainItem> items =
 		[
-			new PlainItem("Apple", 1) { Child = new PlainItem("Foo", 10) },
-			new PlainItem("Banana", 2) { Child = new PlainItem("Bar", 20) },
+			new("Apple", 1) { Child = new("Foo", 10) },
+			new("Banana", 2) { Child = new("Bar", 20) },
 		];
 		var model = CreateModel(items);
 
@@ -109,8 +111,8 @@ public class SearchableAttributeTests : BaseTest
 		// Without [Searchable], child tab search is not enabled, so "Foo" is not found.
 		List<PlainItem> items =
 		[
-			new PlainItem("Apple", 1) { Child = new PlainItem("Foo", 10) },
-			new PlainItem("Banana", 2) { Child = new PlainItem("Bar", 20) },
+			new("Apple", 1) { Child = new("Foo", 10) },
+			new("Banana", 2) { Child = new("Bar", 20) },
 		];
 		var model = CreateModel(items);
 
@@ -122,18 +124,18 @@ public class SearchableAttributeTests : BaseTest
 	[Test]
 	public void NoSearchable_ExplicitDepthPrefix_FindsChildText()
 	{
-		// "+1" in the filter raises the user-specified depth, which overrides the lack of [Searchable]
-		// and enables child tab search even without the attribute.
+		// "+1" in the filter does not raise the user-specified depth without [Searchable]
+		// and does not enable child tab search even with the attribute.
 		List<PlainItem> items =
 		[
-			new PlainItem("Apple", 1) { Child = new PlainItem("Foo", 10) },
-			new PlainItem("Banana", 2) { Child = new PlainItem("Bar", 20) },
+			new("Apple", 1) { Child = new("Foo", 10) },
+			new("Banana", 2) { Child = new("Bar", 20) },
 		];
 		var model = CreateModel(items);
 
 		int matches = CountMatches(model, "+1 foo");
 
-		Assert.That(matches, Is.EqualTo(1));
+		Assert.That(matches, Is.EqualTo(0));
 	}
 
 	[Test]
@@ -141,7 +143,7 @@ public class SearchableAttributeTests : BaseTest
 	{
 		List<PlainItem> items =
 		[
-			new PlainItem("Apple", 1) { Child = new PlainItem("Foo", 10) },
+			new("Apple", 1) { Child = new("Foo", 10) },
 		];
 		var model = CreateModel(items);
 
@@ -159,8 +161,8 @@ public class SearchableAttributeTests : BaseTest
 	{
 		List<SearchableClassItem> items =
 		[
-			new SearchableClassItem("Apple", 1) { Child = new SearchableClassItem("Foo", 10) },
-			new SearchableClassItem("Banana", 2) { Child = new SearchableClassItem("Bar", 20) },
+			new("Apple", 1) { Child = new("Foo", 10) },
+			new("Banana", 2) { Child = new("Bar", 20) },
 		];
 		var model = CreateModel(items);
 
@@ -176,12 +178,12 @@ public class SearchableAttributeTests : BaseTest
 		// Even though Child is a field (not in direct search), the recursive search finds "Foo".
 		List<SearchableClassItem> items =
 		[
-			new SearchableClassItem("Apple", 1) { Child = new SearchableClassItem("Foo", 10) },
-			new SearchableClassItem("Banana", 2) { Child = new SearchableClassItem("Bar", 20) },
+			new("Apple", 1) { Child = new("Foo", 10) },
+			new("Banana", 2) { Child = new("Bar", 20) },
 		];
 		var model = CreateModel(items);
 
-		int matches = CountMatches(model, "foo");
+		int matches = CountMatches(model, "foo", 1);
 
 		Assert.That(matches, Is.EqualTo(1));
 	}
@@ -192,13 +194,13 @@ public class SearchableAttributeTests : BaseTest
 		// The parent item is what appears in the match results (not the child).
 		List<SearchableClassItem> items =
 		[
-			new SearchableClassItem("Apple", 1) { Child = new SearchableClassItem("Foo", 10) },
-			new SearchableClassItem("Banana", 2) { Child = new SearchableClassItem("Bar", 20) },
+			new("Apple", 1) { Child = new("Foo", 10) },
+			new("Banana", 2) { Child = new("Bar", 20) },
 		];
 		var model = CreateModel(items);
 
 		var filter = new Filter("bar");
-		TabBookmark bookmark = model.FindMatches(filter, filter.Depth);
+		TabBookmark bookmark = model.FindMatches(filter, 2);
 		List<SelectedRow> selectedRows = bookmark.SelectedRows;
 
 		Assert.That(selectedRows, Has.Count.EqualTo(1));
@@ -210,13 +212,13 @@ public class SearchableAttributeTests : BaseTest
 	{
 		List<SearchableClassItem> items =
 		[
-			new SearchableClassItem("Apple", 1) { Child = new SearchableClassItem("Foo", 10) },
-			new SearchableClassItem("Banana", 2) { Child = new SearchableClassItem("Foo", 20) },
-			new SearchableClassItem("Cherry", 3) { Child = new SearchableClassItem("Bar", 30) },
+			new("Apple", 1) { Child = new("Foo", 10) },
+			new("Banana", 2) { Child = new("Foo", 20) },
+			new("Cherry", 3) { Child = new("Bar", 30) },
 		];
 		var model = CreateModel(items);
 
-		int matches = CountMatches(model, "foo");
+		int matches = CountMatches(model, "foo", 1);
 
 		Assert.That(matches, Is.EqualTo(2));
 	}
@@ -227,7 +229,7 @@ public class SearchableAttributeTests : BaseTest
 		// When an item matches both directly and via its child, it's only counted once.
 		List<SearchableClassItem> items =
 		[
-			new SearchableClassItem("Foo", 1) { Child = new SearchableClassItem("Foo", 10) },
+			new("Foo", 1) { Child = new("Foo", 10) },
 		];
 		var model = CreateModel(items);
 
@@ -241,7 +243,7 @@ public class SearchableAttributeTests : BaseTest
 	{
 		List<SearchableClassItem> items =
 		[
-			new SearchableClassItem("Apple", 1) { Child = new SearchableClassItem("Foo", 10) },
+			new("Apple", 1) { Child = new("Foo", 10) },
 		];
 		var model = CreateModel(items);
 
@@ -343,7 +345,7 @@ public class SearchableAttributeTests : BaseTest
 		// MaxSearchDepth=0 disables child tab search entirely, even for [Searchable] items.
 		List<SearchableClassItem> items =
 		[
-			new SearchableClassItem("Apple", 1) { Child = new SearchableClassItem("Foo", 10) },
+			new("Apple", 1) { Child = new("Foo", 10) },
 		];
 		var model = CreateModel(items, maxSearchDepth: 0);
 
@@ -358,7 +360,7 @@ public class SearchableAttributeTests : BaseTest
 		// MaxSearchDepth=0 only disables child search; direct matches still work.
 		List<SearchableClassItem> items =
 		[
-			new SearchableClassItem("Apple", 1) { Child = new SearchableClassItem("Foo", 10) },
+			new("Apple", 1) { Child = new("Foo", 10) },
 		];
 		var model = CreateModel(items, maxSearchDepth: 0);
 
@@ -377,18 +379,18 @@ public class SearchableAttributeTests : BaseTest
 		// Demonstrates the core difference: same child data, different attribute → different search results.
 		List<PlainItem> plainItems =
 		[
-			new PlainItem("Item A", 1) { Child = new PlainItem("UniqueChild", 10) },
+			new("Item A", 1) { Child = new("UniqueChild", 10) },
 		];
 		List<SearchableClassItem> searchableItems =
 		[
-			new SearchableClassItem("Item A", 1) { Child = new SearchableClassItem("UniqueChild", 10) },
+			new("Item A", 1) { Child = new("UniqueChild", 10) },
 		];
 
 		var plainModel = CreateModel(plainItems);
 		var searchableModel = CreateModel(searchableItems);
 
-		int plainMatches = CountMatches(plainModel, "uniquechild");
-		int searchableMatches = CountMatches(searchableModel, "uniquechild");
+		int plainMatches = CountMatches(plainModel, "uniquechild", 1);
+		int searchableMatches = CountMatches(searchableModel, "uniquechild", 1);
 
 		Assert.That(plainMatches, Is.EqualTo(0), "Without [Searchable], child field text should not be found");
 		Assert.That(searchableMatches, Is.EqualTo(1), "With class [Searchable], child field text should be found");

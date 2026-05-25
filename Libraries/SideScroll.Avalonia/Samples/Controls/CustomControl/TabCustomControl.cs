@@ -28,8 +28,8 @@ public class TabCustomControl : ITab
 			_toolbar = new TabControlSearchToolbar(this);
 			_toolbar.ButtonNew.Add(New);
 			_toolbar.ButtonSave.Add(Save);
-			_toolbar.ButtonSearch.Add(SearchUI);
-			_toolbar.ButtonCopyToClipboard.Add(CopyToClipboardUI);
+			_toolbar.ButtonSearch.Add(Search);
+			_toolbar.ButtonCopyToClipboard.Add(CopyToClipboard);
 			model.AddObject(_toolbar);
 
 			_planets ??= [.. SolarSystem.Sample.Planets];
@@ -49,7 +49,7 @@ public class TabCustomControl : ITab
 			New(call);
 		}
 
-		private void SearchUI(Call call)
+		private void Search(Call call)
 		{
 			_toolbar!.TextBoxStatus.Text = "Searching";
 
@@ -68,9 +68,9 @@ public class TabCustomControl : ITab
 			_toolbar!.TextBoxStatus.Text = "Finished";
 		}
 
-		private void CopyToClipboardUI(Call call)
+		private void CopyToClipboard(Call call)
 		{
-			CopyToClipboard(SelectedItems);
+			CopyToClipboard(call, SelectedItems);
 		}
 	}
 }

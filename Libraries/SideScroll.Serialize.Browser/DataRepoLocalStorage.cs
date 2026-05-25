@@ -49,9 +49,9 @@ public class DataRepoLocalStorage(string repoPath, string? repoName = null)
 	/// <summary>
 	/// Loads an indexed repository view with all items using localStorage
 	/// </summary>
-	public override DataRepoView<T> LoadIndexedView<T>(Call call, string groupId, bool ascending = true)
+	public override DataRepoView<T> LoadIndexedView<T>(Call call, string groupId, bool ascending = true, int? maxItems = null)
 	{
-		var view = new DataRepoViewLocalStorage<T>(this, groupId, indexed: true);
+		var view = new DataRepoViewLocalStorage<T>(this, groupId, indexed: true, maxItems);
 		view.LoadAllIndexed(call, ascending);
 		return view;
 	}

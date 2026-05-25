@@ -1339,6 +1339,15 @@ public class TabInstance : IDisposable
 		OnCopyToClipboard?.Invoke(this, new CopyToClipboardEventArgs(text));
 	}
 
+	/// <summary>
+	/// Copies text to the clipboard, and shows a popup message
+	/// </summary>
+	public void CopyToClipboard(Call call, string text)
+	{
+		CopyToClipboard(text);
+		call.TaskInstance!.ShowMessage("Copied to Clipboard");
+	}
+
 	private static readonly JsonSerializerOptions JsonSerializerOptions = new()
 	{
 		WriteIndented = true
@@ -1351,5 +1360,14 @@ public class TabInstance : IDisposable
 	{
 		string json = JsonSerializer.Serialize(obj, JsonSerializerOptions);
 		CopyToClipboard(json);
+	}
+
+	/// <summary>
+	/// Serializes an object to JSON and copies it to the clipboard
+	/// </summary>
+	public void CopyToClipboard(Call call, object? obj)
+	{
+		string json = JsonSerializer.Serialize(obj, JsonSerializerOptions);
+		CopyToClipboard(call, json);
 	}
 }

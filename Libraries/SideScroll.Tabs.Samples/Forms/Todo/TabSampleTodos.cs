@@ -80,7 +80,7 @@ public class TabSampleTodos : ITab
 			toolbar.ButtonNew.Action = New;
 			toolbar.ButtonSave.Action = Save;
 			toolbar.ButtonDelete.Action = Delete;
-			toolbar.ButtonCopyToClipboard.Action = CopyToClipboardUI;
+			toolbar.ButtonCopyToClipboard.Action = CopyToClipboard;
 			toolbar.ButtonReset.Action = Reset;
 			model.AddObject(toolbar);
 
@@ -154,9 +154,9 @@ public class TabSampleTodos : ITab
 			}
 		}
 
-		private void CopyToClipboardUI(Call call)
+		private void CopyToClipboard(Call call)
 		{
-			CopyToClipboard(SelectedItems);
+			CopyToClipboard(call, SelectedItems);
 		}
 	}
 }

@@ -110,7 +110,7 @@ public class TabSamplePlanets : ITab
 
 		private void CopyToClipboard(Call call)
 		{
-			CopyToClipboard(SelectedItems);
+			CopyToClipboard(call, SelectedItems);
 		}
 	}
 }

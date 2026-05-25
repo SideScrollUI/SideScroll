@@ -589,7 +589,8 @@ public class TabModel
 			foreach (object obj in list)
 			{
 				if (searchableOnly && obj is ListMember listMember &&
-					listMember.GetCustomAttribute<SearchableAttribute>() == null)
+					listMember.GetCustomAttribute<SearchableAttribute>() == null &&
+					listMember.Value?.GetType()?.GetCustomAttribute<SearchableAttribute>() == null)
 				{
 					continue;
 				}
