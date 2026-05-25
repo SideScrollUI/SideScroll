@@ -700,10 +700,10 @@ public class TabInstance : IDisposable
 	// Todo: Make an async version of this for Task<T> Member(Call call)
 	private void Preload(TabModel model)
 	{
-		for (int i = 0; i < model.ItemList.Count; i++)
+		for (int i = 0; i < model.ItemLists.Count; i++)
 		{
-			IList list = model.ItemList[i];
-			Type listType = list.GetType();
+			IList itemList = model.ItemLists[i];
+			Type listType = itemList.GetType();
 			Type? elementType = listType.GetElementTypeForAll();
 			if (elementType == null) continue;
 
@@ -711,7 +711,7 @@ public class TabInstance : IDisposable
 			TabDataColumns dataColumns = new(tabDataSettings.ColumnNameOrder);
 			List<TabPropertyColumn> propertyColumns = dataColumns.GetPropertyColumns(elementType);
 			int itemCount = 0;
-			foreach (object obj in list)
+			foreach (object obj in itemList)
 			{
 				if (obj != null)
 				{
@@ -728,14 +728,14 @@ public class TabInstance : IDisposable
 					break;
 			}
 
-			if (list is ItemCollection<ListProperty> propertyList)
+			if (itemList is ItemCollection<ListProperty> propertyList)
 			{
-				model.ItemList[i] = ListProperty.Sort(propertyList);
+				model.ItemLists[i] = ListProperty.Sort(propertyList);
 			}
 
-			if (list is ItemCollection<ListMember> memberList)
+			if (itemList is ItemCollection<ListMember> memberList)
 			{
-				model.ItemList[i] = ListMember.Sort(memberList);
+				model.ItemLists[i] = ListMember.Sort(memberList);
 			}
 		}
 	}
@@ -760,9 +760,9 @@ public class TabInstance : IDisposable
 		}
 
 		// Set the context to the UI for items that support it
-		foreach (IList list in model.ItemList)
+		foreach (IList itemList in model.ItemLists)
 		{
-			if (list is IContext context)
+			if (itemList is IContext context)
 			{
 				context.InitializeContext(true);
 			}
@@ -857,10 +857,10 @@ public class TabInstance : IDisposable
 				return false;
 
 			// Only data is skippable?
-			if (Model.Objects.Count > 0 || Model.ItemList.Count == 0 || Model.ItemList[0].Count != 1)
+			if (Model.Objects.Count > 0 || Model.ItemLists.Count == 0 || Model.ItemLists[0].Count != 1)
 				return false;
 
-			var skippableAttribute = Model.ItemList[0][0]!.GetType().GetCustomAttribute<SkippableAttribute>();
+			var skippableAttribute = Model.ItemLists[0][0]!.GetType().GetCustomAttribute<SkippableAttribute>();
 			if (skippableAttribute == null && Model.Actions != null && Model.Actions.Count > 0)
 				return false;
 

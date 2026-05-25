@@ -193,7 +193,17 @@ public class TabModel
 	/// <summary>
 	/// List of data item collections to display
 	/// </summary>
-	public List<IList> ItemList { get; set; } = [];
+	public List<IList> ItemLists { get; set; } = [];
+
+	/// <summary>
+	/// List of data item collections to display
+	/// </summary>
+	[Obsolete("Use ItemLists instead")]
+	public List<IList> ItemList
+	{
+		get => ItemLists;
+		set => ItemLists = value;
+	}
 
 	/// <summary>
 	/// List of objects to display in the tab
@@ -206,10 +216,10 @@ public class TabModel
 	/// </summary>
 	public IList? Items
 	{
-		get => ItemList.FirstOrDefault();
+		get => ItemLists.FirstOrDefault();
 		set
 		{
-			ItemList.Clear();
+			ItemLists.Clear();
 			AddData(value);
 		}
 	}
@@ -265,7 +275,7 @@ public class TabModel
 
 		var tabModel = new TabModel(name);
 		tabModel.AddData(obj);
-		if (tabModel.ItemList.Count == 0 && tabModel.Objects.Count == 0)
+		if (tabModel.ItemLists.Count == 0 && tabModel.Objects.Count == 0)
 			return null;
 
 		return tabModel;
@@ -336,7 +346,7 @@ public class TabModel
 		var listItemAttribute = type.GetCustomAttribute<ListItemAttribute>();
 		if (listItemAttribute != null)
 		{
-			ItemList.Add(IListItem.Create(obj, listItemAttribute.IncludeBaseTypes));
+			ItemLists.Add(IListItem.Create(obj, listItemAttribute.IncludeBaseTypes));
 			return;
 		}
 
@@ -361,7 +371,7 @@ public class TabModel
 		}
 		else if (obj is DataTable dataTable)
 		{
-			ItemList.Add(dataTable.DefaultView);
+			ItemLists.Add(dataTable.DefaultView);
 		}
 		else if (obj is ChartView)
 		{
@@ -369,7 +379,7 @@ public class TabModel
 		}
 		else if (obj is Enum enumValue)
 		{
-			ItemList.Add(ListEnumValue.Create(enumValue));
+			ItemLists.Add(ListEnumValue.Create(enumValue));
 		}
 		else if (TabUtils.ObjectHasLinks(obj))
 		{
@@ -393,11 +403,11 @@ public class TabModel
 		else if (listType.GenericTypeArguments.Length > 0 && visibleProperties.Count > 0)
 		{
 			// list element type has properties (should check if they're visible properties?)
-			ItemList.Add(list);
+			ItemLists.Add(list);
 		}
 		else if (list is byte[] byteArray)
 		{
-			ItemList.Add(ListByte.Create(byteArray));
+			ItemLists.Add(ListByte.Create(byteArray));
 		}
 		/*else if (elementType.IsPrimitive)
 		{
@@ -406,7 +416,7 @@ public class TabModel
 		else*/
 		else if (visibleProperties.Count == 0)
 		{
-			ItemList.Add(ListToString.Create(list));
+			ItemLists.Add(ListToString.Create(list));
 		}
 		else
 		{
@@ -424,7 +434,7 @@ public class TabModel
 			{
 				iNewList.Add(child);
 			}
-			ItemList.Add(iNewList);
+			ItemLists.Add(iNewList);
 		}
 
 		UpdateSkippable(elementType);
@@ -453,7 +463,7 @@ public class TabModel
 				.ToList();
 		}
 
-		ItemList.Add(new ItemCollection<DictionaryEntry>(sortedList));
+		ItemLists.Add(new ItemCollection<DictionaryEntry>(sortedList));
 	}
 
 	/// <summary>
@@ -476,7 +486,7 @@ public class TabModel
 		Type type = enumerable.GetType();
 		if (type.GenericTypeArguments.Length == 0 || type.GenericTypeArguments[0] == typeof(string))
 		{
-			ItemList.Add(ListToString.Create(enumerable));
+			ItemLists.Add(ListToString.Create(enumerable));
 			return;
 		}
 
@@ -487,7 +497,7 @@ public class TabModel
 		{
 			list.Add(item);
 		}
-		ItemList.Add(list);
+		ItemLists.Add(list);
 	}
 
 	// merge with GetElementTypeForAll?
@@ -512,7 +522,7 @@ public class TabModel
 	private void AddObjectMembers(object obj)
 	{
 		var itemCollection = ListMember.Create(obj);
-		ItemList.Add(itemCollection);
+		ItemLists.Add(itemCollection);
 
 		//AddMethods(obj);
 	}
@@ -522,9 +532,9 @@ public class TabModel
 		// skip over single items that will take up lots of room (always show ListItems though)
 		Skippable = false;
 
-		if (ItemList[0].Count == 1 && ItemList[0][0] is { } firstItem)
+		if (ItemLists[0].Count == 1 && ItemLists[0][0] is { } firstItem)
 		{
-			if (ItemList[0] is IItemCollection { Skippable: false })
+			if (ItemLists[0] is IItemCollection { Skippable: false })
 				return;
 
 			var skippableAttribute = firstItem.GetType().GetCustomAttribute<SkippableAttribute>();
@@ -545,7 +555,7 @@ public class TabModel
 	public void Clear()
 	{
 		Objects.Clear();
-		ItemList.Clear();
+		ItemLists.Clear();
 		Actions = null;
 	}
 
@@ -576,9 +586,9 @@ public class TabModel
 		TabBookmark tabBookmark = new();
 
 		depth--;
-		foreach (IList list in ItemList)
+		foreach (IList itemList in ItemLists)
 		{
-			List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleElementProperties(list);
+			List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleElementProperties(itemList);
 
 			TabDataBookmark tabDataBookmark = new()
 			{
@@ -586,7 +596,7 @@ public class TabModel
 			};
 			tabBookmark.TabDatas.Add(tabDataBookmark);
 
-			foreach (object obj in list)
+			foreach (object obj in itemList)
 			{
 				if (searchableOnly && obj is ListMember listMember &&
 					listMember.GetCustomAttribute<SearchableAttribute>() == null &&

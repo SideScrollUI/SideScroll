@@ -533,9 +533,9 @@ public class TabView : Grid, IDisposable
 	protected void AddData()
 	{
 		int index = 0;
-		foreach (IList list in Model.ItemList)
+		foreach (IList itemList in Model.ItemLists)
 		{
-			var tabData = new TabDataGrid(Instance, list, true, TabViewSettings.GetData(index));
+			var tabData = new TabDataGrid(Instance, itemList, true, TabViewSettings.GetData(index));
 			tabData.OnSelectionChanged += ParentListSelectionChanged;
 			_tabParentControls!.AddControl(tabData, true);
 			TabDatas.Add(tabData);

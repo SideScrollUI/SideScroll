@@ -75,8 +75,8 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	/// <summary>Raised whenever the grid selection changes.</summary>
 	public event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
 
-	private Dictionary<DataGridColumn, string> _columnNames = [];
-	private List<PropertyInfo> _columnProperties = []; // makes filtering faster, could change other Dictionaries strings to PropertyInfo
+	private readonly Dictionary<DataGridColumn, string> _columnNames = [];
+	private readonly List<PropertyInfo> _columnProperties = []; // makes filtering faster, could change other Dictionaries strings to PropertyInfo
 
 	private int _disableSaving; // enables saving if > 0
 	private bool _ignoreSelectionChanged;

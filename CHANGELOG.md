@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed Atlas Serializer Decimal Member Handling with other Object Members
 
 ### Changed
+- Renamed TabModel.ItemList to ItemLists and deprecated the old name
 
 ## [0.19] - 2026-05-20
 
