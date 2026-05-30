@@ -13,13 +13,7 @@ public class TabSampleDataGridCollectionSize : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
-			_items = [];
-			AddEntries(20);
-			model.Items = _items;
-			model.ReloadOnThemeChange = true;
-
-			model.Actions =
-			[
+			model.AddActions([
 				new TaskAction("Add 100 Entries", () => AddEntries(100)),
 				new TaskAction("Add 1,000 Entries", () => AddEntries(1_000)),
 				new TaskAction("Add 10,000 Entries", () => AddEntries(10_000)),
@@ -27,7 +21,12 @@ public class TabSampleDataGridCollectionSize : ITab
 				{
 					AccentType = AccentType.Warning,
 				},
-			];
+			]);
+
+			_items = [];
+			AddEntries(20);
+			model.Items = _items;
+			model.ReloadOnThemeChange = true;
 		}
 
 		private void AddEntries(int count)

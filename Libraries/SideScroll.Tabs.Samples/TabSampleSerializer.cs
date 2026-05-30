@@ -14,15 +14,14 @@ public class TabSampleSerializer : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
-			model.Items = _items = [];
-
-			model.Actions =
-			[
+			model.AddActions([
 				new TaskDelegate("Serialize 1 object", Serialize, true, true),
 				new TaskDelegate("Deserialize 1 object", Deserialize, true, true),
 				new TaskDelegate("Serialize 1 million objects", SerializeOneMillionObjects, true, true),
 				new TaskDelegate("Deserialize 1 million objects", DeserializeOneMillionObjects, true, true),
-			];
+			]);
+
+			model.Items = _items = [];
 		}
 
 		private void Serialize(Call call)

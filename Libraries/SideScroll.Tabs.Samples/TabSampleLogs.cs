@@ -18,15 +18,7 @@ public class TabSampleLogs : ITab
 			_sampleCall = call.AddSubCall(Label);
 			_counter = 0;
 
-			model.Items = new List<ListItem>
-			{
-				new("Sample Call Log", _sampleCall.Log),
-				new("Sample Call", _sampleCall),
-				new("Log Entry", new LogEntry(null, LogLevel.Info, "test", null)),
-			};
-
-			model.Actions =
-			[
+			model.AddActions([
 				new TaskAction("Add 1 Entry", () => AddEntries(1)),
 				new TaskAction("Add 10 Entries",() => AddEntries(10)),
 				new TaskAction("Add 100 Entries", () => AddEntries(100)),
@@ -35,7 +27,14 @@ public class TabSampleLogs : ITab
 				new TaskDelegate("Reset", Reset),
 				new TaskDelegate("Sync Task Delegate Thread: Log 1 Entry / second", SyncTaskThread, true, true),
 				new TaskDelegateAsync("Async Task Delegate Thread: Log 1 Entry / second", ASyncTaskThreadAsync, true, true),
-			];
+			]);
+
+			model.Items = new List<ListItem>
+			{
+				new("Sample Call Log", _sampleCall.Log),
+				new("Sample Call", _sampleCall),
+				new("Log Entry", new LogEntry(null, LogLevel.Info, "test", null)),
+			};
 		}
 
 		private void AddEntries(int count)

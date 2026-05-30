@@ -860,10 +860,6 @@ public class TabInstance : IDisposable
 			if (Model.Objects.Count > 0 || Model.ItemLists.Count == 0 || Model.ItemLists[0].Count != 1)
 				return false;
 
-			var skippableAttribute = Model.ItemLists[0][0]!.GetType().GetCustomAttribute<SkippableAttribute>();
-			if (skippableAttribute == null && Model.Actions != null && Model.Actions.Count > 0)
-				return false;
-
 			return Model.Skippable;
 		}
 	}

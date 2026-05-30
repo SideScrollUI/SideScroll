@@ -183,6 +183,7 @@ public class TabModel
 	/// <summary>
 	/// Collection of available actions for the tab
 	/// </summary>
+	[Obsolete("Use AddActions instead")]
 	public IReadOnlyList<TaskCreator>? Actions { get; set; }
 
 	/// <summary>
@@ -304,6 +305,14 @@ public class TabModel
 		Objects.Add(tabObject);
 
 		return tabObject;
+	}
+
+	/// <summary>
+	/// Adds a list of actions to the tab as clickable buttons
+	/// </summary>
+	public TabObject AddActions(IReadOnlyList<TaskCreator> actions)
+	{
+		return AddObject(actions);
 	}
 
 	/// <summary>

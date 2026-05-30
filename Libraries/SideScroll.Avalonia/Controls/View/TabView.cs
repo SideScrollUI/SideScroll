@@ -13,6 +13,7 @@ using SideScroll.Extensions;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks.Models;
 using SideScroll.Tabs.Settings;
+using SideScroll.Tasks;
 using SideScroll.Tabs.Toolbar;
 using System.Collections;
 using System.Diagnostics;
@@ -443,8 +444,15 @@ public class TabView : Grid, IDisposable
 
 		InitializeControls();
 
+#pragma warning disable CS0618 // Type or member is obsolete
+		if (Model.Actions != null)
+		{
+			Model.AddActions(Model.Actions);
+			Model.Actions = null;
+		}
+#pragma warning restore CS0618 // Type or member is obsolete
+
 		AddObjects();
-		AddActions();
 		if (TabTasks == null)
 			AddTasks();
 		AddData();
@@ -477,6 +485,11 @@ public class TabView : Grid, IDisposable
 		{
 			controlCreator.AddControl(Instance, _tabParentControls!, obj);
 		}
+		else if (obj is IReadOnlyList<TaskCreator> taskCreators)
+		{
+			TabActions = new TabViewActions(Instance, taskCreators);
+			_tabParentControls!.AddControl(TabActions, false, SeparatorType.Spacer);
+		}
 		else if (obj is TabToolbar toolbar)
 		{
 			AddToolbar(toolbar);
@@ -506,21 +519,10 @@ public class TabView : Grid, IDisposable
 		AddControl(toolbarControl, GridLength.Auto);
 	}
 
-	/// <summary>Creates and adds the <see cref="TabViewActions"/> control if the model defines any actions.</summary>
-	protected void AddActions()
-	{
-		if (Model.Actions == null)
-			return;
-
-		TabActions = new TabViewActions(Instance);
-
-		_tabParentControls!.AddControl(TabActions, false, SeparatorType.Spacer);
-	}
-
-	/// <summary>Creates and adds the <see cref="TabViewTasks"/> control when the model has actions or objects to display.</summary>
+	/// <summary>Creates and adds the <see cref="TabViewTasks"/> control when the model has objects to display.</summary>
 	protected void AddTasks()
 	{
-		if (Model.Actions == null && Model.Objects == null)
+		if (Model.Objects.Count == 0)
 			return;
 
 		TabTasks = new TabViewTasks(Instance);

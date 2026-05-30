@@ -27,6 +27,15 @@ public class TabSampleDataRepoPaging : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
+			model.AddActions([
+				new TaskDelegate("Add", Add), // Foreground task so we can modify collection
+				new TaskDelegate("Add 10", Add10),
+				new TaskDelegate("Replace", Replace),
+				new TaskDelegate("Delete", Delete),
+				new TaskDelegate("Delete All", DeleteAll),
+				new TaskDelegate("Load All", LoadAll),
+			]);
+
 			LoadPageView(call);
 			model.Items = _sampleItems;
 
@@ -36,16 +45,6 @@ public class TabSampleDataRepoPaging : ITab
 			toolbar.ButtonNext.Action = LoadNext;
 			toolbar.ButtonNext.IsEnabledBinding = new PropertyBinding(nameof(IDataPageView.HasNext), _pageView);
 			model.AddObject(toolbar);
-
-			model.Actions =
-			[
-				new TaskDelegate("Add", Add), // Foreground task so we can modify collection
-				new TaskDelegate("Add 10", Add10),
-				new TaskDelegate("Replace", Replace),
-				new TaskDelegate("Delete", Delete),
-				new TaskDelegate("Delete All", DeleteAll),
-				new TaskDelegate("Load All", LoadAll),
-			];
 		}
 
 		private void LoadPageView(Call call)
@@ -54,7 +53,7 @@ public class TabSampleDataRepoPaging : ITab
 
 			_pageView = _dataRepoItems.LoadPageView(call);
 			_pageView!.PageSize = 10;
-			_sampleItems = new ItemCollectionUI<SampleItem>(_pageView?.Next(call).Select(d => d.Value) ?? []);
+			_sampleItems = [.. _pageView?.Next(call).Select(d => d.Value) ?? []];
 		}
 
 		private void LoadPrevious(Call call)

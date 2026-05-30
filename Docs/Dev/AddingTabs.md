@@ -37,10 +37,9 @@ public class TabSample : ITab
 				new("Tab 2", new Tab2()),
 			};
 
-			model.Actions = new List<TaskCreator>()
-			{
+			model.AddActions([
 				new TaskDelegate("Log this", LogThis),
-			};
+			]);
 		}
 
 		private void LogThis(Call call)
@@ -116,11 +115,10 @@ public class TabSample(int count) : ITab
 				new("Copy", new TabSample()), // Recursive
 			};
 
-			model.Actions = new List<TaskCreator>()
-			{
+			model.AddActions([
 				new TaskDelegateAsync("Sleep 10s", SleepAsync),
 				new TaskDelegate("Add Items", AddItems),
-			};
+			]);
 		}
 
 		private async Task SleepAsync(Call call)
@@ -180,11 +178,10 @@ public class TabSampleAsync : ITab
 			await Task.Delay(2000);
 			model.AddObject("Finished");
 
-			model.Actions = new ItemCollection<TaskCreator>()
-			{
+			model.AddActions([
 				new TaskDelegate("Add Log Entry", AddEntry),
 				new TaskDelegateAsync("Sleep (Async)", SleepAsync, true, true),
-			};
+			]);
 		}
 
 		private int _counter = 1;

@@ -17,21 +17,20 @@ public class TabSampleFormTasks : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
-			model.Items = _items;
-
-			model.Actions =
-			[
-				new TaskDelegate("Add", Add),
-				new TaskDelegateAsync("Task with Progress", ShowProgressAsync, true, true),
-				new TaskDelegateAsync("Task with Sub Tasks", TaskCountAsync, true, true),
-			];
-
 			_sampleItem = LoadOrCreateData<SampleItem>(DataKey);
 			if (_sampleItem.DateTime.Ticks == 0)
 			{
 				_sampleItem.DateTime = DateTime.Now; // in case the serializer loses it
 			}
 			model.AddForm(_sampleItem);
+
+			model.AddActions([
+				new TaskDelegate("Add", Add),
+				new TaskDelegateAsync("Task with Progress", ShowProgressAsync, true, true),
+				new TaskDelegateAsync("Task with Sub Tasks", TaskCountAsync, true, true),
+			]);
+
+			model.Items = _items;
 		}
 
 		private void Add(Call call)

@@ -8,7 +8,7 @@ using SideScroll.Avalonia.Controls.Flyouts;
 namespace SideScroll.Avalonia.Controls.View;
 
 /// <summary>
-/// A panel that renders the clickable action buttons defined in <see cref="TabModel.Actions"/>,
+/// A panel that renders the clickable action buttons defined by a <see cref="TaskCreator"/> list,
 /// each wired to invoke a <see cref="TaskCreator"/> on the owning tab instance.
 /// </summary>
 public class TabViewActions : UserControl
@@ -21,11 +21,11 @@ public class TabViewActions : UserControl
 
 	private readonly Dictionary<Button, TaskCreator> _taskCreators = [];
 
-	public TabViewActions(TabInstance tabInstance)
+	public TabViewActions(TabInstance tabInstance, IReadOnlyList<TaskCreator> actions)
 	{
 		TabInstance = tabInstance;
 
-		if (TabModel.Actions!.Count == 0) return;
+		if (actions.Count == 0) return;
 
 		var containerGrid = new Grid
 		{
@@ -35,7 +35,7 @@ public class TabViewActions : UserControl
 		};
 
 		int rowIndex = 0;
-		foreach (TaskCreator taskCreator in TabModel.Actions)
+		foreach (TaskCreator taskCreator in actions)
 		{
 			var rowDefinition = new RowDefinition
 			{

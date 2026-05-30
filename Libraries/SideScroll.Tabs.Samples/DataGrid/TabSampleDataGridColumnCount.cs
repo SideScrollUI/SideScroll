@@ -13,15 +13,14 @@ public class TabSampleDataGridColumnCount : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
-			model.Items = _items = [];
-			AddEntries(50);
-
-			model.Actions =
-			[
+			model.AddActions([
 				new TaskAction("Add 100 Entries", () => AddEntries(100)),
 				new TaskAction("Add 1,000 Entries", () => AddEntries(1_000)),
 				new TaskAction("Add 10,000 Entries", () => AddEntries(10_000)),
-			];
+			]);
+
+			model.Items = _items = [];
+			AddEntries(50);
 		}
 
 		private void AddEntries(int count)

@@ -1,7 +1,6 @@
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Samples.Forms;
 using SideScroll.Tabs.Tools.FileViewer;
-using SideScroll.Tasks;
 
 namespace SideScroll.Tabs.Samples.DataRepo;
 
@@ -23,24 +22,6 @@ public class TabSampleDataRepo : ITab
 				new("App Directory", new TabDirectory(Project.Data.App.RepoPath)),
 				new("Cache Directory", new TabDirectory(Project.Data.Cache.RepoPath)),
 			};
-
-			model.Actions =
-			[
-				new TaskDelegate("Delete Repos", DeleteRepos)
-				{
-					Flyout = new ConfirmationFlyoutConfig("Are you sure you want to delete all DataRepos?", "Delete"),
-					AccentType = AccentType.Warning,
-				}
-			];
-		}
-
-		private void DeleteRepos(Call call)
-		{
-			Project.Data.Cache.DeleteRepo(call);
-			Project.Data.App.DeleteRepo(call);
-			Project.Data.Shared.DeleteRepo(call);
-
-			Reload();
 		}
 	}
 }

@@ -11,11 +11,10 @@ public class TabSampleProcess : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			model.Actions =
-			[
+			model.AddActions([
 				new TaskDelegate("Open Folder", OpenFolder, true),
 				new TaskDelegate("Open Browser", OpenBrowser, true),
-			];
+			]);
 		}
 
 		private static void OpenFolder(Call call)

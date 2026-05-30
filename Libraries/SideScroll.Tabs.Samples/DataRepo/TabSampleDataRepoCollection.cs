@@ -18,17 +18,16 @@ public class TabSampleDataRepoCollection : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
-			LoadSavedItems(call);
-			model.Items = _sampleItems;
-
-			model.Actions =
-			[
+			model.AddActions([
 				new TaskDelegate("Add", Add), // Foreground task so we can modify collection
 				new TaskDelegate("Add 10", Add10),
 				new TaskDelegate("Replace", Replace),
 				new TaskDelegate("Delete", Delete),
 				new TaskDelegate("Delete All", DeleteAll),
-			];
+			]);
+
+			LoadSavedItems(call);
+			model.Items = _sampleItems;
 		}
 
 		private void LoadSavedItems(Call call)

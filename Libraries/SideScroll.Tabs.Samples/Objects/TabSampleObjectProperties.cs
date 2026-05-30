@@ -16,13 +16,13 @@ public class TabSampleObjectProperties : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			model.ReloadOnThemeChange = true;
-			model.Items = ListProperty.Create(_propertyTest);
 			model.Editing = true;
 
-			model.Actions =
-			[
+			model.AddActions([
 				new TaskDelegate("Toggle", Toggle),
-			];
+			]);
+
+			model.Items = ListProperty.Create(_propertyTest);
 		}
 
 		private void Toggle(Call call)

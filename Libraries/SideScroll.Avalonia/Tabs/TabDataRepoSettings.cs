@@ -25,6 +25,23 @@ public class TabDataRepoSettings(UserSettings userSettings) : ITab
 
 			model.AddForm(DataSettings);
 
+			model.AddActions([
+				new TaskDelegate("Delete Repos - Current Version", DeleteRepos)
+				{
+					Flyout = new ConfirmationFlyoutConfig(
+						"Are you sure you want to permanently delete the data repositories for the current version?",
+						"Delete"),
+					AccentType = AccentType.Warning,
+				},
+				new TaskDelegate("Delete Repos - All Versions", DeleteAllRepos)
+				{
+					Flyout = new ConfirmationFlyoutConfig(
+						"Are you sure you want to permanently delete all data repositories across all versions?",
+						"Delete"),
+					AccentType = AccentType.Warning,
+				}
+			]);
+
 			List<ListItem> currentVersion =
 			[
 				new("App Directory", new TabDirectory(Project.Data.App.RepoPath)),
@@ -44,24 +61,6 @@ public class TabDataRepoSettings(UserSettings userSettings) : ITab
 				new("Current", currentVersion),
 				new("All", allVersions),
 			};
-
-			model.Actions =
-			[
-				new TaskDelegate("Delete Repos - Current Version", DeleteRepos)
-				{
-					Flyout = new ConfirmationFlyoutConfig(
-						"Are you sure you want to permanently delete the data repositories for the current version?",
-						"Delete"),
-					AccentType = AccentType.Warning,
-				},
-				new TaskDelegate("Delete Repos - All Versions", DeleteAllRepos)
-				{
-					Flyout = new ConfirmationFlyoutConfig(
-						"Are you sure you want to permanently delete all data repositories across all versions?",
-						"Delete"),
-					AccentType = AccentType.Warning,
-				}
-			];
 		}
 
 		private void DeleteRepos(Call call)
