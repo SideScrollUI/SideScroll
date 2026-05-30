@@ -16,7 +16,7 @@ using System.Text.Json.Serialization;
 
 namespace SideScroll.Avalonia.Themes.Tabs;
 
-public class TabAvaloniaThemeSettings : ITab, IDataView
+public class TabAvaloniaThemeSettings : ITab, IDataViewItem
 {
 	[DataValue, HiddenColumn]
 	public AvaloniaThemeSettings? ThemeSettings { get; set; }
@@ -26,14 +26,6 @@ public class TabAvaloniaThemeSettings : ITab, IDataView
 
 	[DataKey]
 	public string? Name => ThemeSettings?.Name;
-
-	public event EventHandler<EventArgs>? OnDelete;
-
-	[ButtonColumn("-")]
-	public void Delete()
-	{
-		OnDelete?.Invoke(this, EventArgs.Empty);
-	}
 
 	public override string? ToString() => ThemeSettings?.ToString();
 

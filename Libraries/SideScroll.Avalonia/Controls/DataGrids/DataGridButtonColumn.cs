@@ -10,8 +10,14 @@ namespace SideScroll.Avalonia.Controls.DataGrids;
 /// <summary>A data-grid column that renders a <see cref="DataGridButton"/> in each cell and invokes a reflected method on the row's data object when clicked.</summary>
 public class DataGridButtonColumn : DataGridBoundColumn
 {
-	/// <summary>Gets the method invoked when the button in a cell is clicked.</summary>
-	public MethodInfo MethodInfo { get; }
+	/// <summary>Gets the method invoked when the button in a cell is clicked, or <c>null</c> when <see cref="ClickAction"/> is used instead.</summary>
+	public MethodInfo? MethodInfo { get; }
+
+	/// <summary>
+	/// Gets or sets an optional delegate to invoke when the button is clicked.
+	/// When set, takes precedence over <see cref="MethodInfo"/>; the row's data object is passed as the argument.
+	/// </summary>
+	public Action<object>? ClickAction { get; set; }
 
 	/// <summary>Gets or sets the button label text.</summary>
 	public string ButtonText { get; set; }
@@ -19,10 +25,20 @@ public class DataGridButtonColumn : DataGridBoundColumn
 	/// <summary>Gets or sets the name of a boolean property on the row object that controls button visibility, or <c>null</c> to always show.</summary>
 	public string? VisiblePropertyName { get; set; }
 
+	/// <summary>Creates a column that invokes <paramref name="methodInfo"/> on the row object when clicked.</summary>
 	public DataGridButtonColumn(MethodInfo methodInfo, string buttonText)
 	{
 		MethodInfo = methodInfo;
 		VisiblePropertyName = methodInfo.GetCustomAttribute<ButtonColumnAttribute>()?.VisiblePropertyName;
+		ButtonText = buttonText;
+		CanUserSort = false;
+		Width = new DataGridLength(1, DataGridLengthUnitType.SizeToCells);
+	}
+
+	/// <summary>Creates a column that invokes <paramref name="clickAction"/> with the row's data object when clicked.</summary>
+	public DataGridButtonColumn(string buttonText, Action<object> clickAction)
+	{
+		ClickAction = clickAction;
 		ButtonText = buttonText;
 		CanUserSort = false;
 		Width = new DataGridLength(1, DataGridLengthUnitType.SizeToCells);
@@ -51,7 +67,14 @@ public class DataGridButtonColumn : DataGridBoundColumn
 		try
 		{
 			Button button = (Button)sender!;
-			MethodInfo.Invoke(button.DataContext, []);
+			if (ClickAction != null)
+			{
+				ClickAction(button.DataContext!);
+			}
+			else
+			{
+				MethodInfo!.Invoke(button.DataContext, []);
+			}
 		}
 		catch (Exception ex)
 		{

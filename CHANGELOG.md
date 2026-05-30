@@ -10,12 +10,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added Atlas Serializer support for `Guid`, `Uri`, `DateOnly`, and `TimeOnly`
 - Added TabInstance.CopyToClipboard(Call call...) variant to automatically show a Copied to Clipboard message
+- Added `IDataViewItem` base interface for `DataViewCollection` — new view classes implement this instead of `IDataView`
+- Added `IDeletableList` interface and `EnableDeleting` property to `DataViewCollection` for collection-level delete support
+- Added `DataViewCollection.OnDelete` event raised after an item is successfully deleted
+- Added automatic "Delete" button column to `TabDataGrid` when the list implements `IDeletableList.EnableDeleting`
 
 ### Fixed
 - Fixed Atlas Serializer Decimal Member Handling with other Object Members
 
 ### Changed
 - Renamed TabModel.ItemList to ItemLists and deprecated the old name
+- `IDataView` now extends `IDataViewItem` — existing view classes are fully backwards compatible; per-item `OnDelete` events are still wired automatically
+- `DataGridButtonColumn` now supports an optional `ClickAction` delegate as an alternative to method reflection
 
 ## [0.19] - 2026-05-20
 

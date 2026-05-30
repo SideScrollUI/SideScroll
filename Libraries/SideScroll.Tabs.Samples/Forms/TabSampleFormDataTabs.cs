@@ -17,6 +17,9 @@ public class TabSampleFormDataTabs : ITab
 	{
 		public ToolButton ButtonNew { get; } = new("New", Icons.Svg.BlankDocument);
 		public ToolButton ButtonSave { get; } = new("Save", Icons.Svg.Save, isDefault: true);
+
+		[Separator]
+		public ToolButton ButtonReset { get; } = new("Reset", Icons.Svg.Reset);
 	}
 
 	private class Instance : TabInstance
@@ -39,6 +42,7 @@ public class TabSampleFormDataTabs : ITab
 			Toolbar toolbar = new();
 			toolbar.ButtonNew.Action = New;
 			toolbar.ButtonSave.Action = Save;
+			toolbar.ButtonReset.Action = Reset;
 			model.AddObject(toolbar);
 		}
 
@@ -63,8 +67,17 @@ public class TabSampleFormDataTabs : ITab
 				}
 			}
 
-			var dataCollection = new DataViewCollection<SampleItem, TabSampleItem>(_dataRepoView);
+			var dataCollection = new DataViewCollection<SampleItem, TabSampleItem>(_dataRepoView)
+			{
+				EnableDeleting = true
+			};
 			model.Items = dataCollection.Items;
+		}
+
+		private void Reset(Call call)
+		{
+			_dataRepoView!.DeleteAll(call);
+			Reload();
 		}
 
 		private void New(Call call)

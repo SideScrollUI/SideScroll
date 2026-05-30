@@ -6,7 +6,7 @@ namespace SideScroll.Resources;
 /// <summary>
 /// Provides access to embedded sample text files (plain text, JSON, and XML) for use in demos and tests.
 /// </summary>
-public class TextSamples : NamedItemCollection<TextSamples, ResourceView>
+public abstract class TextSamples : NamedItemCollection<TextSamples, ResourceView>
 {
 	/// <summary>The embedded resource path prefix for sample text files.</summary>
 	public const string SamplePath = "SideScroll.Resources.Samples";

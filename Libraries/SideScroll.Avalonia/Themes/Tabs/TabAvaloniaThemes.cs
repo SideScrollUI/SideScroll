@@ -54,7 +54,10 @@ public class TabAvaloniaThemes : ITab
 			_dataRepoThemes = ThemeManager.Instance!.DataRepoThemes;
 			DataRepoInstance = _dataRepoThemes;
 
-			var dataCollection = new DataViewCollection<AvaloniaThemeSettings, TabAvaloniaThemeSettings>(_dataRepoThemes);
+			var dataCollection = new DataViewCollection<AvaloniaThemeSettings, TabAvaloniaThemeSettings>(_dataRepoThemes)
+			{
+				EnableDeleting = true,
+			};
 			//dataCollection.DataRepoSecondary = DataShared.LoadView<AvaloniaThemeSettings>(call, "Themes", nameof(AvaloniaThemeSettings.Name));
 			model.Items = dataCollection.Items;
 		}

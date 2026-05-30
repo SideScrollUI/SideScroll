@@ -629,8 +629,13 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 		bool styleCells = methodColumns.Count > 0 ||
 			propertyColumns
-			.Select(p => p.IsStyled())
-			.Max();
+			.Max(p => p.IsStyled());
+
+		// Add a delete button column when deleting is enabled on the list
+		if (List is IDeletableList { EnableDeleting: true } deletableList)
+		{
+			AddDeleteColumn(deletableList);
+		}
 
 		foreach (TabPropertyColumn propertyColumn in propertyColumns)
 		{
@@ -776,6 +781,19 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		DataGrid.Columns.Add(column);
 		DataGrid.IsReadOnly = false; // Requires double clicking otherwise
 		_columnNames[column] = methodColumn.Label;
+	}
+
+	/// <summary>
+	/// Adds a "Delete" button column that invokes <see cref="IDeletableList.OnDelete"/> with the row's
+	/// data object when clicked. Called automatically by <see cref="AddColumns"/> when
+	/// <see cref="IDeletableList.EnableDeleting"/> is <see langword="true"/> on the list.
+	/// </summary>
+	public void AddDeleteColumn(IDeletableList deletableList)
+	{
+		var column = new DataGridButtonColumn("-", obj => deletableList.OnDelete?.Invoke(obj));
+		DataGrid.Columns.Add(column);
+		DataGrid.IsReadOnly = false;
+		_columnNames[column] = "Delete";
 	}
 
 	/// <summary>Restores saved search filter and selection from <see cref="TabDataSettings"/>, falling back to auto-selecting the default item if nothing was saved.</summary>

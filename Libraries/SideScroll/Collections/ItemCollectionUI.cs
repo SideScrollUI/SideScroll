@@ -5,6 +5,23 @@ using System.Collections.Specialized;
 namespace SideScroll.Collections;
 
 /// <summary>
+/// Interface for collections that support deleting items via a UI control such as a data grid delete button.
+/// </summary>
+public interface IDeletableList
+{
+	/// <summary>
+	/// Gets or sets whether a delete button should be shown for each item.
+	/// </summary>
+	bool EnableDeleting { get; set; }
+
+	/// <summary>
+	/// Gets or sets the callback invoked with the row's data object when the delete button is clicked.
+	/// Set by <see cref="DataViewCollection"/> to wire the button back to the repository delete logic.
+	/// </summary>
+	Action<object>? OnDelete { get; set; }
+}
+
+/// <summary>
 /// Interface for objects that manage a SynchronizationContext for thread-safe UI operations
 /// </summary>
 public interface IContext
@@ -24,7 +41,7 @@ public interface IContext
 /// A thread-safe observable collection for UI updates. Allows safely adding/removing items from background threads by marshalling operations to the UI thread via SynchronizationContext.
 /// Use this instead of ItemCollection when updating the collection from multiple threads or background tasks.
 /// </summary>
-public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollection, IContext //, IRaiseItemChangedEvents //
+public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollection, IContext, IDeletableList //, IRaiseItemChangedEvents //
 {
 	/// <summary>
 	/// The label to display for this collection
@@ -55,6 +72,19 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	/// Override default header visibility - when set, always shows/hides the header regardless of other settings
 	/// </summary>
 	public bool? ShowHeader { get; set; }
+
+	/// <summary>
+	/// Gets or sets whether a delete button should be shown for each item in the UI.
+	/// When <see langword="true"/>, <see cref="OnDelete"/> should also be set so the button
+	/// is wired to the actual delete logic.
+	/// </summary>
+	public bool EnableDeleting { get; set; }
+
+	/// <summary>
+	/// Gets or sets the callback invoked with the row's data object when the delete button is clicked.
+	/// Typically set by a <c>DataViewCollection</c> to route deletes back to the data repository.
+	/// </summary>
+	public Action<object>? OnDelete { get; set; }
 
 	/// <summary>
 	/// Controls thread safety behavior:

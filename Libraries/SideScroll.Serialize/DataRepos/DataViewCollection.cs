@@ -5,47 +5,77 @@ using System.Diagnostics.CodeAnalysis;
 namespace SideScroll.Serialize.DataRepos;
 
 /// <summary>
-/// Interface for data views that can be loaded and deleted
+/// Base interface for data views that can be loaded into a <see cref="DataViewCollection{TDataType,TViewType}"/>.
+/// Implement this on new view classes — delete support is managed at the collection level via
+/// <see cref="DataViewCollection{TDataType, TViewType}.EnableDeleting"/>.
 /// </summary>
-public interface IDataView
+public interface IDataViewItem
 {
 	/// <summary>
-	/// Occurs when the view is deleted
-	/// </summary>
-	event EventHandler<EventArgs>? OnDelete;
-
-	/// <summary>
-	/// Loads the view with the specified object and parameters
+	/// Loads the view with the specified object and parameters.
 	/// </summary>
 	void Load(object sender, object obj, params object?[] loadParams);
 }
 
 /// <summary>
-/// UI collection that wraps data items in view objects for display
+/// Legacy interface for data views that handle deletion via a per-item event.
+/// Extends <see cref="IDataViewItem"/> with an <see cref="OnDelete"/> event that
+/// <see cref="DataViewCollection{TDataType, TViewType}"/> subscribes to automatically.
+/// New view classes should implement <see cref="IDataViewItem"/> instead and set
+/// <see cref="DataViewCollection{TDataType, TViewType}.EnableDeleting"/> on the collection.
 /// </summary>
-public class DataViewCollection<TDataType, TViewType> where TViewType : IDataView, new()
+public interface IDataView : IDataViewItem
 {
-	//public event EventHandler<EventArgs> OnDelete; // todo?
-
 	/// <summary>
-	/// Gets the UI collection of view items
+	/// Occurs when the view item's delete action is triggered (legacy per-item delete path).
+	/// </summary>
+	event EventHandler<EventArgs>? OnDelete;
+}
+
+/// <summary>
+/// UI collection that wraps data items in view objects for display.
+/// </summary>
+public class DataViewCollection<TDataType, TViewType> where TViewType : IDataViewItem, new()
+{
+	/// <summary>
+	/// Gets the UI collection of view items.
 	/// </summary>
 	public ItemCollectionUI<TViewType> Items { get; } = [];
 
 	/// <summary>
-	/// Gets the primary data repository view
+	/// Gets the primary data repository view.
 	/// </summary>
 	public DataRepoView<TDataType> DataRepoView { get; }
 
 	/// <summary>
-	/// Gets or sets the optional secondary repository for saves and deletes
+	/// Gets or sets the optional secondary repository for saves and deletes.
 	/// </summary>
 	public DataRepoView<TDataType>? DataRepoSecondary { get; set; }
 
 	/// <summary>
-	/// Gets the parameters used when loading view items
+	/// Gets the parameters used when loading view items.
 	/// </summary>
 	public object?[] LoadParams { get; }
+
+	/// <summary>
+	/// Gets or sets whether a delete button is shown for each row in the data grid.
+	/// When <see langword="true"/>, clicking the delete button removes the item from both
+	/// the UI collection and the underlying data repository and raises <see cref="OnDelete"/>.
+	/// </summary>
+	public bool EnableDeleting
+	{
+		get => Items.EnableDeleting;
+		set
+		{
+			Items.EnableDeleting = value;
+			Items.OnDelete = value ? DeleteByViewObject : null;
+		}
+	}
+
+	/// <summary>
+	/// Raised on the collection after an item has been successfully deleted.
+	/// </summary>
+	public event EventHandler<EventArgs>? OnDelete;
 
 	private Dictionary<TViewType, IDataItem> _dataItemLookup;
 	private Dictionary<IDataItem, TViewType> _valueLookup;
@@ -64,7 +94,7 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 	}
 
 	/// <summary>
-	/// Reloads all items from the data repository
+	/// Reloads all items from the data repository.
 	/// </summary>
 	[MemberNotNull(nameof(_dataItemLookup), nameof(_valueLookup))]
 	public void Reload()
@@ -81,13 +111,20 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 	}
 
 	/// <summary>
-	/// Adds a new view item for the specified data item
+	/// Adds a new view item for the specified data item.
+	/// When the view item implements the legacy <see cref="IDataView"/> interface, its
+	/// <see cref="IDataView.OnDelete"/> event is subscribed to for backwards compatibility.
 	/// </summary>
 	public TViewType Add(IDataItem dataItem)
 	{
 		var itemView = new TViewType();
 		itemView.Load(this, dataItem.Object, LoadParams);
-		itemView.OnDelete += Item_OnDelete;
+
+		// Legacy: if the view item raises OnDelete itself, wire it to Remove
+		if (itemView is IDataView legacyView)
+		{
+			legacyView.OnDelete += (_, _) => Remove(dataItem);
+		}
 
 		Items.Add(itemView);
 		_dataItemLookup.Add(itemView, dataItem);
@@ -97,13 +134,20 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 	}
 
 	/// <summary>
-	/// Inserts a new view item at the specified index
+	/// Inserts a new view item at the specified index.
+	/// When the view item implements the legacy <see cref="IDataView"/> interface, its
+	/// <see cref="IDataView.OnDelete"/> event is subscribed to for backwards compatibility.
 	/// </summary>
 	public TViewType Insert(int index, IDataItem dataItem)
 	{
 		var itemView = new TViewType();
 		itemView.Load(this, dataItem.Object, LoadParams);
-		itemView.OnDelete += Item_OnDelete;
+
+		// Legacy: if the view item raises OnDelete itself, wire it to Remove
+		if (itemView is IDataView legacyView)
+		{
+			legacyView.OnDelete += (_, _) => Remove(dataItem);
+		}
 
 		Items.Insert(index, itemView);
 		_dataItemLookup.Add(itemView, dataItem);
@@ -112,17 +156,20 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 		return itemView;
 	}
 
-	private void Item_OnDelete(object? sender, EventArgs e)
+	/// <summary>
+	/// Delete callback wired to <see cref="Items"/>.<see cref="IDeletableList.OnDelete"/>
+	/// when <see cref="EnableDeleting"/> is <see langword="true"/>.
+	/// </summary>
+	private void DeleteByViewObject(object viewObj)
 	{
-		TViewType tab = (TViewType)sender!;
-		if (!_dataItemLookup.TryGetValue(tab, out IDataItem? dataItem))
-			return;
-
-		Remove(dataItem);
+		if (viewObj is TViewType viewItem && _dataItemLookup.TryGetValue(viewItem, out IDataItem? dataItem))
+		{
+			Remove(dataItem);
+		}
 	}
 
 	/// <summary>
-	/// Removes the view item associated with the specified data item
+	/// Removes the view item associated with the specified data item.
 	/// </summary>
 	public void Remove(IDataItem dataItem)
 	{
@@ -135,10 +182,12 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 			_dataItemLookup.Remove(existing);
 			Items.Remove(existing);
 		}
+
+		OnDelete?.Invoke(this, EventArgs.Empty);
 	}
 
 	/// <summary>
-	/// Replaces an old data item with a new one
+	/// Replaces an old data item with a new one.
 	/// </summary>
 	public void Replace(IDataItem oldDataItem, IDataItem newDataItem)
 	{
@@ -158,7 +207,7 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 	}
 
 	/// <summary>
-	/// Adds a secondary data repository for saves and deletes
+	/// Adds a secondary data repository for saves and deletes.
 	/// </summary>
 	public void AddDataRepo(DataRepoView<TDataType> dataRepoView)
 	{
@@ -214,21 +263,39 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 }
 
 /// <summary>
-/// Provides a UI thread-safe collection wrapper around a data repository view
+/// Provides a UI thread-safe collection wrapper around a data repository view.
 /// </summary>
 public class DataViewCollection<T>
 {
-	//public event EventHandler<EventArgs> OnDelete; // todo?
-
 	/// <summary>
-	/// Gets the UI collection of items
+	/// Gets the UI collection of items.
 	/// </summary>
 	public ItemCollectionUI<T> Items { get; } = [];
 
 	/// <summary>
-	/// Gets the underlying data repository view
+	/// Gets the underlying data repository view.
 	/// </summary>
 	public DataRepoView<T> DataRepoView { get; }
+
+	/// <summary>
+	/// Gets or sets whether a delete button is shown for each row in the data grid.
+	/// When <see langword="true"/>, clicking the delete button removes the item from both
+	/// the UI collection and the underlying data repository and raises <see cref="OnDelete"/>.
+	/// </summary>
+	public bool EnableDeleting
+	{
+		get => Items.EnableDeleting;
+		set
+		{
+			Items.EnableDeleting = value;
+			Items.OnDelete = value ? DeleteByObject : null;
+		}
+	}
+
+	/// <summary>
+	/// Raised on the collection after an item has been successfully deleted.
+	/// </summary>
+	public event EventHandler<EventArgs>? OnDelete;
 
 	private Dictionary<IDataItem, T> _valueLookup;
 
@@ -244,7 +311,7 @@ public class DataViewCollection<T>
 	}
 
 	/// <summary>
-	/// Reloads all items from the data repository
+	/// Reloads all items from the data repository.
 	/// </summary>
 	[MemberNotNull(nameof(_valueLookup))]
 	public void Reload()
@@ -260,7 +327,7 @@ public class DataViewCollection<T>
 	}
 
 	/// <summary>
-	/// Adds a new item to the collection
+	/// Adds a new item to the collection.
 	/// </summary>
 	public T Add(IDataItem dataItem)
 	{
@@ -272,7 +339,27 @@ public class DataViewCollection<T>
 	}
 
 	/// <summary>
-	/// Removes the specified data item from the collection
+	/// Delete callback wired to <see cref="Items"/>.<see cref="IDeletableList.OnDelete"/>
+	/// when <see cref="EnableDeleting"/> is <see langword="true"/>.
+	/// </summary>
+	private void DeleteByObject(object obj)
+	{
+		if (obj is not T item)
+			return;
+
+		// Reverse-lookup: find the IDataItem whose stored value is this object instance.
+		IDataItem? dataItem = _valueLookup
+			.FirstOrDefault(kvp => EqualityComparer<T>.Default.Equals(kvp.Value, item))
+			.Key;
+
+		if (dataItem != null)
+		{
+			Remove(dataItem);
+		}
+	}
+
+	/// <summary>
+	/// Removes the specified data item from the collection.
 	/// </summary>
 	public void Remove(IDataItem dataItem)
 	{
@@ -292,6 +379,8 @@ public class DataViewCollection<T>
 		{
 			Items.Remove((T)dataItem.Object);
 		}
+
+		OnDelete?.Invoke(this, EventArgs.Empty);
 	}
 
 	private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

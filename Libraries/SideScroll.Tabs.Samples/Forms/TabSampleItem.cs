@@ -3,19 +3,10 @@ using SideScroll.Serialize.DataRepos;
 
 namespace SideScroll.Tabs.Samples.Forms;
 
-public class TabSampleItem : ITab, IDataView
+public class TabSampleItem : ITab, IDataViewItem
 {
 	[DataValue]
 	public SampleItem? TestItem;
-
-	//[ButtonColumn("-")]
-	public event EventHandler<EventArgs>? OnDelete;
-
-	[ButtonColumn("-")]
-	public void Delete()
-	{
-		OnDelete?.Invoke(this, EventArgs.Empty);
-	}
 
 	[DataKey]
 	public string? Name => TestItem?.Name;
