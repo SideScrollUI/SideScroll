@@ -59,7 +59,7 @@ public static class Paths
 	/// <para>Windows: C:\Users\[User]</para>
 	/// <para>macOS: /Users/[user]</para>
 	/// </summary>
-	public static string HomePath => Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+	public static string HomePath { get; } = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
 	/// <summary>
 	/// Gets the application data directory path for roaming user data
@@ -67,17 +67,9 @@ public static class Paths
 	/// <para>macOS: /Users/[user]/Library/Application Support/</para>
 	/// <para>Browser: /appdata (IDBFS mounted)</para>
 	/// </summary>
-	public static string AppDataPath
-	{
-		get
-		{
-			// Use IDBFS mounted path in browser
-			if (OperatingSystem.IsBrowser())
-				return "/appdata";
-
-			return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-		}
-	}
+	public static string AppDataPath { get; } = OperatingSystem.IsBrowser()
+		? "/appdata"
+		: Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
 	/// <summary>
 	/// Gets the local application data directory path
@@ -85,34 +77,27 @@ public static class Paths
 	/// <para>macOS: /Users/[user]/Library/Application Support/</para>
 	/// <para>Browser: /localappdata (IDBFS mounted)</para>
 	/// </summary>
-	public static string LocalDataPath
-	{
-		get
-		{
-			// Use IDBFS mounted path in browser
-			if (OperatingSystem.IsBrowser())
-				return "/localappdata";
-
-			return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-		}
-	}
+	public static string LocalDataPath { get; } = OperatingSystem.IsBrowser()
+		? "/localappdata"
+		: Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
 	/// <summary>
 	/// Gets the user's Pictures directory path
 	/// <para>Windows: C:\Users\[User]\Pictures</para>
 	/// <para>macOS: /Users/[user]/Pictures</para>
 	/// </summary>
-	public static string PicturesPath => Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+	public static string PicturesPath { get; } = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
 
 	/// <summary>
 	/// Gets the user's Downloads directory path
 	/// </summary>
-	public static string DownloadPath => Combine(HomePath, "Downloads");
+	public static string DownloadPath { get; } = Combine(
+		Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
 
 	/// <summary>
 	/// Gets the user's Desktop directory path
 	/// <para>Windows: C:\Users\[User]\Desktop</para>
 	/// <para>macOS: /Users/[user]/Desktop</para>
 	/// </summary>
-	public static string DesktopPath => Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+	public static string DesktopPath { get; } = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 }

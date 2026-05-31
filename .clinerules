@@ -182,6 +182,39 @@ public class TabSchema(ITab? rootTab = null) : ITab
 | Property needs its own independent state (not from a parameter) | `public T Foo { get; } = new();` |
 | Mutable property (needs `set`) | `public T Foo { get; set; } = foo;` |
 
+## Variable Naming Conventions
+
+### ✅ CORRECT: Use full, descriptive names for local variables
+```csharp
+var listProperty = new ListProperty(obj, propertyInfo);
+if (ReflectionCache.PropertyHasValueDependentHide(propertyInfo) && !listProperty.IsRowVisible())
+    continue;
+member = listProperty;
+
+var listField = new ListField(obj, fieldInfo);
+if (ReflectionCache.FieldHasValueDependentHide(fieldInfo) && !listField.IsRowVisible())
+    continue;
+listMembers.Add(listField);
+```
+
+### ❌ AVOID: 2-letter (or other cryptic) abbreviations for local variables
+```csharp
+// DON'T DO THIS:
+var lp = new ListProperty(obj, propertyInfo);  // lp is unclear
+var lf = new ListField(obj, fieldInfo);        // lf is unclear
+var tp = new TabProperty(...);                  // tp is unclear
+```
+
+### Exceptions — short names ARE acceptable:
+- **Loop indices**: `i`, `j` (classic index counters)
+- **LINQ lambda parameters on the same line**: `items.Where(x => x.IsVisible)`, `list.Sum(l => l.Count)`
+- **Well-known single-letter conventions already established in a loop scope** (e.g. `p` inside a very short LINQ chain that starts and ends on one line)
+
+### Why This Matters:
+- Short abbreviations like `lp`, `lf`, `tp` require the reader to hold context in their head
+- Full names like `listProperty`, `listField` are self-documenting and searchable
+- Consistency across the codebase reduces cognitive load
+
 ## General Principles
 
 1. **Check for existing virtual methods** before using `new`

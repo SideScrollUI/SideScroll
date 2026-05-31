@@ -64,6 +64,49 @@ public class SearchableAttributeTests : BaseTest
 		public override string ToString() => Text;
 	}
 
+	// ── 3-level types ──────────────────────────────────────────────────────────
+
+	/// <summary>Level-1 item. [Searchable] lets FindMatches recurse into DeepChild.</summary>
+	[Searchable]
+	private record DeepItem(string Text, int Number)
+	{
+		public DeepChild? Child { get; set; }
+
+		public override string ToString() => Text;
+	}
+
+	/// <summary>Level-2 item. [Searchable] lets FindMatches recurse into DeepGrandchild.</summary>
+	[Searchable]
+	private record DeepChild(string Text, int Number)
+	{
+		public DeepGrandchild? Grandchild { get; set; }
+
+		public override string ToString() => Text;
+	}
+
+	/// <summary>Level-3 (leaf) item. No [Searchable] needed — it is the final search target.</summary>
+	private record DeepGrandchild(string Text, int Number)
+	{
+		public override string ToString() => Text;
+	}
+
+	/// <summary>Level-2 item WITHOUT [Searchable] — used to verify that the attribute is required.</summary>
+	private record DeepChildNoSearchable(string Text, int Number)
+	{
+		public DeepGrandchild? Grandchild { get; set; }
+
+		public override string ToString() => Text;
+	}
+
+	/// <summary>Level-1 item paired with a plain (non-[Searchable]) child.</summary>
+	[Searchable]
+	private record DeepItemWithPlainChild(string Text, int Number)
+	{
+		public DeepChildNoSearchable? Child { get; set; }
+
+		public override string ToString() => Text;
+	}
+
 	#endregion
 
 	#region Helpers
@@ -394,6 +437,138 @@ public class SearchableAttributeTests : BaseTest
 
 		Assert.That(plainMatches, Is.EqualTo(0), "Without [Searchable], child field text should not be found");
 		Assert.That(searchableMatches, Is.EqualTo(1), "With class [Searchable], child field text should be found");
+	}
+
+	#endregion
+
+	#region 3-Level [Searchable]
+
+	[Test]
+	public void ThreeLevel_GrandchildText_FindsOneRootItem()
+	{
+		// Searching for a color that only exists in a single grandchild returns exactly one root item.
+		List<DeepItem> items =
+		[
+			new("Item 0", 0) { Child = new DeepChild("Child 0", 0) { Grandchild = new DeepGrandchild("red", 0) } },
+			new("Item 1", 1) { Child = new DeepChild("Child 1", 1) { Grandchild = new DeepGrandchild("green", 1) } },
+			new("Item 2", 2) { Child = new DeepChild("Child 2", 2) { Grandchild = new DeepGrandchild("blue", 2) } },
+		];
+		var model = CreateModel(items, maxSearchDepth: 2);
+
+		int matches = CountMatches(model, "red", 2);
+
+		Assert.That(matches, Is.EqualTo(1));
+	}
+
+	[Test]
+	public void ThreeLevel_GrandchildText_ReturnsCorrectRootItem()
+	{
+		// The label on the returned SelectedRow must be the root item, not the grandchild.
+		List<DeepItem> items =
+		[
+			new("Item 0", 0) { Child = new DeepChild("Child 0", 0) { Grandchild = new DeepGrandchild("red", 0) } },
+			new("Item 1", 1) { Child = new DeepChild("Child 1", 1) { Grandchild = new DeepGrandchild("green", 1) } },
+			new("Item 2", 2) { Child = new DeepChild("Child 2", 2) { Grandchild = new DeepGrandchild("blue", 2) } },
+		];
+		var model = CreateModel(items, maxSearchDepth: 2);
+		var filter = new Filter("green");
+
+		TabBookmark bookmark = model.FindMatches(filter, 2);
+
+		Assert.That(bookmark.SelectedRows, Has.Count.EqualTo(1));
+		Assert.That(bookmark.SelectedRows[0].Label, Is.EqualTo("Item 1"));
+	}
+
+	[Test]
+	public void ThreeLevel_MultipleMatchingGrandchildren_AllRootsFound()
+	{
+		// Two items whose grandchildren share a color — both roots should appear.
+		List<DeepItem> items =
+		[
+			new("Item 0", 0) { Child = new DeepChild("Child 0", 0) { Grandchild = new DeepGrandchild("red", 0) } },
+			new("Item 1", 1) { Child = new DeepChild("Child 1", 1) { Grandchild = new DeepGrandchild("blue", 1) } },
+			new("Item 2", 2) { Child = new DeepChild("Child 2", 2) { Grandchild = new DeepGrandchild("red", 2) } },
+		];
+		var model = CreateModel(items, maxSearchDepth: 2);
+
+		int matches = CountMatches(model, "red", 2);
+
+		Assert.That(matches, Is.EqualTo(2));
+	}
+
+	[Test]
+	public void ThreeLevel_MaxSearchDepthOne_GrandchildNotFound()
+	{
+		// depth=1 only reaches level-2 (child), not level-3 (grandchild).
+		List<DeepItem> items =
+		[
+			new("Item 0", 0) { Child = new DeepChild("Child 0", 0) { Grandchild = new DeepGrandchild("red", 0) } },
+		];
+		var model = CreateModel(items, maxSearchDepth: 1);
+
+		int matches = CountMatches(model, "red", 1);
+
+		Assert.That(matches, Is.EqualTo(0));
+	}
+
+	[Test]
+	public void ThreeLevel_ChildWithoutSearchable_GrandchildNotFound()
+	{
+		// Without [Searchable] on the child class, FindMatches uses searchableOnly=true when
+		// recursing into level-3, so the Grandchild property (no [Searchable]) is skipped.
+		List<DeepItemWithPlainChild> items =
+		[
+			new("Item 0", 0) { Child = new DeepChildNoSearchable("Child 0", 0) { Grandchild = new DeepGrandchild("red", 0) } },
+		];
+		var model = CreateModel(items, maxSearchDepth: 2);
+
+		int matches = CountMatches(model, "red", 2);
+
+		Assert.That(matches, Is.EqualTo(0));
+	}
+
+	[Test]
+	public void ThreeLevel_ChildBookmarks_ContainMatchingChildRows()
+	{
+		// The TabBookmark returned for each root match should have a child TabBookmark
+		// whose SelectedRows list contains the level-2 child that led to the match.
+		List<DeepItem> items =
+		[
+			new("Item 0", 0) { Child = new DeepChild("Child 0", 0) { Grandchild = new DeepGrandchild("red", 0) } },
+			new("Item 1", 1) { Child = new DeepChild("Child 1", 1) { Grandchild = new DeepGrandchild("green", 1) } },
+		];
+		var model = CreateModel(items, maxSearchDepth: 2);
+		var filter = new Filter("red");
+
+		TabBookmark bookmark = model.FindMatches(filter, 2);
+
+		// Root level: exactly one match
+		Assert.That(bookmark.SelectedRows, Has.Count.EqualTo(1));
+
+		// Its child bookmark should have one level-2 entry pointing to "Child 0"
+		SelectedRowView rootRowView = bookmark.SelectedRowViews[0];
+		Assert.That(rootRowView.TabBookmark.SelectedRows, Has.Count.EqualTo(1));
+		Assert.That(rootRowView.TabBookmark.SelectedRows[0].Label, Is.EqualTo("Child 0"));
+	}
+
+	[Test]
+	public void ThreeLevel_GrandchildBookmarks_ContainMatchingGrandchildRows()
+	{
+		// The level-2 child bookmark should itself contain a grandchild bookmark
+		// whose SelectedRows lists the matched grandchild.
+		List<DeepItem> items =
+		[
+			new("Item 0", 0) { Child = new DeepChild("Child 0", 0) { Grandchild = new DeepGrandchild("red", 0) } },
+		];
+		var model = CreateModel(items, maxSearchDepth: 2);
+		var filter = new Filter("red");
+
+		TabBookmark bookmark = model.FindMatches(filter, 2);
+
+		SelectedRowView rootRowView = bookmark.SelectedRowViews[0];
+		SelectedRowView childRowView = rootRowView.TabBookmark.SelectedRowViews[0];
+		Assert.That(childRowView.TabBookmark.SelectedRows, Has.Count.EqualTo(1));
+		Assert.That(childRowView.TabBookmark.SelectedRows[0].Label, Is.EqualTo("red"));
 	}
 
 	#endregion

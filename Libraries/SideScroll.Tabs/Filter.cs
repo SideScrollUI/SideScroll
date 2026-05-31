@@ -397,6 +397,11 @@ public class Filter
 
 	private static void GetItemSearchText(object obj, List<PropertyInfo> columnProperties, List<string> uppercaseValues)
 	{
+		if (obj.ToString()?.ToUpper() is { } objText)
+		{
+			uppercaseValues.Add(objText);
+		}
+
 		foreach (PropertyInfo propertyInfo in columnProperties)
 		{
 			object? value = propertyInfo.GetValue(obj);
@@ -422,8 +427,12 @@ public class Filter
 			}
 			else
 			{
-				List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleProperties(innerType);
-				GetItemSearchText(innerValue, visibleProperties, uppercaseValues);
+				// Only add the inner value's own ToString() — recursing into its sub-properties
+				// would expose grandchild text at the wrong search depth level.
+				if (innerValue.ToString()?.ToUpper() is { } innerText)
+				{
+					uppercaseValues.Add(innerText);
+				}
 			}
 		}
 	}

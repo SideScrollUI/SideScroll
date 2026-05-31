@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `IDeletableList` interface and `EnableDeleting` property to `DataViewCollection` for collection-level delete support
 - Added `DataViewCollection.OnDelete` event raised after an item is successfully deleted
 - Added automatic "Delete" button column to `TabDataGrid` when the list implements `IDeletableList.EnableDeleting`
+- Added caching for environment Path variables
 
 ### Fixed
 - Fixed Atlas Serializer Decimal Member Handling with other Object Members

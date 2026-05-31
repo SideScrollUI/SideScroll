@@ -16,6 +16,7 @@ public class TabSampleFilter : ITab
 				new("No [Searchable]", new TabFilterNoSearchable()),
 				new("Class [Searchable]", new TabFilterClassSearchable()),
 				new("Property [Searchable]", new TabFilterPropertySearchable()),
+				new("3 Levels [Searchable]", new TabFilter3LevelSearchable()),
 			};
 		}
 	}
@@ -112,6 +113,41 @@ public class TabSampleFilter : ITab
 	}
 
 	/// <summary>
+	/// 3-level hierarchy with [Searchable] on item and child classes.
+	/// Each grandchild has a unique color name. Searching for a color (e.g. "red") finds
+	/// only the item whose grandchild contains that color.
+	/// Requires MaxSearchDepth = 2 to reach the grandchild level.
+	/// </summary>
+	private class TabFilter3LevelSearchable : ITab
+	{
+		public TabInstance Create() => new Instance();
+
+		private class Instance : TabInstance
+		{
+			public override void Load(Call call, TabModel model)
+			{
+				string[] colors = ["red", "green", "blue", "cyan", "magenta", "yellow", "white"];
+
+				List<Test3LevelItem> items = [];
+				for (int i = 0; i < 7; i++)
+				{
+					items.Add(new Test3LevelItem("Item " + i, i)
+					{
+						Child = new Test3LevelChild("Child " + i, i)
+						{
+							Grandchild = new Test3LevelGrandchild(colors[i], i)
+						}
+					});
+				}
+
+				model.Items = items;
+				model.MaxSearchDepth = 4;
+				model.ShowSearch = true;
+			}
+		}
+	}
+
+	/// <summary>
 	/// Filter item without [Searchable] - only top-level Text and Number properties are searched.
 	/// </summary>
 	public record TestFilterItem(string Text, int Number)
@@ -143,6 +179,40 @@ public class TabSampleFilter : ITab
 		[HiddenColumn]
 		public TestFilterItem? NonSearchableChild { get; set; }
 
+		public override string ToString() => Text;
+	}
+
+	/// <summary>
+	/// Top-level item for the 3-level search example. [Searchable] enables deep child search.
+	/// </summary>
+	[Searchable]
+	public record Test3LevelItem(string Text, int Number)
+	{
+		[HiddenColumn]
+		public Test3LevelChild? Child { get; set; }
+
+		public override string ToString() => Text;
+	}
+
+	/// <summary>
+	/// Second-level item for the 3-level search example. [Searchable] enables grandchild search.
+	/// </summary>
+	[Searchable]
+	public record Test3LevelChild(string Text, int Number)
+	{
+		[HiddenColumn]
+		public Test3LevelGrandchild? Grandchild { get; set; }
+
+		public override string ToString() => Text;
+	}
+
+	/// <summary>
+	/// Third-level (leaf) item for the 3-level search example.
+	/// Each instance has a unique color name used as the searchable text.
+	/// </summary>
+	[Searchable]
+	public record Test3LevelGrandchild(string Text, int Number)
+	{
 		public override string ToString() => Text;
 	}
 }

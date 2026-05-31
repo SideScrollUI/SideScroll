@@ -565,7 +565,9 @@ public class TabModel
 	{
 		Objects.Clear();
 		ItemLists.Clear();
+#pragma warning disable CS0618 // Type or member is obsolete
 		Actions = null;
+#pragma warning restore CS0618 // Type or member is obsolete
 	}
 
 	// todo: split Actions out of ListMethod since those return values?
@@ -614,9 +616,13 @@ public class TabModel
 					continue;
 				}
 
+				// For ListMembers, use the underlying Value as the row object so that labels
+				// reflect the actual value (e.g. "Child 0") rather than the member name (e.g. "Child").
+				object rowObj = (obj is ListMember listMemberRow && listMemberRow.Value is { } rowValue) ? rowValue : obj;
+
 				if (filter.Matches(obj, visibleProperties))
 				{
-					SelectedRow selectedRow = new(obj);
+					SelectedRow selectedRow = new(rowObj);
 					tabDataBookmark.SelectedRows.Add(new(selectedRow));
 				}
 				else if (depth >= 0)
@@ -625,8 +631,15 @@ public class TabModel
 					// explicit depth prefix. Explicit depth (depth >= 0) always enables child search.
 					Type objType = obj.GetType();
 					bool classSearchable = objType.GetCustomAttribute<SearchableAttribute>() != null;
+					// For ListMembers the obj type is always ListProperty/ListField — check the Value type too.
+					if (!classSearchable && obj is ListMember listMemberSearch)
+					{
+						classSearchable = listMemberSearch.Value?.GetType()?.GetCustomAttribute<SearchableAttribute>() != null;
+					}
 
-					TabModel? tabModel = Create(obj.Formatted() ?? "", obj);
+					// Recurse into the actual value for ListMembers so level-N items are the real objects.
+					object tabObj = (obj is ListMember listMemberUnwrap && listMemberUnwrap.Value is { } unwrapped) ? unwrapped : obj;
+					TabModel? tabModel = Create(obj.Formatted() ?? "", tabObj);
 					if (tabModel != null)
 					{
 						TabBookmark childNode = tabModel.FindMatches(filter, depth, !classSearchable);
@@ -634,7 +647,7 @@ public class TabModel
 						{
 							tabModel.MaxSearchDepth = depth;
 							childNode.TabModel = tabModel;
-							SelectedRow selectedRow = new(obj);
+							SelectedRow selectedRow = new(rowObj);
 							tabDataBookmark.SelectedRows.Add(new(selectedRow, childNode));
 						}
 					}
