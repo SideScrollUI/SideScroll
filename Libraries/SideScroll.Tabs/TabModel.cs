@@ -541,7 +541,7 @@ public class TabModel
 		// skip over single items that will take up lots of room (always show ListItems though)
 		Skippable = false;
 
-		if (ItemLists[0].Count == 1 && ItemLists[0][0] is { } firstItem)
+		if (ItemLists.Count > 0 && ItemLists[0].Count == 1 && ItemLists[0][0] is { } firstItem)
 		{
 			if (ItemLists[0] is IItemCollection { Skippable: false })
 				return;
@@ -553,7 +553,15 @@ public class TabModel
 			}
 			else if (firstItem is not ITab && TabDataColumns.GetVisibleProperties(elementType).Count > 1)
 			{
-				Skippable = true;
+				// Don't skip to a leaf: if the item declares [InnerValue] but resolves to null or
+				// an empty collection there is nothing to navigate into.
+				object? innerValue = firstItem.GetInnerValue();
+				bool isLeaf = innerValue == null ||
+					(innerValue != firstItem && innerValue is ICollection { Count: 0 });
+				if (!isLeaf)
+				{
+					Skippable = true;
+				}
 			}
 		}
 	}

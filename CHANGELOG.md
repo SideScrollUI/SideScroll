@@ -18,12 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed Atlas Serializer Decimal Member Handling with other Object Members
+- Fixed classes being marked as skippable if they have no innerValue
 
 ### Changed
 - `TabModel.Actions` deprecated — use `model.AddActions([...])` instead, which adds the action buttons inline within the Objects list at the position they are declared
 - Renamed TabModel.ItemList to ItemLists and deprecated the old name
 - `IDataView` now extends `IDataViewItem` — existing view classes are fully backwards compatible; per-item `OnDelete` events are still wired automatically
 - `DataGridButtonColumn` now supports an optional `ClickAction` delegate as an alternative to method reflection
+- Renamed TabToolbar.Buttons to AdditionalButtons to clarify usage
 
 ## [0.19] - 2026-05-20
 

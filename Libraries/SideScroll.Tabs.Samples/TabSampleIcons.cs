@@ -20,7 +20,7 @@ public class TabSampleIcons : ITab
 			{
 				TabToolbar tabToolbar = new()
 				{
-					Buttons = [.. chunk]
+					AdditionalButtons = [.. chunk]
 				};
 				model.AddObject(tabToolbar);
 			}

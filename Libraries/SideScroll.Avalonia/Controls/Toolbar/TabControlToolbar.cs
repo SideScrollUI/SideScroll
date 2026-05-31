@@ -77,10 +77,10 @@ public class TabControlToolbar : Grid, IDisposable
 			}
 		}
 
-		if (toolbar.Buttons.Count > 0)
+		if (toolbar.AdditionalButtons.Count > 0)
 		{
 			AddSeparator();
-			foreach (var toolButton in toolbar.Buttons)
+			foreach (var toolButton in toolbar.AdditionalButtons)
 			{
 				if (toolButton is ToolToggleButton toolToggleButton)
 				{
