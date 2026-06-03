@@ -600,7 +600,7 @@ public class TabModel
 	/// <param name="filter">The filter to apply when searching</param>
 	/// <param name="depth">Maximum depth to search nested objects. Limited by MaxSearchDepth</param>
 	/// <param name="searchableOnly">If set only [Searchable] members will be checked</param>
-	public TabBookmark FindMatches(Filter filter, int depth, bool searchableOnly = false)
+	public TabBookmark FindMatches(Filter filter, int depth, bool searchableOnly = false, bool isRoot = true)
 	{
 		TabBookmark tabBookmark = new();
 
@@ -611,7 +611,7 @@ public class TabModel
 
 			TabDataBookmark tabDataBookmark = new()
 			{
-				Filter = filter.FilterText
+				Filter = isRoot ? filter.FilterText : null,
 			};
 			tabBookmark.TabDatas.Add(tabDataBookmark);
 
@@ -624,13 +624,9 @@ public class TabModel
 					continue;
 				}
 
-				// For ListMembers, use the underlying Value as the row object so that labels
-				// reflect the actual value (e.g. "Child 0") rather than the member name (e.g. "Child").
-				object rowObj = (obj is ListMember listMemberRow && listMemberRow.Value is { } rowValue) ? rowValue : obj;
-
 				if (filter.Matches(obj, visibleProperties))
 				{
-					SelectedRow selectedRow = new(rowObj);
+					SelectedRow selectedRow = new(obj);
 					tabDataBookmark.SelectedRows.Add(new(selectedRow));
 				}
 				else if (depth >= 0)
@@ -650,12 +646,13 @@ public class TabModel
 					TabModel? tabModel = Create(obj.Formatted() ?? "", tabObj);
 					if (tabModel != null)
 					{
-						TabBookmark childNode = tabModel.FindMatches(filter, depth, !classSearchable);
+						TabBookmark childNode = tabModel.FindMatches(filter, depth, !classSearchable, false);
 						if (childNode.SelectedRows.Count > 0)
 						{
 							tabModel.MaxSearchDepth = depth;
 							childNode.TabModel = tabModel;
-							SelectedRow selectedRow = new(rowObj);
+
+							SelectedRow selectedRow = new(obj);
 							tabDataBookmark.SelectedRows.Add(new(selectedRow, childNode));
 						}
 					}

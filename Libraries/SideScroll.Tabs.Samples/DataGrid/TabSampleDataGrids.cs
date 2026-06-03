@@ -20,7 +20,7 @@ public class TabSampleDataGrids
 	public static TabSampleEnums Enums => new();
 	public static TabSampleDataGridDataTable DataTable => new();
 	public static TabSampleInstanceListItems InstanceListItems => new();
-	public static TabSampleFilter Filter => new();
+	public static TabSampleFilters Filters => new();
 	public static TabSampleDataGridUpdating Updating => new();
 	public static TabSampleHeaders Headers => new();
 	// public static TabSampleGridEditing Editing => new();

@@ -1133,8 +1133,11 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	{
 		set
 		{
+			if (_filter?.FilterText == value) return;
+
 			TabDataSettings.Filter = value;
 			_filter = new Filter(value);
+
 			if (TabModel.SearchFilter != null)
 			{
 				TabModel.SearchFilter.Filter = _filter;
@@ -1144,7 +1147,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 			{
 				if (TabModel.MaxSearchDepth > 0)
 				{
-					// create a new collection because this one might have multiple lists
+					// Create a new collection because this one might have multiple lists
 					TabModel? tabModel = TabModel.Create(TabModel.Name, List!);
 					if (tabModel != null)
 					{
