@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using SideScroll.Attributes;
+using SideScroll.Extensions;
 using SideScroll.Tabs.Bookmarks.Models;
 
 namespace SideScroll.Tabs.Tests;
@@ -29,7 +30,7 @@ public class SearchableAttributeTests : BaseTest
 	/// <summary>
 	/// Item without [Searchable]. Child is a field (excluded from direct visible-property search).
 	/// </summary>
-	private record PlainItem(string Text, int Number)
+	public record PlainItem(string Text, int Number)
 	{
 		public PlainItem? Child;
 
@@ -41,7 +42,7 @@ public class SearchableAttributeTests : BaseTest
 	/// Child is a field so its text is only reachable via recursive child search.
 	/// </summary>
 	[Searchable]
-	private record SearchableClassItem(string Text, int Number)
+	public record SearchableClassItem(string Text, int Number)
 	{
 		public SearchableClassItem? Child;
 
@@ -52,7 +53,7 @@ public class SearchableAttributeTests : BaseTest
 	/// Item whose one property carries a property-level [Searchable].
 	/// Child is a field so it's only found via recursive child search triggered by the [Searchable] property.
 	/// </summary>
-	private record PropertySearchableItem(string Text, int Number)
+	public record PropertySearchableItem(string Text, int Number)
 	{
 		/// <summary>[Searchable] on this property enables child tab search for the whole item.</summary>
 		[Searchable]
@@ -68,7 +69,7 @@ public class SearchableAttributeTests : BaseTest
 
 	/// <summary>Level-1 item. [Searchable] lets FindMatches recurse into DeepChild.</summary>
 	[Searchable]
-	private record DeepItem(string Text, int Number)
+	public record DeepItem(string Text, int Number)
 	{
 		public DeepChild? Child { get; set; }
 
@@ -77,7 +78,7 @@ public class SearchableAttributeTests : BaseTest
 
 	/// <summary>Level-2 item. [Searchable] lets FindMatches recurse into DeepGrandchild.</summary>
 	[Searchable]
-	private record DeepChild(string Text, int Number)
+	public record DeepChild(string Text, int Number)
 	{
 		public DeepGrandchild? Grandchild { get; set; }
 
@@ -85,13 +86,13 @@ public class SearchableAttributeTests : BaseTest
 	}
 
 	/// <summary>Level-3 (leaf) item. No [Searchable] needed — it is the final search target.</summary>
-	private record DeepGrandchild(string Text, int Number)
+	public record DeepGrandchild(string Text, int Number)
 	{
 		public override string ToString() => Text;
 	}
 
 	/// <summary>Level-2 item WITHOUT [Searchable] — used to verify that the attribute is required.</summary>
-	private record DeepChildNoSearchable(string Text, int Number)
+	public record DeepChildNoSearchable(string Text, int Number)
 	{
 		public DeepGrandchild? Grandchild { get; set; }
 
@@ -100,7 +101,7 @@ public class SearchableAttributeTests : BaseTest
 
 	/// <summary>Level-1 item paired with a plain (non-[Searchable]) child.</summary>
 	[Searchable]
-	private record DeepItemWithPlainChild(string Text, int Number)
+	public record DeepItemWithPlainChild(string Text, int Number)
 	{
 		public DeepChildNoSearchable? Child { get; set; }
 
@@ -531,31 +532,46 @@ public class SearchableAttributeTests : BaseTest
 	public void ThreeLevel_ChildBookmarks_ContainMatchingChildRows()
 	{
 		// The TabBookmark returned for each root match should have a child TabBookmark
-		// whose SelectedRows list contains the level-2 child that led to the match.
+		// pointing to the level-2 member that led to the match.
+		//
+		// Below the root, recursion searches each object's member grid (Name/Value rows),
+		// so the bookmark label is the member NAME ("Child"), not its value ("Child 0").
+		// The value lives in that member's Value column, and the next level down
+		// ("Grandchild") is what actually carries the "red" match.
 		List<DeepItem> items =
 		[
 			new("Item 0", 0) { Child = new DeepChild("Child 0", 0) { Grandchild = new DeepGrandchild("red", 0) } },
 			new("Item 1", 1) { Child = new DeepChild("Child 1", 1) { Grandchild = new DeepGrandchild("green", 1) } },
 		];
-		var model = CreateModel(items, maxSearchDepth: 2);
+		var model = CreateModel(items, maxSearchDepth: 3);
 		var filter = new Filter("red");
 
-		TabBookmark bookmark = model.FindMatches(filter, 2);
+		TabBookmark bookmark = model.FindMatches(filter, 3);
 
 		// Root level: exactly one match
 		Assert.That(bookmark.SelectedRows, Has.Count.EqualTo(1));
 
-		// Its child bookmark should have one level-2 entry pointing to "Child 0"
+		// Its child bookmark should have one level-2 entry for the "Child" member.
 		SelectedRowView rootRowView = bookmark.SelectedRowViews[0];
 		Assert.That(rootRowView.TabBookmark.SelectedRows, Has.Count.EqualTo(1));
-		Assert.That(rootRowView.TabBookmark.SelectedRows[0].Label, Is.EqualTo("Child 0"));
+
+		SelectedRow leaf = rootRowView.TabBookmark.SelectedRows[0];
+		Assert.That(leaf.Label, Is.EqualTo("Child"));
+
+		// The matched member's value is the DeepChild on the path to the "red" grandchild.
+		Assert.That(leaf.Object.GetInnerValue()?.ToString(), Is.EqualTo("Child 0"));
 	}
 
 	[Test]
 	public void ThreeLevel_GrandchildBookmarks_ContainMatchingGrandchildRows()
 	{
-		// The level-2 child bookmark should itself contain a grandchild bookmark
-		// whose SelectedRows lists the matched grandchild.
+		// The level-2 member bookmark ("Child") should itself contain a level-3 bookmark
+		// for the "Grandchild" member that carries the matching "red" value.
+		//
+		// Bookmark depth for "red": Item 0 (root) -> Child (member) -> Grandchild (member).
+		// The nested label is the member name ("Grandchild"), but the whole point of the
+		// search is that the filter text "red" is actually located — so we also assert the
+		// matched member's underlying value is the "red" grandchild we searched for.
 		List<DeepItem> items =
 		[
 			new("Item 0", 0) { Child = new DeepChild("Child 0", 0) { Grandchild = new DeepGrandchild("red", 0) } },
@@ -568,7 +584,12 @@ public class SearchableAttributeTests : BaseTest
 		SelectedRowView rootRowView = bookmark.SelectedRowViews[0];
 		SelectedRowView childRowView = rootRowView.TabBookmark.SelectedRowViews[0];
 		Assert.That(childRowView.TabBookmark.SelectedRows, Has.Count.EqualTo(1));
-		Assert.That(childRowView.TabBookmark.SelectedRows[0].Label, Is.EqualTo("red"));
+
+		SelectedRow leaf = childRowView.TabBookmark.SelectedRows[0];
+		Assert.That(leaf.Label, Is.EqualTo("Grandchild"));
+
+		// The matched member's value is the DeepGrandchild whose text is the "red" we searched for.
+		Assert.That(leaf.Object.GetInnerValue()?.ToString(), Is.EqualTo("red"));
 	}
 
 	#endregion
