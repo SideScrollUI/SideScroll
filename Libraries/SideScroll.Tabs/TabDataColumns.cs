@@ -61,7 +61,8 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 	public static List<PropertyInfo> GetVisibleElementProperties(IList list)
 	{
 		Type listType = list.GetType();
-		Type elementType = listType.GetGenericArguments()[0]; // Dictionaries?
+		Type? elementType = listType.GetElementTypeForAll();
+		if (elementType == null) return [];
 		return GetVisibleProperties(elementType);
 	}
 

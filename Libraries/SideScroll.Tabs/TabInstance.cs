@@ -630,6 +630,20 @@ public class TabInstance : IDisposable
 		StartAsync(ReinitializeAsync, TaskInstance.Call);
 	}
 
+	/// <summary>Loads the tab model but doesn't load the UI.</summary>
+	public async Task LoadBackgroundAsync(Call call)
+	{
+		_settingLoaded = false;
+		TabModel model = Model;
+		if (!StaticModel)
+		{
+			model = await LoadModelAsync(call);
+		}
+
+		Model = model;
+		IsLoaded = true;
+	}
+
 	/// <summary>Reloads the tab model (or reuses the static model) and re-runs preload and load, effectively refreshing the tab's data without tearing down the parent hierarchy.</summary>
 	public async Task ReinitializeAsync(Call call)
 	{
@@ -1170,39 +1184,32 @@ public class TabInstance : IDisposable
 	/// </summary>
 	public TabViewSettings LoadDefaultTabSettings()
 	{
-		TabViewSettings = GetTabSettings();
+		TabViewSettings = LoadTabSettings() ?? new();
 		return TabViewSettings;
 	}
 
 	/// <summary>
 	/// Retrieves tab settings from cache based on custom path or tab type
 	/// </summary>
-	public TabViewSettings GetTabSettings()
+	public TabViewSettings? LoadTabSettings()
 	{
 		if (CustomPath != null)
 		{
 			// It's better to return the default constructor so the Tab autosizes instead of using the saved defaults which might have a width specified
-			return Data.Cache.LoadOrCreate<TabViewSettings>(CustomPath, TaskInstance.Call);
+			return Data.Cache.Load<TabViewSettings>(CustomPath, TaskInstance.Call);
 		}
 
 		Type type = GetType();
 		if (type != typeof(TabInstance))
 		{
 			// Unique TabInstance
-			TabViewSettings? tabViewSettings = Data.Cache.Load<TabViewSettings>(TabPath, TaskInstance.Call);
-			if (tabViewSettings != null)
-				return tabViewSettings;
+			return Data.Cache.Load<TabViewSettings>(TabPath, TaskInstance.Call);
 		}
 		else
 		{
-			TabViewSettings? tabViewSettings =
-				Data.Cache.Load<TabViewSettings>(TypeLabelPath, TaskInstance.Call) ??
+			return Data.Cache.Load<TabViewSettings>(TypeLabelPath, TaskInstance.Call) ??
 				Data.Cache.Load<TabViewSettings>(TypePath, TaskInstance.Call);
-			if (tabViewSettings != null)
-				return tabViewSettings;
 		}
-
-		return new TabViewSettings();
 	}
 
 	/// <summary>

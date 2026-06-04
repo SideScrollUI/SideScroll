@@ -615,18 +615,20 @@ public class TabModel
 			};
 			tabBookmark.TabDatas.Add(tabDataBookmark);
 
-			foreach (object obj in itemList)
+			foreach (object item in itemList)
 			{
-				if (searchableOnly && obj is ListMember listMember &&
+				if (searchableOnly && item is ListMember listMember &&
 					listMember.GetCustomAttribute<SearchableAttribute>() == null &&
 					listMember.Value?.GetType()?.GetCustomAttribute<SearchableAttribute>() == null)
 				{
 					continue;
 				}
 
+				if (item.GetInnerValue() is not { } obj) continue;
+
 				if (filter.Matches(obj, visibleProperties))
 				{
-					SelectedRow selectedRow = new(obj);
+					SelectedRow selectedRow = new(item);
 					tabDataBookmark.SelectedRows.Add(new(selectedRow));
 				}
 				else if (depth >= 0)
@@ -635,15 +637,31 @@ public class TabModel
 					// explicit depth prefix. Explicit depth (depth >= 0) always enables child search.
 					Type objType = obj.GetType();
 					bool classSearchable = objType.GetCustomAttribute<SearchableAttribute>() != null;
-					// For ListMembers the obj type is always ListProperty/ListField — check the Value type too.
-					if (!classSearchable && obj is ListMember listMemberSearch)
+					if (!classSearchable)
 					{
-						classSearchable = listMemberSearch.Value?.GetType()?.GetCustomAttribute<SearchableAttribute>() != null;
+						classSearchable = obj.GetType()?.GetCustomAttribute<SearchableAttribute>() != null;
 					}
 
-					// Recurse into the actual value for ListMembers so level-N items are the real objects.
-					object tabObj = (obj is ListMember listMemberUnwrap && listMemberUnwrap.Value is { } unwrapped) ? unwrapped : obj;
-					TabModel? tabModel = Create(obj.Formatted() ?? "", tabObj);
+					string name = item.Formatted() ?? "";
+
+					TabModel? tabModel;
+					if (obj is ITab iTab)
+					{
+						TabInstance childTabInstance = iTab.Create();
+						childTabInstance.TabBookmark ??= tabBookmark;
+						Call call = new()
+						{
+							TaskInstance = new(),
+						};
+						childTabInstance.LoadBackgroundAsync(call).Wait();
+						childTabInstance.Model.Name = name;
+						tabModel = childTabInstance.Model;
+					}
+					else
+					{
+						tabModel = Create(name, obj);
+					}
+
 					if (tabModel != null)
 					{
 						TabBookmark childNode = tabModel.FindMatches(filter, depth, !classSearchable, false);
@@ -652,7 +670,7 @@ public class TabModel
 							tabModel.MaxSearchDepth = depth;
 							childNode.TabModel = tabModel;
 
-							SelectedRow selectedRow = new(obj);
+							SelectedRow selectedRow = new(item);
 							tabDataBookmark.SelectedRows.Add(new(selectedRow, childNode));
 						}
 					}

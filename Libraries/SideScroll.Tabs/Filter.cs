@@ -2,6 +2,7 @@ using SideScroll.Extensions;
 using SideScroll.Tabs.Bookmarks.Models;
 using System.Collections;
 using System.Data;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -404,13 +405,20 @@ public class Filter
 
 		foreach (PropertyInfo propertyInfo in columnProperties)
 		{
-			object? value = propertyInfo.GetValue(obj);
+			try
+			{
+				object? value = propertyInfo.GetValue(obj);
 
-			string? valueText = value?.ToString();
-			if (valueText.IsNullOrEmpty())
-				continue;
+				string? valueText = value?.ToString();
+				if (valueText.IsNullOrEmpty())
+					continue;
 
-			uppercaseValues.Add(valueText.ToUpper());
+				uppercaseValues.Add(valueText.ToUpper());
+			}
+			catch (Exception e)
+			{
+				Debug.WriteLine(e);
+			}
 		}
 
 		object? innerValue = obj.GetInnerValue();
