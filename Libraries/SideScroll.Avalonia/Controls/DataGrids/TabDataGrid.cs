@@ -1156,10 +1156,10 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 						CollectionView!.Filter = FilterPredicate;
 						CollectionView.Refresh();
 
-						// This only works for the first level
+						// This only works for the first level, and doesn't handle pre-existing selection
 						TabInstance.SelectItem(bookmarkNode.SelectedRows.FirstOrDefault()?.Object);
 
-						// Doesn't work, resets filter
+						// Doesn't work yet past the first level, but this should handle all cases
 						// TabInstance.SelectBookmark(bookmarkNode);
 					}
 				}

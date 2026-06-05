@@ -537,7 +537,8 @@ public class TabView : Grid, IDisposable
 		int index = 0;
 		foreach (IList itemList in Model.ItemLists)
 		{
-			var tabData = new TabDataGrid(Instance, itemList, true, TabViewSettings.GetData(index));
+			var dataViewSettings = TabViewSettings.GetData(index);
+			var tabData = new TabDataGrid(Instance, itemList, true, dataViewSettings);
 			tabData.OnSelectionChanged += ParentListSelectionChanged;
 			_tabParentControls!.AddControl(tabData, true);
 			TabDatas.Add(tabData);
@@ -1125,9 +1126,10 @@ public class TabView : Grid, IDisposable
 
 	private void LoadBookmark()
 	{
+		if (Instance.TabBookmark is not { } tabBookmark) return;
+		
 		Instance.Project.UserSettings.AutoSelect = true;
 
-		TabBookmark tabBookmark = Instance.TabBookmark!;
 		TabViewSettings = tabBookmark.ToViewSettings();
 
 		int index = 0;

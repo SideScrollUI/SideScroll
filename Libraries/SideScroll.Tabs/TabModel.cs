@@ -624,23 +624,14 @@ public class TabModel
 					continue;
 				}
 
-				if (item.GetInnerValue() is not { } obj) continue;
-
-				if (filter.Matches(obj, visibleProperties))
+				if (filter.Matches(item, visibleProperties))
 				{
 					SelectedRow selectedRow = new(item);
 					tabDataBookmark.SelectedRows.Add(new(selectedRow));
 				}
 				else if (depth >= 0)
 				{
-					// Class-level [Searchable] enables child search up to MaxSearchDepth without an
-					// explicit depth prefix. Explicit depth (depth >= 0) always enables child search.
-					Type objType = obj.GetType();
-					bool classSearchable = objType.GetCustomAttribute<SearchableAttribute>() != null;
-					if (!classSearchable)
-					{
-						classSearchable = obj.GetType()?.GetCustomAttribute<SearchableAttribute>() != null;
-					}
+					if (item.GetInnerValue() is not { } obj) continue;
 
 					string name = item.Formatted() ?? "";
 
@@ -664,6 +655,11 @@ public class TabModel
 
 					if (tabModel != null)
 					{
+						// Class-level [Searchable] enables child search up to MaxSearchDepth without an
+						// explicit depth prefix. Explicit depth (depth >= 0) always enables child search.
+						Type objType = obj.GetType();
+						bool classSearchable = objType.GetCustomAttribute<SearchableAttribute>() != null;
+
 						TabBookmark childNode = tabModel.FindMatches(filter, depth, !classSearchable, false);
 						if (childNode.SelectedRows.Count > 0)
 						{
