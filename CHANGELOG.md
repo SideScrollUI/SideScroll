@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Fixed
+
+### Changed
+
+## [0.20] - 2026-05-20
+
+### Added
 - Added Atlas Serializer support for `Guid`, `Uri`, `DateOnly`, and `TimeOnly`
 - Added TabInstance.CopyToClipboard(Call call...) variant to automatically show a Copied to Clipboard message
 - Added `IDataViewItem` base interface for `DataViewCollection` — new view classes implement this instead of `IDataView`

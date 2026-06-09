@@ -40,7 +40,10 @@ public class TabLinkCollection(LinkCollection links) : ITab
 			toolbar.ButtonDeleteAll.Action = DeleteAll;
 			toolbar.ButtonDeleteAll.IsEnabledBinding = new PropertyBinding(nameof(IList.Count), tab.Links.Items);
 			ListProperty listProperty = new(tab.Links, nameof(LinkCollection.ShowLinkInfoTab));
-			toolbar.ToggleButtonShowLinkInfoTab = new("Show Link Info Tab", Icons.Svg.PanelLeftContract, Icons.Svg.PanelLeftExpand, listProperty, ShowLinkTab);
+			toolbar.ToggleButtonShowLinkInfoTab = new("Show Link Info Tab", Icons.Svg.PanelLeftContract, Icons.Svg.PanelLeftExpand, listProperty, ShowLinkTab)
+			{
+				IsEnabledBinding = new PropertyBinding(nameof(IList.Count), tab.Links.Items)
+			};
 			model.AddObject(toolbar);
 
 			if (Project.Data.DataSettings.LinkId == null)
