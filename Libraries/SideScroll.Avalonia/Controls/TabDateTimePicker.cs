@@ -4,6 +4,7 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Layout;
 using SideScroll.Avalonia.Controls.Converters;
+using SideScroll.Avalonia.Controls.Flyouts;
 using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Extensions;
@@ -44,6 +45,8 @@ public class TabDateTimePicker : Grid
 	private readonly DateTimeValueConverter _dateTimeConverter;
 	private TabCalendarDatePicker _datePicker;
 	private TabTextBox _timeTextBox;
+	private TabImageButton? _copyButton;
+	private TabImageButton? _importButton;
 
 	/// <summary>Initializes a new <see cref="TabDateTimePicker"/> bound to the given <paramref name="property"/>, creating the date picker and time text box controls.</summary>
 	public TabDateTimePicker(ListProperty property)
@@ -65,11 +68,11 @@ public class TabDateTimePicker : Grid
 		AddDatePicker();
 		AddTimeTextBox();
 
-		AddButton("Copy to Clipboard", Icons.Svg.Copy, 2, CopyToClipboardAsync);
+		_copyButton = AddButton("Copy to Clipboard", Icons.Svg.Copy, 2, CopyToClipboardAsync);
 
 		if (Property.IsEditable)
 		{
-			AddButton("Import from Clipboard", Icons.Svg.Import, 3, ImportFromClipboardAsync);
+			_importButton = AddButton("Import from Clipboard", Icons.Svg.Import, 3, ImportFromClipboardAsync);
 		}
 	}
 
@@ -122,7 +125,7 @@ public class TabDateTimePicker : Grid
 		Children.Add(_timeTextBox);
 	}
 
-	private void AddButton(string tooltip, IResourceView resourcView, int column, CallActionAsync callActionAsync)
+	private TabImageButton AddButton(string tooltip, IResourceView resourcView, int column, CallActionAsync callActionAsync)
 	{
 		var button = new TabImageButton(tooltip, resourcView, null, 20)
 		{
@@ -135,28 +138,7 @@ public class TabDateTimePicker : Grid
 			[ColumnProperty] = column,
 		};
 		Children.Add(button);
-	}
-
-	private async Task ImportFromClipboardAsync(Call call)
-	{
-		string? clipboardText = await ClipboardUtils.TryGetTextAsync(this);
-		if (clipboardText == null) return;
-
-		if (DateTimeUtils.TryParseTimeSpan(clipboardText, out TimeSpan timeSpan))
-		{
-			DateTime? newDateTime = _dateTimeConverter.Convert(timeSpan, typeof(string), null, CultureInfo.InvariantCulture) as DateTime?;
-			Property.PropertyInfo.SetValue(Property.Object, newDateTime);
-			_timeTextBox.Text = timeSpan.ToString();
-		}
-		else
-		{
-			if (DateTimeUtils.TryParseDateTime(clipboardText, out DateTime dateTime))
-			{
-				Property.PropertyInfo.SetValue(Property.Object, dateTime);
-				_datePicker.SelectedDate = dateTime;
-				_timeTextBox.Text = (string)_dateTimeConverter.Convert(dateTime, typeof(string), null, CultureInfo.InvariantCulture)!;
-			}
-		}
+		return button;
 	}
 
 	private async Task CopyToClipboardAsync(Call call)
@@ -164,6 +146,36 @@ public class TabDateTimePicker : Grid
 		if (Property.Value is DateTime dateTime)
 		{
 			await ClipboardUtils.SetTextAsync(this, dateTime.Format(TimeFormatType.Second)!);
+			new MessageFlyout("Copied to Clipboard").ShowAt(_copyButton!);
+		}
+	}
+
+	private async Task ImportFromClipboardAsync(Call call)
+	{
+		string? clipboardText = await ClipboardUtils.TryGetTextAsync(this);
+		if (clipboardText == null)
+		{
+			new MessageFlyout("Clipboard is empty").ShowAt(_importButton!);
+			return;
+		}
+
+		if (DateTimeUtils.TryParseTimeSpan(clipboardText, out TimeSpan timeSpan))
+		{
+			DateTime? newDateTime = _dateTimeConverter.Convert(timeSpan, typeof(string), null, CultureInfo.InvariantCulture) as DateTime?;
+			Property.PropertyInfo.SetValue(Property.Object, newDateTime);
+			_timeTextBox.Text = timeSpan.ToString();
+			new MessageFlyout("Imported Time").ShowAt(_importButton!);
+		}
+		else if (DateTimeUtils.TryParseDateTime(clipboardText, out DateTime dateTime))
+		{
+			Property.PropertyInfo.SetValue(Property.Object, dateTime);
+			_datePicker.SelectedDate = dateTime;
+			_timeTextBox.Text = (string)_dateTimeConverter.Convert(dateTime, typeof(string), null, CultureInfo.InvariantCulture)!;
+			new MessageFlyout("Imported Date and Time").ShowAt(_importButton!);
+		}
+		else
+		{
+			new MessageFlyout($"Invalid Date or Time: {clipboardText}").ShowAt(_importButton!);
 		}
 	}
 }
