@@ -345,7 +345,7 @@ public class DateTimeUtilsTests : BaseTest
 	[Test]
 	public void TryParseTimeSpan_Null()
 	{
-		bool success = DateTimeUtils.TryParseTimeSpan(null, out TimeSpan result);
+		bool success = DateTimeUtils.TryParseTimeSpan(null, out _);
 
 		Assert.That(success, Is.False);
 	}
@@ -415,7 +415,7 @@ public class DateTimeUtilsTests : BaseTest
 	[Test]
 	public void TryParseDateTime_InvalidFormat()
 	{
-		bool success = DateTimeUtils.TryParseDateTime("invalid", out DateTime result);
+		bool success = DateTimeUtils.TryParseDateTime("invalid", out DateTime _);
 
 		Assert.That(success, Is.False);
 	}
@@ -423,7 +423,7 @@ public class DateTimeUtilsTests : BaseTest
 	[Test]
 	public void TryParseDateTime_Null()
 	{
-		bool success = DateTimeUtils.TryParseDateTime(null, out DateTime result);
+		bool success = DateTimeUtils.TryParseDateTime(null, out DateTime _);
 
 		Assert.That(success, Is.False);
 	}

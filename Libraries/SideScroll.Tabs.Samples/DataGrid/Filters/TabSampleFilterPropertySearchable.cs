@@ -1,6 +1,6 @@
 using SideScroll.Attributes;
 
-namespace SideScroll.Tabs.Samples.DataGrid;
+namespace SideScroll.Tabs.Samples.DataGrid.Filters;
 
 /// <summary>
 /// Items with property-level [Searchable] on SearchableChild only.

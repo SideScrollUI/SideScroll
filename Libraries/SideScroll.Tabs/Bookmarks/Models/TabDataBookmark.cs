@@ -87,7 +87,7 @@ public class TabDataBookmark
 		foreach (SelectedRowView selectedRowView in SelectedRows)
 		{
 			address += comma;
-			address += selectedRowView.ToString() + " / " + selectedRowView.TabBookmark.GetAddress(maxDepth - 1, visited);
+			address += selectedRowView + " / " + selectedRowView.TabBookmark.GetAddress(maxDepth - 1, visited);
 			comma = ", ";
 		}
 		if (SelectedRows.Count > 1)

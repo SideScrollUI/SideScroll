@@ -1,6 +1,6 @@
 using SideScroll.Attributes;
 
-namespace SideScroll.Tabs.Samples.DataGrid;
+namespace SideScroll.Tabs.Samples.DataGrid.Filters;
 
 /// <summary>
 /// Items with class-level [Searchable] — the filter recurses into child items.

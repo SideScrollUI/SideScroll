@@ -504,7 +504,7 @@
           <SolidColorBrush x:Key="ComboBoxForegroundFocused" Color="{DynamicResource TextForegroundHighColor}" />
           <SolidColorBrush x:Key="ComboBoxForegroundFocusedPressed" Color="#ffebebeb" />
 
-          <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#e6141414" />
+          <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#f0141414" />
           <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#e6000000" />
 
           <SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />

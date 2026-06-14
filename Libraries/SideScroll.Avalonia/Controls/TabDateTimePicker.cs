@@ -45,8 +45,8 @@ public class TabDateTimePicker : Grid
 	private readonly DateTimeValueConverter _dateTimeConverter;
 	private TabCalendarDatePicker _datePicker;
 	private TabTextBox _timeTextBox;
-	private TabImageButton? _copyButton;
-	private TabImageButton? _importButton;
+	private readonly TabImageButton? _copyButton;
+	private readonly TabImageButton? _importButton;
 
 	/// <summary>Initializes a new <see cref="TabDateTimePicker"/> bound to the given <paramref name="property"/>, creating the date picker and time text box controls.</summary>
 	public TabDateTimePicker(ListProperty property)

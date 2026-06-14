@@ -1,6 +1,6 @@
 using SideScroll.Attributes;
 
-namespace SideScroll.Tabs.Samples.DataGrid;
+namespace SideScroll.Tabs.Samples.DataGrid.Filters;
 
 /// <summary>
 /// The same color hierarchy as <see cref="TabSampleFilter3LevelData"/> but exposed as ITab

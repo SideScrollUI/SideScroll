@@ -1,4 +1,4 @@
-namespace SideScroll.Tabs.Samples.DataGrid;
+namespace SideScroll.Tabs.Samples.DataGrid.Filters;
 
 /// <summary>
 /// Items without [Searchable] — only top-level Text and Number are matched.

@@ -1,4 +1,5 @@
 using SideScroll.Attributes;
+using SideScroll.Tabs.Samples.DataGrid.Filters;
 
 namespace SideScroll.Tabs.Samples.DataGrid;
 

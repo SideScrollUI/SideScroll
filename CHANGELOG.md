@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated Bookmark Changed to [PrivateData]
 
-## [0.20] - 2026-05-20
+## [0.20] - 2026-06-08
 
 ### Added
 - Added Atlas Serializer support for `Guid`, `Uri`, `DateOnly`, and `TimeOnly`

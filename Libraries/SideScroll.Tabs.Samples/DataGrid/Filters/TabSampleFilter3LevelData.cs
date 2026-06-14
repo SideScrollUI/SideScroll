@@ -1,6 +1,6 @@
 using SideScroll.Attributes;
 
-namespace SideScroll.Tabs.Samples.DataGrid;
+namespace SideScroll.Tabs.Samples.DataGrid.Filters;
 
 /// <summary>
 /// Flat data grid where each root item embeds a child and grandchild as data properties.

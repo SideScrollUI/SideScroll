@@ -1,6 +1,6 @@
 using SideScroll.Tabs.Lists;
 
-namespace SideScroll.Tabs.Samples.DataGrid;
+namespace SideScroll.Tabs.Samples.DataGrid.Filters;
 
 /// <summary>
 /// Demonstrates the DataGrid filter and the [Searchable] attribute that controls

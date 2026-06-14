@@ -424,7 +424,6 @@ public class Filter
 		object? innerValue = obj.GetInnerValue();
 		if (innerValue != null && innerValue != obj)
 		{
-			Type innerType = innerValue.GetType();
 			if (innerValue is IList list)
 			{
 				List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleElementProperties(list);

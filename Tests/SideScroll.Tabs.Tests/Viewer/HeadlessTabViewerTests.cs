@@ -891,7 +891,7 @@ public class HeadlessTabViewerTests : BaseTest
 		Assert.That(json, Does.Contain("\"Type\": \"List\""));
 		Assert.That(json, Does.Not.Contain("$type"));
 
-		Assert.That(list!.Columns!.Select(c => c.Label), Is.EqualTo(new[] { "Name", "Count" }),
+		Assert.That(list.Columns!.Select(c => c.Label), Is.EqualTo(new[] { "Name", "Count" }),
 			"Columns should mirror the element type's visible properties.");
 		Assert.That(list.Columns!.Select(c => c.Type), Is.EqualTo(new[] { "String", "Int32" }));
 

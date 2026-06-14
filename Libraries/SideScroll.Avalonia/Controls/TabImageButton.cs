@@ -34,7 +34,7 @@ public class TabImageButton : Button, IDisposable
 	public double IconSize { get; set; } = 24;
 
 	/// <summary>Gets or sets whether the icon colors are updated to match the current theme.</summary>
-	public bool UpdateIconColors { get; set; } = true;
+	public bool UpdateIconColors { get; set; }
 
 	/// <summary>Gets or sets the tab instance used for task context.</summary>
 	public TabInstance? TabInstance { get; set; }

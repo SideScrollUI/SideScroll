@@ -1,4 +1,4 @@
-namespace SideScroll.Tabs.Samples.DataGrid;
+namespace SideScroll.Tabs.Samples.DataGrid.Filters;
 
 /// <summary>
 /// Shared color data used by both the flat data-grid and the recursive-tab filter examples.
