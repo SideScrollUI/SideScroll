@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Headless;
+using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using SideScroll.Avalonia.Samples;
 
@@ -14,11 +15,11 @@ internal static class Program
 			.UseHeadless(new AvaloniaHeadlessPlatformOptions { UseHeadlessDrawing = false })
 			.SetupWithoutStarting();
 
-		var window = new SampleMainWindow();
+		SampleMainWindow window = new();
 		window.Show();
 		Dispatcher.UIThread.RunJobs();
 
-		var bitmap = window.CaptureRenderedFrame();
+		WriteableBitmap? bitmap = window.CaptureRenderedFrame();
 
 		string outputPath = Path.Combine(AppContext.BaseDirectory, "output.png");
 		bitmap?.Save(outputPath);

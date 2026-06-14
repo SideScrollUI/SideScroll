@@ -126,7 +126,7 @@ public class TabDateTimePicker : Grid
 	{
 		var button = new TabImageButton(tooltip, resourcView, null, 20)
 		{
-			Padding = new(5),
+			Padding = new(2),
 			HorizontalAlignment = HorizontalAlignment.Right,
 			VerticalAlignment = VerticalAlignment.Center,
 			CallActionAsync = callActionAsync,
