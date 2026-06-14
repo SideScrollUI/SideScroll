@@ -147,15 +147,9 @@ public class ListProperty : ListMember, IPropertyIsEditable
 		PropertyInfo = propertyInfo;
 		IsCacheable = isCacheable;
 
-		NameAttribute? nameAttribute = propertyInfo.GetCustomAttribute<NameAttribute>();
-
-		Name = nameAttribute?.Name ?? propertyInfo.Name.WordSpaced();
-
-		if (PropertyInfo.GetCustomAttribute<DebugOnlyAttribute>() != null ||
-			PropertyInfo.PropertyType.GetCustomAttribute<DebugOnlyAttribute>() != null)
-		{
-			Name = "* " + Name;
-		}
+		// Display name is purely structural — look up the per-PropertyInfo cache instead of
+		// re-running WordSpaced() tokenization and GetCustomAttribute checks every time.
+		Name = ReflectionCache.GetPropertyDisplayName(propertyInfo);
 
 		if (obj is INotifyPropertyChanged notifyPropertyChanged)
 		{
@@ -190,21 +184,16 @@ public class ListProperty : ListMember, IPropertyIsEditable
 	/// <param name="includeStatic">Whether to include static properties</param>
 	public new static ItemCollection<ListProperty> Create(object obj, bool includeBaseTypes = true, bool includeStatic = true)
 	{
-		// this doesn't work for virtual methods (or any method modifier?)
-		var propertyInfos = obj.GetType().GetProperties()
-			.Where(p => p.IsRowVisible())
-			.Where(p => p.GetGetMethod(false)?.GetParameters().Length == 0)
-			.Where(p => includeBaseTypes || p.DeclaringType == obj.GetType())
-			.Where(p => includeStatic || !p.GetAccessors(nonPublic: true)[0].IsStatic)
-			.OrderBy(p => p.Module.Name)
-			.ThenBy(p => p.MetadataToken);
+		// Use cached, structurally-filtered, sorted PropertyInfo[] to avoid repeated LINQ evaluation.
+		PropertyInfo[] propertyInfos = ReflectionCache.GetProperties(obj.GetType(), includeBaseTypes, includeStatic);
 
 		var listProperties = new ItemCollection<ListProperty>();
-		var propertyToIndex = new Dictionary<string, int>();
+		var propertyToIndex = new Dictionary<string, int>(propertyInfos.Length);
 		foreach (PropertyInfo propertyInfo in propertyInfos)
 		{
 			var listProperty = new ListProperty(obj, propertyInfo);
-			if (!listProperty.IsRowVisible())
+			// IsRowVisible() is unconditionally true when the property has no [Hide]/[HideRow] attributes.
+			if (ReflectionCache.PropertyHasValueDependentHide(propertyInfo) && !listProperty.IsRowVisible())
 				continue;
 
 			if (propertyToIndex.TryGetValue(propertyInfo.Name, out int index))
@@ -229,7 +218,7 @@ public class ListProperty : ListMember, IPropertyIsEditable
 		ItemCollection<ListProperty> newProperties = [];
 		foreach (ListProperty listProperty in listProperties)
 		{
-			if (listProperty.GetCustomAttribute<InlineAttribute>() != null)
+			if (listProperty.HasCustomAttribute<InlineAttribute>())
 			{
 				if (listProperty.Value is { } value)
 				{
@@ -287,7 +276,7 @@ public class ListProperty : ListMember, IPropertyIsEditable
 	public static ItemCollection<ListProperty> Sort(IEnumerable<ListProperty> listProperties)
 	{
 		var sortedProperties = listProperties
-			.OrderByDescending(i => i.GetCustomAttribute<AutoSelectAttribute>() != null)
+			.OrderByDescending(i => i.HasCustomAttribute<AutoSelectAttribute>())
 			.ThenByDescending(i => TabUtils.ObjectHasLinks(i, true));
 
 		var linkSorted = new ItemCollection<ListProperty>(sortedProperties);

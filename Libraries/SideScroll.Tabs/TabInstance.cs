@@ -318,6 +318,14 @@ public class TabInstance : IDisposable
 	public bool StaticModel { get; set; }
 
 	/// <summary>
+	/// Whether this tab is being loaded by a <see cref="SideScroll.Tabs.Headless.HeadlessTabViewer"/>
+	/// rather than the live Avalonia UI.
+	/// Tabs can check this flag to skip slow or UI-only operations (e.g. <c>Thread.Sleep</c>,
+	/// network calls, animations) that are not needed for headless schema traversal.
+	/// </summary>
+	public bool IsHeadless { get; set; }
+
+	/// <summary>
 	/// Whether to show all tasks or only tasks with errors
 	/// </summary>
 	public bool ShowTasks { get; set; }
@@ -354,6 +362,18 @@ public class TabInstance : IDisposable
 	public TabInstance()
 	{
 		Project = new();
+
+		InitializeContext();
+	}
+
+	/// <summary>
+	/// Initializes a new tab instance with an existing project.
+	/// Use this instead of <see cref="TabInstance()"/> when the caller will set the
+	/// <see cref="Project"/> anyway, to avoid constructing a throwaway <see cref="Project"/>.
+	/// </summary>
+	public TabInstance(Project project)
+	{
+		Project = project;
 
 		InitializeContext();
 	}

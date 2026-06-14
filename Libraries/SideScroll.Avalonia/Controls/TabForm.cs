@@ -141,7 +141,7 @@ public class TabForm : Border, IValidationControl
 			{
 				AddHeader(headerAttribute.Text);
 			}
-			else if (property.GetCustomAttribute<SeparatorAttribute>() != null)
+			else if (property.HasCustomAttribute<SeparatorAttribute>())
 			{
 				AddSeparator();
 			}

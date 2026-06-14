@@ -197,6 +197,14 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 	}
 
 	/// <summary>
+	/// Gets a custom attribute of the specified type from the member info
+	/// </summary>
+	public bool HasCustomAttribute<T>() where T : Attribute
+	{
+		return MemberInfo.GetCustomAttribute<T>() != null;
+	}
+
+	/// <summary>
 	/// Sorts list members by auto-select attribute and link presence
 	/// </summary>
 	public static ItemCollection<ListMember> Sort(IEnumerable<ListMember> items)
@@ -210,39 +218,55 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 	}
 
 	/// <summary>
-	/// Creates a collection of list members (properties, methods, fields) from an object using reflection
+	/// Creates a collection of list members (properties, methods, fields) from an object using reflection.
+	/// Uses <see cref="ReflectionCache"/> to avoid rebuilding the filtered/sorted
+	/// <see cref="System.Reflection.MemberInfo"/> arrays and the merged
+	/// <see cref="SortedDictionary{TKey,TValue}"/> on every call for the same type.
 	/// </summary>
 	/// <param name="obj">The object to extract members from</param>
 	/// <param name="includeBaseTypes">Whether to include members from base types</param>
 	/// <param name="includeStatic">Whether to include static members</param>
 	public static ItemCollection<ListMember> Create(object obj, bool includeBaseTypes = true, bool includeStatic = true)
 	{
-		var methodMembers = new SortedDictionary<string, ListMember>();
+		Type type = obj.GetType();
 
-		var properties = ListProperty.Create(obj, includeBaseTypes, includeStatic);
-		foreach (ListProperty listProperty in properties)
+		// Cached: merged (properties + [Item] methods) sorted by MetadataToken,
+		// with duplicate-name hiding already applied (most-derived wins).
+		(string SortKey, MemberInfo Member)[] mergedMethodMembers =
+			ReflectionCache.GetMergedMethodMembers(type, includeBaseTypes, includeStatic);
+
+		// Cached: structurally-filtered, sorted field infos.
+		// Field MetadataTokens don't align with property/method tokens, so fields are appended after.
+		FieldInfo[] fieldInfos = ReflectionCache.GetFields(type, includeBaseTypes, includeStatic);
+
+		var listMembers = new List<ListMember>(mergedMethodMembers.Length + fieldInfos.Length);
+
+		foreach ((_, MemberInfo info) in mergedMethodMembers)
 		{
-			// MetadataTokens are only unique across modules
-			MethodInfo getMethod = listProperty.PropertyInfo.GetGetMethod(false)!;
-			string id = $"{getMethod.Module.Name}:{getMethod.MetadataToken:D10}";
-			methodMembers.Add(id, listProperty);
+			ListMember member;
+			if (info is PropertyInfo propertyInfo)
+			{
+				var listProperty = new ListProperty(obj, propertyInfo);
+				// IsRowVisible() is unconditionally true when the property has no [Hide]/[HideRow] attributes.
+				if (ReflectionCache.PropertyHasValueDependentHide(propertyInfo) && !listProperty.IsRowVisible())
+					continue;
+				member = listProperty;
+			}
+			else
+			{
+				member = new ListMethod(obj, (MethodInfo)info);
+			}
+			listMembers.Add(member);
 		}
 
-		var methods = ListMethod.Create(obj, includeBaseTypes, includeStatic);
-		foreach (ListMethod listMethod in methods)
+		foreach (FieldInfo fieldInfo in fieldInfos)
 		{
-			string id = $"{listMethod.MethodInfo.Module.Name}:{listMethod.MethodInfo.MetadataToken:D10}";
-			methodMembers.Add(id, listMethod);
+			var listField = new ListField(obj, fieldInfo);
+			// IsRowVisible() is unconditionally true when the field has no [Hide]/[HideRow] attributes.
+			if (ReflectionCache.FieldHasValueDependentHide(fieldInfo) && !listField.IsRowVisible())
+				continue;
+			listMembers.Add(listField);
 		}
-
-		var listMembers = methodMembers.Values.ToList();
-
-		// Field MetadataToken's don't line up with the method or property tokens and are added to end
-		// Use property's backing field? (confirmed field order matches)
-		// No simple way to link property and backing fields
-		// .GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-		var listFields = ListField.Create(obj, includeBaseTypes, includeStatic);
-		listMembers.AddRange(listFields);
 
 		return ExpandInlined(listMembers, includeBaseTypes);
 	}
@@ -255,7 +279,7 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 		ItemCollection<ListMember> newMembers = [];
 		foreach (ListMember listMember in listMembers)
 		{
-			if (listMember.GetCustomAttribute<InlineAttribute>() != null)
+			if (listMember.HasCustomAttribute<InlineAttribute>())
 			{
 				if (listMember.Value is { } value)
 				{

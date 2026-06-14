@@ -201,7 +201,7 @@ public static class AvaloniaUtils
 	{
 		dynamic? value = listProperty.Value;
 
-		if (listProperty.GetCustomAttribute<RequiredAttribute>() != null)
+		if (listProperty.HasCustomAttribute<RequiredAttribute>())
 		{
 			if (value == null || (value is string text && text.Length == 0))
 			{

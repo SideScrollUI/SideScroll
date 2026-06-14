@@ -13,18 +13,21 @@ public class TabSampleLoadAsyncItem : ITab
 		{
 			model.Items = new List<ListItem>
 			{
-				new("Test Item", new TestItem()),
+				new("Test Item", new TestItem(!IsHeadless)),
 			};
 		}
 
-		private class TestItem
+		private class TestItem(bool enableDelay)
 		{
 			public int Integer { get; set; }
 
 			[Item]
 			public async Task<string> Text(Call call)
 			{
-				await Task.Delay(2000);
+				if (enableDelay)
+				{
+					await Task.Delay(2000);
+				}
 				return "Text";
 			}
 		}

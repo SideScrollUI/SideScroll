@@ -72,19 +72,8 @@ public class ListMethod : ListMember
 
 	private void UpdateName()
 	{
-		Name = MethodInfo.Name.TrimEnd("Async").WordSpaced();
-
-		NameAttribute? attribute = MethodInfo.GetCustomAttribute<NameAttribute>();
-		if (attribute != null)
-		{
-			Name = attribute.Name;
-		}
-
-		ItemAttribute? itemAttribute = MethodInfo.GetCustomAttribute<ItemAttribute>();
-		if (itemAttribute != null && itemAttribute.Name != null)
-		{
-			Name = itemAttribute.Name;
-		}
+		// Display name is purely structural — look up the per-MethodInfo cache.
+		Name = ReflectionCache.GetMethodDisplayName(MethodInfo);
 	}
 
 	/*public async Task<object> LoadAsync(Call call)
@@ -121,21 +110,16 @@ public class ListMethod : ListMember
 	/// <param name="includeStatic">Whether to include static methods</param>
 	public new static ItemCollection<ListMethod> Create(object obj, bool includeBaseTypes, bool includeStatic = true)
 	{
-		// this doesn't work for virtual methods (or any method modifier?)
-		var methodInfos = obj.GetType().GetMethods()
-			.Where(IsVisible)
-			.Where(m => includeBaseTypes || m.DeclaringType == obj.GetType())
-			.Where(m => includeStatic || !m.IsStatic)
-			.OrderBy(m => m.Module.Name)
-			.ThenBy(m => m.MetadataToken);
+		// Use cached, structurally-filtered, sorted MethodInfo[] to avoid repeated LINQ evaluation.
+		MethodInfo[] methodInfos = ReflectionCache.GetMethods(obj.GetType(), includeBaseTypes, includeStatic);
 
 		var listMethods = new ItemCollection<ListMethod>();
-		var propertyToIndex = new Dictionary<string, int>();
+		var methodToIndex = new Dictionary<string, int>(methodInfos.Length);
 		foreach (MethodInfo methodInfo in methodInfos)
 		{
 			var listMethod = new ListMethod(obj, methodInfo);
 
-			if (propertyToIndex.TryGetValue(methodInfo.Name, out int index))
+			if (methodToIndex.TryGetValue(methodInfo.Name, out int index))
 			{
 				// Replace base method with derived
 				listMethods.RemoveAt(index);
@@ -143,7 +127,7 @@ public class ListMethod : ListMember
 			}
 			else
 			{
-				propertyToIndex[methodInfo.Name] = listMethods.Count;
+				methodToIndex[methodInfo.Name] = listMethods.Count;
 				listMethods.Add(listMethod);
 			}
 		}

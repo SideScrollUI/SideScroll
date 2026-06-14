@@ -19,9 +19,12 @@ public class TabSampleLoadAsyncItemDelegate : ITab
 		// todo: fix, this is being called twice and blocking the UI the 1st time
 		// Preloading doesn't trigger for methods, and most results won't be cached
 		// Need a new CollectionView that can preload and cache?
-		private static async Task<object?> SlowItemAsync(Call call)
+		private async Task<object?> SlowItemAsync(Call call)
 		{
-			await Task.Delay(2000);
+			if (!IsHeadless)
+			{
+				await Task.Delay(2000);
+			}
 			return "finished";
 		}
 	}

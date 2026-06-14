@@ -1,5 +1,6 @@
 using SideScroll.Attributes;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Reflection;
 using System.Xml;
 
@@ -60,6 +61,30 @@ public static class SideScrollExtensions
 	}
 
 	/// <summary>
+	/// Per-type cache of the first <c>[InnerValue]</c>-decorated member (property or field), or
+	/// <c>null</c> when the type has none. Computed once; subsequent calls do a single dictionary
+	/// lookup instead of iterating all properties and fields and calling <c>GetCustomAttribute</c> on each.
+	/// </summary>
+	private static readonly ConcurrentDictionary<Type, MemberInfo?> InnerValueMembers = new();
+
+	private static MemberInfo? ComputeInnerValueMember(Type type)
+	{
+		foreach (PropertyInfo propertyInfo in type.GetProperties())
+		{
+			if (propertyInfo.GetCustomAttribute<InnerValueAttribute>() != null)
+				return propertyInfo;
+		}
+
+		foreach (FieldInfo fieldInfo in type.GetFields())
+		{
+			if (fieldInfo.GetCustomAttribute<InnerValueAttribute>() != null)
+				return fieldInfo;
+		}
+
+		return null;
+	}
+
+	/// <summary>
 	/// Returns the value of the first property or field decorated with [InnerValue] attribute, recursively unwrapping nested inner values
 	/// </summary>
 	public static object? GetInnerValue(this object? value)
@@ -72,22 +97,12 @@ public static class SideScrollExtensions
 			return value;
 
 		Type type = value.GetType();
-		foreach (PropertyInfo propertyInfo in type.GetProperties())
+		switch (InnerValueMembers.GetOrAdd(type, ComputeInnerValueMember))
 		{
-			if (propertyInfo.GetCustomAttribute<InnerValueAttribute>() != null)
-			{
-				object? propertyValue = propertyInfo.GetValue(value);
-				return propertyValue.GetInnerValue();
-			}
-		}
-
-		foreach (FieldInfo fieldInfo in type.GetFields())
-		{
-			if (fieldInfo.GetCustomAttribute<InnerValueAttribute>() != null)
-			{
-				object? fieldValue = fieldInfo.GetValue(value);
-				return fieldValue.GetInnerValue();
-			}
+			case PropertyInfo innerProperty:
+				return innerProperty.GetValue(value).GetInnerValue();
+			case FieldInfo innerField:
+				return innerField.GetValue(value).GetInnerValue();
 		}
 
 		if (value is DictionaryEntry dictionaryEntry)

@@ -1,3 +1,4 @@
+using SideScroll.Attributes;
 using SideScroll.Tabs.Lists;
 
 namespace SideScroll.Tabs.Bookmarks.Tabs;
@@ -12,11 +13,15 @@ public class TabLinks : ITab
 		{
 			var linkManager = LinkManager.Instance!;
 
-			model.Items = new List<ListItem>
+			var items = new List<ListItem>
 			{
 				new("Imported", new TabLinkCollection(linkManager.Imported)),
 				new("Created", new TabLinkCollection(linkManager.Created)),
 			};
+#if DEBUG
+			items.Add(new("* Schema", new TabSchemas()));
+#endif
+			model.Items = items;
 		}
 	}
 }

@@ -352,8 +352,7 @@ public class TabModel
 			CustomSettingsPath ??= itemCollection.CustomSettingsPath;
 		}
 
-		var listItemAttribute = type.GetCustomAttribute<ListItemAttribute>();
-		if (listItemAttribute != null)
+		if (type.GetCustomAttribute<ListItemAttribute>() is { } listItemAttribute)
 		{
 			ItemLists.Add(IListItem.Create(obj, listItemAttribute.IncludeBaseTypes));
 			return;
@@ -618,7 +617,7 @@ public class TabModel
 			foreach (object item in itemList)
 			{
 				if (searchableOnly && item is ListMember listMember &&
-					listMember.GetCustomAttribute<SearchableAttribute>() == null &&
+					!listMember.HasCustomAttribute<SearchableAttribute>() &&
 					listMember.Value?.GetType()?.GetCustomAttribute<SearchableAttribute>() == null)
 				{
 					continue;

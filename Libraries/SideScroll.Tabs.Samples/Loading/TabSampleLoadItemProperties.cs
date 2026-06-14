@@ -12,12 +12,12 @@ public class TabSampleLoadItemProperties : ITab
 		{
 			model.Items = new List<ListItem>
 			{
-				new("Test Item", new TestItem()),
+				new("Test Item", new TestItem(!IsHeadless)),
 			};
 		}
 	}
 
-	private class TestItem
+	private class TestItem(bool enableSleep)
 	{
 		public int Integer { get; set; }
 
@@ -28,7 +28,10 @@ public class TabSampleLoadItemProperties : ITab
 			{
 				if (_text == null)
 				{
-					Thread.Sleep(5000);
+					if (enableSleep)
+					{
+						Thread.Sleep(5000);
+					}
 					_text = "Text";
 				}
 				return _text;

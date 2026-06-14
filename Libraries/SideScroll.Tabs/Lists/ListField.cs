@@ -73,15 +73,8 @@ public class ListField : ListMember, IPropertyIsEditable
 		FieldInfo = fieldInfo;
 		IsAutoSelectable = !fieldInfo.IsStatic;
 
-		NameAttribute? nameAttribute = fieldInfo.GetCustomAttribute<NameAttribute>();
-
-		Name = nameAttribute?.Name ?? fieldInfo.Name.WordSpaced();
-
-		if (FieldInfo.GetCustomAttribute<DebugOnlyAttribute>() != null &&
-			FieldInfo.FieldType.GetCustomAttribute<DebugOnlyAttribute>() != null)
-		{
-			Name = "* " + Name;
-		}
+		// Display name is purely structural — look up the per-FieldInfo cache.
+		Name = ReflectionCache.GetFieldDisplayName(fieldInfo);
 	}
 
 	/// <summary>
@@ -92,20 +85,17 @@ public class ListField : ListMember, IPropertyIsEditable
 	/// <param name="includeStatic">Whether to include static fields</param>
 	public new static ItemCollection<ListField> Create(object obj, bool includeBaseTypes = true, bool includeStatic = true)
 	{
-		var fieldInfos = obj.GetType().GetFields()
-			.Where(f => f.IsRowVisible())
-			.Where(f => includeBaseTypes || f.DeclaringType == obj.GetType())
-			.Where(f => includeStatic || !f.IsStatic)
-			.OrderBy(f => f.Module.Name)
-			.ThenBy(f => f.MetadataToken);
+		// Use cached, structurally-filtered, sorted FieldInfo[] to avoid repeated LINQ evaluation.
+		FieldInfo[] fieldInfos = ReflectionCache.GetFields(obj.GetType(), includeBaseTypes, includeStatic);
 
 		ItemCollection<ListField> listFields = [];
-		// replace any overriden/new field & properties
-		Dictionary<string, int> fieldToIndex = [];
+		// Replace any overridden/new field & properties
+		var fieldToIndex = new Dictionary<string, int>(fieldInfos.Length);
 		foreach (FieldInfo fieldInfo in fieldInfos)
 		{
 			var listField = new ListField(obj, fieldInfo);
-			if (!listField.IsRowVisible())
+			// IsRowVisible() is unconditionally true when the field has no [Hide]/[HideRow] attributes.
+			if (ReflectionCache.FieldHasValueDependentHide(fieldInfo) && !listField.IsRowVisible())
 				continue;
 
 			if (fieldToIndex.TryGetValue(fieldInfo.Name, out int index))

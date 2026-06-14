@@ -11,6 +11,7 @@ using SideScroll.Avalonia.Utilities;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
 using SideScroll.Tabs.Bookmarks.Models;
+using SideScroll.Tabs.Bookmarks.Tabs;
 
 namespace SideScroll.Avalonia.Controls.Viewer;
 
@@ -424,6 +425,8 @@ public class TabViewer : Grid
 		tabInstance.Model.Name = "Start";
 		tabInstance.iTab = tab;
 		tabInstance.Project = Project;
+
+		TabSchemas.DefaultRootTab = tab;
 
 		if (LoadLinkUri != null)
 		{
