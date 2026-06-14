@@ -311,11 +311,31 @@ public class TabBookmark
 	}
 
 	/// <summary>
-	/// Tries to get a child bookmark by label
+	/// Tries to get a child bookmark by label.
+	/// Matches on <see cref="SelectedRow.ToString"/> (<c>DataKey ?? Label</c>) only — use the
+	/// <see cref="TryGetValue(SelectedRow, out TabBookmark?)"/> overload when rows must be
+	/// disambiguated by <see cref="SelectedRow.RowIndex"/> or other identity beyond the label.
 	/// </summary>
 	public bool TryGetValue(string label, [NotNullWhen(true)] out TabBookmark? childBookmarkNode)
 	{
 		if (SelectedRowViews.FirstOrDefault(t => t.SelectedRow.ToString() == label) is { } selectedRowView)
+		{
+			childBookmarkNode = selectedRowView.TabBookmark;
+			return true;
+		}
+		childBookmarkNode = null;
+		return false;
+	}
+
+	/// <summary>
+	/// Tries to get a child bookmark by full <see cref="SelectedRow"/> identity.
+	/// Uses <see cref="SelectedRow.Equals(SelectedRow)"/>, so rows are matched on their label,
+	/// data key, data value, and row index — correctly disambiguating rows that share a label
+	/// (or that are identified only by index when no label/data key is present).
+	/// </summary>
+	public bool TryGetValue(SelectedRow selectedRow, [NotNullWhen(true)] out TabBookmark? childBookmarkNode)
+	{
+		if (SelectedRowViews.FirstOrDefault(t => t.SelectedRow.Equals(selectedRow)) is { } selectedRowView)
 		{
 			childBookmarkNode = selectedRowView.TabBookmark;
 			return true;

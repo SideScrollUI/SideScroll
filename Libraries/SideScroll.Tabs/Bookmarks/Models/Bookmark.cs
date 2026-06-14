@@ -48,6 +48,7 @@ public class Bookmark
 	/// <summary>
 	/// Gets or sets the description of what was just selected (used for naming)
 	/// </summary>
+	[PrivateData]
 	public string? Changed { get; set; }
 
 	/// <summary>

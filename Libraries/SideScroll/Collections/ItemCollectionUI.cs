@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 
 namespace SideScroll.Collections;
 
@@ -248,7 +249,16 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 		lock (_lock)
 		{
 			// Debug.Print("InsertItemCallback: Index = " + itemLocation.Index + ", Item = " + itemLocation.Item.ToString());
-			base.InsertItem(itemLocation.Index, itemLocation.Item);
+			int index = Math.Clamp(itemLocation.Index, 0, Count);
+
+			try
+			{
+				base.InsertItem(index, itemLocation.Item);
+			}
+			catch (Exception e)
+			{
+				Debug.WriteLine($"InsertItemCallback: exception inserting at index {index}: {e.Message}");
+			}
 		}
 	}
 
@@ -298,7 +308,20 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 
 		lock (_lock)
 		{
-			base.RemoveItem(index);
+			if (index < 0 || index >= Count)
+			{
+				Debug.WriteLine($"RemoveItemCallback: index {index} out of range (Count={Count}), skipping.");
+				return;
+			}
+
+			try
+			{
+				base.RemoveItem(index);
+			}
+			catch (Exception e)
+			{
+				Debug.WriteLine($"RemoveItemCallback: exception removing index {index}: {e.Message}");
+			}
 		}
 	}
 

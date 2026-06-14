@@ -418,6 +418,10 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 			_disableSaving++;
 			SelectedItem = selectedItem;
 			_disableSaving--;
+
+			// _disableSaving suppresses the bookmark creation in DataGrid_SelectionChanged
+			// Save explicitly so the selection is persisted without creating a navigator bookmark
+			TabInstance.SaveTabSettings();
 		}
 		else
 		{
