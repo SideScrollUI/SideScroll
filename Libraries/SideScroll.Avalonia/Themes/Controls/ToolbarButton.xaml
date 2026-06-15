@@ -34,6 +34,12 @@
     <Style Selector="^:pressed /template/ ContentPresenter">
       <Setter Property="Background" Value="{DynamicResource ThemeButtonBackgroundPressedBrush}"/>
     </Style>
+    <Style Selector="^.close:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource CloseButtonBackgroundPointerOverBrush}"/>
+    </Style>
+    <Style Selector="^.close:pressed /template/ ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource CloseButtonBackgroundPressedBrush}"/>
+    </Style>
     <Style Selector="^:disabled">
       <Setter Property="Opacity" Value="{DynamicResource ThemeDisabledOpacity}"/>
     </Style>

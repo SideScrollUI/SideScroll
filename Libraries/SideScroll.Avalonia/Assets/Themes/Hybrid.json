@@ -53,6 +53,8 @@
     "TextForeground": "#ffd0d0e8",
     "ButtonBackgroundPointerOver": "#ff303080",
     "ButtonCornerRadius": 6,
+    "CloseButtonBackgroundPointerOver": "#ffcc563b",
+    "CloseButtonBackgroundPressed": "#ffed6445",
     "IconForeground": "#ff0063ed",
     "IconForegroundHighlight": "#ff108dff",
     "IconForegroundDisabled": "#ff004da0",

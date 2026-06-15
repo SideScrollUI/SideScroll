@@ -110,6 +110,8 @@
           <!-- Toolbar -->
           <SolidColorBrush x:Key="ToolbarBackgroundBrush" Color="#27204a" />
           <SolidColorBrush x:Key="ToolbarButtonBackgroundPointerOverBrush" Color="#2040a0" />
+          <SolidColorBrush x:Key="CloseButtonBackgroundPointerOverBrush" Color="#ffc42b1c" />
+          <SolidColorBrush x:Key="CloseButtonBackgroundPressedBrush" Color="#ffa32115" />
           <SolidColorBrush x:Key="ToolbarSeparatorBrush" Color="#303d90" />
 
           <SolidColorBrush x:Key="ToolbarLabelForegroundBrush" Color="#8888FF" />
@@ -221,6 +223,8 @@
           <!-- Toolbar -->
           <SolidColorBrush x:Key="ToolbarBackgroundBrush" Color="#1a1940" />
           <SolidColorBrush x:Key="ToolbarButtonBackgroundPointerOverBrush" Color="#2040a0" />
+          <SolidColorBrush x:Key="CloseButtonBackgroundPointerOverBrush" Color="#ffc42b1c" />
+          <SolidColorBrush x:Key="CloseButtonBackgroundPressedBrush" Color="#ffa32115" />
           <SolidColorBrush x:Key="ToolbarSeparatorBrush" Color="#004db0" />
 
           <SolidColorBrush x:Key="ToolbarLabelForegroundBrush" Color="#8888FF" />

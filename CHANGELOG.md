@@ -8,12 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Added Tab Schema generation
+- Added Headless Tab Viewer for basic tab navigation and tab schema generation
 - Added Reflection Cache for Tab Attributes
 - Added docs for Json Bookmark Schema
 - Added Program for SideScroll.Demo.Avalonia.Headless
 - Added ItemCollectionUI exception handling for InsertItemCallback and RemoveItemCallback
 - Added TabDateTimePicker Button Flyouts
+- Added Window Close Button Theming
 
 ### Fixed
 - Fixed DataGrid not updating default selections for new items

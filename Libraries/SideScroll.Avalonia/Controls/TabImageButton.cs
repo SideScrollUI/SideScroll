@@ -70,8 +70,11 @@ public class TabImageButton : Button, IDisposable
 	/// <summary>Gets the normal-state icon tint color, taken from <see cref="ImageColorView"/> when available, otherwise the theme default.</summary>
 	protected virtual Color Color => (ImageResource as ImageColorView)?.Color ?? SideScrollTheme.IconForeground.Color;
 
-	/// <summary>Gets the pointer-hover icon tint color, taken from <see cref="ImageColorView"/> when available, otherwise the theme highlight default.</summary>
-	protected virtual Color? HighlightColor => (ImageResource as ImageColorView)?.HighlightColor ?? SideScrollTheme.IconForegroundHighlight.Color;
+	/// <summary>Overrides the pointer-hover icon tint color when set, bypassing <see cref="ImageColorView"/> and theme defaults.</summary>
+	public Color? HighlightColorOverride { get; set; }
+
+	/// <summary>Gets the pointer-hover icon tint color, taken from <see cref="HighlightColorOverride"/>, <see cref="ImageColorView"/>, or the theme highlight default.</summary>
+	protected virtual Color? HighlightColor => HighlightColorOverride ?? (ImageResource as ImageColorView)?.HighlightColor ?? SideScrollTheme.IconForegroundHighlight.Color;
 
 	/// <summary>Gets the disabled-state icon tint color from the current theme.</summary>
 	protected virtual Color? DisabledColor => SideScrollTheme.IconForegroundDisabled.Color;

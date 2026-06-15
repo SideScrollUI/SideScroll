@@ -304,6 +304,8 @@
           <SolidColorBrush x:Key="ToolbarBackgroundBrush" Color="#ffebf0fc" />
           
           <SolidColorBrush x:Key="ToolbarButtonBackgroundPointerOverBrush" Color="#ffd4e1ff" />
+          <SolidColorBrush x:Key="CloseButtonBackgroundPointerOverBrush" Color="#ffe66357" />
+          <SolidColorBrush x:Key="CloseButtonBackgroundPressedBrush" Color="#ffd94436" />
           <CornerRadius x:Key="ToolbarButtonCornerRadius">6</CornerRadius>
           
           <SolidColorBrush x:Key="ToolbarSeparatorBrush" Color="#ff5d85e3" />
@@ -718,6 +720,8 @@
           
           <SolidColorBrush x:Key="ToolbarBackgroundBrush" Color="#0d0d0d" />
           <SolidColorBrush x:Key="ToolbarButtonBackgroundPointerOverBrush" Color="#bf2b2b2b" />
+          <SolidColorBrush x:Key="CloseButtonBackgroundPointerOverBrush" Color="#ffc42b1c" />
+          <SolidColorBrush x:Key="CloseButtonBackgroundPressedBrush" Color="#ffa32115" />
           <SolidColorBrush x:Key="ToolbarSeparatorBrush" Color="#363636" />
 
           <SolidColorBrush x:Key="ToolbarLabelForegroundBrush" Color="{DynamicResource TextForegroundColor}" />

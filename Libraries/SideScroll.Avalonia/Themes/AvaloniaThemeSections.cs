@@ -190,6 +190,12 @@ public class ToolbarTheme : ThemeSection
 	[Range(0, 20), ResourceKey("ToolbarButtonCornerRadius")]
 	public double? ButtonCornerRadius { get; set; }
 
+	[Header("Close Button"), ResourceKey("CloseButtonBackgroundPointerOverBrush")]
+	public Color? CloseButtonBackgroundPointerOver { get; set; }
+
+	[ResourceKey("CloseButtonBackgroundPressedBrush")]
+	public Color? CloseButtonBackgroundPressed { get; set; }
+
 	[Header("Icons"), ResourceKey("IconForegroundBrush")]
 	public Color? IconForeground { get; set; }
 

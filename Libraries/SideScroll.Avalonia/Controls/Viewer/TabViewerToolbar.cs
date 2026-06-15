@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Reactive;
 using SideScroll.Avalonia.Controls.Toolbar;
 using SideScroll.Extensions;
@@ -180,6 +181,8 @@ public class TabViewerToolbar : TabControlToolbar
 
 		ButtonClose = AddButton("Close", Icons.Svg.Close);
 		ButtonClose.Width = buttonWidth;
+		ButtonClose.Classes.Add("close");
+		ButtonClose.HighlightColorOverride = Colors.White;
 		ButtonClose.Add(Close);
 
 		SubscribeToWindowState();
