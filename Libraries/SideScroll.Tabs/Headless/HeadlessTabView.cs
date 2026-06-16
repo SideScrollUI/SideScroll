@@ -379,7 +379,7 @@ public class HeadlessTabView(TabInstance instance, string label)
 	/// <summary>
 	/// <see cref="TabInstance"/> used for plain objects (not <see cref="ITab"/>,
 	/// <see cref="ITabCreatorAsync"/>, or <see cref="ILoadAsync"/>).
-	/// Delegates to <see cref="TabModel.AddData"/> so that <c>[ListItem]</c>-decorated types
+	/// Delegates to <see cref="TabModel.AddItems(object?)"/> so that <c>[ListItem]</c>-decorated types
 	/// and other complex objects are properly expanded into navigable schema items —
 	/// mirroring the <c>TabModel.Create</c> path used by the Avalonia <c>TabCreator</c>.
 	/// </summary>
@@ -388,7 +388,7 @@ public class HeadlessTabView(TabInstance instance, string label)
 		public override void Load(Call call, TabModel model)
 		{
 			model.Name = name;
-			model.AddData(obj);
+			model.AddItems(obj);
 		}
 	}
 

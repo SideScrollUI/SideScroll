@@ -90,7 +90,7 @@ public class TabAvaloniaThemeSettings : ITab, IDataViewItem
 			var sectionTabs = ThemeSettings.GetSections()
 				.Select(obj => new TabAvaloniaThemeSection(this, obj))
 				.ToList();
-			model.AddData(sectionTabs);
+			model.AddItems(sectionTabs);
 
 			History.Add(ThemeSettings);
 		}

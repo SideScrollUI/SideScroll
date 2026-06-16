@@ -58,7 +58,7 @@ public class TabInstanceLoadAsync(ILoadAsync loadAsync) : TabInstance, ITabAsync
 		Task task = LoadMethod.LoadAsync(call);
 		await task.ConfigureAwait(false);
 		object result = ((dynamic)task).Result;
-		model.AddData(result);
+		model.AddItems(result);
 	}
 }
 
@@ -702,7 +702,7 @@ public class TabInstance : IDisposable
 			}
 			catch (Exception e)
 			{
-				model.AddData(e);
+				model.AddItems(e);
 				//model.Tasks.Add(call.TaskInstance);
 			}
 		}
@@ -716,7 +716,7 @@ public class TabInstance : IDisposable
 			catch (Exception e)
 			{
 				call.Log.Add(e);
-				model.AddData(e);
+				model.AddItems(e);
 			}
 
 			// Posted Log messages won't have taken affect here yet
@@ -789,7 +789,7 @@ public class TabInstance : IDisposable
 			catch (Exception e)
 			{
 				call.Log.Add(e);
-				model.AddData(e);
+				model.AddItems(e);
 			}
 		}
 

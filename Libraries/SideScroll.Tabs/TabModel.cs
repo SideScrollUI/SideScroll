@@ -191,10 +191,18 @@ public class TabModel
 	/// </summary>
 	public TaskInstanceCollection Tasks { get; set; } = [];
 
+	private List<IList> _itemLists = [];
+
 	/// <summary>
-	/// List of data item collections to display
+	/// List of data item collections to display.
+	/// Use <see cref="AddItems(object?)"/> to add collections.
 	/// </summary>
-	public List<IList> ItemLists { get; set; } = [];
+	public List<IList> ItemLists
+	{
+		get => _itemLists;
+		[Obsolete("Use AddItems() instead. The ItemLists setter will be removed in a future version.")]
+		set => _itemLists = value;
+	}
 
 	/// <summary>
 	/// List of data item collections to display
@@ -202,8 +210,8 @@ public class TabModel
 	[Obsolete("Use ItemLists instead")]
 	public List<IList> ItemList
 	{
-		get => ItemLists;
-		set => ItemLists = value;
+		get => _itemLists;
+		set => _itemLists = value;
 	}
 
 	/// <summary>
@@ -213,7 +221,7 @@ public class TabModel
 	//public List<ITabControl> CustomTabControls { get; set; } = []; // should everything be a custom control? tabControls?
 
 	/// <summary>
-	/// Primary data items collection (gets/sets the first item list)
+	/// Primary data items collection (gets the first item list; setting replaces all item lists)
 	/// </summary>
 	public IList? Items
 	{
@@ -221,7 +229,7 @@ public class TabModel
 		set
 		{
 			ItemLists.Clear();
-			AddData(value);
+			AddItems(value);
 		}
 	}
 
@@ -275,7 +283,7 @@ public class TabModel
 			return null;
 
 		var tabModel = new TabModel(name);
-		tabModel.AddData(obj);
+		tabModel.AddItems(obj);
 		if (tabModel.ItemLists.Count == 0 && tabModel.Objects.Count == 0)
 			return null;
 
@@ -335,7 +343,13 @@ public class TabModel
 	/// <summary>
 	/// Adds data to the tab by analyzing the object type and adding appropriate collections
 	/// </summary>
-	public void AddData(object? obj)
+	[Obsolete("Use AddItems instead")]
+	public void AddData(object? obj) => AddItems(obj);
+
+	/// <summary>
+	/// Adds data to the tab by analyzing the object type and adding appropriate collections
+	/// </summary>
+	public void AddItems(object? obj)
 	{
 		Object = obj;
 		if (obj == null)

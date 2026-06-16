@@ -16,7 +16,7 @@ public class TabSampleDataGridEditing : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			// uses DataGrid internally, doesn't work well yet
-			model.AddData(_logEntry);
+			model.AddItems(_logEntry);
 			model.Editing = true;
 		}
 	}

@@ -20,7 +20,7 @@ public class TabSampleDataGridDataTable : ITab
 			_dataTable.Columns.Add(new DataColumn("Id", typeof(int)));
 			_dataTable.Columns.Add(new DataColumn("Name", typeof(string)));
 			AddEntries();
-			model.AddData(_dataTable);
+			model.AddItems(_dataTable);
 		}
 
 		private void AddEntries()

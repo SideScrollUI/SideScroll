@@ -345,7 +345,7 @@ public class HeadlessTabViewerTests : BaseTest
 
 	[Test, Description(
 		"A ListItem wrapping a plain complex object produces an expandable node. " +
-		"TabModel.AddData is called which populates the model with object members. " +
+		"TabModel.AddItems is called which populates the model with object members. " +
 		"ChildViews is empty until SelectAllItemsAsync is explicitly called.")]
 	public async Task TryCreateChildViewAsync_ListItemWithPlainObject_ReturnsLeafNodeWithNoChildren()
 	{
@@ -366,7 +366,7 @@ public class HeadlessTabViewerTests : BaseTest
 
 	/// <summary>
 	/// Aggregator class decorated with <c>[ListItem]</c>: its public properties are reflected
-	/// by <see cref="TabModel.AddData"/> (via <see cref="IListItem.Create"/>) into a navigable
+	/// by <see cref="TabModel.AddItems(object?)"/> (via <see cref="IListItem.Create"/>) into a navigable
 	/// item collection — exactly like <c>TabSamples</c> in the Avalonia samples.
 	/// </summary>
 	[ListItem]

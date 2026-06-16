@@ -41,7 +41,7 @@ public class TabFileDataRepo(DataRepoView<NodeView> dataRepoNodes, FileSelectorO
 				node.FileSelectorOptions = tab.FileSelectorOptions;
 			}
 
-			model.AddData(nodeViews);
+			model.AddItems(nodeViews);
 		}
 
 		private void ClearAll(Call call)

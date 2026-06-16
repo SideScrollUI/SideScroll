@@ -51,7 +51,7 @@ public class TabLinkCollection(LinkCollection links) : ITab
 				tab.Links.Load(call, true);
 			}
 
-			model.AddData(tab.Links.Items);
+			model.AddItems(tab.Links.Items);
 
 			if (tab.Links.NewBookmark != null)
 			{

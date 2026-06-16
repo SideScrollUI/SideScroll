@@ -12,7 +12,7 @@ public class TabSampleDataGridDictionary : ITab
 		{
 			_items = [];
 			AddEntries();
-			model.AddData(_items);
+			model.AddItems(_items);
 
 			// Dictionary not observable
 			/*model.Actions = new List<TaskCreator>

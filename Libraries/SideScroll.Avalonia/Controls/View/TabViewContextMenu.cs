@@ -92,7 +92,7 @@ public class TabViewContextMenu : ContextMenu, IDisposable
 	{
 		var debugModel = new TabModel("Debug");
 		TabView? clone = TabView.TryDeepClone();
-		debugModel.AddData(clone);
+		debugModel.AddItems(clone);
 		//Control debugControl = clone.CreateChildControl(debugModel, "Debug");
 	}
 

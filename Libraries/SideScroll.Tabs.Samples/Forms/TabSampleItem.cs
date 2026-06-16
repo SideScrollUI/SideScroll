@@ -35,7 +35,7 @@ public class TabSampleItem : ITab, IDataViewItem
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			model.AddData(tab.TestItem);
+			model.AddItems(tab.TestItem);
 		}
 	}
 }

@@ -19,7 +19,7 @@ public class TabSampleNullableArray : ITab
 				};
 			}
 			//model.Items = testItems;
-			model.AddData(testItems);
+			model.AddItems(testItems);
 		}
 	}
 
