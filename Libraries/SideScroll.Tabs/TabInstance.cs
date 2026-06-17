@@ -199,6 +199,13 @@ public class TabInstance : IDisposable
 	public TabBookmark? FilterBookmarkNode { get; set; }
 
 	/// <summary>
+	/// Whether the tab's tasks panel should be shown: when this instance or its model opts in
+	/// (<see cref="ShowTasks"/> / <see cref="TabModel.ShowTasks"/>) or any task warrants display
+	/// (<see cref="TaskInstanceCollection.ShowTasks"/>).
+	/// </summary>
+	public bool TasksVisible => ShowTasks || Model.ShowTasks || Model.Tasks.ShowTasks;
+
+	/// <summary>
 	/// Event arguments for single item selection
 	/// </summary>
 	public class ItemSelectedEventArgs(object obj) : EventArgs
@@ -572,9 +579,12 @@ public class TabInstance : IDisposable
 	public void AddTask(TaskInstance taskInstance, bool showTask)
 	{
 		taskInstance.ShowTask = showTask || ShowTasks;
-		if (taskInstance.ShowTask)
+		if (taskInstance.ShowTask || Model.ShowTasks)
 		{
-			Model.Tasks.Add(taskInstance);
+			if (!Model.Tasks.Contains(taskInstance))
+			{
+				Model.Tasks.Add(taskInstance);
+			}
 		}
 	}
 
@@ -718,14 +728,14 @@ public class TabInstance : IDisposable
 				call.Log.Add(e);
 				model.AddItems(e);
 			}
+		}
 
-			// Posted Log messages won't have taken affect here yet
-			// Task.OnFinished hasn't always been called by this point
-			if ((model.ShowTasks || call.Log.Level >= LogLevel.Error)
-				&& !model.Tasks.Contains(call.TaskInstance!))
-			{
-				model.Tasks.Add(call.TaskInstance!);
-			}
+		// Posted Log messages won't have taken affect here yet
+		// Task.OnFinished hasn't always been called by this point
+		if ((ShowTasks || model.ShowTasks || call.Log.Level >= LogLevel.Error)
+			&& !model.Tasks.Contains(call.TaskInstance!))
+		{
+			model.Tasks.Add(call.TaskInstance!);
 		}
 		return model;
 	}

@@ -28,11 +28,7 @@ public class TabViewTasks : Grid, IDisposable
 	/// <summary>Gets or sets whether newly added tasks are automatically selected.</summary>
 	public bool AutoSelectNew { get; set; } = true;
 
-	private bool ShowTasks => TabInstance.Model.Tasks
-		.Any(task =>
-			task.ShowTask ||
-			task.TaskStatus == TaskStatus.Faulted ||
-			task.Log.Level >= LogLevel.Error);
+	private bool ShowTasks => TabInstance.TasksVisible;
 
 	/// <summary>Gets the list of currently selected items in the task data grid.</summary>
 	public IList SelectedItems => _tabDataGrid.SelectedItems;

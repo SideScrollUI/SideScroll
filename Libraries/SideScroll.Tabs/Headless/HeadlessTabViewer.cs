@@ -31,6 +31,7 @@ public class HeadlessTabViewer(Project project, HeadlessTabOptions? options = nu
 	public async Task<HeadlessTabView> LoadTabAsync(Call call, ITab tab)
 	{
 		TabInstance tabInstance = tab.Create();
+		tabInstance.Model.Name = "Start";
 		tabInstance.iTab = tab;
 		tabInstance.Project = Project;
 

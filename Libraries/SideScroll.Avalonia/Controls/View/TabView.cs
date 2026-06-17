@@ -519,10 +519,10 @@ public class TabView : Grid, IDisposable
 		AddControl(toolbarControl, GridLength.Auto);
 	}
 
-	/// <summary>Creates and adds the <see cref="TabViewTasks"/> control when the model has objects to display.</summary>
+	/// <summary>Creates and adds the <see cref="TabViewTasks"/> control when the model has objects or tasks to display.</summary>
 	protected void AddTasks()
 	{
-		if (Model.Objects.Count == 0)
+		if (Model.Objects.Count == 0 && !Instance.TasksVisible)
 			return;
 
 		TabTasks = new TabViewTasks(Instance);

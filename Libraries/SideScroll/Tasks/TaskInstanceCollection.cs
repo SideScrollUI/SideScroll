@@ -1,4 +1,5 @@
 using SideScroll.Collections;
+using SideScroll.Logs;
 
 namespace SideScroll.Tasks;
 
@@ -37,4 +38,13 @@ public class TaskInstanceCollection : ItemCollection<TaskInstance>
 			RemoveAt(0);
 		}
 	}
+
+	/// <summary>
+	/// Whether any task in the collection warrants display: it explicitly opted in
+	/// (<see cref="TaskInstance.ShowTask"/>), faulted, or logged an error.
+	/// </summary>
+	public bool ShowTasks => this.Any(task =>
+			task.ShowTask ||
+			task.TaskStatus == TaskStatus.Faulted ||
+			task.Log.Level >= LogLevel.Error);
 }

@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed DataGrid not updating default selections for new items
 - Fixed TabDateTimePicker Button Padding
+- Fixed ShowTasks not showing the TabInstance's TaskInstance when required
 
 ### Changed
 - Updated Bookmark Changed to [PrivateData]

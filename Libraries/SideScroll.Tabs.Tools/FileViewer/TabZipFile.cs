@@ -26,8 +26,6 @@ public class TabZipFile : ITab, IFileTypeView
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			model.ShowTasks = true;
-
 			if (string.IsNullOrEmpty(tab.Path) || !File.Exists(tab.Path))
 			{
 				model.AddObject("Zip file doesn't exist");
@@ -252,7 +250,6 @@ public class TabZipDirectory(ZipDirectoryView directoryView) : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			model.Editing = true;
-			model.ShowTasks = true;
 
 			Toolbar toolbar = new();
 			toolbar.ButtonRefresh.Action = Refresh;

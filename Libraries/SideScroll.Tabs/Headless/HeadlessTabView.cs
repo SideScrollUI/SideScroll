@@ -155,6 +155,8 @@ public class HeadlessTabView(TabInstance instance, string label)
 	/// <param name="maxDepth">Maximum number of levels to traverse (default 5).</param>
 	public async Task SelectAllItemsRecursiveAsync(Call call, int maxDepth = 5)
 	{
+		using var callTimer = call.Timer("Loading Tab", new Tag("Label", Label));
+
 		if (maxDepth <= 0)
 		{
 			// Stopped before expanding: flag as truncated if there were rows we could have expanded.
@@ -162,11 +164,11 @@ public class HeadlessTabView(TabInstance instance, string label)
 			return;
 		}
 
-		await SelectAllItemsAsync(call);
+		await SelectAllItemsAsync(callTimer);
 
 		foreach (HeadlessTabView child in ChildViews)
 		{
-			await child.SelectAllItemsRecursiveAsync(call, maxDepth - 1);
+			await child.SelectAllItemsRecursiveAsync(callTimer, maxDepth - 1);
 		}
 	}
 
@@ -182,6 +184,8 @@ public class HeadlessTabView(TabInstance instance, string label)
 	/// <param name="maxDepth">Maximum number of levels to traverse (default 5).</param>
 	public async Task SelectBookmarkItemsRecursiveAsync(Call call, TabBookmark tabBookmark, int maxDepth = 5)
 	{
+		using var callTimer = call.Timer("Loading Tab with Bookmark", new Tag("Label", Label));
+
 		if (maxDepth <= 0)
 		{
 			// Stopped before following the bookmark's remaining selections.
@@ -208,14 +212,14 @@ public class HeadlessTabView(TabInstance instance, string label)
 				if (!tabBookmark.TryGetValue(selectedRow, out TabBookmark? childBookmark))
 					continue;
 
-				HeadlessTabView? childView = await TryCreateChildViewAsync(call, snapshot[rowIndex]);
+				HeadlessTabView? childView = await TryCreateChildViewAsync(callTimer, snapshot[rowIndex]);
 				if (childView == null)
 					continue;
 
 				childView.SourceList = itemList;
 				ChildViews.Add(childView);
 				listItems.Add(new HeadlessTabItem(childView.Label, childView));
-				await childView.SelectBookmarkItemsRecursiveAsync(call, childBookmark, maxDepth - 1);
+				await childView.SelectBookmarkItemsRecursiveAsync(callTimer, childBookmark, maxDepth - 1);
 			}
 		}
 	}

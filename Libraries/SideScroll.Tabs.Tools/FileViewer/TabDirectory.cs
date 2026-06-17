@@ -47,7 +47,6 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 		{
 			model.CustomSettingsPath = tab.Path;
 			model.Editing = true;
-			model.ShowTasks = true;
 
 			if (!Directory.Exists(tab.Path))
 			{

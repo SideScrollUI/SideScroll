@@ -32,6 +32,8 @@ public class TabSchema(ITab tab, HeadlessTabOptions options, Bookmark? bookmark 
 	{
 		public override async Task LoadAsync(Call call, TabModel model)
 		{
+			model.ShowTasks = true;
+
 			// Guard against re-entrant calls (e.g. the headless viewer expanding TabLinks→TabSchemas→TabSchema).
 			if (IsGenerating.Value)
 			{
@@ -39,7 +41,7 @@ public class TabSchema(ITab tab, HeadlessTabOptions options, Bookmark? bookmark 
 				return;
 			}
 
-			call.Log.Add("Exporting schema",
+			using CallTimer schemaCall = call.StartTask("Exporting Schema",
 				new Tag("Tab", tab.GetType().Name),
 				new Tag("MaxDepth", options.MaxDepth),
 				new Tag("Filter", options.TabFilter));
@@ -48,7 +50,8 @@ public class TabSchema(ITab tab, HeadlessTabOptions options, Bookmark? bookmark 
 			try
 			{
 				var viewer = new HeadlessTabViewer(Project, options);
-				HeadlessTabView rootView = await viewer.LoadAndTraverseAsync(call, tab, bookmark);
+				HeadlessTabView rootView = await viewer.LoadAndTraverseAsync(schemaCall, tab, bookmark);
+				call.Log.Level = Logs.LogLevel.Info;
 
 				SchemaNode schemaNode = SchemaNode.From(rootView);
 				string json = JsonSerializer.Serialize(schemaNode, JsonConverters.PublicSerializerOptions);
