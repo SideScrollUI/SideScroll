@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using SideScroll.Attributes;
 using SideScroll.Avalonia.Controls.Viewer;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Resources;
@@ -34,6 +35,10 @@ public class TabFileImage : ITab, IFileTypeView
 
 	public class Toolbar : TabToolbar
 	{
+		public ToolButton ButtonRotateLeft { get; set; } = new("Rotate Left", Icons.Svg.RotateLeft);
+		public ToolButton ButtonRotateRight { get; set; } = new("Rotate Right", Icons.Svg.RotateRight);
+
+		[Separator]
 		public ToolButton ButtonCopy { get; set; } = new("Copy to Clipboard", Icons.Svg.Copy);
 	}
 
@@ -44,6 +49,8 @@ public class TabFileImage : ITab, IFileTypeView
 		public string Path => tab.Path!;
 
 		private Image? _image;
+		private LayoutTransformControl? _imageContainer;
+		private int _rotation;
 
 		public override void LoadUI(Call call, TabModel model)
 		{
@@ -56,6 +63,8 @@ public class TabFileImage : ITab, IFileTypeView
 			}
 
 			Toolbar toolbar = new();
+			toolbar.ButtonRotateLeft.Action = RotateLeft;
+			toolbar.ButtonRotateRight.Action = RotateRight;
 			toolbar.ButtonCopy.ActionAsync = CopyToClipboardAsync;
 			model.AddObject(toolbar);
 
@@ -79,13 +88,43 @@ public class TabFileImage : ITab, IFileTypeView
 					Bitmap bitmap = ImageUtils.LoadImage(_image, Path);
 					model.MaxDesiredWidth = Math.Max(MinDesiredWidth, (int)bitmap.Size.Width);
 				}
-				model.AddObject(_image, true);
+
+				// Wrap in a LayoutTransformControl so rotations also update the layout bounds
+				// (e.g. a 90° rotation swaps the displayed width and height)
+				_imageContainer = new LayoutTransformControl
+				{
+					Child = _image,
+					VerticalAlignment = VerticalAlignment.Top,
+				};
+				UpdateRotation();
+
+				model.AddObject(_imageContainer, true);
 			}
 			catch (Exception ex)
 			{
 				call.Log.Add(ex);
 				model.AddObject(ex);
 			}
+		}
+
+		private void RotateLeft(Call call)
+		{
+			_rotation = (_rotation + 270) % 360;
+			UpdateRotation();
+		}
+
+		private void RotateRight(Call call)
+		{
+			_rotation = (_rotation + 90) % 360;
+			UpdateRotation();
+		}
+
+		private void UpdateRotation()
+		{
+			if (_imageContainer == null)
+				return;
+
+			_imageContainer.LayoutTransform = new RotateTransform(_rotation);
 		}
 
 		private async Task CopyToClipboardAsync(Call call)

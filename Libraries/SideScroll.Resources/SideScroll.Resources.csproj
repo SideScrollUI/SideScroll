@@ -48,6 +48,8 @@
     <None Remove="Icons\svg\Restore.svg" />
     <None Remove="Icons\svg\RightArrow.svg" />
     <None Remove="Icons\svg\RightArrowCircle.svg" />
+    <None Remove="Icons\svg\RotateLeft.svg" />
+    <None Remove="Icons\svg\RotateRight.svg" />
     <None Remove="Icons\svg\SearchRight.svg" />
     <None Remove="Icons\svg\Star.svg" />
     <None Remove="Icons\svg\StarFilled.svg" />
@@ -98,6 +100,8 @@
     <EmbeddedResource Include="Icons\svg\Reset.svg" />
     <EmbeddedResource Include="Icons\svg\Restore.svg" />
     <EmbeddedResource Include="Icons\svg\RightArrowCircle.svg" />
+    <EmbeddedResource Include="Icons\svg\RotateLeft.svg" />
+    <EmbeddedResource Include="Icons\svg\RotateRight.svg" />
     <EmbeddedResource Include="Icons\svg\SearchRight.svg" />
     <EmbeddedResource Include="Icons\svg\Star.svg" />
     <EmbeddedResource Include="Icons\svg\StarFilled.svg" />

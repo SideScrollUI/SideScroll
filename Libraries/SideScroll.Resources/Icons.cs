@@ -36,6 +36,9 @@ public static class Icons
 		public static ResourceView Undo { get; } = Get("Undo");
 		public static ResourceView Redo { get; } = Get("Redo");
 
+		public static ResourceView RotateLeft { get; } = Get("RotateLeft");
+		public static ResourceView RotateRight { get; } = Get("RotateRight");
+
 		public static ResourceView Search { get; } = Get("Search");
 		public static ResourceView SearchRight { get; } = Get("SearchRight");
 		public static ResourceView ClearSearch { get; } = Get("ClearSearch");
