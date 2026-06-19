@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Reflection Cache for Tab Attributes
 - Added docs for Json Bookmark Schema
 - Added Program for SideScroll.Demo.Avalonia.Headless
+- Added AvaloniaHeadlessCapture to allow Capturing Specific Tabs
 - Added ItemCollectionUI exception handling for InsertItemCallback and RemoveItemCallback
 - Added TabDateTimePicker Button Flyouts
 - Added Window Close Button Theming

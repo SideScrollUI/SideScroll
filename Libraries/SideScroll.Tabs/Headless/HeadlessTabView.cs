@@ -148,6 +148,12 @@ public class HeadlessTabView(TabInstance instance, string label)
 	}
 
 	/// <summary>
+	/// Returns <c>true</c> when the call's task has been cancelled — e.g. the
+	/// <see cref="HeadlessTabOptions.MaxTime"/> budget elapsed or the user cancelled it.
+	/// </summary>
+	private static bool IsCancelled(Call call) => call.TaskInstance?.CancelToken.IsCancellationRequested == true;
+
+	/// <summary>
 	/// Recursively selects all items up to <paramref name="maxDepth"/> levels deep.
 	/// Each level calls <see cref="SelectAllItemsAsync"/> then recurses into every child.
 	/// </summary>
@@ -164,10 +170,16 @@ public class HeadlessTabView(TabInstance instance, string label)
 			return;
 		}
 
+		if (IsCancelled(callTimer))
+			return;
+
 		await SelectAllItemsAsync(callTimer);
 
 		foreach (HeadlessTabView child in ChildViews)
 		{
+			if (IsCancelled(callTimer))
+				return;
+
 			await child.SelectAllItemsRecursiveAsync(callTimer, maxDepth - 1);
 		}
 	}
@@ -206,6 +218,9 @@ public class HeadlessTabView(TabInstance instance, string label)
 			List<object> snapshot = itemList.Cast<object>().ToList();
 			for (int rowIndex = 0; rowIndex < snapshot.Count; rowIndex++)
 			{
+				if (IsCancelled(callTimer))
+					return;
+
 				// Match on full SelectedRow identity (label, data key/value, and index) so that
 				// rows sharing a label — or identified only by index — are disambiguated.
 				var selectedRow = new SelectedRow(snapshot[rowIndex]) { RowIndex = rowIndex };
@@ -259,6 +274,9 @@ public class HeadlessTabView(TabInstance instance, string label)
 		int childCount = 0;
 		for (int i = 0; i < snapshot.Count; i++)
 		{
+			if (IsCancelled(call))
+				break;
+
 			object obj = snapshot[i];
 
 			object? value = obj.GetInnerValue();

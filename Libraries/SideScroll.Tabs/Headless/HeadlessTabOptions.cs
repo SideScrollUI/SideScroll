@@ -13,6 +13,13 @@ public record HeadlessTabOptions
 	/// </summary>
 	public int MaxDepth { get; init; } = 5;
 
+	/// <summary>
+	/// Optional time budget for the traversal. When set, the call's task is cancelled after this
+	/// elapses and the traversal stops at the next node/item boundary, returning a partial result.
+	/// <c>null</c> (the default) means no time limit.
+	/// </summary>
+	public TimeSpan? MaxTime { get; init; }
+
 	// Per-list caps. All use: negative = unlimited, 0 = none, positive = cap.
 	// "Items" are rows listed by label (cheap, no deep load — visible columns are always shown).
 	// "Children" are items explored into sub-tabs (loaded and recursed) — the expensive part.

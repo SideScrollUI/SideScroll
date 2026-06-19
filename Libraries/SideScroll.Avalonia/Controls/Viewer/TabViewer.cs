@@ -69,13 +69,13 @@ public class TabViewer : Grid
 	public TabViewerToolbar? Toolbar { get; protected set; }
 
 	/// <summary>Gets the grid that contains the scroll viewer and optional side buttons.</summary>
-	protected Grid BottomGrid { get; }
+	public Grid BottomGrid { get; }
 
 	/// <summary>Gets the scroll viewer that hosts the tab view content.</summary>
 	public ScrollViewer ScrollViewer { get; }
 
 	/// <summary>Gets the inner content grid that wraps the tab view.</summary>
-	protected Grid ContentGrid { get; }
+	public Grid ContentGrid { get; }
 
 	/// <summary>Gets the current root tab view, or <c>null</c> if no tab has been loaded.</summary>
 	public TabView? TabView { get; protected set; }
@@ -85,6 +85,16 @@ public class TabViewer : Grid
 
 	/// <summary>Raised when a new tab has been loaded into the viewer.</summary>
 	public event EventHandler<TabLoadedEventArgs>? OnTabLoaded;
+
+	/// <summary>
+	/// Maximum tab depth to render, where the root tab loaded by <see cref="LoadTab"/> is depth 1.
+	/// Tabs at this depth will show their own content but not create child tabs.
+	/// <c>null</c> means no limit (the default behaviour).
+	/// </summary>
+	public int? MaxTabDepth { get; set; }
+
+	private TaskCompletionSource? _childrenLoadedTcs;
+	private int _pendingChildrenCount;
 
 	/// <summary>Initializes a new <see cref="TabViewer"/> for the given project, building the scroll layout, side buttons, toolbar, and any registered plugins.</summary>
 	public TabViewer(Project project, bool isWindowed = true)
@@ -162,6 +172,29 @@ public class TabViewer : Grid
 		Toolbar.ButtonLink?.AddAsync(CreateLinkAsync);
 		Toolbar.ButtonImport?.AddAsync(ImportClipboardLinkAsync);
 		Children.Add(Toolbar);
+	}
+
+	/// <summary>Hides the navigation toolbar, its background strip, and the side scroll buttons.</summary>
+	public void HideToolbar()
+	{
+		foreach (Control child in Children)
+		{
+			if (child is TabViewerToolbar || child is TabControlToolbar)
+			{
+				child.IsVisible = false;
+			}
+		}
+
+		foreach (Control child in BottomGrid.Children)
+		{
+			if (child is ScrollViewer)
+				continue;
+
+			child.IsVisible = false;
+		}
+
+		ScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+		ScrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
 	}
 
 	/// <summary>Reloads the link manager and the root tab view.</summary>
@@ -446,11 +479,64 @@ public class TabViewer : Grid
 		}
 
 		TabView = new TabView(tabInstance);
+
+		_childrenLoadedTcs = new TaskCompletionSource();
+		_pendingChildrenCount = 1;
+		SubscribeChildrenLoaded(TabView);
+
 		TabView.Load();
 
 		ContentGrid.Children.Add(TabView);
 
 		return tabInstance;
+	}
+
+	/// <summary>
+	/// Returns a task that completes when all tab views up to <see cref="MaxTabDepth"/> have
+	/// finished creating their child controls. Call after <see cref="LoadTab"/> to await the
+	/// full render tree before capturing a frame.
+	/// </summary>
+	public Task ChildrenLoadedAsync => _childrenLoadedTcs?.Task ?? Task.CompletedTask;
+
+	private void SubscribeChildrenLoaded(TabView tabView)
+	{
+		tabView.OnChildrenLoaded += TabView_OnChildrenLoaded;
+	}
+
+	private void TabView_OnChildrenLoaded(object? sender, EventArgs e)
+	{
+		if (sender is not TabView tabView)
+			return;
+
+		tabView.OnChildrenLoaded -= TabView_OnChildrenLoaded;
+
+		// Subscribe to any child TabViews that were just created.
+		// ChildTabInstances is keyed by the Control (TabView) with TabInstance as the value.
+		foreach (var (control, childInstance) in tabView.Instance.ChildTabInstances)
+		{
+			if (childInstance.Depth < (MaxTabDepth ?? int.MaxValue))
+			{
+				_pendingChildrenCount++;
+				if (control is TabView childTabView)
+				{
+					SubscribeChildrenLoaded(childTabView);
+				}
+				else
+				{
+					DecrementPending();
+				}
+			}
+		}
+
+		DecrementPending();
+	}
+
+	private void DecrementPending()
+	{
+		if (Interlocked.Decrement(ref _pendingChildrenCount) == 0)
+		{
+			_childrenLoadedTcs?.TrySetResult();
+		}
 	}
 
 	/// <summary>Pins the content grid's minimum width to prevent the scroll viewer jumping left during layout fluctuations.</summary>

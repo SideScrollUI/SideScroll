@@ -51,6 +51,14 @@ public class HeadlessTabViewer(Project project, HeadlessTabOptions? options = nu
 	public async Task<HeadlessTabView> LoadAndTraverseAsync(Call call, ITab tab, Bookmark? bookmark = null)
 	{
 		HeadlessTabView rootView = await LoadTabAsync(call, tab);
+
+		// Enforce the optional time budget: cancel the task's token after MaxTime. Sub-task timers
+		// created during traversal share this token source, so the whole traversal observes it.
+		if (Options.MaxTime is { } maxTime)
+		{
+			call.TaskInstance?.TokenSource.CancelAfter(maxTime);
+		}
+
 		if (bookmark != null)
 		{
 			await rootView.SelectBookmarkItemsRecursiveAsync(call, bookmark.TabBookmark, Options.MaxDepth);

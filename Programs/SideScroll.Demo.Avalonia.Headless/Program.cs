@@ -1,8 +1,10 @@
 using Avalonia;
 using Avalonia.Headless;
 using Avalonia.Media.Imaging;
-using Avalonia.Threading;
+using SideScroll.Avalonia.Controls.Viewer;
 using SideScroll.Avalonia.Samples;
+using SideScroll.Avalonia.Samples.Tabs;
+using SideScroll.Tabs;
 
 namespace SideScroll.Demo.Avalonia.Headless;
 
@@ -15,14 +17,19 @@ internal static class Program
 			.UseHeadless(new AvaloniaHeadlessPlatformOptions { UseHeadlessDrawing = false })
 			.SetupWithoutStarting();
 
-		SampleMainWindow window = new();
-		window.Show();
-		Dispatcher.UIThread.RunJobs();
+		var project = Project.Load(SampleProjectSettings.Default);
 
-		WriteableBitmap? bitmap = window.CaptureRenderedFrame();
+		Bitmap bitmap = AvaloniaHeadlessCapture.RenderAndCrop(
+			project,
+			tab: new TabAvaloniaSamples(),
+			captureFrame: window => window.CaptureRenderedFrame(),
+			minTabDepth: 1,
+			maxTabDepth: 3,
+			maxWidth: 4000,
+			maxHeight: 1000);
 
 		string outputPath = Path.Combine(AppContext.BaseDirectory, "output.png");
-		bitmap?.Save(outputPath);
+		bitmap.Save(outputPath);
 
 		Console.WriteLine($"Saved bitmap to: {outputPath}");
 	}

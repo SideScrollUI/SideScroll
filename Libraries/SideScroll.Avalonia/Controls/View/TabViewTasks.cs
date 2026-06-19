@@ -2,7 +2,6 @@ using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Threading;
 using SideScroll.Avalonia.Controls.DataGrids;
-using SideScroll.Logs;
 using SideScroll.Tabs;
 using SideScroll.Tasks;
 using System.Collections;

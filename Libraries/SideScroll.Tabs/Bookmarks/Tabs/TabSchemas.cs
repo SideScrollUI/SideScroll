@@ -33,6 +33,7 @@ public class TabSchemas(ITab? rootTab = null, HeadlessTabOptions? options = null
 	public HeadlessTabOptions Options { get; set; } = options ?? new()
 	{
 		AllowedElementTypes = [typeof(IListItem)],
+		MaxTime = TimeSpan.FromSeconds(30),
 	};
 
 	/// <summary>

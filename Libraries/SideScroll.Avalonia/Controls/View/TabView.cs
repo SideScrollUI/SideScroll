@@ -101,6 +101,16 @@ public class TabView : Grid, IDisposable
 	private TabSplitGrid? _tabChildControls;
 	private Panel? _fillerPanel; // GridSplitter doesn't work without control on right side
 
+	/// <summary>Raised once when this tab's child controls have been created and laid out for the first time.</summary>
+	public event EventHandler? OnChildrenLoaded;
+
+	/// <summary>
+	/// Gets the rendered width of this tab column's own content panel, excluding the GridSplitter
+	/// and any child-column or filler panel. Use this as the right-hand crop boundary to avoid
+	/// including resize chrome in headless screenshots.
+	/// </summary>
+	public double ColumnBoundaryWidth => _containerGrid?.ColumnDefinitions[0].ActualWidth ?? 0;
+
 	private Size _arrangeOverrideFinalSize;
 	private bool _childControlsFinishedLoading;
 	private bool _isDragging;
@@ -358,11 +368,11 @@ public class TabView : Grid, IDisposable
 	{
 		if (TabViewSettings.Width != null)
 		{
-			_parentContainerBorder!.Width = _containerGrid!.ColumnDefinitions[0].ActualWidth;
+			_parentContainerBorder!.Width = ColumnBoundaryWidth;
 		}
 
 		// force the width to update (Grid Auto Size caching problem?
-		double width = _containerGrid!.ColumnDefinitions[0].ActualWidth;
+		double width = ColumnBoundaryWidth;
 		TabViewSettings.Width = width;
 		_parentContainerBorder!.Width = width;
 
@@ -384,7 +394,7 @@ public class TabView : Grid, IDisposable
 		InvalidateMeasure();
 
 		//TabViewSettings.SplitterDistance = (int)Math.Ceiling(e.Vector.Y); // backwards
-		double width = (int)_containerGrid!.ColumnDefinitions[0].ActualWidth;
+		double width = (int)ColumnBoundaryWidth;
 
 		SetSplitterDistance(width);
 	}
@@ -737,6 +747,9 @@ public class TabView : Grid, IDisposable
 			if (Instance.Depth > 50)
 				return false;
 
+			if (TabViewer.Instance?.MaxTabDepth is { } maxDepth && Instance.Depth >= maxDepth)
+				return false;
+
 			if (!_tabParentControls!.IsArrangeValid)
 				return false;
 
@@ -844,6 +857,7 @@ public class TabView : Grid, IDisposable
 		_updateChildControls = false;
 
 		_childControlsFinishedLoading = true;
+		OnChildrenLoaded?.Invoke(this, EventArgs.Empty);
 
 		TabViewer.Instance!.SetMinScrollOffset();
 

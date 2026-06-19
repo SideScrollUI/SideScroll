@@ -901,6 +901,21 @@ public class HeadlessTabViewerTests : BaseTest
 	}
 
 	[Test, Description(
+		"A cancelled traversal (e.g. the MaxTime budget elapsed) stops without exploring children.")]
+	public async Task LoadAndTraverseAsync_Cancelled_StopsBeforeExploringChildren()
+	{
+		var viewer = new HeadlessTabViewer(new Project());
+
+		using CallTimer timer = Call.StartTask("Schema");
+		timer.TaskInstance!.TokenSource.Cancel(); // simulate the time budget elapsing
+
+		HeadlessTabView root = await viewer.LoadAndTraverseAsync(timer, BuildChain(3));
+
+		Assert.That(root.ChildViews, Is.Empty,
+			"Cancellation should stop the traversal before any children are explored.");
+	}
+
+	[Test, Description(
 		"When two rows share a label, the bookmark's RowIndex disambiguates which one is followed.")]
 	public async Task LoadAndTraverseAsync_DuplicateLabels_DisambiguatedByRowIndex()
 	{
