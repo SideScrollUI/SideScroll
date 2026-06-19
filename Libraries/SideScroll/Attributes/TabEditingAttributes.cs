@@ -234,6 +234,41 @@ public class HeaderAttribute(string text) : Attribute
 }
 
 /// <summary>
+/// Marks the property as part of a required group, where at least one member of the group must have a value.
+/// </summary>
+/// <param name="groupName">The name shared by all properties belonging to the same required group.</param>
+/// <remarks>
+/// <b>Apply to:</b> Properties.
+/// <para>
+/// Use when one of several alternative inputs must be provided (for example, a phone number or an email).
+/// A TabForm validates the group as a whole: if every property sharing the same
+/// <paramref name="groupName"/> is empty, all of them are flagged. Properties with different group names
+/// are validated independently. Combine with <see cref="System.ComponentModel.DataAnnotations.RequiredAttribute"/>
+/// only when an individual field is always required regardless of the group.
+/// </para>
+/// </remarks>
+/// <example>
+/// <code>
+/// public class Contact
+/// {
+///     [RequiredGroup("ContactMethod")]
+///     public string? Email { get; set; }
+///
+///     [RequiredGroup("ContactMethod")]
+///     public string? Phone { get; set; }
+/// }
+/// </code>
+/// </example>
+[AttributeUsage(AttributeTargets.Property)]
+public class RequiredGroupAttribute(string groupName = "") : Attribute
+{
+	/// <summary>
+	/// The name shared by all properties belonging to the same required group.
+	/// </summary>
+	public string GroupName => groupName;
+}
+
+/// <summary>
 /// Displays a separator line before this property in toolbars and forms.
 /// </summary>
 /// <remarks>

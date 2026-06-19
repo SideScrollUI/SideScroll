@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added TabDateTimePicker Button Flyouts
 - Added Window Close Button Theming
 - Added image rotation (Rotate Left / Rotate Right) toolbar buttons to TabFileImage, with RotateLeft/RotateRight icons
+- Added [TabRequiredGroup] for TabForm to require at least one value to be filled in
 
 ### Fixed
 - Fixed DataGrid not updating default selections for new items

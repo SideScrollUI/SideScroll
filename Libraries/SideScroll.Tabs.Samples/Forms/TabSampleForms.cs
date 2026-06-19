@@ -9,5 +9,6 @@ public class TabSampleForms
 	public static TabSampleFormDataTabs DataTabs => new();
 	public static TabSampleFormTasks Tasks => new();
 	public static TabSampleFormUpdating Updating => new();
+	public static TabSampleFormValidation Validation => new();
 	public static TabSampleTodos Todo => new();
 }

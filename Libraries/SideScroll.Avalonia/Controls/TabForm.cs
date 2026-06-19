@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
 using SideScroll.Attributes;
@@ -385,16 +386,26 @@ public class TabForm : Border, IValidationControl
 	/// <summary>Validates all bound property controls and highlights any that fail validation.</summary>
 	public void Validate()
 	{
+		// A [RequiredGroup] is satisfied when at least one member has a value, so the whole
+		// group must be evaluated before any individual control in it can be flagged.
+		Dictionary<string, bool> requiredGroupsSatisfied = GetRequiredGroupResults();
+
 		bool valid = true;
-		foreach (var propertyControl in _propertyControls)
+		foreach (var (property, control) in _propertyControls)
 		{
-			if (!AvaloniaUtils.ValidateControl(propertyControl.Key, propertyControl.Value))
+			bool controlValid = AvaloniaUtils.ValidateControl(property, control);
+
+			if (property.GetCustomAttribute<RequiredGroupAttribute>() is { } groupAttribute &&
+				!requiredGroupsSatisfied[groupAttribute.GroupName])
 			{
-				if (valid)
-				{
-					propertyControl.Value.Focus();
-					valid = false;
-				}
+				DataValidationErrors.SetError(control, new DataValidationException("Required"));
+				controlValid = false;
+			}
+
+			if (!controlValid && valid)
+			{
+				control.Focus();
+				valid = false;
 			}
 		}
 
@@ -402,5 +413,20 @@ public class TabForm : Border, IValidationControl
 		{
 			throw new ValidationException("Invalid Values");
 		}
+	}
+
+	// Maps each [RequiredGroup] name to whether at least one of its members has a value.
+	private Dictionary<string, bool> GetRequiredGroupResults()
+	{
+		Dictionary<string, bool> results = [];
+		foreach (var (property, _) in _propertyControls)
+		{
+			if (property.GetCustomAttribute<RequiredGroupAttribute>() is not { } groupAttribute)
+				continue;
+
+			bool hasValue = AvaloniaUtils.HasRequiredValue(property);
+			results[groupAttribute.GroupName] = results.GetValueOrDefault(groupAttribute.GroupName) || hasValue;
+		}
+		return results;
 	}
 }

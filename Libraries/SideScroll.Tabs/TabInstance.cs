@@ -672,6 +672,13 @@ public class TabInstance : IDisposable
 
 		Model = model;
 		IsLoaded = true;
+
+		// This path intentionally skips LoadUI(); warn if the tab relies on it so the missing
+		// UI-thread initialization isn't silently lost.
+		if (HasLoadUIMethod)
+		{
+			call.Log.AddWarning("Skipped LoadUI during background load", new Tag("Tab", GetType().Name));
+		}
 	}
 
 	/// <summary>Reloads the tab model (or reuses the static model) and re-runs preload and load, effectively refreshing the tab's data without tearing down the parent hierarchy.</summary>

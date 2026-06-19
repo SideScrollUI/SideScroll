@@ -201,13 +201,10 @@ public static class AvaloniaUtils
 	{
 		dynamic? value = listProperty.Value;
 
-		if (listProperty.HasCustomAttribute<RequiredAttribute>())
+		if (listProperty.HasCustomAttribute<RequiredAttribute>() && !HasRequiredValue(listProperty))
 		{
-			if (value == null || (value is string text && text.Length == 0))
-			{
-				DataValidationErrors.SetError(control, new DataValidationException("Required"));
-				return false;
-			}
+			DataValidationErrors.SetError(control, new DataValidationException("Required"));
+			return false;
 		}
 
 		if (value == null) return true;
@@ -239,6 +236,16 @@ public static class AvaloniaUtils
 		}
 
 		return true;
+	}
+
+	/// <summary>
+	/// Determines whether a property has a value present for [Required] validation
+	/// (non-null, and non-empty for strings).
+	/// </summary>
+	public static bool HasRequiredValue(ListProperty listProperty)
+	{
+		dynamic? value = listProperty.Value;
+		return value is not null && !(value is string text && text.Length == 0);
 	}
 
 	/// <summary>
