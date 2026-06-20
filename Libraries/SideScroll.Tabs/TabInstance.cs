@@ -630,7 +630,9 @@ public class TabInstance : IDisposable
 	}
 
 	private bool HasLoadMethod => GetDerivedLoadMethod(nameof(Load), 2) != null;
-	private bool HasLoadUIMethod => GetDerivedLoadMethod(nameof(LoadUI), 2) != null;
+
+	/// <summary>Whether a derived class overrides <see cref="LoadUI"/> (UI-thread initialization).</summary>
+	internal bool HasLoadUIMethod => GetDerivedLoadMethod(nameof(LoadUI), 2) != null;
 
 	/// <summary>
 	/// Override this method to load the tab's data into the model. Called on a background thread

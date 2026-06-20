@@ -11,8 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Headless Tab Viewer for basic tab navigation and tab schema generation
 - Added Reflection Cache for Tab Attributes
 - Added docs for Json Bookmark Schema
-- Added Program for SideScroll.Demo.Avalonia.Headless
-- Added AvaloniaHeadlessCapture to allow Capturing Specific Tabs
+- Added Sample Program for SideScroll.Demo.Avalonia.Headless
+- Added AvaloniaHeadlessCapture to allow Capturing specific Tabs
 - Added ItemCollectionUI exception handling for InsertItemCallback and RemoveItemCallback
 - Added TabDateTimePicker Button Flyouts
 - Added Window Close Button Theming
@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed ShowTasks not showing the TabInstance's TaskInstance when required
 
 ### Changed
-- Updated Bookmark Changed to [PrivateData]
+- Updated Bookmark.Changed to [PrivateData]
 - Renamed `TabModel.AddData()` to `AddItems()` and deprecated the old name
 - Deprecated the `TabModel.ItemLists` setter — use `AddItems()` instead (the getter and list remain mutable)
 

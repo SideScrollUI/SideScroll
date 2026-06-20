@@ -100,6 +100,13 @@ public class HeadlessTabView(TabInstance instance, string label)
 			call.Log.Add(e);
 		}
 
+		// Headless traversal never calls LoadUI(); warn if the tab relies on it so the missing
+		// UI-thread initialization isn't silently lost.
+		if (Instance.HasLoadUIMethod)
+		{
+			call.Log.AddWarning("Skipped LoadUI during headless load", new Tag("Tab", Instance.GetType().Name));
+		}
+
 		// Sync Label with any name the Load/LoadAsync set on the model
 		Label = Model.Name;
 	}
