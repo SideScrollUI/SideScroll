@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed ShowTasks not showing the TabInstance's TaskInstance when required
 
 ### Changed
+- Restructured the Settings tab into General / Themes / Data sub-tabs, moved Reset/Save into General, and split Data into Settings (saving) and Repositories (viewing/resetting)
 - Updated Bookmark.Changed to [PrivateData]
 - Renamed `TabModel.AddData()` to `AddItems()` and deprecated the old name
 - Deprecated the `TabModel.ItemLists` setter — use `AddItems()` instead (the getter and list remain mutable)

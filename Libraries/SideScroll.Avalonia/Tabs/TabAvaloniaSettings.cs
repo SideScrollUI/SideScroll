@@ -1,13 +1,10 @@
-using SideScroll.Attributes;
 using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Themes.Tabs;
 using SideScroll.Extensions;
-using SideScroll.Resources;
 using SideScroll.Serialize;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Settings;
-using SideScroll.Tabs.Toolbar;
 using SideScroll.Tasks;
 using SideScroll.Time;
 
@@ -19,52 +16,30 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 {
 	public TabInstance Create() => new Instance();
 
-	public class Toolbar : TabToolbar
-	{
-		public ToolButton ButtonReset { get; } = new("Reset", Icons.Svg.Reset)
-		{
-			Flyout = new ConfirmationFlyoutConfig("Are you sure you want to reset the settings?", "Reset"),
-		};
-
-		[Separator]
-		public ToolButton ButtonSave { get; } = new("Save", Icons.Svg.Save, isDefault: true);
-	}
-
 	private class Instance : TabInstance
 	{
-		public T? CustomUserSettings;
+		// Keep the concrete settings type so saving/loading use the same DataRepo key (typeof(T))
+		private T? _customUserSettings;
 
 		public override void LoadUI(Call call, TabModel model)
 		{
-			model.MaxDesiredWidth = 500;
-
-			Toolbar toolbar = new();
-			toolbar.ButtonReset.Action = Reset;
-			toolbar.ButtonSave.Action = Save;
-			model.AddObject(toolbar);
-
-			LoadCustomSettings();
-			model.AddForm(CustomUserSettings!);
+			// A single cloned copy is shared across the child tabs so that saving from
+			// either General or Data persists all pending edits
+			_customUserSettings = LoadCustomSettings();
 
 			model.Items = new List<ListItem>
 			{
+				new("General", new TabSettingsGeneral(_customUserSettings, Save, Reset)),
 				new("Themes", new TabAvaloniaThemes()),
-				new("Data", new TabDataRepoSettings(CustomUserSettings!)),
+				new("Data", new TabDataRepoSettings(_customUserSettings, Save)),
 			};
 		}
 
-		private void LoadCustomSettings()
+		private T LoadCustomSettings()
 		{
-			if (Project.UserSettings.DeepClone() is T customUserSettings)
-			{
-				CustomUserSettings = customUserSettings;
-			}
-			else
-			{
-				CustomUserSettings = new();
-			}
-
-			CustomUserSettings.Theme ??= SideScrollTheme.ThemeVariant.ToString();
+			T customUserSettings = Project.UserSettings.DeepClone() as T ?? new T();
+			customUserSettings.Theme ??= SideScrollTheme.ThemeVariant.ToString();
+			return customUserSettings;
 		}
 
 		private void Reset(Call call)
@@ -75,8 +50,8 @@ public class TabAvaloniaSettings<T> : ITab where T : UserSettings, new()
 
 		private void Save(Call call)
 		{
-			Data.App.Save(CustomUserSettings!);
-			Project.UserSettings = CustomUserSettings!.DeepClone(call);
+			Data.App.Save(_customUserSettings!);
+			Project.UserSettings = _customUserSettings!.DeepClone(call);
 
 			TimeZoneView.Current = Project.UserSettings.TimeZone;
 			DateTimeExtensions.DefaultFormatType = Project.UserSettings.TimeFormat;
