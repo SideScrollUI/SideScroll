@@ -15,9 +15,10 @@ public class TabSampleFilter3LevelData : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			model.Items = TabSampleFilterColorData.CreateDataItems();
-			model.MaxSearchDepth = 2;
 			model.ShowSearch = true;
+			model.MaxSearchDepth = 2;
+
+			model.AddItems(TabSampleFilterColorData.CreateDataItems());
 		}
 	}
 }

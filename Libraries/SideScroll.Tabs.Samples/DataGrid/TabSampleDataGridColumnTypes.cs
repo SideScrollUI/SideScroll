@@ -34,7 +34,7 @@ public class TabSampleDataGridColumnTypes : ITab
 				testItem.LongString += i; // make as a unique string
 				items.Add(testItem);
 			}
-			model.Items = items;
+			model.AddItems(items);
 		}
 	}
 

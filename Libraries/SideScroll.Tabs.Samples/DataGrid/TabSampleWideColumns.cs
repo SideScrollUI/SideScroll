@@ -15,7 +15,7 @@ public class TabSampleWideColumns : ITab
 		{
 			_items = [];
 			AddEntries();
-			model.Items = _items;
+			model.AddItems(_items);
 		}
 
 		private void AddEntries()

@@ -33,7 +33,7 @@ public class TabCustomControl : ITab
 			model.AddObject(_toolbar);
 
 			_planets ??= [.. SolarSystem.Sample.Planets];
-			model.Items = _planets;
+			model.AddItems(_planets);
 		}
 
 		private void New(Call call)

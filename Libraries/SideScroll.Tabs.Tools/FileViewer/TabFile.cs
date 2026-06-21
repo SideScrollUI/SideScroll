@@ -147,7 +147,7 @@ public class TabFile(FileView fileView) : ITab
 			}
 			items.Add(new ListItem("File Info", new FileInfo(path)));
 
-			model.Items = items;
+			model.AddItems(items);
 		}
 
 		private void OpenFolder(Call call)

@@ -14,7 +14,7 @@ namespace SideScroll.Tabs.Bookmarks.Tabs;
 /// Exposed under the "Schema" entry in <see cref="TabLinks"/>.
 /// </summary>
 /// <remarks>Initializes a new <see cref="TabSchemas"/> with an optional root tab to explore.</remarks>
-public class TabSchemas(ITab? rootTab = null, HeadlessTabOptions? options = null) : ITab
+public class TabSchemas(ITab? rootTab = null, HeadlessTabOptions? options = null, Bookmark? bookmark = null) : ITab
 {
 	/// <summary>
 	/// Gets or sets the default root tab explored when exporting the schema.
@@ -41,7 +41,7 @@ public class TabSchemas(ITab? rootTab = null, HeadlessTabOptions? options = null
 	/// bookmark selects are followed, stopping at its leaf nodes, instead of expanding the
 	/// full hierarchy.
 	/// </summary>
-	public Bookmark? Bookmark { get; set; }
+	public Bookmark? Bookmark { get; set; } = bookmark;
 
 	/// <summary>Creates a new tab instance for <see cref="TabSchemas"/>.</summary>
 	public TabInstance Create() => new Instance(this);

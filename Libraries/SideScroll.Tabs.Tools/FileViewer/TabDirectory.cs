@@ -74,11 +74,11 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 
 			if (directories.Count == nodes.Count)
 			{
-				model.Items = new List<IDirectoryView>(directories);
+				model.AddItems(new List<IDirectoryView>(directories));
 			}
 			else
 			{
-				model.Items = nodes;
+				model.AddItems(nodes);
 			}
 		}
 

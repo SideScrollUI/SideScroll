@@ -39,7 +39,7 @@ public class TabZipFile : ITab, IFileTypeView
 			try
 			{
 				List<ZipNodeView> nodes = LoadZipContents(call, tab.Path);
-				model.Items = nodes;
+				model.AddItems(nodes);
 			}
 			catch (Exception ex)
 			{
@@ -264,11 +264,11 @@ public class TabZipDirectory(ZipDirectoryView directoryView) : ITab
 
 			if (files.Count == 0)
 			{
-				model.Items = new List<ZipDirectoryView>(directories);
+				model.AddItems(new List<ZipDirectoryView>(directories));
 			}
 			else
 			{
-				model.Items = nodes;
+				model.AddItems(nodes);
 			}
 		}
 

@@ -100,17 +100,22 @@ public class HeadlessTabView(TabInstance instance, string label)
 			call.Log.Add(e);
 		}
 
-		// Headless traversal never calls LoadUI(); warn if the tab relies on it so the missing
-		// UI-thread initialization isn't silently lost.
+		// Sync Label with any name the Load/LoadAsync set on the model
+		Label = Model.Name;
+	}
+
+	/// <summary>
+	/// Headless traversal never calls LoadUI(); warn if the tab relies on it so the missing
+	/// UI-thread initialization isn't silently lost. Logged under the tab's own timer.
+	/// </summary>
+	private void WarnIfLoadUISkipped(Call call)
+	{
 		if (Instance.HasLoadUIMethod)
 		{
 			call.Log.AddWarning("Skipped LoadUI during headless load",
 				new Tag("Label", Label),
 				new Tag("Tab", TabTypeName));
 		}
-
-		// Sync Label with any name the Load/LoadAsync set on the model
-		Label = Model.Name;
 	}
 
 	/// <summary>
@@ -180,6 +185,8 @@ public class HeadlessTabView(TabInstance instance, string label)
 			new Tag("Label", Label),
 			new Tag("Tab", TabTypeName));
 
+		WarnIfLoadUISkipped(callTimer);
+
 		if (maxDepth <= 0)
 		{
 			// Stopped before expanding: flag as truncated if there were rows we could have expanded.
@@ -216,6 +223,8 @@ public class HeadlessTabView(TabInstance instance, string label)
 		using var callTimer = call.Timer("Loading Tab with Bookmark",
 			new Tag("Label", Label),
 			new Tag("Tab", TabTypeName));
+
+		WarnIfLoadUISkipped(callTimer);
 
 		if (maxDepth <= 0)
 		{

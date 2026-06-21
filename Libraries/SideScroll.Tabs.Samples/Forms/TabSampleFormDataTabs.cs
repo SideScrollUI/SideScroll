@@ -71,7 +71,7 @@ public class TabSampleFormDataTabs : ITab
 			{
 				EnableDeleting = true
 			};
-			model.Items = dataCollection.Items;
+			model.AddItems(dataCollection.Items);
 		}
 
 		private void Reset(Call call)

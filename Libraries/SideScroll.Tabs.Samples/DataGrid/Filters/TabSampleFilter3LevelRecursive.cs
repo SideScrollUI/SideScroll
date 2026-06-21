@@ -21,12 +21,13 @@ public class TabSampleFilter3LevelRecursive : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			model.Items = TabSampleFilterColorData.CreateGroups();
 			// Depth 4 is needed to reach FilterColorVariant through the recursive ITab
 			// indirection: FilterColorGroup → (ListMembers) → Shades list → FilterColorShade
 			// → (ListMembers) → Variants list → FilterColorVariant.ToString().
 			model.MaxSearchDepth = 4;
 			model.ShowSearch = true;
+
+			model.AddItems(TabSampleFilterColorData.CreateGroups());
 		}
 	}
 }
@@ -52,11 +53,12 @@ public class FilterColorGroup(string name, List<FilterColorShade> shades) : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			model.CustomSettingsPath = group.Name;
-			model.Items = group.Shades;
 			// Depth 2 so the inherited parent filter can reach FilterColorVariant:
 			// FilterColorShade → (ListMembers) → Variants list → FilterColorVariant.ToString().
 			model.MaxSearchDepth = 2;
 			model.ShowSearch = true;
+
+			model.AddItems(group.Shades);
 		}
 	}
 }
@@ -82,8 +84,9 @@ public class FilterColorShade(string name, List<FilterColorVariant> variants) : 
 		public override void Load(Call call, TabModel model)
 		{
 			model.CustomSettingsPath = shade.Name;
-			model.Items = shade.Variants;
 			model.ShowSearch = true;
+
+			model.AddItems(shade.Variants);
 		}
 	}
 }

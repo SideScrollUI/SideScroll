@@ -29,7 +29,7 @@ public class TabSampleFormValidation : ITab
 			toolbar.ButtonSave.Action = Save;
 			model.AddObject(toolbar);
 
-			model.Items = _items;
+			model.AddItems(_items);
 		}
 
 		private void Save(Call call)

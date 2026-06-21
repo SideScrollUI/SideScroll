@@ -16,6 +16,9 @@ public class TabSampleFilterPropertySearchable : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
+			model.ShowSearch = true;
+			model.MaxSearchDepth = 3;
+
 			string characters = "abcdefghijklmn";
 
 			List<PropertySearchableItem> items = [];
@@ -28,9 +31,7 @@ public class TabSampleFilterPropertySearchable : ITab
 				});
 			}
 
-			model.Items = items;
-			model.MaxSearchDepth = 3;
-			model.ShowSearch = true;
+			model.AddItems(items);
 		}
 	}
 }

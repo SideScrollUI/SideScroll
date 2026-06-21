@@ -111,7 +111,7 @@ public class TabSampleTodos : ITab
 			}
 
 			var dataCollection = new DataViewCollection<SampleTodoItem>(_dataRepoView);
-			model.Items = dataCollection.Items;
+			model.AddItems(dataCollection.Items);
 		}
 
 		private void Reset(Call call)

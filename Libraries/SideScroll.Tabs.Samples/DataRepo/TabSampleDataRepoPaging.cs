@@ -36,15 +36,15 @@ public class TabSampleDataRepoPaging : ITab
 				new TaskDelegate("Load All", LoadAll),
 			]);
 
-			LoadPageView(call);
-			model.Items = _sampleItems;
-
 			Toolbar toolbar = new();
 			toolbar.ButtonPrevious.Action = LoadPrevious;
 			toolbar.ButtonPrevious.IsEnabledBinding = new PropertyBinding(nameof(IDataPageView.HasPrevious), _pageView);
 			toolbar.ButtonNext.Action = LoadNext;
 			toolbar.ButtonNext.IsEnabledBinding = new PropertyBinding(nameof(IDataPageView.HasNext), _pageView);
 			model.AddObject(toolbar);
+
+			LoadPageView(call);
+			model.AddItems(_sampleItems);
 		}
 
 		private void LoadPageView(Call call)

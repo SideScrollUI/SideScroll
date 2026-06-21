@@ -16,7 +16,7 @@ public class TabSampleDataGridColumnOrdering : ITab
 				items.Add(item);
 			}
 
-			model.Items = items;
+			model.AddItems(items);
 		}
 	}
 

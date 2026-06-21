@@ -40,7 +40,7 @@ public class TabFileViewer(SelectFileDelegate? selectFileDelegate = null) : ITab
 				new("Local Data", new TabDirectory(Project.DataSettings.LocalDataPath!, fileSelectorOptions)),
 			]);
 
-			model.Items = items;
+			model.AddItems(items);
 		}
 	}
 }

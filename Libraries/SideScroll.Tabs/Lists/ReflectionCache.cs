@@ -193,33 +193,33 @@ internal static class ReflectionCache
 		// has a higher MetadataToken than the base property it hides.
 		// Track name → current sortKey so we can remove the earlier base entry.
 		var seenPropertyNames = new Dictionary<string, string>(properties.Length);
-		foreach (PropertyInfo p in properties)
+		foreach (PropertyInfo propertyInfo in properties)
 		{
-			MethodInfo getMethod = p.GetGetMethod(false)!;
+			MethodInfo getMethod = propertyInfo.GetGetMethod(false)!;
 			string sortKey = $"{getMethod.Module.Name}:{getMethod.MetadataToken:D10}";
 
-			if (seenPropertyNames.TryGetValue(p.Name, out string? prevKey))
+			if (seenPropertyNames.TryGetValue(propertyInfo.Name, out string? prevKey))
 			{
 				merged.Remove(prevKey);
 			}
 
-			seenPropertyNames[p.Name] = sortKey;
-			merged[sortKey] = p;
+			seenPropertyNames[propertyInfo.Name] = sortKey;
+			merged[sortKey] = propertyInfo;
 		}
 
 		// Methods — same duplicate-name handling.
 		var seenMethodNames = new Dictionary<string, string>(methods.Length);
-		foreach (MethodInfo m in methods)
+		foreach (MethodInfo methodInfo in methods)
 		{
-			string sortKey = $"{m.Module.Name}:{m.MetadataToken:D10}";
+			string sortKey = $"{methodInfo.Module.Name}:{methodInfo.MetadataToken:D10}";
 
-			if (seenMethodNames.TryGetValue(m.Name, out string? prevKey))
+			if (seenMethodNames.TryGetValue(methodInfo.Name, out string? prevKey))
 			{
 				merged.Remove(prevKey);
 			}
 
-			seenMethodNames[m.Name] = sortKey;
-			merged[sortKey] = m;
+			seenMethodNames[methodInfo.Name] = sortKey;
+			merged[sortKey] = methodInfo;
 		}
 
 		return merged.Select(kvp => (kvp.Key, kvp.Value)).ToArray();

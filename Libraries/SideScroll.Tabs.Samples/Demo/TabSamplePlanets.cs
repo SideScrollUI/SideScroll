@@ -65,7 +65,7 @@ public class TabSamplePlanets : ITab
 			}
 
 			var dataCollection = new DataViewCollection<Planet>(_dataRepoView);
-			model.Items = dataCollection.Items;
+			model.AddItems(dataCollection.Items);
 		}
 
 		private void Reset(Call call)

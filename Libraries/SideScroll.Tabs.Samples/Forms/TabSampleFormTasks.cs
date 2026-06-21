@@ -30,7 +30,7 @@ public class TabSampleFormTasks : ITab
 				new TaskDelegateAsync("Task with Sub Tasks", TaskCountAsync, true, true),
 			]);
 
-			model.Items = _items;
+			model.AddItems(_items);
 		}
 
 		private void Add(Call call)

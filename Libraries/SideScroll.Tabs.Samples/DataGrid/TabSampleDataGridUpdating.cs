@@ -32,7 +32,7 @@ public class TabSampleDataGridUpdating : ITab
 
 			_items = [];
 			AddEntries();
-			model.Items = _items;
+			model.AddItems(_items);
 		}
 
 		private void AddEntries()

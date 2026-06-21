@@ -13,6 +13,9 @@ public class TabSampleFilterNoSearchable : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
+			model.ShowSearch = true;
+			model.MaxSearchDepth = 1;
+
 			string characters = "abcdefghijklmn";
 
 			List<FilterItem> items = [];
@@ -24,9 +27,7 @@ public class TabSampleFilterNoSearchable : ITab
 				});
 			}
 
-			model.Items = items;
-			model.MaxSearchDepth = 1;
-			model.ShowSearch = true;
+			model.AddItems(items);
 		}
 	}
 }

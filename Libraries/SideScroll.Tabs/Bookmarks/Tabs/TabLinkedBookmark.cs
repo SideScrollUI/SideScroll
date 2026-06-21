@@ -7,6 +7,7 @@ using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Tabs.Bookmarks.Tabs;
 
+[PrivateData]
 public class TabLinkedBookmark(LinkedBookmark linkedBookmark, LinkCollection linkCollection) : ITabContainer
 {
 	public event EventHandler<EventArgs>? OnDelete;

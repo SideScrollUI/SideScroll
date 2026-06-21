@@ -27,7 +27,7 @@ public class TabSampleDataRepoCollection : ITab
 			]);
 
 			LoadSavedItems(call);
-			model.Items = _sampleItems;
+			model.AddItems(_sampleItems);
 		}
 
 		private void LoadSavedItems(Call call)

@@ -13,6 +13,8 @@ public class TabSampleDataGridCollectionSize : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
+			model.ReloadOnThemeChange = true;
+
 			model.AddActions([
 				new TaskAction("Add 100 Entries", () => AddEntries(100)),
 				new TaskAction("Add 1,000 Entries", () => AddEntries(1_000)),
@@ -25,8 +27,7 @@ public class TabSampleDataGridCollectionSize : ITab
 
 			_items = [];
 			AddEntries(20);
-			model.Items = _items;
-			model.ReloadOnThemeChange = true;
+			model.AddItems(_items);
 		}
 
 		private void AddEntries(int count)

@@ -59,7 +59,7 @@ public class TabAvaloniaThemes : ITab
 				EnableDeleting = true,
 			};
 			//dataCollection.DataRepoSecondary = DataShared.LoadView<AvaloniaThemeSettings>(call, "Themes", nameof(AvaloniaThemeSettings.Name));
-			model.Items = dataCollection.Items;
+			model.AddItems(dataCollection.Items);
 		}
 
 		private void New(Call call)

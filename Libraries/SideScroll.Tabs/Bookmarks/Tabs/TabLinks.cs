@@ -20,7 +20,7 @@ public class TabLinks : ITab
 #if DEBUG
 			items.Add(new("* Schema", new TabSchemas()));
 #endif
-			model.Items = items;
+			model.AddItems(items);
 		}
 	}
 }

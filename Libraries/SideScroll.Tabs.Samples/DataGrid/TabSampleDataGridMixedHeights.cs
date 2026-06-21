@@ -17,7 +17,7 @@ public class TabSampleDataGridMixedHeights : ITab
 				string text = i % 2 == 0 ? "aaa" : "b\nb\nb\nb\nb\nb\nb\nb\nb\nb\nb";
 				list.Add(new TestItem(i, text));
 			}
-			model.Items = list;
+			model.AddItems(list);
 		}
 	}
 

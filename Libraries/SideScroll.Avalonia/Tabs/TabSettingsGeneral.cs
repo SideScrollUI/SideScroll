@@ -29,7 +29,7 @@ public class TabSettingsGeneral(UserSettings userSettings, CallAction save, Call
 
 	private class Instance(TabSettingsGeneral tab) : TabInstance
 	{
-		public override void LoadUI(Call call, TabModel model)
+		public override void Load(Call call, TabModel model)
 		{
 			model.MaxDesiredWidth = 500;
 

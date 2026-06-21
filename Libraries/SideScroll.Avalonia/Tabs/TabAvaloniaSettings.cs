@@ -5,7 +5,6 @@ using SideScroll.Serialize;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Settings;
-using SideScroll.Tasks;
 using SideScroll.Time;
 
 namespace SideScroll.Avalonia.Tabs;

@@ -14,7 +14,7 @@ public class TabSampleObjectMembers : ITab
 		public override void Load(Call call, TabModel model)
 		{
 			model.ReloadOnThemeChange = true;
-			model.Items = ListMember.Create(_sampleMembers);
+			model.AddItems(ListMember.Create(_sampleMembers));
 		}
 	}
 }

@@ -33,7 +33,7 @@ public class HeadlessTabViewerTests : BaseTest
 			public override void Load(Call call, TabModel model)
 			{
 				model.Name = name;
-				model.Items = children.Cast<object>().ToList();
+				model.AddItems(children.Cast<object>().ToList());
 			}
 		}
 	}
@@ -630,7 +630,7 @@ public class HeadlessTabViewerTests : BaseTest
 			public override void Load(Call call, TabModel model)
 			{
 				model.Name = "Strings";
-				model.Items = new List<string> { "one", "two", "three" };
+				model.AddItems(new List<string> { "one", "two", "three" });
 			}
 		}
 	}
@@ -658,7 +658,7 @@ public class HeadlessTabViewerTests : BaseTest
 			public override void Load(Call call, TabModel model)
 			{
 				model.Name = "Rows";
-				model.Items = rows;
+				model.AddItems(rows);
 			}
 		}
 	}

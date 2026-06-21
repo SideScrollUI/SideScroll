@@ -14,7 +14,7 @@ public class TabFileBytes(string path) : ITab
 	{
 		public override void Load(Call call, TabModel model)
 		{
-			model.Items = ListByte.Load(tab.Path);
+			model.AddItems(ListByte.Load(tab.Path));
 		}
 	}
 }

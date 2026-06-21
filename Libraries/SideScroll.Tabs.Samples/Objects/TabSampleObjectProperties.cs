@@ -22,7 +22,7 @@ public class TabSampleObjectProperties : ITab
 				new TaskDelegate("Toggle", Toggle),
 			]);
 
-			model.Items = ListProperty.Create(_propertyTest);
+			model.AddItems(ListProperty.Create(_propertyTest));
 		}
 
 		private void Toggle(Call call)
