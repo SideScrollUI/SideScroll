@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Added Headless Tab Viewer for basic tab navigation and tab schema generation
+- Added [Explorable] attribute to override the tab schema element type allowlist per type
+- Added Task Tab to allow copying the Task log to the clipboard as json
 - Added Reflection Cache for Tab Attributes
 - Added docs for Json Bookmark Schema
 - Added Sample Program for SideScroll.Demo.Avalonia.Headless

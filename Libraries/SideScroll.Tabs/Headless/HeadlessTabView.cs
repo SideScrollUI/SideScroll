@@ -104,7 +104,9 @@ public class HeadlessTabView(TabInstance instance, string label)
 		// UI-thread initialization isn't silently lost.
 		if (Instance.HasLoadUIMethod)
 		{
-			call.Log.AddWarning("Skipped LoadUI during headless load", new Tag("Tab", Instance.GetType().Name));
+			call.Log.AddWarning("Skipped LoadUI during headless load",
+				new Tag("Label", Label),
+				new Tag("Tab", TabTypeName));
 		}
 
 		// Sync Label with any name the Load/LoadAsync set on the model
@@ -161,6 +163,12 @@ public class HeadlessTabView(TabInstance instance, string label)
 	private static bool IsCancelled(Call call) => call.TaskInstance?.CancelToken.IsCancellationRequested == true;
 
 	/// <summary>
+	/// The type name used for logging: the <see cref="ITab"/> type when present, otherwise the
+	/// underlying model object's type (e.g. a <c>[ListItem]</c> aggregator like <c>TabSamples</c>).
+	/// </summary>
+	private string? TabTypeName => Instance.iTab?.GetType().Name ?? Model.Object?.GetType().Name;
+
+	/// <summary>
 	/// Recursively selects all items up to <paramref name="maxDepth"/> levels deep.
 	/// Each level calls <see cref="SelectAllItemsAsync"/> then recurses into every child.
 	/// </summary>
@@ -168,7 +176,9 @@ public class HeadlessTabView(TabInstance instance, string label)
 	/// <param name="maxDepth">Maximum number of levels to traverse (default 5).</param>
 	public async Task SelectAllItemsRecursiveAsync(Call call, int maxDepth = 5)
 	{
-		using var callTimer = call.Timer("Loading Tab", new Tag("Label", Label));
+		using var callTimer = call.Timer("Loading Tab",
+			new Tag("Label", Label),
+			new Tag("Tab", TabTypeName));
 
 		if (maxDepth <= 0)
 		{
@@ -203,7 +213,9 @@ public class HeadlessTabView(TabInstance instance, string label)
 	/// <param name="maxDepth">Maximum number of levels to traverse (default 5).</param>
 	public async Task SelectBookmarkItemsRecursiveAsync(Call call, TabBookmark tabBookmark, int maxDepth = 5)
 	{
-		using var callTimer = call.Timer("Loading Tab with Bookmark", new Tag("Label", Label));
+		using var callTimer = call.Timer("Loading Tab with Bookmark",
+			new Tag("Label", Label),
+			new Tag("Tab", TabTypeName));
 
 		if (maxDepth <= 0)
 		{

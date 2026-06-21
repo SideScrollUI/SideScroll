@@ -2,10 +2,12 @@ using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Threading;
 using SideScroll.Avalonia.Controls.DataGrids;
+using SideScroll.Avalonia.Tabs;
 using SideScroll.Tabs;
 using SideScroll.Tasks;
 using System.Collections;
 using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 
 namespace SideScroll.Avalonia.Controls.View;
 
@@ -29,8 +31,18 @@ public class TabViewTasks : Grid, IDisposable
 
 	private bool ShowTasks => TabInstance.TasksVisible;
 
-	/// <summary>Gets the list of currently selected items in the task data grid.</summary>
-	public IList SelectedItems => _tabDataGrid.SelectedItems;
+	/// <summary>
+	/// Gets the currently selected tasks wrapped as <see cref="TabTaskInstance"/> tabs, which display the
+	/// task's log and a toolbar button to copy the Call.Log as JSON. Wrappers are cached per task so the
+	/// child controls can be reused across selection changes.
+	/// </summary>
+	public IList SelectedItems =>
+		_tabDataGrid.SelectedItems
+			.OfType<TaskInstance>()
+			.Select(taskInstance => _tabTaskInstances.GetValue(taskInstance, ti => new TabTaskInstance(ti)))
+			.ToList();
+
+	private readonly ConditionalWeakTable<TaskInstance, TabTaskInstance> _tabTaskInstances = new();
 
 	private readonly TabDataGrid _tabDataGrid;
 

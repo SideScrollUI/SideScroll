@@ -44,7 +44,7 @@ public class TabSchema(ITab tab, HeadlessTabOptions options, Bookmark? bookmark 
 			using CallTimer schemaCall = call.StartTask("Exporting Schema",
 				new Tag("Tab", tab.GetType().Name),
 				new Tag("MaxDepth", options.MaxDepth),
-				new Tag("Filter", options.TabFilter));
+				new Tag("Filtered", options.TabFilter != null));
 
 			IsGenerating.Value = true;
 			try
