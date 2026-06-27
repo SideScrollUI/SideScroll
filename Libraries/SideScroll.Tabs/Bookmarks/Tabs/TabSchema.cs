@@ -23,7 +23,10 @@ public class TabSchema(ITab tab, HeadlessTabOptions options, Bookmark? bookmark 
 	/// </summary>
 	private static readonly AsyncLocal<bool> IsGenerating = new();
 
-	public TabInstance Create() => new Instance(tab, options, bookmark);
+	public TabInstance Create() => new Instance(tab, options, bookmark)
+	{
+		LoadingMessage = "Exporting schema...",
+	};
 
 	/// <summary>
 	/// Async tab instance that runs the headless traversal for one access level (Public or Private).

@@ -63,14 +63,8 @@ public static class ObjectExtensions
 
 			if (obj is TimeSpan timeSpan)
 			{
-				if (timeSpan.TotalSeconds < 1)
-				{
-					return timeSpan.Trim(TimeSpan.FromMilliseconds(1)).ToString("g");
-				}
-				else
-				{
-					return timeSpan.FormattedDecimal();
-				}
+				// Colon format with leading zero units trimmed (e.g. "0.416", "2:30", "1:23:45.12")
+				return timeSpan.FormattedShort();
 			}
 
 			if (type.IsEnum)

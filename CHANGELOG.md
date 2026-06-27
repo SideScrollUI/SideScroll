@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Restructured the Settings tab into General / Themes / Data sub-tabs, moved Reset/Save into General, and split Data into Settings (saving) and Repositories (viewing/resetting)
+- Updated `ObjectExtensions.Formatted()` TimeSpans to use `FormattedShort()`
 - Updated Bookmark.Changed to [PrivateData]
 - Renamed `TabModel.AddData()` to `AddItems()` and deprecated the old name
 - Deprecated the `TabModel.ItemLists` setter — use `AddItems()` instead (the getter and list remain mutable)
