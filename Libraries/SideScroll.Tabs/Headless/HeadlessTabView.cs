@@ -389,9 +389,9 @@ public class HeadlessTabView(TabInstance instance, string label)
 
 		if (value is ITab iTab)
 		{
-			// Apply the optional tab filter before expanding — e.g. skip [PrivateData] tabs
+			// Apply the optional type filter before expanding — e.g. skip [PrivateData] tabs
 			// for the public schema view.
-			if (Options.TabFilter != null && !Options.TabFilter(iTab))
+			if (Options.TabFilter != null && !Options.TabFilter(iTab.GetType()))
 				return null;
 
 			TabInstance childInstance = Instance.CreateChildTab(iTab);
@@ -407,6 +407,10 @@ public class HeadlessTabView(TabInstance instance, string label)
 		// Note: value may be null here if ITabCreatorAsync.CreateAsync returned null.
 		if (value != null && !value.GetType().IsPrimitive && value is not string)
 		{
+			// Apply the same type filter to plain aggregators (e.g. skip [ListItem, PrivateData]).
+			if (Options.TabFilter != null && !Options.TabFilter(value.GetType()))
+				return null;
+
 			var childInstance = new PlainObjectTabInstance(Instance.Project, label, value);
 			var childView = new HeadlessTabView(childInstance, label) { Options = Options };
 			await childView.LoadAsync(call);

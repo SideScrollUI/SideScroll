@@ -428,6 +428,39 @@ public class HeadlessTabViewerTests : BaseTest
 		Assert.That(child!.Label, Is.EqualTo("Controls"));
 	}
 
+	/// <summary>A [ListItem] aggregator that is also [PrivateData] — should be filtered from the public schema.</summary>
+	[ListItem, PrivateData]
+	private class PrivateListSection
+	{
+		public NamedTab Child { get; } = new("Child");
+	}
+
+	[Test, Description(
+		"The type filter (e.g. the public schema's [PrivateData] exclusion) applies to [ListItem] " +
+		"aggregators too, not just ITab tabs.")]
+	public async Task TryCreateChildViewAsync_TypeFilter_ExcludesPrivateDataListItem()
+	{
+		// Mirrors the public schema filter: skip [PrivateData] types.
+		var filteredViewer = new HeadlessTabViewer(new Project())
+		{
+			Options = new HeadlessTabOptions
+			{
+				TabFilter = type => !type.IsDefined(typeof(PrivateDataAttribute), inherit: true),
+			},
+		};
+		HeadlessTabView root = await filteredViewer.LoadTabAsync(Call, new NamedTab("Root"));
+
+		HeadlessTabView? filtered = await root.TryCreateChildViewAsync(Call, new ListItem("Secret", new PrivateListSection()));
+		Assert.That(filtered, Is.Null, "[ListItem, PrivateData] should be filtered out by the type filter.");
+
+		// Without a filter the same aggregator is expanded.
+		var openViewer = new HeadlessTabViewer(new Project());
+		HeadlessTabView openRoot = await openViewer.LoadTabAsync(Call, new NamedTab("Root"));
+
+		HeadlessTabView? expanded = await openRoot.TryCreateChildViewAsync(Call, new ListItem("Secret", new PrivateListSection()));
+		Assert.That(expanded, Is.Not.Null, "Without a filter the aggregator should still expand.");
+	}
+
 	// ─── Nested depth (SelectAllItemsAsync – one level) ───────────────────
 
 	[Test]

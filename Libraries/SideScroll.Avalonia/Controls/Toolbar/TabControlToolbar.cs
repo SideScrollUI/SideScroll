@@ -266,7 +266,7 @@ public class ToolbarTextBlock : TextBlock
 	public ToolbarTextBlock(string text = "")
 	{
 		Text = text;
-		Margin = new Thickness(6, 2, 6, 0);
+		Margin = new Thickness(5);
 		TextWrapping = TextWrapping.NoWrap;
 		VerticalAlignment = VerticalAlignment.Center;
 	}

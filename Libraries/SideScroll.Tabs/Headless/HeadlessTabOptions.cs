@@ -44,10 +44,12 @@ public record HeadlessTabOptions
 	public int MaxOtherChildren { get; init; } = 1;
 
 	/// <summary>
-	/// Optional filter applied to every <see cref="ITab"/> encountered during traversal.
-	/// Tabs for which the predicate returns <c>false</c> are not expanded.
+	/// Optional filter applied to the resolved type of every navigable value encountered during
+	/// traversal — tabs, <c>[ListItem]</c> aggregators, and other plain objects alike. Values whose
+	/// type returns <c>false</c> are not expanded (e.g. used to skip <c>[PrivateData]</c> types in
+	/// the public schema view).
 	/// </summary>
-	public Func<ITab, bool>? TabFilter { get; init; }
+	public Func<Type, bool>? TabFilter { get; init; }
 
 	/// <summary>
 	/// Optional allowlist of element types that may be fully expanded (up to

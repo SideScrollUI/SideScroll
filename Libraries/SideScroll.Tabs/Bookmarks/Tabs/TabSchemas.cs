@@ -47,11 +47,11 @@ public class TabSchemas(ITab? rootTab = null, HeadlessTabOptions? options = null
 	public TabInstance Create() => new Instance(this);
 
 	/// <summary>
-	/// Filter that accepts only tabs NOT decorated with <c>[PrivateData]</c>.
-	/// Used for the "Public" schema view.
+	/// Filter that accepts only types NOT decorated with <c>[PrivateData]</c>.
+	/// Used for the "Public" schema view (applies to tabs and <c>[ListItem]</c> aggregators alike).
 	/// </summary>
-	private static bool IsPublicTab(ITab iTab) =>
-		iTab.GetType().GetCustomAttribute<PrivateDataAttribute>() == null;
+	private static bool IsPublicType(Type type) =>
+		type.GetCustomAttribute<PrivateDataAttribute>() == null;
 
 	/// <summary>
 	/// The live tab instance for <see cref="TabSchemas"/>.
@@ -72,7 +72,7 @@ public class TabSchemas(ITab? rootTab = null, HeadlessTabOptions? options = null
 
 			model.Items = new List<ListItem>
 			{
-				new("Public",  new TabSchema(effectiveRootTab, tab.Options with { TabFilter = IsPublicTab }, tab.Bookmark)),
+				new("Public",  new TabSchema(effectiveRootTab, tab.Options with { TabFilter = IsPublicType }, tab.Bookmark)),
 				new("Private", new TabSchema(effectiveRootTab, tab.Options with { TabFilter = null }, tab.Bookmark)),
 			};
 		}

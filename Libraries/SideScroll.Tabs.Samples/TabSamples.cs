@@ -19,7 +19,7 @@ public class TabSamples
 	public static TabSampleObjects Objects => new();
 	public static TabSampleDataGrids DataGrid => new();
 	public static TabSampleForms Forms => new();
-	public static TabSampleToolbar Toolbar => new();
+	public static TabSampleToolbars Toolbars => new();
 	public static TabSampleActions Actions => new();
 	public static TabSampleLoading Loading => new();
 	public static TabSampleLogs Logs => new();

@@ -6,7 +6,7 @@ using SideScroll.Utilities;
 
 namespace SideScroll.Tabs.Samples;
 
-public class TabSampleToolbar : ITab
+public class TabSampleToolbars : ITab
 {
 	public TabInstance Create() => new Instance();
 
@@ -30,6 +30,11 @@ public class TabSampleToolbar : ITab
 		public string Label => "(Status)";
 	}
 
+	private class ToolbarInfoMessage : TabToolbar
+	{
+		public string Message => "Info message";
+	}
+
 	private class Instance : TabInstance
 	{
 		public override void Load(Call call, TabModel model)
@@ -39,6 +44,8 @@ public class TabSampleToolbar : ITab
 			toolbar.ButtonSearch.ActionAsync = SearchAsync;
 			toolbar.ButtonOpenBrowser.Action = OpenBrowser;
 			model.AddObject(toolbar);
+
+			model.AddObject(new ToolbarInfoMessage());
 		}
 
 		private void Refresh(Call call)
