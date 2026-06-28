@@ -56,11 +56,11 @@ public class TabSchema(ITab tab, HeadlessTabOptions options, Bookmark? bookmark 
 				HeadlessTabView rootView = await viewer.LoadAndTraverseAsync(schemaCall, tab, bookmark);
 				call.Log.Level = Logs.LogLevel.Info;
 
-				SchemaNode schemaNode = SchemaNode.From(rootView);
-				string json = JsonSerializer.Serialize(schemaNode, JsonConverters.PublicSerializerOptions);
+				SchemaDocument schemaDocument = SchemaDocument.From(rootView);
+				string json = JsonSerializer.Serialize(schemaDocument, JsonConverters.PublicSerializerOptions);
 				model.Items = new List<ListItem>
 				{
-					new("View", schemaNode.Objects),
+					new("View", schemaDocument),
 					new("Json", json),
 				};
 			}

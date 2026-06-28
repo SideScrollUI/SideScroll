@@ -79,6 +79,21 @@ duplicate-labelled or index-only rows are disambiguated.
 
 ## Schema shape
 
+The export is a `SchemaDocument`: the `Root` tree plus a `Definitions` map.
+
+| Field | Meaning |
+| --- | --- |
+| `Root` | The root tab's `SchemaNode`. |
+| `Definitions` | Map of deduplicated type schemas, keyed by type name. Omitted when empty. |
+
+### Deduplication
+
+Types whose structure is fully determined by the type — currently `[ListItem]` aggregators — are
+described **once** in `Definitions` and referenced by name elsewhere. A node that refers to a
+defined type sets `Ref` (the type name) instead of repeating its `Objects`; look it up directly in
+`Definitions[ref]`. This both shrinks the output and avoids re-walking self-recursive tabs (e.g.
+`TabSampleDemo.Copy => new()`). The mechanism is extensible — see `HeadlessTabView.DedupType`.
+
 ### `SchemaNode`
 
 | Field | Meaning |
@@ -86,6 +101,7 @@ duplicate-labelled or index-only rows are disambiguated.
 | `Label` | The tab name (not serialized; used for display). |
 | `TabRoot` | Tab is `[TabRoot]` (bookmarkable/linkable). Omitted when false. |
 | `DepthTruncated` | Traversal stopped here at `MaxDepth` with more to expand (vs. a real leaf). |
+| `Ref` | Name of a `Definitions` entry this node references instead of inlining its `Objects`. |
 | `Objects` | The tab's contents in order: display objects and item lists. |
 
 ### `SchemaObject` (polymorphic)

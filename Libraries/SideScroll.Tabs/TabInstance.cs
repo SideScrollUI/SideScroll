@@ -702,7 +702,7 @@ public class TabInstance : IDisposable
 			call.Log.Add(e);
 		}
 
-		var subTask = call.AddSubTask("Loading");
+		var subTask = call.AddSubTask("Loading Tab UI");
 		Post(() => LoadModelUI(subTask.Call, model)); // Some controls need to be created on the UI context
 	}
 

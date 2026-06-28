@@ -29,18 +29,37 @@ public class SchemaNode
 	public bool DepthTruncated { get; set; }
 
 	/// <summary>
+	/// When set, this node duplicates a type already described earlier in the schema, so it
+	/// references it by name instead of repeating its contents.
+	/// </summary>
+	[Hidden]
+	public string? Ref { get; set; }
+
+	[Hide(null), Unserialized]
+	public SchemaNode? Reference { get; set; }
+
+	/// <summary>
 	/// The tab's contents: display objects (toolbars, forms, charts, actions) and item lists,
 	/// in order. Item lists carry their columns and navigated items (each with an optional child).
 	/// </summary>
 	public List<SchemaObject>? Objects { get; set; }
 
-	public override string ToString() => Label;
-
 	/// <summary>True when this node has details worth nesting under a parent item (vs. a bare leaf label).</summary>
 	[Hidden, JsonIgnore]
-	public bool HasDetails => Objects?.Count > 0 || TabRoot || DepthTruncated;
+	public bool HasDetails => Objects?.Count > 0 || TabRoot || DepthTruncated || Ref != null;
 
-	public static SchemaNode From(HeadlessTabView view)
+	public override string ToString() => Label;
+
+	/// <summary>Builds the schema for <paramref name="view"/> without a shared export context.</summary>
+	public static SchemaNode From(HeadlessTabView view) => From(view, new SchemaDocument());
+
+	/// <summary>
+	/// Builds the schema for <paramref name="view"/>, hoisting deduplicated types
+	/// (<see cref="HeadlessTabView.DedupType"/>) into <paramref name="schemaDocument"/>'s definitions and
+	/// referencing them by name via <see cref="Ref"/>, so a repeated type is described once and
+	/// looked up directly. The <see cref="SchemaDocument"/> also carries any other shared traversal state.
+	/// </summary>
+	internal static SchemaNode From(HeadlessTabView view, SchemaDocument schemaDocument)
 	{
 		SchemaNode node = new()
 		{
@@ -49,6 +68,36 @@ public class SchemaNode
 			DepthTruncated = view.DepthTruncated,
 		};
 
+		// Deduplicated type: reference it by name, hoisting its contents into the definitions map
+		// the first time (from the canonical, fully-expanded occurrence).
+		if (view.DedupType is { } dedupType)
+		{
+			node.Ref = dedupType.Name;
+
+			Dictionary<string, SchemaNode> definitions = schemaDocument.Definitions!; // non-null while building
+			if (view.DuplicateType == null && !definitions.ContainsKey(node.Ref))
+			{
+				SchemaNode definition = new()
+				{
+					Label = dedupType.Name,
+				};
+				definitions[node.Ref] = definition; // reserve before populating (handles self-reference)
+				PopulateObjects(definition, view, schemaDocument);
+			}
+
+			// Live pointer to the resolved definition for in-app navigation (not serialized).
+			node.Reference = definitions.GetValueOrDefault(node.Ref);
+
+			return node;
+		}
+
+		PopulateObjects(node, view, schemaDocument);
+		return node;
+	}
+
+	/// <summary>Fills <paramref name="node"/>'s <see cref="Objects"/> from the view's display objects and item lists.</summary>
+	private static void PopulateObjects(SchemaNode node, HeadlessTabView view, SchemaDocument schemaDocument)
+	{
 		List<SchemaObject> objects = [];
 
 		// Display objects (toolbars, forms, charts, actions) in their original order.
@@ -63,15 +112,41 @@ public class SchemaNode
 		// Item lists become list objects carrying columns and the navigated child items.
 		foreach (IList itemList in view.Model.ItemLists)
 		{
-			objects.Add(SchemaObject.FromList(itemList, view));
+			objects.Add(SchemaObject.FromList(itemList, view, schemaDocument));
 		}
 
 		if (objects.Count > 0)
 		{
 			node.Objects = objects;
 		}
+	}
+}
 
-		return node;
+/// <summary>
+/// The exported schema: the <see cref="Root"/> tree plus a map of deduplicated type definitions
+/// referenced from the tree by name (see <see cref="SchemaNode.Ref"/>).
+/// </summary>
+public class SchemaDocument
+{
+	/// <summary>Schemas for deduplicated types, keyed by type name and referenced via <see cref="SchemaNode.Ref"/>.</summary>
+	[Hide(null)]
+	public Dictionary<string, SchemaNode>? Definitions { get; set; } = [];
+
+	/// <summary>The root tab's schema.</summary>
+	public SchemaNode Root { get; set; } = new();
+
+	public static SchemaDocument From(HeadlessTabView view)
+	{
+		SchemaDocument schemaDocument = new();
+		schemaDocument.Root = SchemaNode.From(view, schemaDocument);
+
+		// Drop the map entirely when nothing was deduplicated, so it's hidden/omitted.
+		if (schemaDocument.Definitions!.Count == 0)
+		{
+			schemaDocument.Definitions = null;
+		}
+
+		return schemaDocument;
 	}
 }
 
@@ -114,7 +189,8 @@ public abstract class SchemaObject
 	}
 
 	/// <summary>Builds a list object for <paramref name="list"/> using the child views from <paramref name="view"/>.</summary>
-	public static SchemaObject FromList(IList list, HeadlessTabView view) => SchemaList.From(list, view);
+	internal static SchemaObject FromList(IList list, HeadlessTabView view, SchemaDocument schemaDocument) =>
+		SchemaList.From(list, view, schemaDocument);
 
 	public override string ToString() => Type;
 }
@@ -327,7 +403,7 @@ public class SchemaList : SchemaObject
 	public bool Truncated { get; set; }
 
 	/// <summary>Builds a list object from <paramref name="list"/> using the child views from <paramref name="view"/>.</summary>
-	public static SchemaList From(IList list, HeadlessTabView view)
+	internal static SchemaList From(IList list, HeadlessTabView view, SchemaDocument schemaDocument)
 	{
 		SchemaList schemaList = new()
 		{
@@ -340,7 +416,7 @@ public class SchemaList : SchemaObject
 			List<SchemaItem> items = [];
 			foreach (HeadlessTabItem listItem in listItems)
 			{
-				SchemaNode? childNode = listItem.Child != null ? SchemaNode.From(listItem.Child) : null;
+				SchemaNode? childNode = listItem.Child != null ? SchemaNode.From(listItem.Child, schemaDocument) : null;
 				items.Add(new SchemaItem
 				{
 					Label = listItem.Label,

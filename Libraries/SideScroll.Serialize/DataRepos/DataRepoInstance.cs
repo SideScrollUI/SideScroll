@@ -151,7 +151,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 		using CallTimer callTimer = call.Timer("LoadAll",
 			new Tag("GroupId", GroupId),
 			new Tag("Type", DataType.Name));
-		
+
 		return [.. LoadAllDataItems(callTimer, ascending)];
 	}
 

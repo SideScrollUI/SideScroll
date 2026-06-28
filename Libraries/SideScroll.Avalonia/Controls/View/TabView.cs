@@ -1141,7 +1141,7 @@ public class TabView : Grid, IDisposable
 	private void LoadBookmark()
 	{
 		if (Instance.TabBookmark is not { } tabBookmark) return;
-		
+
 		Instance.Project.UserSettings.AutoSelect = true;
 
 		TabViewSettings = tabBookmark.ToViewSettings();

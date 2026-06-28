@@ -461,6 +461,54 @@ public class HeadlessTabViewerTests : BaseTest
 		Assert.That(expanded, Is.Not.Null, "Without a filter the aggregator should still expand.");
 	}
 
+	/// <summary>A [ListItem] aggregator that references its own type (like TabSampleDemo.Copy).</summary>
+	[ListItem]
+	private class RecursiveSection
+	{
+		public NamedTab Leaf { get; } = new("Leaf");
+		public RecursiveSection Copy => new();
+	}
+
+	private class RecursiveSectionTab : ITab
+	{
+		public TabInstance Create() => new Instance();
+
+		private class Instance : TabInstance
+		{
+			public override void Load(Call call, TabModel model)
+			{
+				model.Name = "Root";
+				model.Items = new List<RecursiveSection> { new() };
+			}
+		}
+	}
+
+	[Test, Description(
+		"A [ListItem] type that references its own type is expanded once; later occurrences are " +
+		"marked as duplicates (referencing the type) instead of being re-expanded.")]
+	public async Task SelectAllItemsRecursiveAsync_DeduplicatesListItemType()
+	{
+		var viewer = new HeadlessTabViewer(new Project());
+		HeadlessTabView root = await viewer.LoadAndTraverseAsync(Call, new RecursiveSectionTab());
+
+		// root → the RecursiveSection list item → its members (Leaf + Copy)
+		HeadlessTabView section = root.ChildViews.Single();
+
+		HeadlessTabView copy = section.ChildViews.Single(c => c.DuplicateType != null);
+		Assert.That(copy.DuplicateType, Is.EqualTo(typeof(RecursiveSection)),
+			"The repeated [ListItem] type should be flagged as a duplicate.");
+		Assert.That(copy.ChildViews, Is.Empty, "A duplicate should not be expanded again.");
+
+		// The schema hoists the type into Definitions once, and references it by name in the tree.
+		SchemaDocument schemaDocument = SchemaDocument.From(root);
+		Assert.That(schemaDocument.Definitions, Is.Not.Null);
+		Assert.That(schemaDocument.Definitions, Does.ContainKey("RecursiveSection"),
+			"The deduplicated type should be defined once in Definitions.");
+
+		string json = System.Text.Json.JsonSerializer.Serialize(schemaDocument, SideScroll.Serialize.Json.JsonConverters.PublicSerializerOptions);
+		Assert.That(json, Does.Contain("\"Ref\": \"RecursiveSection\""));
+	}
+
 	// ─── Nested depth (SelectAllItemsAsync – one level) ───────────────────
 
 	[Test]

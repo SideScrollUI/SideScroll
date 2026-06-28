@@ -42,6 +42,12 @@ public class HeadlessTabView(TabInstance instance, string label)
 	/// </summary>
 	public bool DepthTruncated { get; private set; }
 
+	/// <summary>
+	/// Set when this node's type was already expanded earlier in the traversal, so it references that
+	/// type instead of re-expanding (deduplication). Currently only applies to <c>[ListItem]</c> types.
+	/// </summary>
+	public Type? DuplicateType { get; private set; }
+
 	private readonly HashSet<IList> _truncatedLists = [];
 
 	/// <summary>Item lists that were not fully expanded into children (per-list cap reached with items remaining).</summary>
@@ -174,12 +180,26 @@ public class HeadlessTabView(TabInstance instance, string label)
 	private string? TabTypeName => Instance.iTab?.GetType().Name ?? Model.Object?.GetType().Name;
 
 	/// <summary>
+	/// The type this node can be deduplicated on, or <c>null</c> if it should always be expanded.
+	/// Currently only <c>[ListItem]</c> aggregator types (whose structure is fixed by the type, so
+	/// re-expanding another instance produces the same schema). Extend here for more types later.
+	/// </summary>
+	public Type? DedupType
+	{
+		get
+		{
+			Type? type = Model.Object?.GetType();
+			return type?.GetCustomAttribute<ListItemAttribute>() != null ? type : null;
+		}
+	}
+
+	/// <summary>
 	/// Recursively selects all items up to <paramref name="maxDepth"/> levels deep.
 	/// Each level calls <see cref="SelectAllItemsAsync"/> then recurses into every child.
 	/// </summary>
 	/// <param name="call">The call context for logging.</param>
 	/// <param name="maxDepth">Maximum number of levels to traverse (default 5).</param>
-	public async Task SelectAllItemsRecursiveAsync(Call call, int maxDepth = 5)
+	public async Task SelectAllItemsRecursiveAsync(Call call, int maxDepth = 5, HashSet<Type>? expandedTypes = null)
 	{
 		using var callTimer = call.Timer("Loading Tab",
 			new Tag("Label", Label),
@@ -197,6 +217,16 @@ public class HeadlessTabView(TabInstance instance, string label)
 		if (IsCancelled(callTimer))
 			return;
 
+		// Deduplicate eligible types: if this type was already expanded earlier in the traversal,
+		// reference it instead of re-expanding the same structure.
+		expandedTypes ??= [];
+		if (DedupType is { } dedupType && !expandedTypes.Add(dedupType))
+		{
+			DuplicateType = dedupType;
+			callTimer.Log.Add("Referencing already-expanded type", new Tag("Type", dedupType.Name));
+			return;
+		}
+
 		await SelectAllItemsAsync(callTimer);
 
 		foreach (HeadlessTabView child in ChildViews)
@@ -204,7 +234,7 @@ public class HeadlessTabView(TabInstance instance, string label)
 			if (IsCancelled(callTimer))
 				return;
 
-			await child.SelectAllItemsRecursiveAsync(callTimer, maxDepth - 1);
+			await child.SelectAllItemsRecursiveAsync(callTimer, maxDepth - 1, expandedTypes);
 		}
 	}
 
@@ -364,7 +394,7 @@ public class HeadlessTabView(TabInstance instance, string label)
 	{
 		string label = obj.Formatted() ?? '(' + obj.GetType().Name + ')';
 		using CallTimer callTimer = call.Timer("Creating Child Tab", new Tag("Label", label));
-		
+
 		object? value = obj.GetInnerValue();
 		if (value is null or bool)
 			return null;
