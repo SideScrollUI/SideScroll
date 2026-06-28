@@ -362,11 +362,12 @@ public class HeadlessTabView(TabInstance instance, string label)
 	/// </summary>
 	public async Task<HeadlessTabView?> TryCreateChildViewAsync(Call call, object obj)
 	{
-		object? value = obj.GetInnerValue();
-		if (value == null || value is bool)
-			return null;
-
 		string label = obj.Formatted() ?? '(' + obj.GetType().Name + ')';
+		using CallTimer callTimer = call.Timer("Creating Child Tab", new Tag("Label", label));
+		
+		object? value = obj.GetInnerValue();
+		if (value is null or bool)
+			return null;
 
 		// ILoadAsync: wrap in TabInstanceLoadAsync so TabInstance.Load calls LoadAsync
 		if (value is ILoadAsync loadAsync)
@@ -377,14 +378,14 @@ public class HeadlessTabView(TabInstance instance, string label)
 			};
 			childTabInstance.Model.Name = label;
 			var childView = new HeadlessTabView(childTabInstance, label) { Options = Options };
-			await childView.LoadAsync(call);
+			await childView.LoadAsync(callTimer);
 			return childView;
 		}
 
 		// ITabCreatorAsync: resolve asynchronously to an ITab (mirrors Avalonia TabCreator)
 		if (value is ITabCreatorAsync creatorAsync)
 		{
-			value = await creatorAsync.CreateAsync(call);
+			value = await creatorAsync.CreateAsync(callTimer);
 		}
 
 		if (value is ITab iTab)
@@ -396,7 +397,7 @@ public class HeadlessTabView(TabInstance instance, string label)
 
 			TabInstance childInstance = Instance.CreateChildTab(iTab);
 			var childView = new HeadlessTabView(childInstance, label) { Options = Options };
-			await childView.LoadAsync(call);
+			await childView.LoadAsync(callTimer);
 			return childView;
 		}
 
@@ -413,7 +414,7 @@ public class HeadlessTabView(TabInstance instance, string label)
 
 			var childInstance = new PlainObjectTabInstance(Instance.Project, label, value);
 			var childView = new HeadlessTabView(childInstance, label) { Options = Options };
-			await childView.LoadAsync(call);
+			await childView.LoadAsync(callTimer);
 			return childView;
 		}
 
@@ -423,7 +424,7 @@ public class HeadlessTabView(TabInstance instance, string label)
 		{
 			var leafInstance = new LeafTabInstance(Instance.Project, label);
 			var leafView = new HeadlessTabView(leafInstance, label) { Options = Options };
-			await leafView.LoadAsync(call);
+			await leafView.LoadAsync(callTimer);
 			return leafView;
 		}
 

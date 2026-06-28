@@ -115,8 +115,7 @@ public class TabSampleDataRepoPaging : ITab
 
 		private void LoadAll(Call call)
 		{
-			_dataRepoItems!.LoadAllDataItems(call);
-			var dataItemCollection = _dataRepoItems.LoadAll(call);
+			var dataItemCollection = _dataRepoItems!.LoadAll(call);
 			_sampleItems!.Replace(dataItemCollection.Values);
 		}
 

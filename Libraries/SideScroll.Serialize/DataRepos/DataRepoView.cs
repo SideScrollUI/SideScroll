@@ -62,7 +62,11 @@ public class DataRepoView<T> : DataRepoInstance<T>
 				return;
 			}
 
-			var dataItems = LoadAllDataItems(call, ascending);
+			using CallTimer callTimer = call.Timer("LoadAllIndexed",
+				new Tag("GroupId", GroupId),
+				new Tag("Type", DataType.Name));
+			
+			var dataItems = LoadAllDataItems(callTimer, ascending);
 			Items = [.. dataItems];
 			IsLoaded = true;
 		}

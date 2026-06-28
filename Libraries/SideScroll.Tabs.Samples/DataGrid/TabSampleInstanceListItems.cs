@@ -27,9 +27,12 @@ public class TabSampleInstanceListItems : ITab
 			model.Items = GetListItems();
 		}
 
-		private static async Task<string> MethodAsync()
+		private async Task<string> MethodAsync()
 		{
-			await Task.Delay(10);
+			if (!IsHeadless)
+			{
+				await Task.Delay(10);
+			}
 			return "Result";
 		}
 	}

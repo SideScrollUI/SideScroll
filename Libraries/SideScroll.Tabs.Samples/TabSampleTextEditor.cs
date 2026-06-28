@@ -1,6 +1,5 @@
 using SideScroll.Resources;
 using SideScroll.Tabs.Lists;
-using System.Text;
 
 namespace SideScroll.Tabs.Samples;
 
@@ -42,12 +41,7 @@ public class TabSampleTextEditor : ITab
 
 		private static string GetLines(int lines)
 		{
-			StringBuilder sb = new();
-			for (int i = 0; i < lines; i++)
-			{
-				sb.Append("Lots of Lines\n");
-			}
-			return sb.ToString();
+			return Repeat("Lots of Lines\n", lines);
 		}
 
 		private static ListItem GetStringItem(string label, int length)
@@ -59,12 +53,20 @@ public class TabSampleTextEditor : ITab
 
 		private static string GetString(int length)
 		{
-			StringBuilder sb = new();
-			while (sb.Length < length)
+			const string Unit = "Long String ";
+			int count = (length + Unit.Length - 1) / Unit.Length;
+			return Repeat(Unit, count);
+		}
+
+		private static string Repeat(string value, int count)
+		{
+			return string.Create(value.Length * count, value, static (span, value) =>
 			{
-				sb.Append("Long String ");
-			}
-			return sb.ToString();
+				for (int i = 0; i < span.Length; i += value.Length)
+				{
+					value.CopyTo(span[i..]);
+				}
+			});
 		}
 	}
 }

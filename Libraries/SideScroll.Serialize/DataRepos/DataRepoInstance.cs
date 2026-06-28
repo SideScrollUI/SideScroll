@@ -148,7 +148,11 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	public virtual DataItemCollection<T> LoadAll(Call? call = null, bool ascending = true)
 	{
 		call ??= new();
-		return [.. LoadAllDataItems(call, ascending)];
+		using CallTimer callTimer = call.Timer("LoadAll",
+			new Tag("GroupId", GroupId),
+			new Tag("Type", DataType.Name));
+		
+		return [.. LoadAllDataItems(callTimer, ascending)];
 	}
 
 	/// <summary>
