@@ -80,8 +80,18 @@ public class LiveChartLineSeries(LiveChartSeries liveChartSeries) : LineSeries<L
 		var cartesianSeries = (ICartesianSeries)target.Context.Series;
 		var cartesianChartView = (ICartesianChartView)cartesianChart.CoreChart.View;
 
-		var primaryAxis = cartesianChartView.Core.YAxes[cartesianSeries.ScalesYAt];
-		var secondaryAxis = cartesianChartView.Core.XAxes[cartesianSeries.ScalesXAt];
+		var yAxes = cartesianChartView.Core.YAxes;
+		var xAxes = cartesianChartView.Core.XAxes;
+
+		// The series can briefly reference an axis index that no longer exists while the chart is being rebuilt
+		if ((uint)cartesianSeries.ScalesYAt >= (uint)yAxes.Length ||
+			(uint)cartesianSeries.ScalesXAt >= (uint)xAxes.Length)
+		{
+			return double.MaxValue;
+		}
+
+		var primaryAxis = yAxes[cartesianSeries.ScalesYAt];
+		var secondaryAxis = xAxes[cartesianSeries.ScalesXAt];
 
 		var drawLocation = cartesianChartView.Core.DrawMarginLocation;
 		var drawMarginSize = cartesianChartView.Core.DrawMarginSize;

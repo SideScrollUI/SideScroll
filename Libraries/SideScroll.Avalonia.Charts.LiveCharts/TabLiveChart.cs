@@ -710,6 +710,18 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 			?.point;
 	}
 
+	/// <summary>
+	/// Converts a pixel location to a data coordinate, returning null when the chart's axes aren't ready
+	/// (they can briefly be empty while the chart is being rebuilt).
+	/// </summary>
+	private LvcPointD? TryScalePixelsToData(LvcPointD point)
+	{
+		var core = ((ICartesianChartView)Chart).Core;
+		if (core.XAxes.Length == 0 || core.YAxes.Length == 0) return null;
+
+		return Chart.ScalePixelsToData(point);
+	}
+
 	/// <summary>Selects the series that owns the given chart point and raises the selection-changed event.</summary>
 	public void SelectPoint(ChartPoint chartPoint)
 	{
@@ -841,7 +853,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 				}
 			}
 
-			LvcPointD dataPoint = Chart.ScalePixelsToData(new LvcPointD(point.X, point.Y));
+			if (TryScalePixelsToData(new LvcPointD(point.X, point.Y)) is not { } dataPoint) return;
 
 			var moveEvent = new PointerMovedEventArgs(dataPoint.X);
 			PointerMovedEventSource.Raise(sender, moveEvent);
@@ -863,7 +875,8 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 	{
 		var point = e.GetPosition(Chart);
 		_startScreenPoint = point;
-		_startDataPoint = Chart.ScalePixelsToData(new LvcPointD(point.X, point.Y));
+		_startDataPoint = TryScalePixelsToData(new LvcPointD(point.X, point.Y));
+		if (_startDataPoint == null) return;
 
 		if (!_selecting)
 		{
@@ -882,7 +895,13 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		if (_selecting && _startDataPoint != null)
 		{
 			var point = e.GetPosition(Chart);
-			_endDataPoint = Chart.ScalePixelsToData(new LvcPointD(point.X, point.Y));
+			_endDataPoint = TryScalePixelsToData(new LvcPointD(point.X, point.Y));
+			if (_endDataPoint == null)
+			{
+				StopSelecting();
+				return;
+			}
+
 			double width = Math.Abs(point.X - _startScreenPoint.X);
 			if (width > MinSelectionWidth)
 			{

@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated Bookmark.Changed to [PrivateData]
 - Renamed `TabModel.AddData()` to `AddItems()` and deprecated the old name
 - Deprecated the `TabModel.ItemLists` setter — use `AddItems()` instead (the getter and list remain mutable)
+- Updated to Avalonia 11.3.18 and LiveCharts 2.0.5
 
 ## [0.20] - 2026-06-08
 
