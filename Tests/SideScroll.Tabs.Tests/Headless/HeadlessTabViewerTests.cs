@@ -6,7 +6,7 @@ using SideScroll.Tabs.Headless;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tasks;
 
-namespace SideScroll.Tabs.Tests.Viewer;
+namespace SideScroll.Tabs.Tests.Headless;
 
 [Category("Tabs")]
 public class HeadlessTabViewerTests : BaseTest

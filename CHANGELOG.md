@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Fixed ListSeries Totals for time ranges without any entries
+- Updated Avalonia Headless Tab Loading to handle delays better
 
 ### Changed
 

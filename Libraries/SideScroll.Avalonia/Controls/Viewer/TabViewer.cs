@@ -95,6 +95,8 @@ public class TabViewer : Grid
 
 	private TaskCompletionSource? _childrenLoadedTcs;
 	private int _pendingChildrenCount;
+	private readonly HashSet<TabView> _trackedTabViews = []; // subscribed to OnChildrenLoaded
+	private readonly HashSet<TabView> _loadedTabViews = []; // have fired OnChildrenLoaded at least once
 
 	/// <summary>Initializes a new <see cref="TabViewer"/> for the given project, building the scroll layout, side buttons, toolbar, and any registered plugins.</summary>
 	public TabViewer(Project project, bool isWindowed = true)
@@ -481,7 +483,9 @@ public class TabViewer : Grid
 		TabView = new TabView(tabInstance);
 
 		_childrenLoadedTcs = new TaskCompletionSource();
-		_pendingChildrenCount = 1;
+		_pendingChildrenCount = 0;
+		_trackedTabViews.Clear();
+		_loadedTabViews.Clear();
 		SubscribeChildrenLoaded(TabView);
 
 		TabView.Load();
@@ -500,7 +504,18 @@ public class TabViewer : Grid
 
 	private void SubscribeChildrenLoaded(TabView tabView)
 	{
+		if (!_trackedTabViews.Add(tabView))
+			return;
+
+		_pendingChildrenCount++;
 		tabView.OnChildrenLoaded += TabView_OnChildrenLoaded;
+
+		// The TabView may have finished loading before we subscribed (e.g. created synchronously
+		// inside a parent's load pass), so process it directly instead of waiting for the event
+		if (tabView.ChildControlsFinishedLoading)
+		{
+			TabView_OnChildrenLoaded(tabView, EventArgs.Empty);
+		}
 	}
 
 	private void TabView_OnChildrenLoaded(object? sender, EventArgs e)
@@ -508,32 +523,44 @@ public class TabViewer : Grid
 		if (sender is not TabView tabView)
 			return;
 
-		tabView.OnChildrenLoaded -= TabView_OnChildrenLoaded;
-
-		// Subscribe to any child TabViews that were just created.
+		// Subscribe to any child TabViews within the depth limit. Async tabs can create children
+		// on a later pass (after their data loads), so stay subscribed for repeat fires and
+		// re-arm the completion source when new children appear after it already completed.
 		// ChildTabInstances is keyed by the Control (TabView) with TabInstance as the value.
 		foreach (var (control, childInstance) in tabView.Instance.ChildTabInstances)
 		{
-			if (childInstance.Depth < (MaxTabDepth ?? int.MaxValue))
+			if (control is TabView childTabView
+				&& childInstance.Depth <= (MaxTabDepth ?? int.MaxValue)
+				&& !_trackedTabViews.Contains(childTabView))
 			{
-				_pendingChildrenCount++;
-				if (control is TabView childTabView)
+				if (_childrenLoadedTcs?.Task.IsCompleted == true)
 				{
-					SubscribeChildrenLoaded(childTabView);
+					_childrenLoadedTcs = new TaskCompletionSource();
 				}
-				else
-				{
-					DecrementPending();
-				}
+				SubscribeChildrenLoaded(childTabView);
 			}
 		}
 
-		DecrementPending();
+		// A restored bookmark or saved view settings apply their selection asynchronously
+		// (via the DataGrid), so this TabView can fire before the selection - and therefore
+		// its child tabs - exist. Keep it pending until the expected selection has been
+		// applied; the selection change refires this event.
+		bool selectionPending =
+			tabView.Instance.Depth < (MaxTabDepth ?? int.MaxValue)
+			&& tabView.Instance.SelectedItems is not { Count: > 0 }
+			&& (tabView.Instance.TabBookmark?.SelectedRowViews.Count > 0
+				|| tabView.Instance.TabViewSettings.SelectedRows.Count > 0);
+
+		// Only the first fire per TabView counts against the pending total
+		if (!selectionPending && _loadedTabViews.Add(tabView))
+		{
+			DecrementPending();
+		}
 	}
 
 	private void DecrementPending()
 	{
-		if (Interlocked.Decrement(ref _pendingChildrenCount) == 0)
+		if (--_pendingChildrenCount == 0)
 		{
 			_childrenLoadedTcs?.TrySetResult();
 		}

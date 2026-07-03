@@ -101,8 +101,14 @@ public class TabView : Grid, IDisposable
 	private TabSplitGrid? _tabChildControls;
 	private Panel? _fillerPanel; // GridSplitter doesn't work without control on right side
 
-	/// <summary>Raised once when this tab's child controls have been created and laid out for the first time.</summary>
+	/// <summary>
+	/// Raised each time this tab's child controls have been created and <see cref="TabInstance.ChildTabInstances"/>
+	/// has been updated. Fires again when the selection changes or async data adds new children.
+	/// </summary>
 	public event EventHandler? OnChildrenLoaded;
+
+	/// <summary>Whether this tab has finished creating its child controls at least once.</summary>
+	public bool ChildControlsFinishedLoading => _childControlsFinishedLoading;
 
 	/// <summary>
 	/// Gets the rendered width of this tab column's own content panel, excluding the GridSplitter
@@ -857,7 +863,6 @@ public class TabView : Grid, IDisposable
 		_updateChildControls = false;
 
 		_childControlsFinishedLoading = true;
-		OnChildrenLoaded?.Invoke(this, EventArgs.Empty);
 
 		TabViewer.Instance!.SetMinScrollOffset();
 
@@ -884,6 +889,9 @@ public class TabView : Grid, IDisposable
 		}
 		_tabChildControls!.SetControls(newChildControls, orderedChildControls);
 		UpdateSelectedTabInstances();
+
+		// Fire after ChildTabInstances is updated so listeners see the newly created child TabViews
+		OnChildrenLoaded?.Invoke(this, EventArgs.Empty);
 	}
 
 	private List<Control> CreateAllChildControls(bool recreate, out Dictionary<object, Control> newChildControls)
