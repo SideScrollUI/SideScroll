@@ -6,10 +6,12 @@ on:
   workflow_dispatch:  # Allow manual trigger
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+# (actions: write allows deleting stale artifacts when re-running the job)
 permissions:
   contents: read
   pages: write
   id-token: write
+  actions: write
 
 # Allow only one concurrent deployment
 concurrency:
@@ -29,10 +31,10 @@ jobs:
     
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
-    
+      uses: actions/checkout@v7
+
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 8.0.x
     
@@ -46,13 +48,22 @@ jobs:
       run: dotnet publish Programs/SideScroll.Demo.Avalonia.Browser/SideScroll.Demo.Avalonia.Browser.csproj -c Release -o publish
     
     - name: Setup Pages
-      uses: actions/configure-pages@v4
+      uses: actions/configure-pages@v6
     
+    # Re-runs keep artifacts from earlier attempts, and deploy-pages fails if
+    # multiple artifacts share the "github-pages" name, so delete leftovers first
+    - name: Delete stale Pages artifact from earlier attempts
+      if: github.run_attempt != '1'
+      uses: geekyeggo/delete-artifact@v6
+      with:
+        name: github-pages
+        failOnError: false
+
     - name: Upload artifact
-      uses: actions/upload-pages-artifact@v3
+      uses: actions/upload-pages-artifact@v5
       with:
         path: 'publish/wwwroot'
     
     - name: Deploy to GitHub Pages
       id: deployment
-      uses: actions/deploy-pages@v4
+      uses: actions/deploy-pages@v5
