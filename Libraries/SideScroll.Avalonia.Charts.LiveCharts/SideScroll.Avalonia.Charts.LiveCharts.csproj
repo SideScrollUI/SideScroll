@@ -1,31 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-  </PropertyGroup>
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <None Remove="TabLiveChart.xaml" />
-    <None Remove="Themes\ControlThemes.xaml" />
+    <None Remove="Themes\*.xaml" />
   </ItemGroup>
 
   <ItemGroup>
-    <AvaloniaResource Include="Themes\ControlThemes.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Themes\TabLiveChart.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </AvaloniaResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\..\Images\Logo\png\SideScroll_128.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Include="..\..\README.NuGet.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
+    <AvaloniaResource Include="Themes\*.xaml" />
   </ItemGroup>
 
   <ItemGroup>
