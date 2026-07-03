@@ -78,6 +78,7 @@ public class BookmarkNavigator : INotifyPropertyChanged
 	[Hidden]
 	public SynchronizationContext? Context { get; set; }
 
+	/// <summary>Returns the current position as <c>index / history count</c>.</summary>
 	public override string ToString() => $"{CurrentIndex} / {History.Count}";
 
 	/// <summary>

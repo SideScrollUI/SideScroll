@@ -288,6 +288,7 @@ public class WordSpacer
 			Value = value;
 		}
 
+		/// <summary>Returns the token's <see cref="Value"/>.</summary>
 		public override string ToString() => Value;
 
 		/// <summary>

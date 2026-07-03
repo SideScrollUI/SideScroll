@@ -22,6 +22,7 @@ public class TabViewContextMenu : ContextMenu, IDisposable
 
 	private readonly CheckBox _checkboxAutoSelect;
 
+	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(ContextMenu);
 
 	public TabViewContextMenu(TabView tabView, TabInstance tabInstance)

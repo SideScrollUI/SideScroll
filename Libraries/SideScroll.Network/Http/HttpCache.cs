@@ -30,6 +30,7 @@ public class HttpCache : IDisposable
 		/// <summary>Gets or sets the time this entry was downloaded.</summary>
 		public DateTime Downloaded { get; set; }
 
+		/// <summary>Returns the entry's <see cref="Uri"/>.</summary>
 		public override string? ToString() => Uri;
 	}
 
@@ -68,6 +69,7 @@ public class HttpCache : IDisposable
 	private readonly object _entryLock = new();
 	private bool _disposed;
 
+	/// <summary>Returns the cache's <see cref="BasePath"/>.</summary>
 	public override string ToString() => BasePath;
 
 	/// <summary>Opens or creates the cache files at <paramref name="basePath"/>, loading any existing index entries.</summary>

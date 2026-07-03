@@ -69,6 +69,7 @@ public class LazyProperty
 	/// </summary>
 	public FieldInfo? FieldInfoTypeRef;
 
+	/// <summary>Returns the property's name.</summary>
 	public override string? ToString() => PropertyBuilder?.Name;
 
 	/// <summary>

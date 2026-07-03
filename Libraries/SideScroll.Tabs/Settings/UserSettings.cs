@@ -63,6 +63,7 @@ public class UserSettings
 	[Hidden]
 	public DataSettings DataSettings { get; set; } = new();
 
+	/// <summary>Returns the <see cref="DataSettings"/>' string representation.</summary>
 	public override string ToString() => DataSettings.ToString();
 }
 
@@ -107,5 +108,6 @@ public class DataSettings
 	[Range(1, 100)]
 	public int MaxHistory { get; set; } = 20;
 
+	/// <summary>Returns the <see cref="SettingsPath"/>.</summary>
 	public override string ToString() => SettingsPath;
 }

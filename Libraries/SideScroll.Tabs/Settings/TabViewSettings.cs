@@ -60,6 +60,7 @@ public class TabViewSettings
 				.FirstOrDefault(dataSettings => dataSettings.SelectionType != SelectionType.None)
 				?.SelectionType ?? SelectionType.None;
 
+	/// <summary>Returns the settings <see cref="Address"/>.</summary>
 	public override string ToString() => Address;
 
 	/// <summary>

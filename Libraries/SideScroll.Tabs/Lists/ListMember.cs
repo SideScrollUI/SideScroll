@@ -178,6 +178,7 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 		}
 	}
 
+	/// <summary>Returns the member's <see cref="Name"/>.</summary>
 	public override string? ToString() => Name;
 
 	/// <summary>

@@ -30,6 +30,7 @@ public class ChartSeries<TSeries>(ListSeries listSeries, TSeries lineSeries, Col
 	/// <summary>Gets or sets whether this series is selected (visible) in the chart.</summary>
 	public bool IsSelected { get; set; } = true; // Visible = Selected
 
+	/// <summary>Returns the underlying <see cref="ListSeries"/>' name.</summary>
 	public override string? ToString() => ListSeries.Name;
 
 	/// <summary>Creates a <see cref="SeriesInfo"/> snapshot of the current name, color, and selection state.</summary>
@@ -177,6 +178,7 @@ public abstract class TabChart<TSeries> : Border, ITabChart
 	/// <summary>Gets the root grid that contains the title, chart area, and legend.</summary>
 	public Grid ContainerGrid { get; }
 
+	/// <summary>Returns the <see cref="ChartView"/>'s string representation.</summary>
 	public override string? ToString() => ChartView.ToString();
 
 	/// <summary>Initializes a new chart control bound to the given <paramref name="chartView"/>, optionally expanding to fill available vertical space.</summary>

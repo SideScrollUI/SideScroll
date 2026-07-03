@@ -183,6 +183,7 @@ public class LogEntry : INotifyPropertyChanged
 	[HiddenColumn]
 	public Tag[]? Tags { get; set; }
 
+	/// <summary>Returns the <see cref="Message"/>, or the log <see cref="Level"/> when no message is set.</summary>
 	public override string ToString() => Message ?? Level.ToString();
 
 	/// <summary>

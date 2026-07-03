@@ -22,6 +22,7 @@ public class TabItemCollection
 	private HashSet<object> _objects = [];
 	private Dictionary<string, object> _keys = [];
 
+	/// <summary>Returns the underlying <see cref="Items"/> collection's string representation.</summary>
 	public override string? ToString() => Items.ToString();
 
 	/// <summary>

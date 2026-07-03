@@ -104,6 +104,7 @@ public class TimeRangePeriod : ITags
 		}
 	}
 
+	/// <summary>Returns the formatted time range followed by the entry <see cref="Count"/>.</summary>
 	public override string ToString() => DateTimeUtils.FormatTimeRange(StartTime, EndTime) + " - " + Count;
 
 	/// <summary>

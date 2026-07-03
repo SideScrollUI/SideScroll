@@ -8,6 +8,7 @@ namespace SideScroll.Avalonia.Controls.Toolbar;
 /// <summary>A compact single-line text box styled for use in a toolbar.</summary>
 public class ToolbarTextBox : TextBox
 {
+	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(TextBox);
 
 	/// <summary>Initializes the text box with optional initial text.</summary>

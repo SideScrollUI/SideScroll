@@ -10,6 +10,7 @@ namespace SideScroll.Avalonia.Controls.ScreenCapture;
 /// </summary>
 public class ScreenCaptureToolbar : TabControlToolbar
 {
+	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(TabControlToolbar);
 
 	/// <summary>Gets the copy-to-clipboard button, or <c>null</c> on Linux where clipboard bitmap support is unavailable.</summary>

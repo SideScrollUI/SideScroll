@@ -63,6 +63,7 @@ public class TimeRangeValue : ITags
 	/// </summary>
 	public TimeWindow TimeWindow => new(StartTime, EndTime);
 
+	/// <summary>Returns the formatted time range followed by the <see cref="Value"/>.</summary>
 	public override string ToString() => DateTimeUtils.FormatTimeRange(StartTime, EndTime) + " - " + Value;
 
 	/// <summary>

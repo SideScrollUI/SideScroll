@@ -22,6 +22,7 @@ public class ToolbarSeparator : Border;
 /// </summary>
 public class TabControlToolbar : Grid, IDisposable
 {
+	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(TabControlToolbar);
 
 	/// <summary>Gets or sets the default margin applied to toolbar controls.</summary>
@@ -278,6 +279,7 @@ public class ToolbarHeaderTextBlock(string text = "") : ToolbarTextBlock(text);
 /// <summary>A radio button styled for horizontal placement in a toolbar.</summary>
 public class ToolbarRadioButton : RadioButton
 {
+	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(RadioButton);
 
 	/// <summary>Initializes the radio button with optional display text.</summary>

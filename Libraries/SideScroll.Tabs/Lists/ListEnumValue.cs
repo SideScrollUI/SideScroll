@@ -28,6 +28,7 @@ public class ListEnumValue(string name, bool isSelected, object value, string he
 	/// </summary>
 	public string Hex => hex;
 
+	/// <summary>Returns the enum value's <see cref="Name"/>.</summary>
 	public override string ToString() => Name;
 
 	/// <summary>

@@ -215,6 +215,7 @@ public class TabInstance : IDisposable
 		/// </summary>
 		public object Object => obj;
 
+		/// <summary>Returns the selected <see cref="Object"/>'s string representation.</summary>
 		public override string? ToString() => Object?.ToString();
 	}
 
@@ -361,6 +362,7 @@ public class TabInstance : IDisposable
 
 	private bool _disposed;
 
+	/// <summary>Returns the tab's <see cref="Label"/>.</summary>
 	public override string ToString() => Label;
 
 	/// <summary>

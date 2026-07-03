@@ -9,6 +9,7 @@ namespace SideScroll.Avalonia.Controls.DataGrids;
 /// <summary>A context menu for a <see cref="DataGrid"/> that provides copy, select-all, and filter actions, updating its items based on the currently focused column and cell.</summary>
 public class DataGridContextMenu : ContextMenu, IDisposable
 {
+	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(ContextMenu);
 
 	/// <summary>Gets or sets the maximum number of characters copied from a cell value to avoid huge clipboard payloads.</summary>

@@ -12,6 +12,7 @@ namespace SideScroll.Avalonia.Samples.Controls.CustomControl;
 
 public class TabControlSearchToolbar : TabControlToolbar
 {
+	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(TabControlToolbar);
 
 	public ToolbarButton ButtonNew { get; }

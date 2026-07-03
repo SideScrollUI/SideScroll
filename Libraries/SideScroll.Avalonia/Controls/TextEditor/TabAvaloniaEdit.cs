@@ -16,6 +16,7 @@ namespace SideScroll.Avalonia.Controls.TextEditor;
 /// </summary>
 public class TabTextEditor : AvaloniaEdit.TextEditor
 {
+	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(AvaloniaEdit.TextEditor);
 
 	protected override Size MeasureOverride(Size constraint)

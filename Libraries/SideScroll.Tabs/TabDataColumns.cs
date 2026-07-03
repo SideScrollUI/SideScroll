@@ -143,6 +143,7 @@ public class TabPropertyColumn(PropertyInfo propertyInfo, string label)
 	/// </summary>
 	public string Label { get; set; } = label;
 
+	/// <summary>Returns the column's <see cref="Label"/>.</summary>
 	public override string ToString() => Label;
 
 	/// <summary>

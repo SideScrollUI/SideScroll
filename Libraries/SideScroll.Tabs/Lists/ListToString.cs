@@ -39,6 +39,7 @@ public class ListToString
 	[DataValue, HiddenColumn]
 	public object? DataValue { get; set; }
 
+	/// <summary>Returns the wrapped <see cref="Value"/>.</summary>
 	public override string? ToString() => Value;
 
 	/// <summary>

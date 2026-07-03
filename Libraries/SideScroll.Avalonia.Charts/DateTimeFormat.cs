@@ -22,6 +22,7 @@ public class DateTimeFormat(string? dateFormat, string? timeFormat, string? time
 	/// <summary>Gets the maximum window duration this format applies to.</summary>
 	public TimeSpan Maximum => maximum;
 
+	/// <summary>Returns the date/time format strings and the window duration range this format applies to.</summary>
 	public override string ToString() => $"{DateFormat} {timeFormat}: {Minimum} - {Maximum}";
 
 	/// <summary>Formats a <see cref="DateTime"/> using this format's date and time strings.</summary>

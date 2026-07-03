@@ -136,6 +136,7 @@ public class ListProperty : ListMember, IPropertyIsEditable
 	[Hidden]
 	public bool IsPropertyVisible => PropertyInfo.IsRowVisible();
 
+	/// <summary>Returns the property's <see cref="Name"/>.</summary>
 	public override string? ToString() => Name;
 
 	/// <summary>

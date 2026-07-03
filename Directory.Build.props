@@ -30,7 +30,8 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+  <!-- Generate XML docs for the packaged libraries, but skip the test and demo projects -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release' and !$(MSBuildProjectName.EndsWith('.Tests')) and !$(MSBuildProjectName.Contains('.Demo.'))">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 

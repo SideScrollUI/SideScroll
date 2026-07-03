@@ -11,8 +11,10 @@ namespace SideScroll.Avalonia.Controls;
 /// </summary>
 public class TabCheckBox : CheckBox
 {
+	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(CheckBox);
 
+	/// <summary>Creates an unbound check box with the default styling.</summary>
 	public TabCheckBox()
 	{
 		HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -21,6 +23,8 @@ public class TabCheckBox : CheckBox
 		//Padding = new Thickness(6, 3);
 	}
 
+	/// <summary>Creates a check box bound to <paramref name="property"/>, respecting its editable state and tooltip attribute.</summary>
+	/// <param name="property">The list property to bind to.</param>
 	public TabCheckBox(ListProperty property) : this()
 	{
 		IsEnabled = property.IsEditable;

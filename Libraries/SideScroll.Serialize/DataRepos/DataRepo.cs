@@ -34,6 +34,7 @@ public class DataRepo
 
 	//public RepoSettings Settings;
 
+	/// <summary>Returns the repository's <see cref="RepoPath"/>.</summary>
 	public override string ToString() => RepoPath;
 
 	/// <summary>Initializes a new <see cref="DataRepo"/> at the given path, with an optional name seed for group hashing and an option to use JSON serialization.</summary>

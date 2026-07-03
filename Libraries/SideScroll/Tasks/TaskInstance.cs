@@ -155,6 +155,7 @@ public class TaskInstance : INotifyPropertyChanged
 
 	private readonly Stopwatch _stopwatch = new();
 
+	/// <summary>Returns the task's <see cref="Label"/>.</summary>
 	public override string? ToString() => Label;
 
 	/// <summary>

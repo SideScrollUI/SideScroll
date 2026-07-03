@@ -23,6 +23,7 @@ namespace SideScroll.Avalonia.Controls;
 /// </summary>
 public class TabTextBox : TextBox
 {
+	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(TextBox);
 
 	/// <summary>Gets the list property this text box is bound to, or <c>null</c> if unbound.</summary>
@@ -34,6 +35,7 @@ public class TabTextBox : TextBox
 	/// <summary>Returns the string representation of the bound property.</summary>
 	public override string? ToString() => Property?.ToString();
 
+	/// <summary>Creates an unbound text box with the default styling and border layout.</summary>
 	public TabTextBox()
 	{
 		HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -45,6 +47,8 @@ public class TabTextBox : TextBox
 		InitializeBorder();
 	}
 
+	/// <summary>Creates a text box bound to <paramref name="property"/>, applying its validation, width, and display attributes.</summary>
+	/// <param name="property">The list property to bind to.</param>
 	public TabTextBox(ListProperty property) : this()
 	{
 		Property = property;
@@ -77,6 +81,8 @@ public class TabTextBox : TextBox
 		Styles.Add(style);
 	}
 
+	/// <summary>Applies the property's read-only state, watermark, and layout attributes, then binds the text box to it.</summary>
+	/// <param name="property">The list property to configure and bind to.</param>
 	protected void InitializeProperty(ListProperty property)
 	{
 		IsReadOnly = !property.IsEditable;

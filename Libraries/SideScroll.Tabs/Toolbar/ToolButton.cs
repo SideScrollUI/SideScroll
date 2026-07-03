@@ -65,6 +65,7 @@ public class ToolButton
 	/// </summary>
 	public CallActionAsync? ActionAsync { get; set; }
 
+	/// <summary>Returns the button's <see cref="Tooltip"/>.</summary>
 	public override string ToString() => Tooltip;
 
 	/// <summary>

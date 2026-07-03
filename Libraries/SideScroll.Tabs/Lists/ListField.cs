@@ -62,6 +62,7 @@ public class ListField : ListMember, IPropertyIsEditable
 	[Hidden]
 	public bool IsFieldVisible => FieldInfo.IsRowVisible();
 
+	/// <summary>Returns the field's <see cref="Name"/>.</summary>
 	public override string? ToString() => Name;
 
 	/// <summary>

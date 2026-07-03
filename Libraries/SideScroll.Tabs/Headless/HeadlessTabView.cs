@@ -199,6 +199,7 @@ public class HeadlessTabView(TabInstance instance, string label)
 	/// </summary>
 	/// <param name="call">The call context for logging.</param>
 	/// <param name="maxDepth">Maximum number of levels to traverse (default 5).</param>
+	/// <param name="expandedTypes">Tracks eligible types already expanded earlier in the traversal so duplicates are referenced instead of re-expanded; pass <c>null</c> to start a fresh traversal.</param>
 	public async Task SelectAllItemsRecursiveAsync(Call call, int maxDepth = 5, HashSet<Type>? expandedTypes = null)
 	{
 		using var callTimer = call.Timer("Loading Tab",
@@ -499,5 +500,6 @@ public class HeadlessTabItem(string label, HeadlessTabView? child)
 	/// <summary>The explored child view, or <c>null</c> when the row was listed but not explored.</summary>
 	public HeadlessTabView? Child => child;
 
+	/// <summary>Returns the row's <see cref="Label"/>.</summary>
 	public override string ToString() => Label;
 }

@@ -10,6 +10,7 @@ namespace SideScroll.Avalonia.Controls.Toolbar;
 /// </summary>
 public class ToolbarToggleButton : ToolbarButton
 {
+	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(ToolbarButton);
 
 	/// <summary>Gets or sets the image resource used when the toggle is in the on/checked state.</summary>

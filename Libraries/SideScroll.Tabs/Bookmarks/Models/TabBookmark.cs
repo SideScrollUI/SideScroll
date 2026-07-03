@@ -101,6 +101,7 @@ public class TabBookmark
 				.FirstOrDefault(tabDataBookmark => tabDataBookmark.SelectionType != SelectionType.None)
 				?.SelectionType ?? SelectionType.None;
 
+	/// <summary>Returns the bookmark's <see cref="Address"/>.</summary>
 	public override string? ToString() => Address;
 
 	/// <summary>

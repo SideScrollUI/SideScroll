@@ -28,6 +28,7 @@ public class Call
 	/// </summary>
 	public TaskInstance? TaskInstance { get; set; } // Shows the Task Status and let's you stop them
 
+	/// <summary>Returns the call's <see cref="Name"/>.</summary>
 	public override string? ToString() => Name;
 
 	/// <summary>

@@ -61,6 +61,7 @@ public class TimeZoneView : IComparable
 		}
 	}
 
+	/// <summary>Returns the abbreviation, or the abbreviation, name, and UTC offset when they differ.</summary>
 	public override string? ToString()
 	{
 		if (Abbreviation == Name)

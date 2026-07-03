@@ -25,7 +25,7 @@ public class HeadlessTabViewer(Project project, HeadlessTabOptions? options = nu
 	/// <summary>
 	/// Creates a tab instance from <paramref name="tab"/>, loads its model asynchronously, and returns
 	/// the root <see cref="HeadlessTabView"/>. Child views are not selected automatically; call
-	/// <see cref="HeadlessTabView.SelectAllItemsAsync"/> or <see cref="HeadlessTabView.SelectItemsAsync"/>
+	/// <see cref="HeadlessTabView.SelectAllItemsAsync"/> or <see cref="HeadlessTabView.SelectItemsAsync(SideScroll.Call, System.Collections.IList)"/>
 	/// to traverse children, or use <see cref="LoadAndTraverseAsync"/> for a one-step operation.
 	/// </summary>
 	public async Task<HeadlessTabView> LoadTabAsync(Call call, ITab tab)

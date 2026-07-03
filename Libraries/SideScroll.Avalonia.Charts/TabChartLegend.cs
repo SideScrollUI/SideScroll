@@ -37,6 +37,7 @@ public abstract class TabChartLegend<TSeries> : Grid
 	/// <summary>Raised when the visible set of series changes due to selection or highlight actions.</summary>
 	public event EventHandler<EventArgs>? OnVisibleSeriesChanged;
 
+	/// <summary>Returns the <see cref="ChartView"/>'s string representation.</summary>
 	public override string? ToString() => ChartView.ToString();
 
 	/// <summary>Initializes the legend, creating the scroll viewer and wrap panel layout.</summary>

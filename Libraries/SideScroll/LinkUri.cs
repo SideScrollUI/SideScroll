@@ -62,6 +62,7 @@ public class LinkUri
 		Url = ToUri();
 	}
 
+	/// <summary>Returns the <see cref="Url"/>, generating it from the components when not already set.</summary>
 	public override string ToString() => Url ?? ToUri();
 
 	/// <summary>

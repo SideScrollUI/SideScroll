@@ -43,6 +43,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 	/// <summary>Gets the SkiaSharp color used for painting this series.</summary>
 	public SKColor SkColor { get; protected set; }
 
+	/// <summary>Returns the underlying <see cref="ListSeries"/>'s string representation.</summary>
 	public override string ToString() => ListSeries.ToString();
 
 	/// <summary>Initializes the series, converts the source data to <see cref="LiveChartPoint"/> instances, and subscribes to collection changes.</summary>

@@ -7,8 +7,11 @@ using SideScroll.Tabs.Toolbar;
 
 namespace SideScroll.Avalonia.Tabs;
 
+/// <summary>A tab that displays a string of text in a formatted, read-only editor, with a toolbar button to copy the text to the clipboard.</summary>
+/// <param name="text">The text displayed by the tab.</param>
 public class TabText(string text) : ITab
 {
+	/// <summary>The text displayed by the tab.</summary>
 	public string Text => text;
 
 	public TabInstance Create() => new Instance(this);

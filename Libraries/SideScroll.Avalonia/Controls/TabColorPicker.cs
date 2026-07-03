@@ -15,6 +15,7 @@ namespace SideScroll.Avalonia.Controls;
 /// </summary>
 public class TabColorPicker : ColorPicker
 {
+	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(ColorPicker);
 
 	/// <summary>Gets the list property this color picker is bound to, or <c>null</c> if unbound.</summary>
@@ -23,6 +24,7 @@ public class TabColorPicker : ColorPicker
 	private static int? _prevSelectedIndex = 2;
 	private static ColorModel? _prevColorModel = ColorModel.Hsva;
 
+	/// <summary>Creates an unbound color picker with the default styling and restored color model and tab selection.</summary>
 	public TabColorPicker()
 	{
 		HexInputAlphaPosition = AlphaComponentPosition.Leading;
@@ -39,6 +41,8 @@ public class TabColorPicker : ColorPicker
 		PropertyChanged += TabColorPicker_PropertyChanged;
 	}
 
+	/// <summary>Creates a color picker bound to <paramref name="property"/>.</summary>
+	/// <param name="property">The list property to bind to.</param>
 	public TabColorPicker(ListProperty property) : this()
 	{
 		Property = property;

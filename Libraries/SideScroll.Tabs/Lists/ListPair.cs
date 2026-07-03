@@ -50,6 +50,7 @@ public class ListPair(object key, object? value, object? obj = null, int? maxDes
 	/// </summary>
 	public event PropertyChangedEventHandler? PropertyChanged;
 
+	/// <summary>Returns the pair's <see cref="Key"/>.</summary>
 	public override string ToString() => Key?.ToString() ?? "";
 }
 
@@ -88,5 +89,6 @@ public class ListPair<TKey, TValue>(TKey key, TValue value, object? obj = null) 
 	/// </summary>
 	public event PropertyChangedEventHandler? PropertyChanged;
 
+	/// <summary>Returns the pair's <see cref="Key"/>.</summary>
 	public override string ToString() => Key?.ToString() ?? "";
 }

@@ -7,6 +7,7 @@ namespace SideScroll.Avalonia.Controls;
 /// </summary>
 public class TabMenuItem : MenuItem
 {
+	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(MenuItem);
 
 	/// <summary>Initializes the menu item with an optional header text.</summary>

@@ -19,6 +19,7 @@ public class SelectedRowView
 	/// </summary>
 	public TabBookmark TabBookmark { get; set; }
 
+	/// <summary>Returns the underlying <see cref="SelectedRow"/>'s string representation.</summary>
 	public override string? ToString() => SelectedRow.ToString();
 
 	/// <summary>

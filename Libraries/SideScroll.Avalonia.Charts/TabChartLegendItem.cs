@@ -72,6 +72,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 	private static readonly List<Point> PolygonPointsSmall = GetPolygonPoints(13, 13);
 	private static readonly List<Point> PolygonPointsLarge = GetPolygonPoints(15, 15);
 
+	/// <summary>Returns the represented <see cref="ChartSeries"/>' string representation.</summary>
 	public override string? ToString() => ChartSeries.ToString();
 
 	/// <summary>Initializes the legend item with the parent legend and the chart series it represents.</summary>

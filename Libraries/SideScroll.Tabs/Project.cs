@@ -68,6 +68,7 @@ public class Project
 	/// </summary>
 	public virtual ProjectDataRepos Data => new(ProjectSettings, UserSettings);
 
+	/// <summary>Returns the project's <see cref="Name"/>.</summary>
 	public override string? ToString() => Name;
 
 	/// <summary>

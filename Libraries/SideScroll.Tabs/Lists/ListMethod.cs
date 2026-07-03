@@ -55,6 +55,7 @@ public class ListMethod : ListMember
 		}
 	}
 
+	/// <summary>Returns the method's <see cref="Name"/>.</summary>
 	public override string? ToString() => Name;
 
 	/// <summary>

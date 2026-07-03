@@ -32,6 +32,7 @@ public class TabObject
 	/// </summary>
 	public bool EnableScrolling { get; set; }
 
+	/// <summary>Returns the wrapped <see cref="Object"/>'s string representation.</summary>
 	public override string? ToString() => Object?.ToString();
 }
 
@@ -258,6 +259,7 @@ public class TabModel
 		}
 	}
 
+	/// <summary>Returns the model's <see cref="Name"/>.</summary>
 	public override string ToString() => Name;
 
 	/// <summary>
@@ -613,6 +615,7 @@ public class TabModel
 	/// <param name="filter">The filter to apply when searching</param>
 	/// <param name="depth">Maximum depth to search nested objects. Limited by MaxSearchDepth</param>
 	/// <param name="searchableOnly">If set only [Searchable] members will be checked</param>
+	/// <param name="isRoot">Whether this is the top-level call of the recursive search; <c>false</c> for nested recursive calls</param>
 	public TabBookmark FindMatches(Filter filter, int depth, bool searchableOnly = false, bool isRoot = true)
 	{
 		TabBookmark tabBookmark = new();

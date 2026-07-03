@@ -68,6 +68,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	/// </summary>
 	public DataRepoIndex<T>? Index { get; set; }
 
+	/// <summary>Returns the instance's <see cref="GroupId"/>.</summary>
 	public override string ToString() => GroupId;
 
 	/// <summary>Initializes the repository instance for the given group, optionally adding an index.</summary>

@@ -54,6 +54,7 @@ public class MemberSchema(TypeSchema typeSchema, string name, int typeIndex = -1
 	/// </summary>
 	public bool IsReadable { get; set; }
 
+	/// <summary>Returns the member's <see cref="Name"/>.</summary>
 	public override string ToString() => Name;
 
 	/// <summary>

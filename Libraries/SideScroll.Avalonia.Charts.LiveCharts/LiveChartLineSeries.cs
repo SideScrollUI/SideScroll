@@ -36,6 +36,7 @@ public class LiveChartPoint : ObservablePoint
 		}
 	}
 
+	/// <summary>Returns the point's <c>X: Y</c> coordinate.</summary>
 	public override string ToString() => $"{X}: {Y}";
 }
 
@@ -48,6 +49,7 @@ public class LiveChartLineSeries(LiveChartSeries liveChartSeries) : LineSeries<L
 	/// <summary>Gets the <see cref="SideScroll.Avalonia.Charts.LiveCharts.LiveChartSeries"/> that owns this native series.</summary>
 	public LiveChartSeries LiveChartSeries => liveChartSeries;
 
+	/// <summary>Returns the owning <see cref="LiveChartSeries"/>'s string representation.</summary>
 	public override string ToString() => LiveChartSeries.ToString();
 
 	/// <summary>Exposes the base <c>Fetch</c> implementation publicly so the tooltip and hit-test logic can enumerate rendered points.</summary>

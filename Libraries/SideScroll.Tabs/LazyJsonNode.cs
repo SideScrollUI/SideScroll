@@ -85,6 +85,7 @@ public class LazyJsonArray(JsonArray jsonArray) : LazyJsonNode
 	}
 	private List<object?>? _items;
 
+	/// <summary>Returns the formatted array items.</summary>
 	public override string? ToString() => Items.Formatted();
 }
 
@@ -119,6 +120,7 @@ public class LazyJsonObject(JsonObject jsonObject) : LazyJsonNode
 	}
 	private List<LazyJsonProperty>? _items;
 
+	/// <summary>Returns the formatted object properties.</summary>
 	public override string? ToString() => Items.Formatted();
 }
 
@@ -150,5 +152,6 @@ public class LazyJsonProperty : LazyJsonNode
 		}
 	}*/
 
+	/// <summary>Returns the property's <see cref="Key"/>.</summary>
 	public override string? ToString() => Key;
 }

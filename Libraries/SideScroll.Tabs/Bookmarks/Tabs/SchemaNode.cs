@@ -14,6 +14,7 @@ namespace SideScroll.Tabs.Bookmarks.Tabs;
 /// <summary>Describes a tab node in the exported schema tree.</summary>
 public class SchemaNode
 {
+	/// <summary>The tab's display label.</summary>
 	[Hidden, JsonIgnore]
 	public string Label { get; set; } = "";
 
@@ -35,6 +36,7 @@ public class SchemaNode
 	[Hidden]
 	public string? Ref { get; set; }
 
+	/// <summary>Live pointer to the resolved definition for the deduplicated type named by <see cref="Ref"/>, for in-app navigation (not serialized).</summary>
 	[Hide(null), Unserialized]
 	public SchemaNode? Reference { get; set; }
 
@@ -48,6 +50,7 @@ public class SchemaNode
 	[Hidden, JsonIgnore]
 	public bool HasDetails => Objects?.Count > 0 || TabRoot || DepthTruncated || Ref != null;
 
+	/// <summary>Returns the tab's <see cref="Label"/>.</summary>
 	public override string ToString() => Label;
 
 	/// <summary>Builds the schema for <paramref name="view"/> without a shared export context.</summary>
@@ -135,6 +138,7 @@ public class SchemaDocument
 	/// <summary>The root tab's schema.</summary>
 	public SchemaNode Root { get; set; } = new();
 
+	/// <summary>Builds the full schema document for <paramref name="view"/>, populating the deduplicated type definitions or omitting them when nothing was deduplicated.</summary>
 	public static SchemaDocument From(HeadlessTabView view)
 	{
 		SchemaDocument schemaDocument = new();
@@ -192,14 +196,17 @@ public abstract class SchemaObject
 	internal static SchemaObject FromList(IList list, HeadlessTabView view, SchemaDocument schemaDocument) =>
 		SchemaList.From(list, view, schemaDocument);
 
+	/// <summary>Returns the object's <see cref="Type"/> discriminator.</summary>
 	public override string ToString() => Type;
 }
 
 /// <summary>Plain display text, e.g. an object's <c>ToString()</c>.</summary>
 public class SchemaText : SchemaObject
 {
+	/// <inheritdoc/>
 	public override string Type => "Text";
 
+	/// <summary>The display text.</summary>
 	public string? Text { get; set; }
 
 	//public override string ToString() => Text ?? base.ToString()!;
@@ -208,13 +215,16 @@ public class SchemaText : SchemaObject
 /// <summary>A set of action buttons from a list of <see cref="TaskCreator"/>.</summary>
 public class SchemaActions : SchemaObject
 {
+	/// <inheritdoc/>
 	public override string Type => "Actions";
 
+	/// <summary>The action buttons.</summary>
 	[InnerValue]
 	public List<SchemaAction>? Actions { get; set; }
 
 	//public override string ToString() => $"{Actions?.Count ?? 0}";
 
+	/// <summary>Builds an actions object from a list of <see cref="TaskCreator"/>.</summary>
 	public static SchemaActions From(IEnumerable<TaskCreator> actions) => new()
 	{
 		Actions = actions.Select(SchemaAction.From).ToList(),
@@ -224,14 +234,19 @@ public class SchemaActions : SchemaObject
 /// <summary>A single visible property of a form: its display label, type, and current value.</summary>
 public class SchemaProperty
 {
+	/// <summary>The property's display label.</summary>
 	public string? Label { get; set; }
 
+	/// <summary>The property's value type name.</summary>
 	public string? Type { get; set; }
 
+	/// <summary>The property's current value, formatted as text.</summary>
 	public string? Value { get; set; }
 
+	/// <summary>Returns the property's <see cref="Label"/>.</summary>
 	public override string ToString() => Label ?? base.ToString()!;
 
+	/// <summary>Builds a property from <paramref name="propertyInfo"/> on <paramref name="obj"/>, capturing its label, type, and value.</summary>
 	public static SchemaProperty From(object obj, PropertyInfo propertyInfo)
 	{
 		return new SchemaProperty
@@ -258,13 +273,17 @@ public class SchemaProperty
 /// <summary>A single action button from a <see cref="TaskCreator"/>: its label and description.</summary>
 public class SchemaAction
 {
+	/// <summary>The action button's label.</summary>
 	public string? Label { get; set; }
 
+	/// <summary>The action button's description.</summary>
 	[Hide(null)]
 	public string? Description { get; set; }
 
+	/// <summary>Returns the action's <see cref="Label"/>.</summary>
 	public override string ToString() => Label ?? base.ToString()!;
 
+	/// <summary>Builds an action from a <see cref="TaskCreator"/>.</summary>
 	public static SchemaAction From(TaskCreator taskCreator)
 	{
 		return new SchemaAction
@@ -278,13 +297,16 @@ public class SchemaAction
 /// <summary>A chart: its name and series names.</summary>
 public class SchemaChart : SchemaObject
 {
+	/// <inheritdoc/>
 	public override string Type => "Chart";
 
+	/// <summary>The chart's name.</summary>
 	public string? Name { get; set; }
 
 	/// <summary>The chart's series names, in order.</summary>
 	public List<string>? Series { get; set; }
 
+	/// <summary>Builds a chart object from a <see cref="ChartView"/>, capturing its name and series names.</summary>
 	public static SchemaChart From(ChartView chart)
 	{
 		List<string> series = chart.Series
@@ -303,6 +325,7 @@ public class SchemaChart : SchemaObject
 /// <summary>A toolbar: its controls in order.</summary>
 public class SchemaToolbar : SchemaObject
 {
+	/// <inheritdoc/>
 	public override string Type => "Toolbar";
 
 	/// <summary>The controls in order.</summary>
@@ -342,10 +365,13 @@ public class SchemaToolbar : SchemaObject
 /// <summary>A single toolbar control: its display name and kind (Button, Toggle, ComboBox, Label).</summary>
 public class SchemaControl
 {
+	/// <summary>The control's display name.</summary>
 	public string? Name { get; set; }
 
+	/// <summary>The control's kind (Button, Toggle, ComboBox, or Label).</summary>
 	public string? Kind { get; set; }
 
+	/// <summary>Returns the control's <see cref="Name"/>.</summary>
 	public override string ToString() => Name ?? base.ToString()!;
 
 	/// <summary>
@@ -365,6 +391,7 @@ public class SchemaControl
 /// <summary>A form: its visible properties.</summary>
 public class SchemaForm : SchemaObject
 {
+	/// <inheritdoc/>
 	public override string Type => "Form";
 
 	/// <summary>The form's visible properties, in order.</summary>
@@ -390,6 +417,7 @@ public class SchemaForm : SchemaObject
 /// <summary>A data-grid item list: its visible columns and the navigated items.</summary>
 public class SchemaList : SchemaObject
 {
+	/// <inheritdoc/>
 	public override string Type => "List";
 
 	/// <summary>The visible columns, mirroring the data grid's columns for the list's element type.</summary>
@@ -456,20 +484,26 @@ public class SchemaList : SchemaObject
 /// <summary>A single data-grid column: its display label and value type.</summary>
 public class SchemaColumn
 {
+	/// <summary>The column's display label.</summary>
 	public string? Label { get; set; }
 
+	/// <summary>The column's value type name.</summary>
 	public string? Type { get; set; }
 
+	/// <summary>Returns the column's <see cref="Label"/>.</summary>
 	public override string ToString() => Label ?? base.ToString()!;
 }
 
 /// <summary>A single navigated row in a list: its label and an optional expanded child node.</summary>
 public class SchemaItem
 {
+	/// <summary>The row's display label.</summary>
 	public string? Label { get; set; }
 
+	/// <summary>The row's expanded child node, if any.</summary>
 	[Hidden, InnerValue]
 	public SchemaNode? Child { get; set; }
 
+	/// <summary>Returns the item's <see cref="Label"/>.</summary>
 	public override string ToString() => Label ?? base.ToString()!;
 }

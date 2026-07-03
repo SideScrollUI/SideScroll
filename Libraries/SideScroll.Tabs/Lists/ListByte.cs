@@ -38,6 +38,7 @@ public class ListByte(int index, byte b)
 	/// </summary>
 	public string Bits { get; } = Convert.ToString(b, 2).PadLeft(8, '0');
 
+	/// <summary>Returns the byte's <see cref="Index"/>.</summary>
 	public override string ToString() => Index.ToString();
 
 	/// <summary>

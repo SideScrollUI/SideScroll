@@ -8,6 +8,7 @@ namespace SideScroll.Avalonia.Controls;
 /// <summary>A styled text-label button with optional warning or default accent coloring, used for action buttons in tab forms.</summary>
 public class TabTextButton : Button
 {
+	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(Button);
 
 	/// <summary>Initializes the button with an optional label and accent style.</summary>

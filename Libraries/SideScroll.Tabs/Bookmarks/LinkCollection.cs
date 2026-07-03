@@ -35,6 +35,7 @@ public class LinkedBookmark(LinkUri? linkUri, Bookmark bookmark)
 	/// </summary>
 	public string LinkId => linkUri?.ToString() ?? bookmark.ToString();
 
+	/// <summary>Returns the <see cref="LinkId"/>.</summary>
 	public override string ToString() => LinkId;
 }
 

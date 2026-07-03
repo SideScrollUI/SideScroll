@@ -36,6 +36,7 @@ public class SelectedRow : IEquatable<SelectedRow>
 	/// </summary>
 	public object? DataValue { get; set; }
 
+	/// <summary>Returns the <see cref="DataKey"/>, or the <see cref="Label"/> when no data key is set.</summary>
 	public override string? ToString() => DataKey ?? Label;
 
 	/// <summary>

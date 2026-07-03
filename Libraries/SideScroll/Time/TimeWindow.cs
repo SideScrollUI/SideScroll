@@ -38,6 +38,7 @@ public class TimeWindow
 	/// </summary>
 	public event EventHandler<TimeWindowEventArgs>? OnSelectionChanged;
 
+	/// <summary>Returns the <see cref="Name"/>, the current selection, or the formatted time range, whichever is available first.</summary>
 	public override string ToString() => Name ?? Selection?.ToString() ?? DateTimeUtils.FormatTimeRange(StartTime, EndTime);
 
 	/// <summary>

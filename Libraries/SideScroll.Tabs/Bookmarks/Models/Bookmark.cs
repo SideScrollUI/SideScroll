@@ -91,6 +91,7 @@ public class Bookmark
 	[HiddenColumn]
 	public TabBookmark TabBookmark { get; set; } = new();
 
+	/// <summary>Returns the bookmark's <see cref="Label"/>.</summary>
 	public override string ToString() => Label;
 
 	/// <summary>

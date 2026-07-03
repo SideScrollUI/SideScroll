@@ -225,6 +225,8 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 		}
 	}
 
+	/// <summary>Writes the index entries to the primary index file, creating the group directory if needed.</summary>
+	/// <param name="indices">The in-memory index entries to persist.</param>
 	protected virtual void Save(Indices indices)
 	{
 		if (!Directory.Exists(GroupPath))

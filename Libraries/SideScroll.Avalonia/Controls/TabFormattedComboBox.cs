@@ -19,6 +19,7 @@ namespace SideScroll.Avalonia.Controls;
 /// </summary>
 public class TabFormattedComboBox : ComboBox
 {
+	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(ComboBox);
 
 	/// <summary>Gets the list property this combo box is bound to.</summary>

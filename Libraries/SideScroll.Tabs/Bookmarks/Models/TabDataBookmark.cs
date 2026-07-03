@@ -97,6 +97,7 @@ public class TabDataBookmark
 		return address;
 	}
 
+	/// <summary>Returns the bookmark's <see cref="Address"/>.</summary>
 	public override string? ToString() => Address;
 
 	/// <summary>

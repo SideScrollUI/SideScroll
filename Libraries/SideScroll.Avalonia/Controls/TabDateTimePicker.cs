@@ -20,6 +20,7 @@ namespace SideScroll.Avalonia.Controls;
 /// <summary>A calendar date picker that suppresses the default scroll-wheel date increment behavior on desktop.</summary>
 public class TabCalendarDatePicker : CalendarDatePicker
 {
+	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(CalendarDatePicker);
 
 	// Default behavior increments and decrements Date when scrolling left/right with the mousepad

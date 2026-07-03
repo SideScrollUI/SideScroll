@@ -12,6 +12,7 @@ namespace SideScroll.Avalonia.Controls;
 /// <summary>A combo box bound to a <see cref="ListProperty"/>, with support for attribute-based enabled items and auto-select of a default value.</summary>
 public class TabComboBox : ComboBox
 {
+	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(ComboBox);
 
 	/// <summary>Gets the list property this combo box is bound to, or <c>null</c> if unbound.</summary>

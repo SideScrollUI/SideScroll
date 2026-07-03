@@ -165,6 +165,7 @@ public class ChartView
 	/// </summary>
 	public event EventHandler<SeriesSelectedEventArgs>? SelectionChanged;
 
+	/// <summary>Returns the chart's <see cref="Name"/>.</summary>
 	public override string? ToString() => Name;
 
 	/// <summary>

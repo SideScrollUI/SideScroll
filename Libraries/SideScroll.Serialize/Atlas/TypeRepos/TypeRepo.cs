@@ -186,6 +186,7 @@ public abstract class TypeRepo : IDisposable
 	/// </summary>
 	protected virtual void LoadCustomHeader() { }
 
+	/// <summary>Returns the type schema's name.</summary>
 	public override string ToString() => TypeSchema.Name;
 
 	/// <summary>
@@ -652,6 +653,8 @@ public abstract class TypeRepo : IDisposable
 		return obj;
 	}
 
+	/// <summary>Creates an uninitialized instance of the loadable type and queues it for lazy member loading.</summary>
+	/// <param name="objectIndex">The index of the object within this type repo.</param>
 	protected virtual object? CreateObject(int objectIndex)
 	{
 		object obj = Activator.CreateInstance(LoadableType!, true)!;

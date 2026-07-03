@@ -726,6 +726,8 @@ public class Serializer : IDisposable
 		_loadQueue.Enqueue(loadItem);
 	}
 
+	/// <summary>Releases the resources used by the serializer.</summary>
+	/// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
 	protected virtual void Dispose(bool disposing)
 	{
 		if (_disposed)

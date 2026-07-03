@@ -191,5 +191,6 @@ public class DataItem<T>(string key, T value, string? path = null) : IDataItem
 	/// </summary>
 	public DateTime? ModifiedUtc => FileInfo?.LastWriteTimeUtc;
 
+	/// <summary>Returns the item's <see cref="Key"/>.</summary>
 	public override string ToString() => Key;
 }

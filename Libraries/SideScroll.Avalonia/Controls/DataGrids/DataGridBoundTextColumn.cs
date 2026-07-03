@@ -47,6 +47,7 @@ public class DataGridBoundTextColumn : DataGridTextColumn
 	/// <summary>A text block whose <see cref="MeasureCore"/> caps the available width to <see cref="MaxDesiredWidth"/> to prevent runaway column auto-sizing.</summary>
 	public class TextBlockElement : TextBlock
 	{
+		/// <inheritdoc/>
 		protected override Type StyleKeyOverride => typeof(TextBlock);
 
 		/// <summary>The maximum width in pixels that this element reports as its desired width.</summary>

@@ -17,6 +17,7 @@ public class TaskMethod : TaskCreator
 	/// </summary>
 	public object Object { get; }
 
+	/// <summary>Returns the method's name.</summary>
 	public override string ToString() => MethodInfo.Name;
 
 	/// <summary>

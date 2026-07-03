@@ -84,6 +84,8 @@ public static class Icons
 		public static ResourceView Restore { get; } = Get("Restore");
 		public static ResourceView Close { get; } = Get("Close");
 
+		/// <summary>Loads an embedded SVG icon resource by name.</summary>
+		/// <param name="resourceName">The name of the SVG resource (without file extension).</param>
 		public static ResourceView Get(string resourceName) => new(Assembly, IconPath, "svg", resourceName, "svg");
 	}
 }

@@ -9,6 +9,7 @@ public class HttpFile
 	/// <summary>Gets or sets the downloaded file size in bytes, populated after a successful <see cref="DownloadAsync"/> call.</summary>
 	public int? Size { get; set; }
 
+	/// <summary>Returns the query portion of the file's <see cref="Uri"/>.</summary>
 	public override string? ToString() => Uri?.Query;
 
 	/// <summary>Downloads the file from <see cref="Uri"/> into <paramref name="httpCache"/> and records the byte count in <see cref="Size"/>.</summary>

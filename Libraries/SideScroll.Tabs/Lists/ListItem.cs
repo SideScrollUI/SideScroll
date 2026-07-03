@@ -95,5 +95,6 @@ public class ListItem(object? key, object? value) : IListItem, INotifyPropertyCh
 	/// </summary>
 	public event PropertyChangedEventHandler? PropertyChanged;
 
+	/// <summary>Returns the item's <see cref="Key"/>.</summary>
 	public override string ToString() => Key?.ToString() ?? "";
 }

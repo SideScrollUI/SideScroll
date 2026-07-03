@@ -121,6 +121,7 @@ public class ListSeries
 	/// </summary>
 	public double StrokeThickness { get; set; } = 2;
 
+	/// <summary>Returns the series <see cref="Name"/> followed by the item count in brackets.</summary>
 	public override string ToString() => $"{Name}[{List?.Count}]";
 
 	/// <summary>

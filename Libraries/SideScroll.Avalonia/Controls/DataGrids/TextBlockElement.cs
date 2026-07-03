@@ -11,6 +11,7 @@ namespace SideScroll.Avalonia.Controls.DataGrids;
 /// <summary>A styled text block used as a data-grid cell element, applying foreground/background brush converters and capping its desired size to the column's configured maximum.</summary>
 public class TextBlockElement : TextBlock
 {
+	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(TextBlock);
 
 	/// <summary>Gets the owning <see cref="DataGridPropertyTextColumn"/> that created this element.</summary>

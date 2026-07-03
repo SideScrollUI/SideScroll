@@ -72,5 +72,6 @@ public class TabDataSettings
 		}
 	}
 
+	/// <summary>Returns the settings <see cref="Address"/>.</summary>
 	public override string? ToString() => Address;
 }

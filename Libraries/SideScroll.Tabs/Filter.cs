@@ -146,6 +146,7 @@ public class Filter
 
 	private static readonly Regex _regex = new(@"^(?<Depth>\+\d+ )?(?<Filters>.+)$", RegexOptions.IgnoreCase);
 
+	/// <summary>Returns the filter's <see cref="FilterText"/>.</summary>
 	public override string ToString() => FilterText;
 
 	/// <summary>
@@ -153,6 +154,7 @@ public class Filter
 	/// Supports depth prefix (+N), quoted strings, AND (&amp;), OR (|), and parentheses for grouping.
 	/// </summary>
 	/// <param name="filterText">The filter expression to parse (e.g., "+3 foo &amp; bar | baz")</param>
+	/// <param name="depth">The default search depth, used when the filter text has no depth prefix (+N)</param>
 	public Filter(string? filterText, int depth = 0)
 	{
 		FilterText = filterText ?? "";

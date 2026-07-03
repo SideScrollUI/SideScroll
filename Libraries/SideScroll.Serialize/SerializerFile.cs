@@ -37,6 +37,7 @@ public abstract class SerializerFile(string basePath, string name = "")
 	/// </summary>
 	public virtual bool Exists => File.Exists(DataPath) && new FileInfo(DataPath).Length > 0;
 
+	/// <summary>Returns the file's <see cref="BasePath"/>.</summary>
 	public override string ToString() => BasePath;
 
 	/// <summary>

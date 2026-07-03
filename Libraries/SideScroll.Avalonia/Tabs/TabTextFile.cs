@@ -8,8 +8,11 @@ using SideScroll.Utilities;
 
 namespace SideScroll.Avalonia.Tabs;
 
+/// <summary>A tab that displays the contents of a text file in a read-only editor, with a toolbar button to copy the text to the clipboard.</summary>
+/// <param name="filePath">The file whose contents are displayed.</param>
 public class TabTextFile(FilePath filePath) : ITab
 {
+	/// <summary>The file whose contents are displayed.</summary>
 	public FilePath FilePath => filePath;
 
 	public TabInstance Create() => new Instance(this);

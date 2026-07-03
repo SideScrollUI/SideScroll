@@ -226,6 +226,7 @@ public class ViewHttpResponse
 	[HiddenColumn]
 	public HttpResponseMessage? Response { get; set; }
 
+	/// <summary>Returns the response <see cref="Filename"/>.</summary>
 	public override string? ToString() => Filename;
 
 	/// <summary>Initializes an empty <see cref="ViewHttpResponse"/>.</summary>
