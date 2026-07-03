@@ -38,7 +38,7 @@ public class TabSampleChartLists : ITab
 			for (int i = 0; i < 2; i++)
 			{
 				ItemCollection<int> list = [];
-				chartView.AddSeries($"Series {i}", list);
+				chartView.AddSeries($"Series {i}", list, seriesType: SeriesType.Average);
 				_series.Add(list);
 			}
 

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Fixed
+- Fixed ListSeries Totals for time ranges without any entries
 
 ### Changed
 
@@ -17,17 +18,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Added Headless Tab Viewer for basic tab navigation and tab schema generation
-- Added [Explorable] attribute to override the tab schema element type allowlist per type
+- Added `[Explorable]` attribute to override the tab schema element type allowlist per type
 - Added Task Tab to allow copying the Task log to the clipboard as json
 - Added Reflection Cache for Tab Attributes
 - Added docs for Json Bookmark Schema
-- Added Sample Program for SideScroll.Demo.Avalonia.Headless
+- Added Sample Program for `SideScroll.Demo.Avalonia.Headless`
 - Added AvaloniaHeadlessCapture to allow Capturing specific Tabs
-- Added ItemCollectionUI exception handling for InsertItemCallback and RemoveItemCallback
-- Added TabDateTimePicker Button Flyouts
+- Added `ItemCollectionUI` exception handling for `InsertItemCallback` and `RemoveItemCallback`
+- Added `TabDateTimePicker` Button Flyouts
 - Added Window Close Button Theming
 - Added image rotation (Rotate Left / Rotate Right) toolbar buttons to TabFileImage, with RotateLeft/RotateRight icons
-- Added [TabRequiredGroup] for TabForm to require at least one value to be filled in
+- Added `[TabRequiredGroup]` for TabForm to require at least one value to be filled in
 
 ### Fixed
 - Fixed DataGrid not updating default selections for new items
@@ -37,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Restructured the Settings tab into General / Themes / Data sub-tabs, moved Reset/Save into General, and split Data into Settings (saving) and Repositories (viewing/resetting)
 - Updated `ObjectExtensions.Formatted()` TimeSpans to use `FormattedShort()`
-- Updated Bookmark.Changed to [PrivateData]
+- Updated Bookmark.Changed to `[PrivateData]`
 - Renamed `TabModel.AddData()` to `AddItems()` and deprecated the old name
 - Deprecated the `TabModel.ItemLists` setter — use `AddItems()` instead (the getter and list remain mutable)
 - Updated to Avalonia 11.3.18 and LiveCharts 2.0.5

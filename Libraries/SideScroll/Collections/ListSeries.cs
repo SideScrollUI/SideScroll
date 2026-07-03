@@ -345,11 +345,13 @@ public class ListSeries
 	/// <summary>
 	/// Gets the time window spanning all data points in the series
 	/// </summary>
-	public TimeWindow GetTimeWindow()
+	public TimeWindow? GetTimeWindow()
 	{
+		if (TimeRangeValues is not { } timeRangeValues) return null;
+
 		DateTime startTime = DateTime.MaxValue;
 		DateTime endTime = DateTime.MinValue;
-		foreach (TimeRangeValue timeRangeValue in TimeRangeValues!)
+		foreach (TimeRangeValue timeRangeValue in timeRangeValues)
 		{
 			startTime = startTime.Min(timeRangeValue.StartTime);
 			endTime = endTime.Max(timeRangeValue.EndTime);

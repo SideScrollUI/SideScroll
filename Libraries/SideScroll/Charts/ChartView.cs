@@ -260,7 +260,7 @@ public class ChartView
 		if (averageCount == Series.Count)
 		{
 			// Use the Min/Max times from the series data points (should this be configurable?)
-			timeWindow = GetSeriesTimeWindow();
+			timeWindow = GetSeriesTimeWindow() ?? timeWindow;
 		}
 
 		var orderedSeries = Series.OrderByDescending(series => series.CalculateTotal(timeWindow));
@@ -271,16 +271,26 @@ public class ChartView
 	/// <summary>
 	/// Gets the time window that encompasses all series data points
 	/// </summary>
-	public TimeWindow GetSeriesTimeWindow()
+	public TimeWindow? GetSeriesTimeWindow()
 	{
 		DateTime startTime = DateTime.MaxValue;
 		DateTime endTime = DateTime.MinValue;
+		bool found = false;
 		foreach (ListSeries listSeries in Series)
 		{
-			TimeWindow seriesWindow = listSeries.GetTimeWindow();
-			startTime = startTime.Min(seriesWindow.StartTime);
-			endTime = endTime.Max(seriesWindow.EndTime);
+			if (listSeries.GetTimeWindow() is { } seriesWindow)
+			{
+				startTime = startTime.Min(seriesWindow.StartTime);
+				endTime = endTime.Max(seriesWindow.EndTime);
+				found = true;
+			}
 		}
+
+		if (!found)
+		{
+			return null;
+		}
+
 		return new TimeWindow(startTime, endTime);
 	}
 
