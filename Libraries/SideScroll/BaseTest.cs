@@ -21,6 +21,6 @@ public class BaseTest
 	{
 		Call = new Call(name);
 		Call.Log.Settings!.DebugPrintLogLevel = logLevel;
-		new LogWriterConsole(Call.Log);
+		_ = new LogWriterConsole(Call.Log);
 	}
 }

@@ -36,6 +36,9 @@ public static class AvaloniaHeadlessCapture
 		int maxHeight = 900,
 		int timeoutMs = 10_000)
 	{
+		// Don't let headless navigation overwrite the Current bookmark used by the UI
+		project.SaveCurrentBookmark = false;
+
 		var window = new Window
 		{
 			Width = maxWidth,

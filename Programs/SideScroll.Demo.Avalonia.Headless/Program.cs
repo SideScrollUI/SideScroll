@@ -25,7 +25,7 @@ internal static class Program
 			captureFrame: window => window.CaptureRenderedFrame(),
 			minTabDepth: 1,
 			maxTabDepth: 10,
-			maxWidth: 4000,
+			maxWidth: 3000,
 			maxHeight: 1000);
 
 		string outputPath = Path.Combine(AppContext.BaseDirectory, "output.png");

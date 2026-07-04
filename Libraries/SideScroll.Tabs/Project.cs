@@ -59,6 +59,12 @@ public class Project
 	public Linker Linker { get; set; }
 
 	/// <summary>
+	/// Whether tab navigation updates the Current bookmark used to restore the session on startup.
+	/// Disable for headless viewers so automated navigation doesn't overwrite the user's UI state.
+	/// </summary>
+	public bool SaveCurrentBookmark { get; set; } = true;
+
+	/// <summary>
 	/// Gets the bookmark navigator for managing navigation history
 	/// </summary>
 	public BookmarkNavigator Navigator { get; protected init; } = new();

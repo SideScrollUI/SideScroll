@@ -1133,6 +1133,9 @@ public class TabInstance : IDisposable
 
 	private void SaveDefaultBookmark()
 	{
+		if (!Project.SaveCurrentBookmark)
+			return;
+
 		Bookmark bookmark = RootInstance.CreateBookmark(); // create from base Tab
 		bookmark.Name = CurrentBookmarkName;
 		Data.App.Save(bookmark.Name, bookmark, TaskInstance.Call);

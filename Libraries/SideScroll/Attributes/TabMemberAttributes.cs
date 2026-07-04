@@ -279,13 +279,29 @@ public class HideRowAttribute(object? value, params object?[] additionalValues) 
 /// Similar to <see cref="HideAttribute"/> but only affects column displays, 
 /// leaving row displays unaffected.
 /// </para>
+/// <para>
+/// <b>null vs 0 are distinct:</b> <c>[HideColumn(0)]</c> hides the column only when every
+/// item's value equals <c>0</c>; a <c>null</c> value does <em>not</em> match <c>0</c>.
+/// Likewise, <c>[HideColumn(null)]</c> only matches <c>null</c>, not <c>0</c>.
+/// To hide the column when all values are either <c>null</c> or <c>0</c>, list both:
+/// <c>[HideColumn(null, 0)]</c>.
+/// </para>
 /// </remarks>
 /// <example>
 /// <code>
 /// public class Config
 /// {
+///     // Hides the column when all items have IsEnabled = false
 ///     [HideColumn(false)]
 ///     public bool IsEnabled { get; set; }
+///
+///     // Hides the column only when all items have Count = 0; null does NOT match 0
+///     [HideColumn(0)]
+///     public int? Count { get; set; }
+///
+///     // Hides the column when all items have Count = null or Count = 0
+///     [HideColumn(null, 0)]
+///     public int? NullableCount { get; set; }
 /// }
 /// </code>
 /// </example>

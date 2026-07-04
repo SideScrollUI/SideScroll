@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated Avalonia Headless Tab Loading to handle delays better
 
 ### Changed
+- Updated Headless Tab Viewer to no longer update the Current Bookmark
 
 ## [0.21] - 2026-06-29
 
