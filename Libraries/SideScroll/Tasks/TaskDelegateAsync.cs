@@ -17,6 +17,7 @@ public class TaskDelegateAsync : TaskCreator
 	/// </summary>
 	public CallActionAsync CallAction { get; }
 
+	/// <summary>Returns the task's <see cref="TaskCreator.Label"/>.</summary>
 	public override string? ToString() => Label;
 
 	/// <summary>

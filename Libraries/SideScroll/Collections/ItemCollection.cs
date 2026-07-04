@@ -88,6 +88,7 @@ public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComp
 	/// </summary>
 	public IComparer Comparer { get; set; } = new CustomComparer();
 
+	/// <summary>Returns the <see cref="Label"/>, or the item count in brackets when no label is set.</summary>
 	public override string ToString() => Label ?? "[" + Count.ToString("N0") + "]";
 
 	/// <summary>Initializes an empty <see cref="ItemCollection{T}"/>.</summary>

@@ -63,7 +63,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	/// <summary>Gets whether columns are auto-generated from the element type's public properties.</summary>
 	public bool AutoGenerateColumns { get; }
 
-	/// <summary>Gets the underlying Avalonia <see cref="Avalonia.Controls.DataGrid"/> rendered inside this control.</summary>
+	/// <summary>Gets the underlying Avalonia <c>DataGrid</c> rendered inside this control.</summary>
 	public DataGrid DataGrid { get; protected set; }
 
 	/// <summary>Gets the search bar control shown above the grid, or <c>null</c> if not yet initialised.</summary>

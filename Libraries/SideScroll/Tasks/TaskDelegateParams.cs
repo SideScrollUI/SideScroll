@@ -25,6 +25,7 @@ public class TaskDelegateParams : TaskCreator
 	/// </summary>
 	public object[] Objects { get; }
 
+	/// <summary>Returns the task's <see cref="TaskCreator.Label"/>.</summary>
 	public override string? ToString() => Label;
 
 	/// <summary>

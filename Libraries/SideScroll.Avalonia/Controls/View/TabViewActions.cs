@@ -21,6 +21,9 @@ public class TabViewActions : UserControl
 
 	private readonly Dictionary<Button, TaskCreator> _taskCreators = [];
 
+	/// <summary>Initializes the actions panel for <paramref name="tabInstance"/>, rendering a button for each of the given actions.</summary>
+	/// <param name="tabInstance">The tab instance the actions are invoked on.</param>
+	/// <param name="actions">The actions to render as buttons.</param>
 	public TabViewActions(TabInstance tabInstance, IReadOnlyList<TaskCreator> actions)
 	{
 		TabInstance = tabInstance;

@@ -19,7 +19,7 @@ public class FieldSchema : MemberSchema
 	/// </summary>
 	public TypeSchema? FieldTypeSchema { get; set; }
 
-	/// <summary>Returns the field's <see cref="Name"/>.</summary>
+	/// <summary>Returns the field's <see cref="MemberSchema.Name"/>.</summary>
 	public override string ToString() => Name;
 
 	/// <summary>

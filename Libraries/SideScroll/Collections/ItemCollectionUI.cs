@@ -17,7 +17,7 @@ public interface IDeletableList
 
 	/// <summary>
 	/// Gets or sets the callback invoked with the row's data object when the delete button is clicked.
-	/// Set by <see cref="DataViewCollection"/> to wire the button back to the repository delete logic.
+	/// Set by <c>DataViewCollection</c> to wire the button back to the repository delete logic.
 	/// </summary>
 	Action<object>? OnDelete { get; set; }
 }

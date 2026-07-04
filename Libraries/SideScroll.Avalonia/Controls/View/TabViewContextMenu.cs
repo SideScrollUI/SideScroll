@@ -25,6 +25,9 @@ public class TabViewContextMenu : ContextMenu, IDisposable
 	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(ContextMenu);
 
+	/// <summary>Initializes the context menu for the given tab view and instance, building its refresh, reload, settings, and bookmark items.</summary>
+	/// <param name="tabView">The tab view this menu is attached to.</param>
+	/// <param name="tabInstance">The tab instance the menu actions operate on.</param>
 	public TabViewContextMenu(TabView tabView, TabInstance tabInstance)
 	{
 		TabView = tabView;

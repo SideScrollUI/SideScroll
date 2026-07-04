@@ -178,6 +178,7 @@ public abstract class ZipNodeView(string fullPath) : IHasLinks
 	[InnerValue, Unserialized, HiddenColumn]
 	public ITab? Tab { get; set; }
 
+	/// <summary>Returns the entry's <see cref="Name"/>.</summary>
 	public override string ToString() => Name;
 }
 
@@ -186,19 +187,26 @@ public abstract class ZipNodeView(string fullPath) : IHasLinks
 /// </summary>
 public class ZipDirectoryView : ZipNodeView, IHasLinks
 {
+	/// <inheritdoc/>
 	public override string Name { get; }
+	/// <inheritdoc/>
 	public override long? Size => null;
 
 	/// <summary>Gets the last write time of the directory entry.</summary>
 	public DateTime? LastWriteTime { get; }
 
+	/// <inheritdoc/>
 	public override TimeSpan? Modified => LastWriteTime?.Age();
+	/// <inheritdoc/>
 	public override bool HasLinks => true;
 
 	/// <summary>Gets the list of child entries within this directory.</summary>
 	[InnerValue, HiddenColumn]
 	public List<ZipNodeView> Children { get; } = [];
 
+	/// <summary>Initializes a directory view with its display name and full archive path.</summary>
+	/// <param name="name">The directory's display name.</param>
+	/// <param name="fullPath">The full path of the directory within the archive.</param>
 	public ZipDirectoryView(string name, string fullPath) : base(fullPath)
 	{
 		Name = name;
@@ -211,13 +219,17 @@ public class ZipDirectoryView : ZipNodeView, IHasLinks
 /// </summary>
 public class ZipFileView(ZipArchiveEntry entry) : ZipNodeView(entry.FullName)
 {
+	/// <inheritdoc/>
 	public override string Name { get; } = Path.GetFileName(entry.FullName);
+	/// <inheritdoc/>
 	public override long? Size { get; } = entry.Length;
 
 	/// <summary>Gets the last write time of the file entry.</summary>
 	public DateTime? LastWriteTime { get; } = entry.LastWriteTime.DateTime;
 
+	/// <inheritdoc/>
 	public override TimeSpan? Modified => LastWriteTime?.Age();
+	/// <inheritdoc/>
 	public override bool HasLinks => false;
 
 	/// <summary>Gets the compressed size of the file in bytes.</summary>

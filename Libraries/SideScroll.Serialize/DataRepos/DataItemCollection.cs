@@ -30,9 +30,12 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 	/// </summary>
 	public IEnumerable<T> SortedValues => Lookup.Values.Select(o => o.Value);
 
+	/// <summary>Initializes an empty collection.</summary>
 	public DataItemCollection() { }
 
 	// Don't implement List<T>, it isn't sortable
+	/// <summary>Initializes the collection with the given items.</summary>
+	/// <param name="enumerable">The items to add to the collection.</param>
 	public DataItemCollection(IEnumerable<DataItem<T>> enumerable) : base(enumerable)
 	{
 	}

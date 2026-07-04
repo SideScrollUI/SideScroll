@@ -127,6 +127,8 @@ public class LazyClass
 		}
 	}
 
+	/// <summary>Emits a dynamic subclass of the original type that adds lazy-loading backing fields for the given properties.</summary>
+	/// <param name="propertyRepos">The properties to generate lazy-loading members for.</param>
 	protected TypeInfo CreateLazyType(List<TypeRepoObject.PropertyRepo> propertyRepos)
 	{
 		TypeBuilder typeBuilder = GetTypeBuilder();

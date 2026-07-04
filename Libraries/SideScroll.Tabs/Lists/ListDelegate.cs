@@ -65,7 +65,7 @@ public class ListDelegate : ListMember, IPropertyIsEditable, ILoadAsync
 		}
 	}
 
-	/// <summary>Returns the delegate's <see cref="Name"/>.</summary>
+	/// <summary>Returns the delegate's <see cref="ListMember.Name"/>.</summary>
 	public override string? ToString() => Name;
 
 	/// <summary>

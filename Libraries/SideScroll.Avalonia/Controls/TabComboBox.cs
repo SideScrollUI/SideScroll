@@ -21,11 +21,15 @@ public class TabComboBox : ComboBox
 	/// <summary>Returns the string representation of the currently selected item.</summary>
 	public override string? ToString() => SelectedItem?.ToString();
 
+	/// <summary>Creates an empty, unbound combo box.</summary>
 	public TabComboBox()
 	{
 		InitializeComponent();
 	}
 
+	/// <summary>Creates a combo box populated with the given items and an optional initial selection.</summary>
+	/// <param name="items">The items to display.</param>
+	/// <param name="selectedItem">The item to select initially, or <c>null</c> for no selection.</param>
 	public TabComboBox(IEnumerable items, object? selectedItem = null)
 	{
 		InitializeComponent();
@@ -34,6 +38,9 @@ public class TabComboBox : ComboBox
 		SelectedItem = selectedItem;
 	}
 
+	/// <summary>Creates a combo box bound to <paramref name="property"/>, optionally sourcing its items from another list property on the same object.</summary>
+	/// <param name="property">The list property to bind the selected value to.</param>
+	/// <param name="listPropertyName">The name of a property providing the selectable items, or <c>null</c> to use the property's own item source.</param>
 	public TabComboBox(ListProperty property, string? listPropertyName)
 	{
 		Property = property;

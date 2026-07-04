@@ -35,6 +35,7 @@ public class SerializerHeader
 	/// </summary>
 	public string? Name { get; set; }
 
+	/// <summary>Returns the header's version and object <see cref="Name"/>.</summary>
 	public override string ToString() => $"v{Version}: {Name}";
 
 	/// <summary>

@@ -111,6 +111,7 @@ public abstract class TaskCreator : INotifyPropertyChanged
 	[HiddenColumn]
 	public SynchronizationContext? Context { get; set; }
 
+	/// <summary>Returns the task's <see cref="Label"/>.</summary>
 	public override string? ToString() => Label;
 
 	/// <summary>

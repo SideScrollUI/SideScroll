@@ -9,6 +9,11 @@ namespace SideScroll.Serialize.Browser;
 [SupportedOSPlatform("browser")]
 public class DataRepoViewLocalStorage<T> : DataRepoView<T>
 {
+	/// <summary>Initializes the view for the given group, optionally creating a localStorage-backed index.</summary>
+	/// <param name="dataRepo">The owning data repository.</param>
+	/// <param name="groupId">The group identifier for this view's items.</param>
+	/// <param name="indexed">Whether to maintain a localStorage-compatible index for ordered access.</param>
+	/// <param name="maxItems">The maximum number of items to retain, or <c>null</c> for no limit.</param>
 	public DataRepoViewLocalStorage(DataRepo dataRepo, string groupId, bool indexed = false, int? maxItems = null)
 		: base(dataRepo, groupId, false, maxItems) // Don't let base class create a file-system index
 	{

@@ -80,6 +80,7 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 	private Dictionary<TViewType, IDataItem> _dataItemLookup;
 	private Dictionary<IDataItem, TViewType> _valueLookup;
 
+	/// <summary>Returns the backing <see cref="DataRepoView"/>'s string representation.</summary>
 	public override string ToString() => DataRepoView.ToString();
 
 	/// <summary>Initializes a new <see cref="DataViewCollection{TDataType,TViewType}"/> backed by <paramref name="dataRepoView"/>, using <paramref name="loadParams"/> when constructing each view item, and performs an initial load.</summary>
@@ -299,8 +300,11 @@ public class DataViewCollection<T>
 
 	private Dictionary<IDataItem, T> _valueLookup;
 
+	/// <summary>Returns the backing <see cref="DataRepoView"/>'s string representation.</summary>
 	public override string ToString() => DataRepoView.ToString();
 
+	/// <summary>Initializes a new collection backed by <paramref name="dataRepoView"/> and performs an initial load.</summary>
+	/// <param name="dataRepoView">The data repository view whose items this collection mirrors.</param>
 	public DataViewCollection(DataRepoView<T> dataRepoView)
 	{
 		DataRepoView = dataRepoView;

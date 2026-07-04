@@ -15,6 +15,7 @@ public class TaskDelegate : TaskCreator
 	/// </summary>
 	public CallAction Action { get; }
 
+	/// <summary>Returns the task's <see cref="TaskCreator.Label"/>.</summary>
 	public override string? ToString() => Label;
 
 	/// <summary>

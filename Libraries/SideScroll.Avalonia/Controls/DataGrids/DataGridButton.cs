@@ -20,7 +20,7 @@ public class DataGridButton : Button
 		Content = label;
 	}
 
-	/// <summary>Binds <see cref="Avalonia.Visual.IsVisible"/> one-way to the named property on the row's DataContext.</summary>
+	/// <summary>Binds <c>IsVisible</c> one-way to the named property on the row's DataContext.</summary>
 	public void BindVisible(string propertyName)
 	{
 		var binding = new Binding(propertyName)

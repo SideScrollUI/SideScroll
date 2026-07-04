@@ -31,6 +31,7 @@ public class SerializerFileAtlas : SerializerFile
 		DataPath = Paths.Combine(basePath, DataFileName);
 	}
 
+	/// <inheritdoc/>
 	protected override void SaveInternal(Call call, object obj, string? name = null, bool publicOnly = false)
 	{
 		for (int attempt = 0; attempt < SaveAttemptsMax; attempt++)
@@ -67,6 +68,7 @@ public class SerializerFileAtlas : SerializerFile
 		}
 	}
 
+	/// <inheritdoc/>
 	protected override object? LoadInternal(Call call, bool lazy, TaskInstance? taskInstance, bool publicOnly = false, Type? expectedType = null)
 	{
 		Serializer serializer = new()

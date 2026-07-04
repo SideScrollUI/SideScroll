@@ -77,6 +77,7 @@ public abstract class NodeView : IHasLinks, INotifyPropertyChanged
 	/// <summary>Raised when a property value changes.</summary>
 	public event PropertyChangedEventHandler? PropertyChanged;
 
+	/// <summary>Returns the node's <see cref="Name"/>.</summary>
 	public override string ToString() => Name;
 
 	/// <summary>Initializes the node with its file system path and optional file selector options.</summary>
@@ -129,13 +130,17 @@ public class DirectoryView : NodeView, IDirectoryView
 	/// <summary>Gets the directory name (last segment of the path).</summary>
 	public string Directory { get; }
 
+	/// <inheritdoc/>
 	public override string Name => Directory;
+	/// <inheritdoc/>
 	public override long? Size { get; set; } = null;
 
 	/// <summary>Gets the last write time of the directory.</summary>
 	public DateTime LastWriteTime { get; }
 
+	/// <inheritdoc/>
 	public override TimeSpan? Modified => LastWriteTime.Age();
+	/// <inheritdoc/>
 	public override bool HasLinks => true;
 
 	/// <summary>Initializes a directory view for the given path.</summary>
@@ -157,14 +162,18 @@ public class FileView : NodeView
 	/// <summary>Gets the file name (last segment of the path).</summary>
 	public string Filename { get; }
 
+	/// <inheritdoc/>
 	public override long? Size { get; set; }
 
 	/// <summary>Gets the last write time of the file.</summary>
 	public DateTime? LastWriteTime { get; }
 
+	/// <inheritdoc/>
 	public override TimeSpan? Modified => LastWriteTime?.Age();
+	/// <inheritdoc/>
 	public override bool HasLinks => false;
 
+	/// <inheritdoc/>
 	public override string Name => Filename;
 
 	/// <summary>Gets the file system info for this file, or <c>null</c> if unavailable.</summary>

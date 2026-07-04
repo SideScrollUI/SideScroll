@@ -21,12 +21,14 @@ public class TabAvaloniaThemeSettings : ITab, IDataViewItem
 	[DataValue, HiddenColumn]
 	public AvaloniaThemeSettings? ThemeSettings { get; set; }
 
+	/// <summary>Gets or sets the data view collection this theme settings item belongs to.</summary>
 	[HiddenColumn]
 	public DataViewCollection<AvaloniaThemeSettings, TabAvaloniaThemeSettings>? DataViewCollection { get; set; }
 
 	[DataKey]
 	public string? Name => ThemeSettings?.Name;
 
+	/// <summary>Returns the underlying <see cref="ThemeSettings"/>' string representation.</summary>
 	public override string? ToString() => ThemeSettings?.ToString();
 
 	public TabAvaloniaThemeSettings() { }
