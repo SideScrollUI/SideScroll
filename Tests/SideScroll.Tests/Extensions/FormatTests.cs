@@ -4,6 +4,7 @@ using SideScroll.Extensions;
 namespace SideScroll.Tests.Extensions;
 
 [Category("Formatting")]
+[SetCulture("en-US")] // Formatting assertions depend on '.' decimal and ',' group separators
 public class FormatTests : BaseTest
 {
 	[OneTimeSetUp]
@@ -30,5 +31,15 @@ public class FormatTests : BaseTest
 		Assert.That(0.999_998.FormattedShortDecimal(6), Is.EqualTo("0.999998"));
 		Assert.That(0.000_002.FormattedShortDecimal(6), Is.EqualTo("0.000002"));
 		Assert.That(9_999.998.FormattedShortDecimal(6), Is.EqualTo("9.999998 K"));
+	}
+
+	[Test]
+	[Ignore("todo: fix")]
+	public void DecimalToString()
+	{
+		decimal d = 123456.1234M;
+		string text = d.Formatted()!;
+
+		Assert.That(text, Is.EqualTo("123,456.1234"));
 	}
 }

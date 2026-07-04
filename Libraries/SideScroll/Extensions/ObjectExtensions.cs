@@ -1,5 +1,6 @@
 using SideScroll.Attributes;
 using System.Collections;
+using System.Globalization;
 using System.Reflection;
 
 namespace SideScroll.Extensions;
@@ -46,10 +47,8 @@ public static class ObjectExtensions
 				}
 			}
 
-			MethodInfo toStringMethod = type.GetMethod("ToString", [typeof(string)])!;
 			string format = type.IsDecimal() ? "G" : "N0";
-			object? result = toStringMethod.Invoke(obj, [format]);
-			return (string?)result;
+			return ((IFormattable)obj).ToString(format, CultureInfo.CurrentCulture);
 		}
 
 		int maxFormatLength = maxLength ?? DefaultMaxFormattedLength;
@@ -215,10 +214,8 @@ public static class ObjectExtensions
 
 		if (type.IsNumeric())
 		{
-			MethodInfo toStringMethod = type.GetMethod("ToString", [typeof(string)])!;
 			string format = type.IsDecimal() ? "N" : "N0";
-			object? result = toStringMethod.Invoke(obj, [format]);
-			return (string?)result;
+			return ((IFormattable)obj).ToString(format, CultureInfo.CurrentCulture);
 		}
 
 		if (obj is DictionaryEntry dictionaryEntry)

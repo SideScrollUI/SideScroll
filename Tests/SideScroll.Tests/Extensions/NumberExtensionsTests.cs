@@ -4,6 +4,7 @@ using SideScroll.Extensions;
 namespace SideScroll.Tests.Extensions;
 
 [Category("Extensions")]
+[SetCulture("en-US")] // Formatting assertions depend on '.' decimal and ',' group separators
 public class NumberExtensionsTests : BaseTest
 {
 	[OneTimeSetUp]
