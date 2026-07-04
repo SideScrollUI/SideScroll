@@ -12,6 +12,7 @@ public class TabLiveChartLegend(TabLiveChart liveChart)
 {
 	/// <summary>Gets the parent <see cref="TabLiveChart"/> this legend belongs to.</summary>
 	public TabLiveChart LiveChart => liveChart;
+
 	/// <summary>Gets the underlying LiveCharts <see cref="CartesianChart"/> control.</summary>
 	public CartesianChart Chart => LiveChart.Chart;
 

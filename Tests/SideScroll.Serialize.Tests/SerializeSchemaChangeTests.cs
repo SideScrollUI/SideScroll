@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using SideScroll.Attributes;
 using SideScroll.Serialize.Atlas;
+using SideScroll.Serialize.Atlas.Schema;
 using System.Text;
 
 namespace SideScroll.Serialize.Tests;
@@ -145,6 +146,59 @@ public class SerializeSchemaChangeTests : SerializeBaseTest
 
 		Assert.That(output.NewField, Is.EqualTo(input.OldField));
 		Assert.That(output.NewProperty, Is.EqualTo(input.OldProperty));
+	}
+
+	public class RenamedClassNew
+	{
+		public int IntField = 1;
+		public int IntProperty { get; set; } = 2;
+	}
+
+	[Test, Description("Rename a type in the TypeSchema using RegisterDeprecatedType")]
+	public void RenameTypeWithDeprecatedName()
+	{
+		TypeSchema.RegisterDeprecatedType(typeof(RenamedClassNew), "RenamedClassOld");
+
+		RenamedClassNew input = new()
+		{
+			IntField = 4,
+			IntProperty = 5,
+		};
+
+		_serializer.Save(Call, input);
+
+		// Simulate data serialized before the rename by replacing the type name with one that no longer exists
+		ReplaceBytes(nameof(RenamedClassNew), "RenamedClassOld");
+
+		var output = _serializer.Load<RenamedClassNew>(Call);
+
+		Assert.That(output.IntField, Is.EqualTo(input.IntField));
+		Assert.That(output.IntProperty, Is.EqualTo(input.IntProperty));
+	}
+
+	public class TypeReferenceClass
+	{
+		public Type? Type { get; set; }
+	}
+
+	[Test, Description("Rename a serialized Type value in the TypeRepoType using RegisterDeprecatedType")]
+	public void RenameTypeValueWithDeprecatedName()
+	{
+		TypeSchema.RegisterDeprecatedType(typeof(RenamedClassNew), "RenamedClassOld");
+
+		TypeReferenceClass input = new()
+		{
+			Type = typeof(RenamedClassNew),
+		};
+
+		_serializer.Save(Call, input);
+
+		// Simulate data serialized before the rename by replacing the type name with one that no longer exists
+		ReplaceBytes(nameof(RenamedClassNew), "RenamedClassOld");
+
+		var output = _serializer.Load<TypeReferenceClass>(Call);
+
+		Assert.That(output.Type, Is.EqualTo(typeof(RenamedClassNew)));
 	}
 
 	public class NullableOldClass

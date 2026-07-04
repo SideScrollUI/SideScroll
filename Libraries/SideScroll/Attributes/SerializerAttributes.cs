@@ -173,6 +173,7 @@ public class PrivateDataAttribute : Attribute
 /// <b>Apply to:</b> Fields or properties.
 /// <para>
 /// Maintains compatibility with data serialized using older member names.
+/// For renamed types, use <c>TypeSchema.RegisterDeprecatedType()</c> instead.
 /// </para>
 /// </remarks>
 /// <example>

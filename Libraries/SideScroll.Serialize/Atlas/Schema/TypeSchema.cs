@@ -195,6 +195,9 @@ public class TypeSchema
 	// Type lookup can take a long time, especially when there's missing types
 	private static readonly Dictionary<string, Type?> TypeCache = [];
 
+	// Renamed types registered with RegisterDeprecatedType(), keyed by their deprecated full names
+	private static readonly Dictionary<string, Type> DeprecatedTypes = [];
+
 	/// <summary>
 	/// Binding flags used for reflection when accessing members
 	/// </summary>
@@ -518,10 +521,53 @@ public class TypeSchema
 			}
 		}
 
+		// Check for renamed types with a matching [DeprecatedName]
+		Type ??= GetDeprecatedType(AssemblyQualifiedName);
+
 		lock (TypeCache)
 		{
 			TypeCache.TryAdd(AssemblyQualifiedName, Type);
 		}
+	}
+
+	/// <summary>
+	/// Registers deprecated names for a renamed type so data serialized with the old names can still be loaded
+	/// Deprecated names without a namespace are matched within the type's current namespace
+	/// </summary>
+	public static void RegisterDeprecatedType(Type type, params string[] deprecatedNames)
+	{
+		string fullName = type.FullName!;
+		lock (DeprecatedTypes)
+		{
+			foreach (string deprecatedName in deprecatedNames)
+			{
+				DeprecatedTypes[GetDeprecatedFullName(fullName, deprecatedName)] = type;
+			}
+		}
+	}
+
+	/// <summary>
+	/// Gets the registered type matching a deprecated type name, or null if none found
+	/// </summary>
+	public static Type? GetDeprecatedType(string assemblyQualifiedName)
+	{
+		string typeName = assemblyQualifiedName.Split(',').First();
+
+		lock (DeprecatedTypes)
+		{
+			return DeprecatedTypes.GetValueOrDefault(typeName);
+		}
+	}
+
+	// Replaces the last segment of the full name with the deprecated name
+	// ("Namespace.Outer+Inner", "OldInner") -> "Namespace.Outer+OldInner"
+	private static string GetDeprecatedFullName(string fullName, string deprecatedName)
+	{
+		if (deprecatedName.Contains('.') || deprecatedName.Contains('+'))
+			return deprecatedName; // Already a full name
+
+		int index = Math.Max(fullName.LastIndexOf('+'), fullName.LastIndexOf('.'));
+		return index >= 0 ? fullName[..(index + 1)] + deprecatedName : deprecatedName;
 	}
 
 	// ignore Assembly version to allow loading shared 

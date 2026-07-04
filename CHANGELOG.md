@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added Atlas Serializer support for renaming types via `TypeSchema.RegisterDeprecatedType()`
 
 ### Fixed
 - Fixed ListSeries Totals for time ranges without any entries

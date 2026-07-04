@@ -30,6 +30,9 @@ public class TypeRepoType(Serializer serializer, TypeSchema typeSchema) : TypeRe
 		string assemblyQualifiedName = Reader.ReadString();
 		//object obj = Type.GetType(assemblyQualifiedName, false);
 		object? obj = Type.GetType(assemblyQualifiedName, AssemblyResolver, null);
+
+		// Check for renamed types with a matching [DeprecatedName]
+		obj ??= TypeSchema.GetDeprecatedType(assemblyQualifiedName);
 		Reader.BaseStream.Position = position;
 
 		ObjectsLoaded[objectIndex] = obj; // must assign before loading any more refs

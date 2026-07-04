@@ -19,6 +19,7 @@ public abstract class TabChartLegend<TSeries> : Grid
 {
 	/// <summary>Gets the parent chart control this legend belongs to.</summary>
 	public TabChart<TSeries> TabChart { get; }
+
 	/// <summary>Gets the chart view data model.</summary>
 	public ChartView ChartView => TabChart.ChartView;
 
@@ -29,8 +30,10 @@ public abstract class TabChartLegend<TSeries> : Grid
 
 	/// <summary>Gets the scroll viewer that wraps the legend items panel.</summary>
 	protected ScrollViewer ScrollViewer { get; }
+
 	/// <summary>Gets the wrap panel that lays out legend items horizontally or vertically.</summary>
 	protected WrapPanel WrapPanel { get; }
+
 	/// <summary>Gets the optional text block showing the aggregate column header (e.g., "Total" or "Count").</summary>
 	protected TextBlock? TextBlockTotal { get; }
 
