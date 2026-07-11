@@ -41,8 +41,9 @@ public class TabSampleActions : ITab
 
 		private static void PassParams(int param1, string param2)
 		{
+			// This will only log in the debug output
 			Log log = new();
-			log.Add("If you log and no one's listening, are you really logging?",
+			log.AddWarning("If you log and no one's listening, are you really logging?",
 				new Tag("param1", param1),
 				new Tag("param2", param2));
 		}
@@ -50,7 +51,7 @@ public class TabSampleActions : ITab
 		private int _counter = 1;
 		private void AddEntry(Call call)
 		{
-			call.Log.Add("New Log entry", new Tag("counter", _counter++));
+			call.Log.Add("New Log Entry", new Tag("Counter", _counter++));
 		}
 
 		private void TestException(Call call)
@@ -60,7 +61,7 @@ public class TabSampleActions : ITab
 
 		private static void ParallelTaskProgress(Call call)
 		{
-			var downloads = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+			List<int> downloads = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 			Parallel.ForEach(downloads, new ParallelOptions { MaxDegreeOfParallelism = 10 }, i =>
 			{
 				using CallTimer sleepCall = call.Timer(i.ToString());
@@ -77,7 +78,7 @@ public class TabSampleActions : ITab
 
 		private static async Task SubTaskProgressAsync(Call call)
 		{
-			List<int> ids = Enumerable.Range(0, 20).ToList();
+			List<int> ids = [.. Enumerable.Range(0, 20)];
 
 			var results = await call.RunAsync(DoTask, ids);
 		}
@@ -98,14 +99,14 @@ public class TabSampleActions : ITab
 
 		private async Task MultiLevelRunAsync(Call call)
 		{
-			List<int> ids = Enumerable.Range(0, 20).ToList();
+			List<int> ids = [.. Enumerable.Range(0, 20)];
 
 			var results = await call.RunAsync(MultiLevelRunIdAsync, ids, maxConcurrentRequests: 5, maxRequestsPerSecond: 3);
 		}
 
 		private async Task<int> MultiLevelRunIdAsync(Call call, int id)
 		{
-			List<int> ids = Enumerable.Range(0, 10).ToList();
+			List<int> ids = [.. Enumerable.Range(0, 10)];
 
 			// Disable logging for high rates
 			//call.Log.Settings = call.Log.Settings!.WithMinLogLevel(LogLevel.Warn);
@@ -126,7 +127,7 @@ public class TabSampleActions : ITab
 
 		private static async Task SleepAsync(Call call)
 		{
-			using CallTimer callTimer = call.Timer("long op");
+			using CallTimer callTimer = call.Timer("Sleeping ...");
 
 			await Task.Delay(1000);
 		}

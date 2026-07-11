@@ -62,6 +62,12 @@ public class TabTheme : ThemeSection
 	[ResourceKey("MenuFlyoutItemForeground")]
 	public Color? ContextMenuForeground { get; set; }
 
+	[ResourceKey("MenuFlyoutItemBackgroundPressed")]
+	public Color? ContextMenuBackgroundPressed { get; set; }
+
+	[ResourceKey("MenuFlyoutItemForegroundPressed")]
+	public Color? ContextMenuForegroundPressed { get; set; }
+
 
 	[Header("Progress Bar"), ResourceKey("TabProgressBarForegroundBrush")]
 	public Color? ProgressBarForeground { get; set; }
@@ -211,8 +217,20 @@ public class ToolbarTheme : ThemeSection
 	[ResourceKey("IconAltForegroundHighlightBrush")]
 	public Color? IconAltForegroundHighlight { get; set; }
 
-	[Header("Radio Button"), ResourceKey("RadioButtonForegroundPointerOver")]
+	[Header("Radio Button"), ResourceKey(
+		"RadioButtonForegroundPointerOver",
+		"RadioButtonForegroundPressed"
+		)]
 	public Color? RadioButtonForegroundPointerOver { get; set; }
+
+	[ResourceKey("RadioButtonOuterEllipseFillPressed")]
+	public Color? RadioButtonFillPressed { get; set; }
+
+	[ResourceKey("RadioButtonOuterEllipseStrokePressed")]
+	public Color? RadioButtonStrokePressed { get; set; }
+
+	[ResourceKey("RadioButtonOuterEllipseCheckedStrokePressed")]
+	public Color? RadioButtonSelectedStrokePressed { get; set; }
 }
 
 /// <summary>Theme section for tooltip and flyout background, foreground, border, and font-size settings.</summary>
@@ -468,8 +486,7 @@ public class TextControlTheme : ThemeSection
 		"ComboBoxForegroundFocused",
 		//"ComboBoxForegroundPointerOver",
 		"ComboBoxPlaceHolderForegroundFocusedPressed",
-		"CalendarDatePickerBorderBrushPointerOver",
-		"RadioButtonOuterEllipseStrokePressed"
+		"CalendarDatePickerBorderBrushPointerOver"
 		)]
 	public Color? TextControlForegroundHighlight { get; set; }
 

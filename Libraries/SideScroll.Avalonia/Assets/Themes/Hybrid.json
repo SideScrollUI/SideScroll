@@ -23,6 +23,8 @@
     "SectionSeparator": "#ff050524",
     "ContextMenuBackground": "#ff58588f",
     "ContextMenuForeground": "#ffd0d0e8",
+    "ContextMenuBackgroundPressed": "#ff2040a0",
+    "ContextMenuForegroundPressed": "White",
     "ProgressBarForeground": "#ff292dab",
     "ButtonBackground": "#ff27204a",
     "ButtonBackgroundPointerOver": "#ff2040a0",
@@ -60,7 +62,10 @@
     "IconForegroundDisabled": "#ff004da0",
     "IconAltForeground": "#ff2daf13",
     "IconAltForegroundHighlight": "#ff2dc210",
-    "RadioButtonForegroundPointerOver": "White"
+    "RadioButtonForegroundPointerOver": "White",
+    "RadioButtonFillPressed": "#ff20204a",
+    "RadioButtonStrokePressed": "#ff7e7efc",
+    "RadioButtonSelectedStrokePressed": "#ff9292fc"
   },
   "ToolTip": {
     "Background": "#dd333366",

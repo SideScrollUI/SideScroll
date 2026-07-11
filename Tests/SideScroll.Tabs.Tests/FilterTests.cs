@@ -202,6 +202,135 @@ public class FilterTests : BaseTest
 
 	#endregion
 
+	#region NOT Operator Tests
+
+	[Test]
+	public void Constructor_NotOperatorDash_ParsesCorrectly()
+	{
+		var filter = new Filter("-foo");
+
+		Assert.That(filter.RootNode, Is.InstanceOf<FilterNotNode>());
+
+		var notNode = (FilterNotNode)filter.RootNode!;
+		Assert.That(notNode.Child, Is.InstanceOf<FilterLeafNode>());
+
+		var leafNode = (FilterLeafNode)notNode.Child!;
+		Assert.That(leafNode.TextUppercase, Is.EqualTo("FOO"));
+	}
+
+	[Test]
+	public void Constructor_NotOperatorExclamation_ParsesCorrectly()
+	{
+		var filter = new Filter("!foo");
+
+		Assert.That(filter.RootNode, Is.InstanceOf<FilterNotNode>());
+
+		var notNode = (FilterNotNode)filter.RootNode!;
+		var leafNode = (FilterLeafNode)notNode.Child!;
+		Assert.That(leafNode.TextUppercase, Is.EqualTo("FOO"));
+	}
+
+	[Test]
+	public void Constructor_NotOperatorWithAnd_ParsesCorrectly()
+	{
+		var filter = new Filter("foo -bar");
+
+		Assert.That(filter.RootNode, Is.InstanceOf<FilterOperatorNode>());
+
+		var operatorNode = (FilterOperatorNode)filter.RootNode!;
+		Assert.That(operatorNode.Operator, Is.EqualTo(FilterOperator.And));
+		Assert.That(operatorNode.Children, Has.Count.EqualTo(2));
+		Assert.That(operatorNode.Children[0], Is.InstanceOf<FilterLeafNode>());
+		Assert.That(operatorNode.Children[1], Is.InstanceOf<FilterNotNode>());
+	}
+
+	[Test]
+	public void Constructor_NotOperatorQuotedPhrase_ParsesCorrectly()
+	{
+		var filter = new Filter("-\"hello world\"");
+
+		Assert.That(filter.RootNode, Is.InstanceOf<FilterNotNode>());
+
+		var notNode = (FilterNotNode)filter.RootNode!;
+		var leafNode = (FilterLeafNode)notNode.Child!;
+		Assert.That(leafNode.TextUppercase, Is.EqualTo("HELLO WORLD"));
+	}
+
+	[Test]
+	public void Constructor_QuotedDash_StaysLiteral()
+	{
+		var filter = new Filter("\"-foo\"");
+
+		Assert.That(filter.RootNode, Is.InstanceOf<FilterLeafNode>());
+
+		var leafNode = (FilterLeafNode)filter.RootNode!;
+		Assert.That(leafNode.TextUppercase, Is.EqualTo("-FOO"));
+	}
+
+	[Test]
+	public void Constructor_MidTokenDash_StaysLiteral()
+	{
+		var filter = new Filter("foo-bar");
+
+		Assert.That(filter.RootNode, Is.InstanceOf<FilterLeafNode>());
+
+		var leafNode = (FilterLeafNode)filter.RootNode!;
+		Assert.That(leafNode.TextUppercase, Is.EqualTo("FOO-BAR"));
+	}
+
+	[Test]
+	public void Constructor_NotOperatorParentheses_ParsesCorrectly()
+	{
+		var filter = new Filter("-(foo | bar)");
+
+		Assert.That(filter.RootNode, Is.InstanceOf<FilterNotNode>());
+
+		var notNode = (FilterNotNode)filter.RootNode!;
+		Assert.That(notNode.Child, Is.InstanceOf<FilterOperatorNode>());
+
+		var orNode = (FilterOperatorNode)notNode.Child!;
+		Assert.That(orNode.Operator, Is.EqualTo(FilterOperator.Or));
+	}
+
+	[Test]
+	public void FilterNotNode_ExcludesMatch()
+	{
+		var filter = new Filter("-foo");
+
+		Assert.That(filter.RootNode!.Matches(["FOO"]), Is.False);
+		Assert.That(filter.RootNode!.Matches(["BAR"]), Is.True);
+	}
+
+	[Test]
+	public void Filter_MatchesObject_NotOperator_ExcludesMatchingItem()
+	{
+		var filter = new Filter("-apple");
+		var properties = typeof(TestItem).GetProperties().ToList();
+
+		var apple = new TestItem { Name = "Apple", Id = 1, Description = "A fruit" };
+		var banana = new TestItem { Name = "Banana", Id = 2, Description = "A fruit" };
+
+		Assert.That(filter.Matches(apple, properties), Is.False);
+		Assert.That(filter.Matches(banana, properties), Is.True);
+	}
+
+	[Test]
+	public void Filter_MatchesObject_NotOperatorWithAnd_FiltersCorrectly()
+	{
+		var filter = new Filter("fruit -apple");
+		var properties = typeof(TestItem).GetProperties().ToList();
+
+		var apple = new TestItem { Name = "Apple", Id = 1, Description = "A fruit" };
+		var banana = new TestItem { Name = "Banana", Id = 2, Description = "A fruit" };
+		var carrot = new TestItem { Name = "Carrot", Id = 3, Description = "A vegetable" };
+
+		Assert.That(filter.Matches(apple, properties), Is.False);
+		Assert.That(filter.Matches(banana, properties), Is.True);
+		Assert.That(filter.Matches(carrot, properties), Is.False);
+	}
+
+	#endregion
+
 	#region Mixed Operator Tests (Precedence)
 
 	[Test]

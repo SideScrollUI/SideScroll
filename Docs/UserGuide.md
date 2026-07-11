@@ -12,10 +12,14 @@
 
 ## DataGrid Searching
 * Press `Ctrl + F` on any Data Grid to show the search (You can click anywhere on a tab to focus it)
-* You can use `|` or `&` to restrict searches
+* You can use `|` or `&` to restrict searches, and a leading `-` or `!` to exclude matches
 * Examples:
   - Search for the exact string `"ABC"` or anything containing `123`
     - `"ABC" | 123`
+  - Exclude anything containing `foo`
+    - `-foo`
+  - Quote a term to search for a literal leading `-` or `!`
+    - `"-5"`
 * Recursive searches will eventually be supported
 
 ## Hints

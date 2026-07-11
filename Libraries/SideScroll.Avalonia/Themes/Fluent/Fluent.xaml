@@ -122,11 +122,13 @@
           <!--SolidColorBrush x:Key="RadioButtonOuterEllipseFill" Color="#453e77" /-->
           <SolidColorBrush x:Key="RadioButtonOuterEllipseStroke" Color="{DynamicResource IconForegroundColor}" />
           <SolidColorBrush x:Key="RadioButtonOuterEllipseStrokePointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
-          <SolidColorBrush x:Key="RadioButtonOuterEllipseStrokePressed" Color="{DynamicResource ThemeControlBorderHighColor}" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseStrokePressed" Color="#ffb1c7fc" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseFillPressed" Color="#fff2f5fc" />
 
           <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFill" Color="Transparent" />
           <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPointerOver" Color="Transparent" />
           <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPressed" Color="Transparent" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePressed" Color="#ff8faff7" />
 
           <SolidColorBrush x:Key="RadioButtonCheckGlyphFill" Color="{DynamicResource IconForegroundColor}" />
           <SolidColorBrush x:Key="RadioButtonCheckGlyphFillPointerOver" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
@@ -173,6 +175,7 @@
           <SolidColorBrush x:Key="MenuFlyoutItemForegroundPointerOver" Color="#ff2d3196" />
 
           <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver" Color="#ffbac6ff" />
+          <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPressed" Color="#ffa8b8ff" />
 
           <!-- Flyout -->
 
@@ -560,11 +563,13 @@
           <!--SolidColorBrush x:Key="RadioButtonOuterEllipseFill" Color="#453e77" /-->
           <SolidColorBrush x:Key="RadioButtonOuterEllipseStroke" Color="{DynamicResource IconForegroundColor}" />
           <SolidColorBrush x:Key="RadioButtonOuterEllipseStrokePointerOver" Color="{DynamicResource ThemeControlBorderHighColor}" />
-          <SolidColorBrush x:Key="RadioButtonOuterEllipseStrokePressed" Color="{DynamicResource ThemeControlBorderHighColor}" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseStrokePressed" Color="#ff7e7efc" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseFillPressed" Color="{DynamicResource SystemAltMediumLowColor}" />
 
           <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFill" Color="Transparent" />
           <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPointerOver" Color="Transparent" />
           <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPressed" Color="Transparent" />
+          <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePressed" Color="#ff9292fc" />
 
           <SolidColorBrush x:Key="RadioButtonCheckGlyphFill" Color="{DynamicResource IconForegroundColor}" />
           <SolidColorBrush x:Key="RadioButtonCheckGlyphFillPointerOver" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
@@ -610,6 +615,7 @@
           <SolidColorBrush x:Key="MenuFlyoutItemForegroundPointerOver" Color="#e0e0f8" />
 
           <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver" Color="{DynamicResource ThemeControlBackgroundSelectedColor}" />
+          <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPressed" Color="#ff2a55ab" />
 
           <!-- Flyout -->
 

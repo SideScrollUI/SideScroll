@@ -8,9 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added DataGrid Search support for excluding terms with a leading `-` or `!` (e.g. `-foo`, `!(foo | bar)`)
 - Added Atlas Serializer support for renaming types via `TypeSchema.RegisterDeprecatedType()`
+- Added Toolbar Radio Button theming for the pressed circle fill and border, and the selected pressed circle border, which were previously showing as gray
+- Added Context Menu theming for the pressed item background and foreground, with the background previously showing as gray
 
 ### Fixed
+- Fixed custom theme Radio Button label foregrounds showing the default variant color when pressed
 - Fixed ListSeries Totals for time ranges without any entries
 - Updated Avalonia Headless Tab Loading to handle delays better
 
@@ -31,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `TabDateTimePicker` Button Flyouts
 - Added Window Close Button Theming
 - Added image rotation (Rotate Left / Rotate Right) toolbar buttons to TabFileImage, with RotateLeft/RotateRight icons
-- Added `[TabRequiredGroup]` for TabForm to require at least one value to be filled in
+- Added `[RequiredGroup]` for TabForm to require at least one value to be filled in
 
 ### Fixed
 - Fixed DataGrid not updating default selections for new items

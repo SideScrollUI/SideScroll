@@ -5,7 +5,7 @@ namespace SideScroll.Demo.Avalonia.Browser;
 
 internal static class Program
 {
-	private static Task Main(string[] args) => BuildAvaloniaApp()
+	private static Task Main() => BuildAvaloniaApp()
 			.WithInterFont()
 			.StartBrowserAppAsync("out");
 

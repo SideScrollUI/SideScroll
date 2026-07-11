@@ -56,6 +56,25 @@ public class FilterLeafNode : FilterNode
 }
 
 /// <summary>
+/// Negation node that inverts the match result of its child node
+/// </summary>
+public class FilterNotNode : FilterNode
+{
+	/// <summary>
+	/// Gets or sets the child filter node to negate
+	/// </summary>
+	public FilterNode? Child { get; set; }
+
+	/// <summary>
+	/// Matches when the child node does not match
+	/// </summary>
+	public override bool Matches(List<string> uppercaseValues)
+	{
+		return Child == null || !Child.Matches(uppercaseValues);
+	}
+}
+
+/// <summary>
 /// Operator node combining multiple filter nodes with AND or OR logic
 /// </summary>
 public class FilterOperatorNode : FilterNode
@@ -124,8 +143,9 @@ public class SearchFilter
 }
 
 /// <summary>
-/// Parses and evaluates text search expressions with support for AND/OR operators, quoted strings, and nested depth.
-/// Syntax examples: "ABC" | 123, +3 "ABC" | 123, (foo | bar) &amp; baz
+/// Parses and evaluates text search expressions with support for AND/OR/NOT operators, quoted strings, and nested depth.
+/// Syntax examples: "ABC" | 123, +3 "ABC" | 123, (foo | bar) &amp; baz, -foo, !(foo | bar)
+/// Quote a term to search for a literal leading - or ! (e.g. "-5")
 /// </summary>
 public class Filter
 {
@@ -196,11 +216,14 @@ public class Filter
 			}
 			else if (!insideQuotes && c == '(')
 			{
+				// A pending - or ! token negates the subexpression: -(foo | bar)
+				bool negate = input[tokenStart..i].Trim() is "-" or "!";
+
 				// Parse subexpression
 				var subNode = ParseExpression(input, i + 1, out int closeParen);
 				if (subNode != null)
 				{
-					nodes.Add(subNode);
+					nodes.Add(negate ? new FilterNotNode { Child = subNode } : subNode);
 				}
 				i = closeParen + 1;
 				tokenStart = i;
@@ -273,6 +296,14 @@ public class Filter
 		if (string.IsNullOrWhiteSpace(token))
 			return;
 
+		// A leading - or ! negates the token; quote the term to match these characters literally
+		bool negate = false;
+		if (token[0] == '-' || token[0] == '!')
+		{
+			negate = true;
+			token = token[1..].Trim();
+		}
+
 		// Remove quotes if present
 		if (token.Length >= 2 && token.First() == '"' && token.Last() == '"')
 		{
@@ -287,7 +318,12 @@ public class Filter
 
 		if (!string.IsNullOrWhiteSpace(token))
 		{
-			nodes.Add(new FilterLeafNode { TextUppercase = token.ToUpper() });
+			FilterNode node = new FilterLeafNode { TextUppercase = token.ToUpper() };
+			if (negate)
+			{
+				node = new FilterNotNode { Child = node };
+			}
+			nodes.Add(node);
 		}
 	}
 
