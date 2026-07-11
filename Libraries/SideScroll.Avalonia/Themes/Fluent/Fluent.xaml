@@ -45,7 +45,7 @@
           <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="#ff001061" />
           <SolidColorBrush x:Key="TextControlForegroundFocused" Color="#ff001061" />
           
-          <SolidColorBrush x:Key="TextControlBorderBrush" Color="#e6ced7f5" />
+          <SolidColorBrush x:Key="TextControlBorderBrush" Color="#e6cbd5f2" />
           <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="#ff8fc3f7" />
           <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#ff61aaf2" />
           <SolidColorBrush x:Key="TextControlBorderBrushReadOnlyPointerOver" Color="#5e65729c" />
@@ -101,14 +101,14 @@
           <!-- CheckBox -->
 
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUnchecked" Color="White" />
-          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="#e6ced7f5" />
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="#e6cbd5f2" />
 
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUncheckedPointerOver" Color="White" />
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver" Color="#ff8fc3f7" />
 
-          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedDisabled" Color="#e6ced7f5" />
-          <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedDisabled" Color="#e6ced7f5" />
-          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedDisabled" Color="#e6ced7f5" />
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedDisabled" Color="#e6cbd5f2" />
+          <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedDisabled" Color="{DynamicResource IconForegroundColor}" />
+          <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedDisabled" Color="#e6cbd5f2" />
         
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUncheckedPressed" Color="White" />
           <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedDisabled" Color="Transparent" />
