@@ -263,7 +263,7 @@ public class TaskInstance : INotifyPropertyChanged
 	[Formatted]
 	public double ProgressMax
 	{
-		get => _progressMax;
+		get => _progressMax ?? 100 * SubTasks.Count;
 		set
 		{
 			if (_progressMax == value)
@@ -275,7 +275,7 @@ public class TaskInstance : INotifyPropertyChanged
 			UpdatePercent();
 		}
 	}
-	private double _progressMax;
+	private double? _progressMax;
 
 	private void AddProgress(double amount)
 	{

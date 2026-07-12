@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Context Menu theming for the pressed item background and foreground, with the background previously showing as gray
 
 ### Fixed
+- Fixed `TaskInstance.ProgressMax` not updating for sub-tasks
 - Fixed Light theme read-only CheckBox check color to stand out more than the border
 - Fixed custom theme Radio Button label foregrounds showing the default variant color when pressed
 - Fixed ListSeries Totals for time ranges without any entries
