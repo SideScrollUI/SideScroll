@@ -223,7 +223,7 @@ public class ListSeries
 		Total = GetTotal(timeWindow);
 		if (Total is > 50)
 		{
-			Total = Math.Floor(Total!.Value);
+			Total = Math.Floor(Total.Value);
 		}
 		return Total;
 	}
@@ -254,13 +254,18 @@ public class ListSeries
 	{
 		if (List.Count == 0) return null;
 
+		if (SeriesType == SeriesType.Count) return List.Count;
+
+		// Values() skips null Y values, so it can be empty even when List isn't
+		List<double> values = Values().ToList();
+		if (values.Count == 0) return null;
+
 		return SeriesType switch
 		{
-			SeriesType.Count => List.Count,
-			SeriesType.Average => Values().Average(),
-			SeriesType.Minimum => Values().Min(),
-			SeriesType.Maximum => Values().Max(),
-			SeriesType.Sum => Values().Sum(),
+			SeriesType.Average => values.Average(),
+			SeriesType.Minimum => values.Min(),
+			SeriesType.Maximum => values.Max(),
+			SeriesType.Sum => values.Sum(),
 			_ => null,
 		};
 	}

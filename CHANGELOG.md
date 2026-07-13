@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed ListSeries Totals for time ranges without any entries
 - Fixed calling  `TabViewer.LoadTab()` multiple times
 - Fixed `ListSeries.GetTimeWindow()` when there's no data points
+- Fixed `ListSeries.GetTotal()` throwing when all Y values are null
 - Updated Avalonia Headless Tab Loading to handle delays better
 
 ### Changed
