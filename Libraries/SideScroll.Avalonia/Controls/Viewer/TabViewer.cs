@@ -480,6 +480,18 @@ public class TabViewer : Grid
 			tabInstance.LoadDefaultBookmark();
 		}
 
+		// Unsubscribe stale TabViews from any previous load so their late fires
+		// (e.g. a delayed async load) can't corrupt the new load's pending state
+		foreach (TabView trackedTabView in _trackedTabViews)
+		{
+			trackedTabView.OnChildrenLoaded -= TabView_OnChildrenLoaded;
+		}
+
+		if (TabView != null)
+		{
+			ContentGrid.Children.Remove(TabView);
+		}
+
 		TabView = new TabView(tabInstance);
 
 		_childrenLoadedTcs = new TaskCompletionSource();

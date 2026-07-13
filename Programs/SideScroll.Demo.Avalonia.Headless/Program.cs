@@ -24,7 +24,7 @@ internal static class Program
 			tab: new TabAvaloniaSamples(),
 			captureFrame: window => window.CaptureRenderedFrame(),
 			minTabDepth: 1,
-			maxTabDepth: 10,
+			maxTabDepth: 12,
 			maxWidth: 3000,
 			maxHeight: 1000);
 

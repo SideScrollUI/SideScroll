@@ -348,7 +348,7 @@ public class ListSeries
 	/// </summary>
 	public TimeWindow? GetTimeWindow()
 	{
-		if (TimeRangeValues is not { } timeRangeValues) return null;
+		if (TimeRangeValues is not { Count: > 0 } timeRangeValues) return null;
 
 		DateTime startTime = DateTime.MaxValue;
 		DateTime endTime = DateTime.MinValue;
