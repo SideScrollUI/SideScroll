@@ -66,7 +66,7 @@ public class SerializerMemoryAtlas : SerializerMemory
 		using CallTimer callTimer = call.Timer();
 
 		Stream.Seek(0, SeekOrigin.Begin);
-		using var reader = new BinaryReader(Stream);
+		using var reader = new BinaryReader(Stream, Encoding.Default, true);
 
 		var serializer = Create();
 		serializer.TypeRepoString = TypeRepoString;
@@ -83,7 +83,7 @@ public class SerializerMemoryAtlas : SerializerMemory
 		using CallTimer callTimer = call.Timer();
 
 		Stream.Seek(0, SeekOrigin.Begin);
-		using var reader = new BinaryReader(Stream);
+		using var reader = new BinaryReader(Stream, Encoding.Default, true);
 
 		var serializer = Create();
 		serializer.Load(callTimer, reader, loadData: false);

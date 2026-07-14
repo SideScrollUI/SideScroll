@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed calling  `TabViewer.LoadTab()` multiple times
 - Fixed `ListSeries.GetTimeWindow()` when there's no data points
 - Fixed `ListSeries.GetTotal()` throwing when all Y values are null
+- Fixed `SerializerMemoryAtlas.Load()` and `Validate()` closing the stream, which made a second `Load()` throw an `ObjectDisposedException`
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark

@@ -51,4 +51,29 @@ public class SerializeValidationTests : SerializeBaseTest
 
 		Assert.That(bytes.Take(4), Is.EqualTo(sideId));
 	}
+
+	[Test, Description("Load leaves the stream open so it can be loaded multiple times")]
+	public void LoadTwice()
+	{
+		SerializerMemoryAtlas serializer = new();
+		serializer.Save(Call, "input");
+
+		var first = serializer.Load<string>(Call);
+		var second = serializer.Load<string>(Call);
+
+		Assert.That(first, Is.EqualTo("input"));
+		Assert.That(second, Is.EqualTo("input"));
+	}
+
+	[Test, Description("Validate leaves the stream open so the data can still be loaded")]
+	public void ValidateThenLoad()
+	{
+		SerializerMemoryAtlas serializer = new();
+		serializer.Save(Call, "input");
+
+		serializer.Validate(Call);
+		var output = serializer.Load<string>(Call);
+
+		Assert.That(output, Is.EqualTo("input"));
+	}
 }
