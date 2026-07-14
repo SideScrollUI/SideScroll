@@ -10,18 +10,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added DataGrid Search support for excluding terms with a leading `-` or `!` (e.g. `-foo`, `!(foo | bar)`)
 - Added Atlas Serializer support for renaming types via `TypeSchema.RegisterDeprecatedType()`
-- Added Toolbar Radio Button theming for the pressed circle fill and border, and the selected pressed circle border, which were previously showing as gray
-- Added Context Menu theming for the pressed item background and foreground, with the background previously showing as gray
+- Added Toolbar Radio Button theming for the pressed circle fill and border, and the selected pressed circle border
+- Added Context Menu theming for the pressed item background and foreground
 
 ### Fixed
+- Updated Avalonia Headless Tab Loading to handle delays better
 - Fixed `TaskInstance.ProgressMax` not updating for sub-tasks
 - Fixed Light theme read-only CheckBox check color to stand out more than the border
 - Fixed custom theme Radio Button label foregrounds showing the default variant color when pressed
 - Fixed ListSeries Totals for time ranges without any entries
+- Fixed TabFormattedComboBox null handling
 - Fixed calling  `TabViewer.LoadTab()` multiple times
 - Fixed `ListSeries.GetTimeWindow()` when there's no data points
 - Fixed `ListSeries.GetTotal()` throwing when all Y values are null
-- Updated Avalonia Headless Tab Loading to handle delays better
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark

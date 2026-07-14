@@ -122,11 +122,10 @@ public class TabFormattedComboBox : ComboBox
 
 	private FormattedItem? GetFormattedItem(object? obj)
 	{
-		if (obj == null) return null;
-
 		foreach (FormattedItem? item in base.Items)
 		{
-			if (item?.Object!.ToString() == obj.ToString())
+			// This can match a null item value
+			if (item?.Object?.ToString() == obj?.ToString())
 				return item;
 		}
 		return null;
@@ -188,6 +187,13 @@ public class TabFormattedComboBox : ComboBox
 		}
 		set
 		{
+			if (value == null)
+			{
+				// Select existing null-object item if present; otherwise clear selection
+				base.SelectedItem = _items?.FirstOrDefault(i => i.Object == null);
+				return;
+			}
+
 			FormattedItem? formattedItem = GetFormattedItem(value);
 			if (formattedItem == null)
 			{
