@@ -130,6 +130,15 @@ public class LogEntry : INotifyPropertyChanged
 	public LogLevel Level { get; set; } = LogLevel.Info;
 
 	/// <summary>
+	/// Returns true if entries at this level would be retained by the log.
+	/// Check before logging in hot paths to avoid allocating tags for filtered entries.
+	/// </summary>
+	public bool IsEnabled(LogLevel logLevel)
+	{
+		return Settings == null || logLevel >= Settings.MinLogLevel;
+	}
+
+	/// <summary>
 	/// The raw log message text without tags
 	/// </summary>
 	[Hidden]

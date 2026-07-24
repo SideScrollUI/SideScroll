@@ -365,7 +365,10 @@ public abstract class TypeRepo : IDisposable
 			long objectEnd = writer.BaseStream.Position;
 			ObjectSizes[index++] = (int)(objectEnd - objectStart);
 
-			logTimer.AddDebug("Saved Object", new Tag(TypeSchema.Name, obj));
+			if (logTimer.IsEnabled(LogLevel.Debug))
+			{
+				logTimer.AddDebug("Saved Object", new Tag(TypeSchema.Name, obj));
+			}
 		}
 
 		logTimer.Add("Saved Type Objects",

@@ -114,10 +114,17 @@ public class TabInstance : IDisposable
 	/// </summary>
 	public static int MaxPreloadItems { get; set; } = 50;
 
+	private Project? _project;
 	/// <summary>
-	/// The project this tab instance belongs to
+	/// The project this tab instance belongs to.
+	/// Created on first access when not set, so callers that assign one (e.g. child tab creation)
+	/// avoid constructing a throwaway <see cref="Tabs.Project"/>.
 	/// </summary>
-	public Project Project { get; set; }
+	public Project Project
+	{
+		get => _project ??= new();
+		set => _project = value;
+	}
 
 	/// <summary>
 	/// The ITab that created this instance
@@ -370,8 +377,6 @@ public class TabInstance : IDisposable
 	/// </summary>
 	public TabInstance()
 	{
-		Project = new();
-
 		InitializeContext();
 	}
 
@@ -406,7 +411,8 @@ public class TabInstance : IDisposable
 	{
 		TabInstance tabInstance = tab.Create();
 
-		if (tabInstance.Project.LinkType == null)
+		// Check the backing field so an unset Project isn't materialized just to be replaced
+		if (tabInstance._project?.LinkType == null)
 		{
 			tabInstance.Project = Project;
 		}

@@ -80,7 +80,7 @@ public class Log : LogEntry
 	/// </summary>
 	public LogEntry? Add(LogLevel logLevel, string text, params Tag[] tags)
 	{
-		if (logLevel < Settings!.MinLogLevel)
+		if (!IsEnabled(logLevel))
 			return null;
 
 		var logEntry = new LogEntry(Settings, logLevel, text, tags);
@@ -233,7 +233,7 @@ public class Log : LogEntry
 		{
 			Debug.Print(logEntry.Level + ": " + logEntry);
 		}
-		if (logEntry.Level < Settings.MinLogLevel)
+		if (!IsEnabled(logEntry.Level))
 			return;
 
 		logEntry.RootLog = RootLog;

@@ -128,8 +128,8 @@ public class TypeRepoObject : TypeRepo
 				if (TypeRepo.TypeSchema.IsPrimitive)
 				{
 					// todo: construct temp object and store default instead for speed?
-					dynamic? currentValue = PropertySchema.PropertyInfo.GetValue(obj);
-					if ((dynamic?)valueObject == currentValue)
+					object? currentValue = PropertySchema.PropertyInfo.GetValue(obj);
+					if (Equals(valueObject, currentValue))
 						return;
 				}
 				if (valueObject != null || PropertySchema.IsNullable)
@@ -462,6 +462,11 @@ public class TypeRepoObject : TypeRepo
 			if (!fieldSchema.IsReadable)
 				continue;
 
+			// GetOrAddObjectRef() ignores primitives, and value types can't be subclassed,
+			// so skip the boxing GetValue() call (AddObjectMemberTypes() registers the TypeRepo)
+			if (fieldSchema.NonNullableType!.IsPrimitive)
+				continue;
+
 			object? fieldValue = fieldSchema.FieldInfo.GetValue(obj);
 			Serializer.AddObjectRef(fieldValue);
 		}
@@ -482,6 +487,11 @@ public class TypeRepoObject : TypeRepo
 		foreach (PropertySchema propertySchema in TypeSchema.PropertySchemas)
 		{
 			if (!propertySchema.ShouldWrite) continue;
+
+			// GetOrAddObjectRef() ignores primitives, and value types can't be subclassed,
+			// so skip the boxing GetValue() call (AddObjectMemberTypes() registers the TypeRepo)
+			if (propertySchema.NonNullableType!.IsPrimitive)
+				continue;
 
 			object? propertyValue = propertySchema.PropertyInfo.GetValue(obj);
 			Serializer.AddObjectRef(propertyValue);

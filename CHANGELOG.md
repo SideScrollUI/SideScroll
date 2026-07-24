@@ -27,6 +27,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark
+- Improved Atlas Serializer save performance (~20% faster, ~20% fewer allocations) by skipping per-object debug log tag allocations and primitive member boxing during the object graph walk
+- Improved Atlas Serializer load performance (~20% faster, ~15% fewer allocations) by replacing the `dynamic` default-value comparison for primitive properties with `Equals()`
+- Updated `TabInstance` to lazily create its default `Project`, so child tab creation no longer allocates a throwaway `Project` (~1.4 KB per tab load)
 
 ## [0.21] - 2026-06-29
 
