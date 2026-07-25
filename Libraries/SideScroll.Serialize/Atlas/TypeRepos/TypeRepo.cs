@@ -482,7 +482,9 @@ public abstract class TypeRepo : IDisposable
 			{
 				int typeIndex = Reader.ReadInt16(); // not saved for sealed classes
 				TypeRepo typeRepo = Serializer.TypeRepos[typeIndex];
-				if (typeRepo.TypeSchema.Type!.IsPrimitive)
+
+				// Use the schema, Type is null when it can't be found
+				if (typeRepo.TypeSchema.IsPrimitive)
 				{
 					LoadObject();
 				}
@@ -522,7 +524,7 @@ public abstract class TypeRepo : IDisposable
 			if (objectType == ObjectType.DerivedType)
 			{
 				int typeIndex = Reader.ReadInt16();
-				if (typeIndex >= Serializer.TypeRepos.Count)
+				if (typeIndex < 0 || typeIndex >= Serializer.TypeRepos.Count)
 					return null;
 
 				TypeRepo typeRepo = Serializer.TypeRepos[typeIndex];
@@ -601,7 +603,8 @@ public abstract class TypeRepo : IDisposable
 		if (LoadableType == null) // type might have disappeared or been renamed
 			return null; // should we pass a "ref bool valid"?
 
-		if (objectIndex >= ObjectsLoaded.Length)
+		// Indexes come from the data being loaded so they can't be trusted
+		if (objectIndex < 0 || objectIndex >= ObjectsLoaded.Length)
 			return null;
 
 		if (ObjectsLoaded[objectIndex] is { } existingObject)

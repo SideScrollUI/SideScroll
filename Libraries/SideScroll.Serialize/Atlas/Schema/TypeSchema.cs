@@ -213,6 +213,11 @@ public class TypeSchema
 		Name = type.ToString(); // better than FullName (don't remember why)
 
 		AssemblyQualifiedName = type.AssemblyQualifiedName!; // todo: strip out unused version?
+
+		// Only set when saving. Loading uses the value stored in the file, since it decides
+		// whether object references include a type index and the type might be sealed since
+		HasSubType = !type.IsSealed; // set for all non derived classes?
+
 		InitializeType();
 
 		if (!IsCollection)
@@ -233,8 +238,7 @@ public class TypeSchema
 	private void InitializeType()
 	{
 		IsCollection = typeof(ICollection).IsAssignableFrom(Type);
-		HasSubType = !Type!.IsSealed; // set for all non derived classes?
-		CanReference = !(Type.IsPrimitive || Type.IsEnum || Type == typeof(string));
+		CanReference = !(Type!.IsPrimitive || Type.IsEnum || Type == typeof(string));
 		NonNullableType = Type.GetNonNullableType();
 		IsPrimitive = NonNullableType.IsPrimitive;
 		HasEmptyConstructor = TypeHasEmptyConstructor(Type);
