@@ -100,6 +100,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `TypeExtensions.GetAssemblyQualifiedShortName` incorrectly leaving fully qualified assembly names for generic arguments within an array (e.g. `List<int>[]`)
 - Fixed `ObjectExtensions.ToUniqueString` throwing a `StackOverflowException` when identifying object models with circular references
 - Fixed `DateTimeUtils.FormatTimeRange` duration being offset when the time range crosses a Daylight Saving Time (DST) transition or when mixing time zones (e.g. UTC and Local)
+- Fixed `StringExtensions.Range` throwing an `ArgumentOutOfRangeException` when provided a negative `start` index
+- Fixed `NumberExtensions.RoundToSignificantFigures` returning `NaN` for extremely small doubles and throwing an `OverflowException` for decimals due to the scaling magnitude exceeding the type's limits
+- Fixed `SerializerMemory.ValidateBase64` incorrectly passing parameter names instead of values to `ArgumentNullException.ThrowIfNull`, causing it to never throw on null strings
+- Fixed `SerializerMemoryAtlas.TryLoad` failing to catch serialization exceptions for invalid data, causing uncaught errors instead of safely returning false
+- Fixed `TypeRepoDictionary` throwing a `NullReferenceException` when deserializing or cloning explicitly-implemented dictionaries (like `ConcurrentDictionary`) by replacing reflection with a direct interface cast
+- Fixed `Atlas.Serializer` crashing silently when deserializing non-generic collections like `Hashtable` and `ArrayList`
+- Fixed `Atlas.Serializer` failing to resolve generic arguments for custom collections inheriting from `HashSet<T>` and `IEnumerable<T>`
+- Fixed `TypeRepo` throwing `ArgumentOutOfRangeException` or exhausting memory on maliciously crafted large or negative object counts by enforcing `ValidateDataSize` checks across all collection repos
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark

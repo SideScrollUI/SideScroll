@@ -53,8 +53,17 @@ public class SerializerMemoryAtlas : SerializerMemory
 	/// </summary>
 	public override bool TryLoad<T>(out T? obj, Call? call = null) where T : class
 	{
-		obj = (T?)Load(call);
-		return obj != null;
+		try
+		{
+			obj = (T?)Load(call);
+			return obj != null;
+		}
+		catch (Exception e)
+		{
+			call?.Log.Add(e);
+			obj = null;
+			return false;
+		}
 	}
 
 	/// <summary>

@@ -82,9 +82,20 @@ public static class NumberExtensions
 		int d = (int)Math.Floor(Math.Log10(absNum));
 		int power = significantFigures - d - 1;
 
-		double magnitude = Math.Pow(10, power);
-		double shifted = Math.Round(num * magnitude, MidpointRounding.AwayFromZero);
-		double ret = shifted / magnitude;
+		double ret;
+		if (power > 300)
+		{
+			double scale1 = Math.Pow(10, 300);
+			double scale2 = Math.Pow(10, power - 300);
+			double shifted = Math.Round((num * scale1) * scale2, MidpointRounding.AwayFromZero);
+			ret = (shifted / scale2) / scale1;
+		}
+		else
+		{
+			double magnitude = Math.Pow(10, power);
+			double shifted = Math.Round(num * magnitude, MidpointRounding.AwayFromZero);
+			ret = shifted / magnitude;
+		}
 
 		return ret;
 	}
@@ -99,10 +110,20 @@ public static class NumberExtensions
 		int d = (int)Math.Floor(Math.Log10((double)Math.Abs(num)));
 		int power = significantFigures - d - 1;
 
-		decimal magnitude = (decimal)Math.Pow(10, power);
-
-		decimal shifted = Math.Round(num * magnitude, 0, MidpointRounding.AwayFromZero);
-		decimal ret = shifted / magnitude;
+		decimal ret;
+		if (power > 28)
+		{
+			decimal scale1 = (decimal)Math.Pow(10, 28);
+			decimal scale2 = (decimal)Math.Pow(10, power - 28);
+			decimal shifted = Math.Round((num * scale1) * scale2, 0, MidpointRounding.AwayFromZero);
+			ret = (shifted / scale2) / scale1;
+		}
+		else
+		{
+			decimal magnitude = (decimal)Math.Pow(10, power);
+			decimal shifted = Math.Round(num * magnitude, 0, MidpointRounding.AwayFromZero);
+			ret = shifted / magnitude;
+		}
 
 		return ret;
 	}

@@ -672,6 +672,12 @@ public abstract class TypeRepo : IDisposable
 	/// </summary>
 	public void ValidateDataSize(int requested)
 	{
+		if (requested < 0)
+		{
+			throw new SerializerException("Requested byte count is negative",
+				new Tag("Requested", requested));
+		}
+
 		if (requested > TypeSchema.DataSize)
 		{
 			throw new SerializerException("Requested byte count is larger than the data size",

@@ -99,7 +99,7 @@ public abstract class SerializerMemory
 	/// </summary>
 	public static void ValidateBase64(Call call, string base64, bool publicOnly = false)
 	{
-		ArgumentNullException.ThrowIfNull(nameof(base64));
+		ArgumentNullException.ThrowIfNull(base64);
 
 		var memorySerializer = Create();
 		memorySerializer.PublicOnly = publicOnly;

@@ -62,6 +62,7 @@ public static class StringExtensions
 	/// </summary>
 	public static string Range(this string input, int start, int end)
 	{
+		start = Math.Max(0, start);
 		end++;
 		end = Math.Min(end, input.Length);
 		if (end < start)
@@ -75,6 +76,7 @@ public static class StringExtensions
 	/// </summary>
 	public static string Range(this string input, int start)
 	{
+		start = Math.Max(0, start);
 		if (input.Length < start)
 			return "";
 

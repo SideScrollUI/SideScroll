@@ -46,7 +46,7 @@ public static class SideScrollExtensions
 		PropertyInfo[] propertyInfos = type.GetProperties();
 		foreach (PropertyInfo propertyInfo in propertyInfos)
 		{
-			if (!propertyInfo.CanWrite)
+			if (!propertyInfo.CanWrite || !propertyInfo.CanRead || propertyInfo.GetIndexParameters().Length > 0)
 				continue;
 
 			object? existingValue = propertyInfo.GetValue(obj);

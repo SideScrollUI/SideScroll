@@ -28,10 +28,36 @@ public class TypeRepoEnumerable : TypeRepo
 	{
 		if (LoadableType != null)
 		{
-			Type[] types = LoadableType.GetGenericArguments();
-			if (types.Length > 0)
+			Type? baseType = LoadableType;
+			while (baseType != null && baseType != typeof(object))
 			{
-				ElementType = types[0];
+				if (baseType.IsGenericType)
+				{
+					Type[] types = baseType.GetGenericArguments();
+					if (types.Length > 0)
+					{
+						ElementType = types[0];
+						break;
+					}
+				}
+				baseType = baseType.BaseType;
+			}
+
+			if (ElementType == null)
+			{
+				Type[] types = LoadableType
+					.GetInterfaces()
+					.FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>))?
+					.GetGenericArguments() ?? [];
+				
+				if (types.Length > 0)
+				{
+					ElementType = types[0];
+				}
+				else
+				{
+					ElementType = typeof(object);
+				}
 			}
 
 			AddMethod = LoadableType.GetMethods()
@@ -78,6 +104,7 @@ public class TypeRepoEnumerable : TypeRepo
 	public override void LoadObjectData(object obj)
 	{
 		int count = Reader!.ReadInt32();
+		ValidateBytesAvailable(count);
 
 		for (int j = 0; j < count; j++)
 		{

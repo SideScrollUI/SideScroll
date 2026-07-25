@@ -162,7 +162,7 @@ public class LazyClass
 			lazyProperty.FieldInfoLoaded = LazyType.GetField(lazyProperty.FieldBuilderLoaded!.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 			lazyProperty.FieldInfoTypeRef = LazyType.GetField(lazyProperty.FieldBuilderTypeRef!.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 			Debug.Assert(lazyProperty.FieldInfoLoaded != null);
-			Debug.Assert(lazyProperty.FieldBuilderTypeRef != null);
+			Debug.Assert(lazyProperty.FieldInfoTypeRef != null);
 		}
 	}
 

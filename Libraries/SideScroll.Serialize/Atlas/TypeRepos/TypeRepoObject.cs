@@ -539,7 +539,6 @@ public class TypeRepoObject : TypeRepo
 			if (!fieldSchema.IsReadable) continue;
 
 			object? fieldValue = fieldSchema.FieldInfo.GetValue(source);
-			Serializer.AddObjectRef(fieldValue);
 			object? clone = Serializer.Clone(fieldValue);
 			fieldSchema.FieldInfo.SetValue(dest, clone);
 		}
@@ -552,7 +551,6 @@ public class TypeRepoObject : TypeRepo
 			if (!propertySchema.ShouldWrite) continue;
 
 			object? propertyValue = propertySchema.PropertyInfo.GetValue(source);
-			Serializer.AddObjectRef(propertyValue);
 			object? clone = Serializer.Clone(propertyValue);
 			propertySchema.PropertyInfo.SetValue(dest, clone); // else set to null?
 		}
