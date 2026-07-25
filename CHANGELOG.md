@@ -24,6 +24,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `ListSeries.GetTimeWindow()` when there's no data points
 - Fixed `ListSeries.GetTotal()` throwing when all Y values are null
 - Fixed `SerializerMemoryAtlas.Load()` and `Validate()` closing the stream, which made a second `Load()` throw an `ObjectDisposedException`
+- Fixed `DateTime.Ceil()` rounding to seconds instead of the passed tick interval
+- Fixed `TimeSpan.FormattedShort()` dropping the larger units for negative durations (e.g. -90 seconds showed as `-30` instead of `-1:30`)
+- Fixed `ByteFormatter.Format()` ignoring the passed `decimalPlaces` for negative values
+- Removed the unused `FileUtils.chmod()` interop declaration, which marshaled paths as UTF-16 instead of the UTF-8 that libc expects
+- Removed the unused `TypeRepo.LoadObjectRef(byte[], ref int)` overload, which read the null flag and field order incorrectly
+- Fixed `string.CamelCased()` throwing on an empty string
+- Fixed `ConcurrentRateLimiter` discarding fractional refill tokens each cycle, which made the effective rate drift below the configured requests per second
+- Fixed `CustomComparer` returning inconsistent results for mixed-type comparisons, which could make sorting a DataGrid column with mixed value types throw. Different types are now grouped together by type name
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark

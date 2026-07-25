@@ -69,10 +69,11 @@ public class ConcurrentRateLimiter : IDisposable
 			return;
 
 		var stopwatch = Stopwatch.StartNew();
+		double earnedTokens = 0; // Carries the fractional remainder between cycles so the rate doesn't drift low
 
 		while (!cancellationToken.IsCancellationRequested)
 		{
-			// Dynamically adjust the delay: 
+			// Dynamically adjust the delay:
 			// - High RPS = shorter delay
 			// - Low RPS = longer delay (up to 100ms)
 			int delayMs = Math.Max(1, 1000 / rps); // Minimum 1ms delay for high RPS
@@ -80,11 +81,13 @@ public class ConcurrentRateLimiter : IDisposable
 
 			await Task.Delay(delayMs, cancellationToken);
 
-			double elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
-			int tokensToRelease = (int)(elapsedSeconds * rps); // Calculate tokens based on elapsed time
+			earnedTokens += stopwatch.Elapsed.TotalSeconds * rps; // Calculate tokens based on elapsed time
+			stopwatch.Restart();
+
+			int tokensToRelease = (int)earnedTokens;
 			if (tokensToRelease <= 0) continue;
 
-			stopwatch.Restart(); // Reset the stopwatch after releasing tokens
+			earnedTokens -= tokensToRelease; // Whole tokens are spent below, unreleased ones are discarded
 
 			for (int i = 0; i < tokensToRelease; i++)
 			{

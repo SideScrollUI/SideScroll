@@ -214,7 +214,7 @@ public static class DateTimeExtensions
 	/// </summary>
 	public static DateTime Ceil(this DateTime dateTime, long ticks = TimeSpan.TicksPerSecond)
 	{
-		return new DateTime(dateTime.Ticks + ticks - 1, dateTime.Kind).Trim();
+		return new DateTime(dateTime.Ticks + ticks - 1, dateTime.Kind).Trim(ticks);
 	}
 
 	/// <summary>

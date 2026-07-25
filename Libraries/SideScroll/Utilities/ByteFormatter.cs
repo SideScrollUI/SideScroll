@@ -21,7 +21,7 @@ public class ByteFormatter : ICustomFormatter
 	{
 		if (value < 0)
 		{
-			return "-" + Format(-value);
+			return "-" + Format(-value, decimalPlaces);
 		}
 
 		int i = 0;

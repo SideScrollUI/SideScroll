@@ -23,7 +23,11 @@ public class CustomComparer : IComparer
 		Type xType = x.GetType();
 		Type yType = y.GetType();
 		if (xType != yType)
-			return 0;
+		{
+			// Group by type name so mixed-type comparisons stay transitive
+			// Returning 0 here would be inconsistent with the value comparisons below, which can make List.Sort throw
+			return string.CompareOrdinal(xType.FullName, yType.FullName);
+		}
 
 		if (x is string xString && y is string yString)
 		{

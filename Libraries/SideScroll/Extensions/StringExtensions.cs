@@ -94,6 +94,9 @@ public static class StringExtensions
 	/// </summary>
 	public static string CamelCased(this string text)
 	{
+		if (text.Length == 0)
+			return text;
+
 		string lowerCased = text.ToLower();
 		string camelCased = char.ToUpper(lowerCased[0]) + lowerCased[1..];
 		return camelCased;

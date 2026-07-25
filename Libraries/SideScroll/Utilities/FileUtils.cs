@@ -88,9 +88,6 @@ public static class FileUtils
 		".txt",
 	];
 
-	[DllImport("libc", SetLastError = true, CharSet = CharSet.Unicode)]
-	internal static extern int chmod(string path, int mode);
-
 	[DllImport("libc", SetLastError = true)]
 	internal static extern int umask(uint mask);
 

@@ -63,6 +63,12 @@ public static class TimeSpanExtensions
 	{
 		StringBuilder sb = new();
 
+		if (timeSpan.Ticks < 0)
+		{
+			sb.Append('-');
+			timeSpan = timeSpan.Duration();
+		}
+
 		if ((int)timeSpan.TotalDays > 0)
 		{
 			sb.Append((int)timeSpan.TotalDays);

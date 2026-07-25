@@ -25,6 +25,15 @@ public class FormatTests : BaseTest
 	}
 
 	[Test]
+	public void TimeSpanFormattedShortNegative()
+	{
+		Assert.That(TimeSpan.FromSeconds(-1.5).FormattedShort(), Is.EqualTo("-1.5"));
+		Assert.That(TimeSpan.FromSeconds(-90).FormattedShort(), Is.EqualTo("-1:30"));
+		Assert.That(new TimeSpan(0, -1, -2, -3).FormattedShort(), Is.EqualTo("-1:02:03"));
+		Assert.That(new TimeSpan(-1, -2, -3, -4).FormattedShort(), Is.EqualTo("-1:2:03:04"));
+	}
+
+	[Test]
 	public void DoubleFormattedShortDecimal()
 	{
 		Assert.That(1.123.FormattedShortDecimal(), Is.EqualTo("1.123"));
