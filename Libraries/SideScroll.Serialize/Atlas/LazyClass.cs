@@ -233,6 +233,7 @@ public class LazyClass
 		ILGenerator getIl = getPropertyMethodBuilder.GetILGenerator();
 
 		Label returnValue = getIl.DefineLabel();
+		LocalBuilder localTypeRef = getIl.DeclareLocal(typeof(TypeRef));
 
 		// check result and jump to Ret if are equals
 		getIl.Emit(OpCodes.Ldarg_0); // load this
@@ -241,23 +242,21 @@ public class LazyClass
 
 		// Return the current value if there's no TypeRef to load, which happens when loading
 		// never reached this property. Calling Load() on it would throw a NullReferenceException.
-		// Don't set Loaded here, a TypeRef can still get assigned afterwards
+		// load TypeRef into a local variable for thread safety
 		getIl.Emit(OpCodes.Ldarg_0); // load this
 		getIl.Emit(OpCodes.Ldfld, fieldBuilderTypeRef);
-		getIl.Emit(OpCodes.Brfalse, returnValue);
+		getIl.Emit(OpCodes.Stloc, localTypeRef);
 
-		// set IsModified to true
-		getIl.Emit(OpCodes.Ldarg_0); // load this
-		getIl.Emit(OpCodes.Ldc_I4_1); // load 1 (true)
-		getIl.Emit(OpCodes.Stfld, fieldBuilderLoaded);
+		// check if localTypeRef is null
+		getIl.Emit(OpCodes.Ldloc, localTypeRef);
+		getIl.Emit(OpCodes.Brfalse, returnValue);
 
 		// save value to inner property
 
 		// load value into field
 		getIl.Emit(OpCodes.Ldarg_0); // load this
 
-		getIl.Emit(OpCodes.Ldarg_0); // load this
-		getIl.Emit(OpCodes.Ldfld, fieldBuilderTypeRef);
+		getIl.Emit(OpCodes.Ldloc, localTypeRef); // load localTypeRef
 		getIl.Emit(OpCodes.Call, methodInfoLoad);
 
 		// Load() returns an object, convert it before calling a setter that takes anything else.
@@ -272,6 +271,11 @@ public class LazyClass
 		}
 
 		getIl.Emit(OpCodes.Call, setMethod);
+
+		// set IsModified to true
+		getIl.Emit(OpCodes.Ldarg_0); // load this
+		getIl.Emit(OpCodes.Ldc_I4_1); // load 1 (true)
+		getIl.Emit(OpCodes.Stfld, fieldBuilderLoaded);
 
 		// set TypeRef to null to free memory
 		getIl.Emit(OpCodes.Ldarg_0); // load this
@@ -300,17 +304,15 @@ public class LazyClass
 
 		ILGenerator setIl = setPropertyMethodBuilder.GetILGenerator();
 
-		// set IsModified to true
-		setIl.Emit(OpCodes.Ldarg_0); // load this
-		setIl.Emit(OpCodes.Ldc_I4_1); // load 1 (true)
-		setIl.Emit(OpCodes.Stfld, fieldBuilderLoaded);
-
-		// save value to inner property
-
 		// set value
 		setIl.Emit(OpCodes.Ldarg_0); // load this
 		setIl.Emit(OpCodes.Ldarg_1); // load value
 		setIl.Emit(OpCodes.Call, setMethod);
+
+		// set IsModified to true
+		setIl.Emit(OpCodes.Ldarg_0); // load this
+		setIl.Emit(OpCodes.Ldc_I4_1); // load 1 (true)
+		setIl.Emit(OpCodes.Stfld, fieldBuilderLoaded);
 
 		setIl.Emit(OpCodes.Ret);
 
