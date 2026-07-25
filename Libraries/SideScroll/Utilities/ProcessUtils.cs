@@ -138,6 +138,10 @@ public static class ProcessUtils
 			{
 				Process.Start("open", folder);
 			}
+			else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+			{
+				Process.Start("xdg-open", folder);
+			}
 		}
 		catch (Exception e)
 		{

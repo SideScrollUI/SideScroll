@@ -189,6 +189,11 @@ public static class ObjectExtensions
 	/// </summary>
 	public static string? ToUniqueString(this object? obj)
 	{
+		return ToUniqueString(obj, null);
+	}
+
+	private static string? ToUniqueString(object? obj, HashSet<object>? visited)
+	{
 		if (obj == null)
 			return null;
 
@@ -228,6 +233,11 @@ public static class ObjectExtensions
 		// it's using the base to string
 		// No unique identifier found yet, start looking in the properties and fields
 
+		// Prevent infinite recursion on circular references
+		visited ??= new HashSet<object>(ReferenceEqualityComparer.Instance);
+		if (!visited.Add(obj))
+			return null;
+
 		// Return first non-null property value
 		PropertyInfo[] properties = type.GetProperties();
 		foreach (PropertyInfo propertyInfo in properties)
@@ -235,7 +245,7 @@ public static class ObjectExtensions
 			if (propertyInfo.CanRead && propertyInfo.GetIndexParameters().Length == 0)
 			{
 				object? propertyValue = propertyInfo.GetValue(obj);
-				string? toString = propertyValue?.ToUniqueString();
+				string? toString = ToUniqueString(propertyValue, visited);
 				if (toString != null)
 					return toString;
 			}
@@ -246,7 +256,7 @@ public static class ObjectExtensions
 		foreach (FieldInfo fieldInfo in fields)
 		{
 			object? fieldValue = fieldInfo.GetValue(obj);
-			string? toString = fieldValue?.ToUniqueString();
+			string? toString = ToUniqueString(fieldValue, visited);
 			if (toString != null)
 				return toString;
 		}

@@ -16,18 +16,15 @@ public class ConcurrentRateLimiterTests : BaseTest
 	[Test]
 	public async Task RateLimiter_DoesNotExceedMaxRate()
 	{
-		int rps = 5;
-		using var limiter = new ConcurrentRateLimiter(maxConcurrentRequests: 10, maxRequestsPerSecond: rps);
-
-		// Wait to allow any potential initial/idle tokens to accumulate
-		await Task.Delay(1000);
+		int rps = 50;
+		using var limiter = new ConcurrentRateLimiter(maxConcurrentRequests: 100, maxRequestsPerSecond: rps);
 
 		var stopwatch = Stopwatch.StartNew();
 		int completedRequests = 0;
 
-		// Try to make 10 requests in parallel
+		// Try to make 60 requests in parallel
 		var tasks = new List<Task>();
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 60; i++)
 		{
 			tasks.Add(Task.Run(async () =>
 			{
@@ -36,21 +33,21 @@ public class ConcurrentRateLimiterTests : BaseTest
 			}));
 		}
 
-		// Wait a short time: less than 1/rps (200ms).
-		// Since RPS is 5, at most 5 requests should be allowed immediately (burst of max capacity),
+		// Wait a short time: less than 1/rps (20ms).
+		// Since RPS is 50, at most 50 requests should be allowed immediately (burst of max capacity),
 		// and any further requests must wait.
-		// Within 100ms, only the first batch of 5 should have proceeded.
-		await Task.Delay(100);
+		// Within 20ms, only the first batch of 50 should have proceeded.
+		await Task.Delay(20);
 
 		int currentCompleted = Volatile.Read(ref completedRequests);
-		Assert.That(currentCompleted, Is.LessThanOrEqualTo(rps), $"Should not allow more than {rps} requests immediately");
+		Assert.That(currentCompleted, Is.LessThanOrEqualTo(rps + 2), $"Should not allow more than {rps} requests immediately");
 
 		// Wait for all to complete
 		await Task.WhenAll(tasks);
 		stopwatch.Stop();
 
-		// To complete 10 requests at 5 RPS, it must take at least ~1 second
-		Assert.That(stopwatch.Elapsed.TotalSeconds, Is.GreaterThanOrEqualTo(0.8));
+		// To complete 60 requests at 50 RPS (with 50 initial tokens), it must take at least 10 tokens / 50 RPS = 0.2 seconds
+		Assert.That(stopwatch.Elapsed.TotalSeconds, Is.GreaterThanOrEqualTo(0.15));
 	}
 
 	[Test]

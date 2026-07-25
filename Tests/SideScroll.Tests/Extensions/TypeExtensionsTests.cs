@@ -43,4 +43,20 @@ public class TypeExtensionsTests : BaseTest
 
 		Assert.That(shortName, Is.EqualTo("System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib], [SideScroll.Tag, SideScroll]], System.Private.CoreLib"));
 	}
+
+	[Test]
+	public void AssemblyQualifiedShortNameArrayOfGenerics()
+	{
+		string shortName = typeof(List<Tag>[]).GetAssemblyQualifiedShortName();
+
+		Assert.That(shortName, Is.EqualTo("System.Collections.Generic.List`1[[SideScroll.Tag, SideScroll]][], System.Private.CoreLib"));
+	}
+
+	[Test]
+	public void AssemblyQualifiedShortNameMultiDimensionalArrayOfGenerics()
+	{
+		string shortName = typeof(List<Tag>[,]).GetAssemblyQualifiedShortName();
+
+		Assert.That(shortName, Is.EqualTo("System.Collections.Generic.List`1[[SideScroll.Tag, SideScroll]][,], System.Private.CoreLib"));
+	}
 }

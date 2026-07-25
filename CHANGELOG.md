@@ -95,6 +95,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `HeadlessTabOptions.TabFilter` not being applied to `ILoadAsync` rows, so a `[PrivateData]` loader was resolved and added to the public schema
 - Fixed `HeadlessTabView` resolving item list element types without `GetElementTypeForAll()`, so arrays and non-generic list subclasses fell back to `object` and missed their element type's `[Explorable]` attribute and allowlist entry
 - Fixed `HeadlessTabView` not flagging a list as truncated when rows were dropped by `TabFilter` or left unlisted by cancellation, which made the exported schema claim the list was complete
+- Fixed `FileUtils.IsTextStream(Stream)` unintentionally disposing the underlying stream and failing to reset its position
+- Fixed `ProcessUtils.OpenFolder` silently failing on Linux by adding `xdg-open` support
+- Fixed `TypeExtensions.GetAssemblyQualifiedShortName` incorrectly leaving fully qualified assembly names for generic arguments within an array (e.g. `List<int>[]`)
+- Fixed `ObjectExtensions.ToUniqueString` throwing a `StackOverflowException` when identifying object models with circular references
+- Fixed `DateTimeUtils.FormatTimeRange` duration being offset when the time range crosses a Daylight Saving Time (DST) transition or when mixing time zones (e.g. UTC and Local)
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark

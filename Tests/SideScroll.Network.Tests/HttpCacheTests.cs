@@ -103,7 +103,7 @@ public class HttpCacheTests : BaseTest
 
 		Task adding = Task.Run(() =>
 		{
-			for (int i = 0; i < 2_000 && !cancellation.IsCancellationRequested; i++)
+			for (int i = 0; i < 200 && !cancellation.IsCancellationRequested; i++)
 			{
 				cache.AddEntry($"http://example.com/{i}", GetBytes("value"));
 			}

@@ -166,21 +166,27 @@ public static class TypeExtensions
 	/// </summary>
 	public static string GetAssemblyQualifiedShortName(this Type type)
 	{
-		string name;
-		if (type.IsGenericType)
-		{
-			var args = type.GetGenericArguments().Select(a => '[' + a.GetAssemblyQualifiedShortName() + ']');
-			name = $"{type.GetGenericTypeDefinition().FullName}[{string.Join(", ", args)}]";
-		}
-		else
-		{
-			name = type.FullName!;
-		}
+		string name = GetShortFullName(type);
 
 		if (type.Assembly.GetName().Name is { } assemblyName)
 		{
 			name += ", " + assemblyName;
 		}
 		return name;
+
+		static string GetShortFullName(Type t)
+		{
+			if (t.HasElementType)
+			{
+				Type elementType = t.GetElementType()!;
+				return GetShortFullName(elementType) + t.Name[elementType.Name.Length..];
+			}
+			if (t.IsGenericType)
+			{
+				var args = t.GetGenericArguments().Select(a => '[' + a.GetAssemblyQualifiedShortName() + ']');
+				return $"{t.GetGenericTypeDefinition().FullName}[{string.Join(", ", args)}]";
+			}
+			return t.FullName!;
+		}
 	}
 }

@@ -48,6 +48,7 @@ public class HttpUtilsTests : BaseTest
 	}
 
 	[Test, Description("Connection failures are retried and return null instead of throwing an HttpRequestException")]
+	[Ignore("Takes ~6 seconds due to OS socket connection timeout on Windows")]
 	public async Task GetBytesAsyncReturnsNullWhenUnreachable()
 	{
 		ViewHttpResponse? response = await HttpUtils.GetBytesAsync(Call, UnreachableUri);

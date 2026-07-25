@@ -130,6 +130,8 @@ public static class DateTimeUtils
 	/// </remarks>
 	public static string FormatTimeRange(DateTime startTime, DateTime endTime, bool withDuration = true)
 	{
+		TimeSpan duration = endTime.ToUniversalTime().Subtract(startTime.ToUniversalTime());
+
 		startTime = TimeZoneView.Current.Convert(startTime);
 		endTime = TimeZoneView.Current.Convert(endTime);
 
@@ -164,7 +166,6 @@ public static class DateTimeUtils
 
 		if (withDuration)
 		{
-			TimeSpan duration = endTime.Subtract(startTime);
 			text += " - " + duration.FormattedDecimal();
 		}
 		return text;

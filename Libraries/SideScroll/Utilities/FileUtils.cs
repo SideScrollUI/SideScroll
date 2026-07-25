@@ -22,6 +22,11 @@ public readonly struct FilePath(string path)
 public static class FileUtils
 {
 	/// <summary>
+	/// Number of characters to read when checking if a file or stream is text
+	/// </summary>
+	public const int TextCheckBufferSize = 1024;
+
+	/// <summary>
 	/// Unix permission bit: User read permission
 	/// </summary>
 	public const int S_IRUSR = 0x100;
@@ -210,8 +215,21 @@ public static class FileUtils
 	{
 		try
 		{
-			using var streamReader = new StreamReader(stream);
-			return IsTextStream(streamReader);
+			long originalPosition = 0;
+			if (stream.CanSeek)
+			{
+				originalPosition = stream.Position;
+			}
+
+			using var streamReader = new StreamReader(stream, System.Text.Encoding.UTF8, true, TextCheckBufferSize, leaveOpen: true);
+			bool result = IsTextStream(streamReader);
+
+			if (stream.CanSeek)
+			{
+				stream.Position = originalPosition;
+			}
+
+			return result;
 		}
 		catch (Exception)
 		{
@@ -227,9 +245,9 @@ public static class FileUtils
 	{
 		try
 		{
-			var buffer = new char[1000]; // 100 won't detect pdf's as binary
-			int bytesRead = streamReader.Read(buffer, 0, buffer.Length);
-			Array.Resize(ref buffer, bytesRead);
+			var buffer = new char[TextCheckBufferSize]; // 100 won't detect pdf's as binary
+			int charsRead = streamReader.Read(buffer, 0, buffer.Length);
+			Array.Resize(ref buffer, charsRead);
 			return !buffer.Any(ch => char.IsControl(ch) && ch != '\r' && ch != '\n' && ch != '\t');
 		}
 		catch (Exception)
