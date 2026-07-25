@@ -42,14 +42,20 @@ public class Linker(Project project)
 		call = call.DebugLogAll();
 #endif
 		string base64 = bookmark.ToBase64String(call, PublicOnly);
-		if (base64.Length > MaxLength)
+
+		LinkUri linkUri = new(SideScrollPrefix, LinkType, project.Version, base64);
+
+		// Measure the full uri, GetLinkAsync() does too. Checking only the base64 here would
+		// allow creating links that are too large to open once the prefix is added
+		int length = linkUri.ToUri().Length;
+		if (length > MaxLength)
 		{
 			call.Log.Throw("Link too large",
-				new Tag("Length", base64.Length),
+				new Tag("Length", length),
 				new Tag("MaxLength", MaxLength));
 		}
 
-		return new LinkUri(SideScrollPrefix, LinkType, project.Version, base64);
+		return linkUri;
 	}
 
 	/// <summary>

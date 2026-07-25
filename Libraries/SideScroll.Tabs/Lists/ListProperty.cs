@@ -185,6 +185,11 @@ public class ListProperty : ListMember, IPropertyIsEditable
 	/// <param name="includeStatic">Whether to include static properties</param>
 	public new static ItemCollection<ListProperty> Create(object obj, bool includeBaseTypes = true, bool includeStatic = true)
 	{
+		return Create(obj, includeBaseTypes, includeStatic, MaxInlineDepth);
+	}
+
+	private static ItemCollection<ListProperty> Create(object obj, bool includeBaseTypes, bool includeStatic, int inlineDepth)
+	{
 		// Use cached, structurally-filtered, sorted PropertyInfo[] to avoid repeated LINQ evaluation.
 		PropertyInfo[] propertyInfos = ReflectionCache.GetProperties(obj.GetType(), includeBaseTypes, includeStatic);
 
@@ -208,7 +213,7 @@ public class ListProperty : ListMember, IPropertyIsEditable
 				listProperties.Add(listProperty);
 			}
 		}
-		return ExpandInlined(listProperties, includeBaseTypes);
+		return ExpandInlined(listProperties, includeBaseTypes, inlineDepth);
 	}
 
 	/// <summary>
@@ -216,14 +221,20 @@ public class ListProperty : ListMember, IPropertyIsEditable
 	/// </summary>
 	public static ItemCollection<ListProperty> ExpandInlined(ItemCollection<ListProperty> listProperties, bool includeBaseTypes)
 	{
+		return ExpandInlined(listProperties, includeBaseTypes, MaxInlineDepth);
+	}
+
+	private static ItemCollection<ListProperty> ExpandInlined(ItemCollection<ListProperty> listProperties, bool includeBaseTypes, int inlineDepth)
+	{
 		ItemCollection<ListProperty> newProperties = [];
 		foreach (ListProperty listProperty in listProperties)
 		{
-			if (listProperty.HasCustomAttribute<InlineAttribute>())
+			// Show the property itself once the nesting limit is reached instead of expanding forever
+			if (listProperty.HasCustomAttribute<InlineAttribute>() && inlineDepth > 0)
 			{
 				if (listProperty.Value is { } value)
 				{
-					ItemCollection<ListProperty> inlinedProperties = Create(value, includeBaseTypes);
+					ItemCollection<ListProperty> inlinedProperties = Create(value, includeBaseTypes, true, inlineDepth - 1);
 					newProperties.AddRange(inlinedProperties);
 				}
 			}

@@ -229,6 +229,14 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 	/// <param name="includeStatic">Whether to include static members</param>
 	public static ItemCollection<ListMember> Create(object obj, bool includeBaseTypes = true, bool includeStatic = true)
 	{
+		return Create(obj, includeBaseTypes, includeStatic, MaxInlineDepth);
+	}
+
+	// [Inline] members can reference each other, limit the nesting instead of overflowing the stack
+	internal const int MaxInlineDepth = 4;
+
+	private static ItemCollection<ListMember> Create(object obj, bool includeBaseTypes, bool includeStatic, int inlineDepth)
+	{
 		Type type = obj.GetType();
 
 		// Cached: merged (properties + [Item] methods) sorted by MetadataToken,
@@ -269,7 +277,7 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 			listMembers.Add(listField);
 		}
 
-		return ExpandInlined(listMembers, includeBaseTypes);
+		return ExpandInlined(listMembers, includeBaseTypes, includeStatic, inlineDepth);
 	}
 
 	/// <summary>
@@ -277,14 +285,20 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 	/// </summary>
 	public static ItemCollection<ListMember> ExpandInlined(List<ListMember> listMembers, bool includeBaseTypes, bool includeStatic = true)
 	{
+		return ExpandInlined(listMembers, includeBaseTypes, includeStatic, MaxInlineDepth);
+	}
+
+	private static ItemCollection<ListMember> ExpandInlined(List<ListMember> listMembers, bool includeBaseTypes, bool includeStatic, int inlineDepth)
+	{
 		ItemCollection<ListMember> newMembers = [];
 		foreach (ListMember listMember in listMembers)
 		{
-			if (listMember.HasCustomAttribute<InlineAttribute>())
+			// Show the member itself once the nesting limit is reached instead of expanding forever
+			if (listMember.HasCustomAttribute<InlineAttribute>() && inlineDepth > 0)
 			{
 				if (listMember.Value is { } value)
 				{
-					ItemCollection<ListMember> inlinedProperties = Create(value, includeBaseTypes, includeStatic);
+					ItemCollection<ListMember> inlinedProperties = Create(value, includeBaseTypes, includeStatic, inlineDepth - 1);
 					newMembers.AddRange(inlinedProperties);
 				}
 			}
