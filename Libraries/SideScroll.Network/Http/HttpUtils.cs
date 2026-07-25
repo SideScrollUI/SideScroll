@@ -91,7 +91,8 @@ public static class HttpUtils
 		{
 			if (attempt > 1)
 			{
-				await Task.Delay(BaseRetryDelay * Math.Pow(2, attempt));
+				// The first retry waits the base delay, doubling for each one after
+				await Task.Delay(BaseRetryDelay * Math.Pow(2, attempt - 2));
 			}
 
 			try
@@ -176,7 +177,8 @@ public static class HttpUtils
 		{
 			if (attempt > 1)
 			{
-				await Task.Delay(BaseRetryDelay * Math.Pow(2, attempt));
+				// The first retry waits the base delay, doubling for each one after
+				await Task.Delay(BaseRetryDelay * Math.Pow(2, attempt - 2));
 			}
 
 			HttpRequestMessage request = new(HttpMethod.Head, uri);

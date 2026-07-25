@@ -59,6 +59,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed HTTP responses decoding as ASCII, which replaced every byte over 0x7F with a '?'. They now use `HttpUtils.DefaultEncoding` (UTF-8) and skip a leading byte order mark
 - Fixed binned Charts drawing a line straight through gaps instead of breaking it, only a leading gap ever added the `NaN` that breaks the line
 - Fixed binned Charts treating a bin whose values sum to zero as a gap, and misaligning bins for negative X values
+- Fixed `HttpCall` returning error responses as content, which let `HttpCachedCall` cache a 404 or 500 permanently. Non success status codes now throw
+- Fixed `HttpCachedCall` ignoring the `accept` parameter and caching every Accept header under the same key
+- Fixed `HttpCache` throwing when opening a cache that doesn't exist read only
+- Fixed `HttpCache` failing to open after an interrupted write. It now keeps every complete entry and drops the partial one
+- Fixed the `HttpUtils` retry delay being 4x longer than intended on the first retry
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark

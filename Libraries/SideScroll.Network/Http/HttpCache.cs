@@ -67,6 +67,7 @@ public class HttpCache : IDisposable
 	private readonly Stream _dataStream;
 
 	private readonly object _entryLock = new();
+	private readonly bool _writeable;
 	private bool _disposed;
 
 	/// <summary>Returns the cache's <see cref="BasePath"/>.</summary>
@@ -76,6 +77,7 @@ public class HttpCache : IDisposable
 	public HttpCache(string basePath, bool writeable)
 	{
 		BasePath = basePath;
+		_writeable = writeable;
 		Directory.CreateDirectory(basePath);
 
 		_indexPath = Paths.Combine(basePath, "http.index");
@@ -85,7 +87,8 @@ public class HttpCache : IDisposable
 		_indexStream = new FileStream(_indexPath, FileMode.OpenOrCreate, fileAccess, FileShare.Read);
 		_dataStream = new FileStream(_dataPath, FileMode.OpenOrCreate, fileAccess, FileShare.Read);
 
-		if (_indexStream.Length == 0)
+		// A read only cache can't write the header, it stays empty until something opens it writeable
+		if (writeable && _indexStream.Length == 0)
 		{
 			SaveHeader();
 		}
@@ -133,21 +136,44 @@ public class HttpCache : IDisposable
 
 	private void LoadIndex()
 	{
+		// Nothing has been written yet, a read only cache never writes the header
+		if (_indexStream.Length == 0) return;
+
 		_indexStream.Seek(0, SeekOrigin.Begin);
 		using var indexReader = new BinaryReader(_indexStream, Encoding.Default, true);
 
 		LoadHeader(indexReader);
-		while (indexReader.PeekChar() >= 0)
+
+		// Writes aren't atomic, so the last entry can be incomplete if the process was interrupted.
+		// Keep everything up to the last complete entry instead of failing to open the cache at all
+		long lastCompletePosition = _indexStream.Position;
+		try
 		{
-			var entry = new Entry
+			// PeekChar() decodes the next bytes as a character, which isn't what a length prefix is
+			while (_indexStream.Position < _indexStream.Length)
 			{
-				Uri = indexReader.ReadString(),
-				Offset = indexReader.ReadInt64(),
-				Size = indexReader.ReadInt32()
-			};
-			long ticks = indexReader.ReadInt64();
-			entry.Downloaded = new DateTime(ticks);
-			_cache[entry.Uri] = entry;
+				var entry = new Entry
+				{
+					Uri = indexReader.ReadString(),
+					Offset = indexReader.ReadInt64(),
+					Size = indexReader.ReadInt32()
+				};
+				long ticks = indexReader.ReadInt64();
+				entry.Downloaded = new DateTime(ticks);
+				_cache[entry.Uri] = entry;
+
+				lastCompletePosition = _indexStream.Position;
+			}
+		}
+		catch (Exception)
+		{
+			// Truncated or corrupt, keep the entries that already loaded
+		}
+
+		if (_writeable && lastCompletePosition < _indexStream.Length)
+		{
+			// Drop the partial entry, appending after it would orphan everything written later
+			_indexStream.SetLength(lastCompletePosition);
 		}
 	}
 

@@ -23,9 +23,9 @@ public class HttpCall(Call call)
 	}
 
 	/// <summary>Fetches <paramref name="uri"/> and returns the raw response bytes.</summary>
-	public virtual async Task<byte[]> GetBytesAsync(string uri)
+	public virtual async Task<byte[]> GetBytesAsync(string uri, string? accept = null)
 	{
-		return await GetResponseAsync(uri);
+		return await GetResponseAsync(uri, accept);
 	}
 
 	private async Task<byte[]> GetResponseAsync(string uri, string? accept = null)
@@ -46,6 +46,9 @@ public class HttpCall(Call call)
 			{
 				using HttpResponseMessage response = await client.SendAsync(request);
 
+				// Don't return error responses, HttpCachedCall would cache them permanently
+				response.EnsureSuccessStatusCode();
+
 				Stream dataStream = await response.Content.ReadAsStreamAsync();
 
 				MemoryStream memoryStream = new();
@@ -63,9 +66,9 @@ public class HttpCall(Call call)
 			{
 				getCall.Log.AddError("URI request " + request.RequestUri + " failed: " + exception.Message);
 
-				// Status codes won't change between attempts
+				// Status codes won't change between attempts, rethrow so the caller sees which one
 				if (exception.StatusCode != null)
-					break;
+					throw;
 			}
 			catch (TaskCanceledException exception) // Timed out
 			{
