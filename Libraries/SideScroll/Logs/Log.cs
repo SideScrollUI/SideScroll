@@ -261,15 +261,21 @@ public class Log : LogEntry
 	private void AddEntry(LogEntry logEntry)
 	{
 		Items.Add(logEntry);
+
+		// Always update, otherwise Level would stop rising once the log fills up and
+		// later errors wouldn't show up in the Tasks that check it
+		UpdateStats(logEntry);
+
 		if (Items.Count > Settings!.MaxLogItems)
 		{
-			// subtract entries or leave them?
+			// Entries counts everything added, including trimmed entries
+			LogEntry removedEntry = Items[0];
 			Items.RemoveAt(0);
-			//UpdateStats();
-		}
-		else
-		{
-			UpdateStats(logEntry);
+
+			if (removedEntry is Log removedLog)
+			{
+				removedLog.OnMessage -= ChildLog_OnMessage;
+			}
 		}
 
 		NotifyLogMessage(logEntry);

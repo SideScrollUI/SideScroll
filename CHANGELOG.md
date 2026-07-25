@@ -38,6 +38,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `DataRepoIndex.Load()` not repairing `NextIndex` when it equals an existing item's index, which could assign a duplicate index on the next save
 - Fixed `TabInstance.IsOwnerObject()` comparing `[DataKey]` values by reference instead of by value, so parent/child loop detection now works for equal string and boxed value keys
 - Fixed `TabModel` dictionaries never sorting by key, since the comparable check was made against the dictionary instead of the keys
+- Fixed `GetInnerValue()` overflowing the stack when `[InnerValue]` members form a cycle. It now stops after `MaxInnerValueDepth` (16) levels and returns the value reached
+- Fixed `Log.Level` and `Entries` no longer updating once a Log reached `MaxLogItems`, which hid later errors from the Tasks that check the Log Level
+- Fixed `LogSettings.Clone()` not copying the `Context`, so Logs added entries on the calling thread instead of the UI thread after calling `Call.DebugLogAll()` or `Log.SetLogLevel()`
+- Fixed `CompressionUtils.Compress()` logging the compressed size before the `GZipStream` finished writing
+- Renamed the `CompressionUtils.Decompress()` size tags, the decompressed size was labeled as the compressed size
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark

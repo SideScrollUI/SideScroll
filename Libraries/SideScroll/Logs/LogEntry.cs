@@ -53,6 +53,7 @@ public class LogSettings
 			MaxLogItems = MaxLogItems,
 			MinLogLevel = MinLogLevel,
 			DebugPrintLogLevel = DebugPrintLogLevel,
+			Context = Context, // Entries have to keep posting to the same context to stay thread safe
 		};
 	}
 

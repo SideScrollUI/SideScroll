@@ -1,6 +1,7 @@
 using SideScroll.Attributes;
 using System.Collections;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Reflection;
 using System.Xml;
 
@@ -85,9 +86,23 @@ public static class SideScrollExtensions
 	}
 
 	/// <summary>
+	/// Gets or sets the maximum number of [InnerValue] members to unwrap before stopping.
+	/// Limits the recursion so a cycle can't overflow the stack
+	/// </summary>
+	public static int MaxInnerValueDepth { get; set; } = 16;
+
+	/// <summary>
 	/// Returns the value of the first property or field decorated with [InnerValue] attribute, recursively unwrapping nested inner values
 	/// </summary>
+	/// <remarks>
+	/// Stops unwrapping after <see cref="MaxInnerValueDepth"/> levels, returning the value reached so far
+	/// </remarks>
 	public static object? GetInnerValue(this object? value)
+	{
+		return GetInnerValue(value, MaxInnerValueDepth);
+	}
+
+	private static object? GetInnerValue(object? value, int depth)
 	{
 		if (value == null)
 			return null;
@@ -97,12 +112,23 @@ public static class SideScrollExtensions
 			return value;
 
 		Type type = value.GetType();
-		switch (InnerValueMembers.GetOrAdd(type, ComputeInnerValueMember))
+		MemberInfo? innerMember = InnerValueMembers.GetOrAdd(type, ComputeInnerValueMember);
+		if (innerMember != null)
 		{
-			case PropertyInfo innerProperty:
-				return innerProperty.GetValue(value).GetInnerValue();
-			case FieldInfo innerField:
-				return innerField.GetValue(value).GetInnerValue();
+			// [InnerValue] members can reference each other, stop instead of overflowing the stack
+			if (depth <= 0)
+			{
+				Debug.WriteLine($"Max [InnerValue] depth reached for {type}, possible cycle");
+				return value;
+			}
+
+			switch (innerMember)
+			{
+				case PropertyInfo innerProperty:
+					return GetInnerValue(innerProperty.GetValue(value), depth - 1);
+				case FieldInfo innerField:
+					return GetInnerValue(innerField.GetValue(value), depth - 1);
+			}
 		}
 
 		if (value is DictionaryEntry dictionaryEntry)

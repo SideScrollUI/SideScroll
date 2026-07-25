@@ -1,0 +1,95 @@
+using NUnit.Framework;
+using SideScroll.Logs;
+
+namespace SideScroll.Tests.Logs;
+
+[Category("Core")]
+public class LogTests : BaseTest
+{
+	[OneTimeSetUp]
+	public void BaseSetup()
+	{
+		Initialize("Core");
+	}
+
+	[Test, Description("Level keeps rising after the log fills up and starts trimming")]
+	public void Level_RisesAfterMaxLogItems()
+	{
+		Log log = new()
+		{
+			Settings = new LogSettings { MaxLogItems = 3 },
+		};
+
+		for (int i = 0; i < 5; i++)
+		{
+			log.Add("Info " + i);
+		}
+		Assert.That(log.Level, Is.EqualTo(LogLevel.Info));
+
+		log.AddError("Failed");
+
+		Assert.That(log.Level, Is.EqualTo(LogLevel.Error));
+	}
+
+	[Test, Description("Entries counts every entry added, including trimmed ones")]
+	public void Entries_CountsTrimmedItems()
+	{
+		Log log = new()
+		{
+			Settings = new LogSettings { MaxLogItems = 3 },
+		};
+
+		for (int i = 0; i < 6; i++)
+		{
+			log.Add("Info " + i);
+		}
+
+		Assert.That(log.Items, Has.Count.EqualTo(3));
+		Assert.That(log.Entries, Is.EqualTo(6));
+	}
+
+	[Test]
+	public void CloneSettings_KeepsContext()
+	{
+		SynchronizationContext context = new();
+		LogSettings settings = new()
+		{
+			Context = context,
+			MaxLogItems = 5,
+		};
+
+		LogSettings clone = settings.Clone();
+
+		Assert.That(clone.Context, Is.SameAs(context));
+		Assert.That(clone.MaxLogItems, Is.EqualTo(5));
+	}
+
+	[Test]
+	public void WithMinLogLevel_KeepsContext()
+	{
+		SynchronizationContext context = new();
+		LogSettings settings = new()
+		{
+			Context = context,
+		};
+
+		LogSettings clone = settings.WithMinLogLevel(LogLevel.Debug);
+
+		Assert.That(clone.Context, Is.SameAs(context));
+		Assert.That(clone.MinLogLevel, Is.EqualTo(LogLevel.Debug));
+	}
+
+	[Test]
+	public void SetLogLevel_KeepsContext()
+	{
+		SynchronizationContext context = new();
+		Log log = new()
+		{
+			Settings = new LogSettings { Context = context },
+		};
+
+		log.SetLogLevel(LogLevel.Debug);
+
+		Assert.That(log.Settings!.Context, Is.SameAs(context));
+	}
+}
