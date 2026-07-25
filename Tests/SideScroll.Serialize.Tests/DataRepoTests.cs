@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SideScroll.Serialize.Atlas;
 using SideScroll.Serialize.DataRepos;
 
 namespace SideScroll.Serialize.Tests;
@@ -121,6 +122,47 @@ public class DataRepoTests : SerializeBaseTest
 
 		DataItemCollection<int> allItems = instance.LoadAll(Call);
 
+		Assert.That(allItems, Has.Exactly(2).Items);
+		Assert.That(allItems[0].Value, Is.EqualTo(1));
+		Assert.That(allItems[1].Value, Is.EqualTo(2));
+	}
+
+	[Test, Description("CleanupCache keeps recent items in a JSON DataRepo")]
+	public void CleanupCacheJsonKeepsRecentItems()
+	{
+		var jsonRepo = new DataRepo(Path.Combine(TestPath, "CleanupCacheJson"), "Test", useJson: true);
+		jsonRepo.DeleteRepo();
+
+		jsonRepo.Save("item", 5, Call);
+		jsonRepo.CleanupCache(Call, TimeSpan.FromDays(1));
+
+		Assert.That(jsonRepo.Load<int>("item", Call), Is.EqualTo(5));
+	}
+
+	[Test, Description("Items deleted by CleanupCache are pruned from the index on load")]
+	public void CleanupCachePrunesDeletedIndexEntries()
+	{
+		string groupId = "CleanupIndexTest";
+		var repo = new DataRepo(Path.Combine(TestPath, "CleanupCacheIndex"), "Test");
+		repo.DeleteRepo();
+
+		var instance = repo.Open<int>(groupId, indexed: true);
+		for (int i = 0; i < 3; i++)
+		{
+			instance.Save(Call, i.ToString(), i);
+		}
+
+		// Backdate the first item's data file so CleanupCache deletes it
+		string dataPath = repo.GetDataPath(typeof(int), groupId, "0");
+		string filePath = Path.Combine(dataPath, SerializerFileAtlas.DataFileName);
+		File.SetLastWriteTimeUtc(filePath, DateTime.UtcNow - TimeSpan.FromDays(2));
+
+		repo.CleanupCache(Call, TimeSpan.FromDays(1));
+
+		var indices = instance.Index!.Load(Call);
+		Assert.That(indices.Items.Select(item => item.Key), Is.EqualTo(new[] { "1", "2" }));
+
+		DataItemCollection<int> allItems = instance.LoadAll(Call);
 		Assert.That(allItems, Has.Exactly(2).Items);
 		Assert.That(allItems[0].Value, Is.EqualTo(1));
 		Assert.That(allItems[1].Value, Is.EqualTo(2));

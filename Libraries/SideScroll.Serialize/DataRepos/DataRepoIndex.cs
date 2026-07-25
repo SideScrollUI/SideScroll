@@ -275,15 +275,27 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 		{
 			long index = reader.ReadInt64();
 			string key = reader.ReadString();
-			if (index > nextIndex)
+			if (index >= nextIndex)
 			{
-				call.Log.AddWarning("Index > NextIndex",
+				call.Log.AddWarning("Index >= NextIndex",
 					new Tag("Index", index),
 					new Tag("Key", key));
 				nextIndex = index + 1;
 			}
 			items.Add(new Item(index, key));
 		}
+
+		// Drop entries whose data no longer exists (e.g. removed by DataRepo.CleanupCache()),
+		// so they don't count against MaxItems. The next Save() persists the pruned list
+		int removed = items.RemoveAll(item =>
+			!Directory.Exists(DataRepoInstance.DataRepo.GetDataPath(DataRepoInstance.DataType, GroupId, item.Key)));
+		if (removed > 0)
+		{
+			call.Log.Add("Removed missing items from index",
+				new Tag("GroupId", GroupId),
+				new Tag("Count", removed));
+		}
+
 		return new Indices
 		{
 			Items = items,

@@ -480,11 +480,19 @@ public class TabModel
 			Debug.WriteLine($"Failed to add Dictionary: {e}");
 		}
 
-		if (Object is IComparable)
+		if (sortedList.Count > 0 && sortedList[0].Key is IComparable)
 		{
-			sortedList = sortedList
-				.OrderBy(x => x.Key)
-				.ToList();
+			try
+			{
+				sortedList = sortedList
+					.OrderBy(x => x.Key)
+					.ToList();
+			}
+			catch (Exception e)
+			{
+				// Mixed key types can fail to compare
+				Debug.WriteLine($"Failed to sort Dictionary keys: {e}");
+			}
 		}
 
 		ItemLists.Add(new ItemCollection<DictionaryEntry>(sortedList));

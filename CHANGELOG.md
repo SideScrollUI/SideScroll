@@ -32,6 +32,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `string.CamelCased()` throwing on an empty string
 - Fixed `ConcurrentRateLimiter` discarding fractional refill tokens each cycle, which made the effective rate drift below the configured requests per second
 - Fixed `CustomComparer` returning inconsistent results for mixed-type comparisons, which could make sorting a DataGrid column with mixed value types throw. Different types are now grouped together by type name
+- Fixed `DataRepo.CleanupCache()` deleting all items in JSON repos regardless of age, since it always checked the Atlas data filename and missing files return a year 1601 timestamp
+- Updated `DataRepoIndex.Load()` to drop entries whose data no longer exists (e.g. removed by `CleanupCache()`), so stale entries no longer count against `MaxItems` or accumulate in the index file
+- Fixed `DataRepoView.LoadAllIndexed()` ignoring the `ascending` parameter when falling back to `LoadAll()` for unindexed views
+- Fixed `DataRepoIndex.Load()` not repairing `NextIndex` when it equals an existing item's index, which could assign a duplicate index on the next save
+- Fixed `TabInstance.IsOwnerObject()` comparing `[DataKey]` values by reference instead of by value, so parent/child loop detection now works for equal string and boxed value keys
+- Fixed `TabModel` dictionaries never sorting by key, since the comparable check was made against the dictionary instead of the keys
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark

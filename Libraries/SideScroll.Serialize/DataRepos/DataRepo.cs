@@ -1,6 +1,7 @@
 using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Serialize.Atlas;
+using SideScroll.Serialize.Json;
 using System.Diagnostics;
 
 namespace SideScroll.Serialize.DataRepos;
@@ -438,16 +439,21 @@ public class DataRepo
 			return;
 
 		DateTime threshold = DateTime.UtcNow - maxAge;
+		string dataFileName = UseJson ? SerializerFileJson.DataFileName : SerializerFileAtlas.DataFileName;
+		DateTime missingFileTime = DateTime.FromFileTimeUtc(0); // Returned for missing files instead of throwing
 
 		foreach (string groupDirectory in Directory.EnumerateDirectories(RepoPath))
 		{
 			foreach (string dataDirectory in Directory.EnumerateDirectories(groupDirectory))
 			{
-				string filePath = Path.Combine(dataDirectory, SerializerFileAtlas.DataFileName);
+				string filePath = Path.Combine(dataDirectory, dataFileName);
 
 				try
 				{
 					DateTime time = File.GetLastWriteTimeUtc(filePath); // or LastAccessTimeUtc
+					if (time == missingFileTime)
+						continue; // Don't delete directories missing a data file, they might use a different format
+
 					if (time < threshold)
 					{
 						Directory.Delete(dataDirectory, true);

@@ -58,7 +58,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 
 			if (Index == null)
 			{
-				LoadAll(call);
+				LoadAll(call, ascending);
 				return;
 			}
 
