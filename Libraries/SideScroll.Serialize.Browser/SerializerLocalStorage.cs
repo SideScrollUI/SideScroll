@@ -182,9 +182,22 @@ public partial class SerializerLocalStorage : SerializerFile
 	/// <summary>
 	/// Sets an item in localStorage (public static helper for index)
 	/// </summary>
-	public static void SetItem(string key, string value)
+	/// <returns>False if it couldn't be stored, localStorage has a limited quota</returns>
+	public static bool SetItem(string key, string value)
 	{
-		SetLocalStorageItem(key, value);
+		return SetLocalStorageItem(key, value);
+	}
+
+	/// <summary>
+	/// Returns whether an item exists in localStorage (public static helper for index)
+	/// </summary>
+	/// <remarks>
+	/// Throws if localStorage can't be reached, so callers removing entries based on this
+	/// don't treat a failure as everything being missing
+	/// </remarks>
+	public static bool ItemExists(string key)
+	{
+		return ExistsInStorage(key);
 	}
 
 	/// <summary>

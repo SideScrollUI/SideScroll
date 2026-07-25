@@ -29,6 +29,8 @@ public class DataRepoIndexLocalStorage<T>(DataRepoInstance<T> dataRepoInstance, 
 				var indices = JsonSerializer.Deserialize<Indices>(json);
 				if (indices != null)
 				{
+					Validate(call, indices);
+
 					call.Log.AddDebug("Loaded index from localStorage",
 						new Tag("Key", IndexStorageKey),
 						new Tag("Count", indices.Items.Count));
@@ -47,12 +49,56 @@ public class DataRepoIndexLocalStorage<T>(DataRepoInstance<T> dataRepoInstance, 
 	}
 
 	/// <summary>
+	/// Repairs an index that doesn't match what's in localStorage.
+	/// Entries can be edited or evicted by the browser independently of the index
+	/// </summary>
+	private void Validate(Call call, Indices indices)
+	{
+		foreach (Item item in indices.Items)
+		{
+			if (item.Index >= indices.NextIndex)
+			{
+				call.Log.AddWarning("Index >= NextIndex",
+					new Tag("Index", item.Index),
+					new Tag("Key", item.Key));
+
+				indices.NextIndex = item.Index + 1;
+			}
+		}
+
+		// Drop entries whose data is gone so they don't count against MaxItems.
+		// The next Save() persists the pruned list. If localStorage can't be reached this throws,
+		// and Load() rebuilds the index rather than treating every entry as missing
+		int removed = indices.Items.RemoveAll(item => !DataExists(item.Key));
+		if (removed > 0)
+		{
+			call.Log.Add("Removed missing items from index",
+				new Tag("GroupId", GroupId),
+				new Tag("Count", removed));
+		}
+	}
+
+	private bool DataExists(string key)
+	{
+		string dataPath = DataRepoInstance.DataRepo.GetDataPath(DataRepoInstance.DataType, GroupId, key);
+		return SerializerLocalStorage.ItemExists(SerializerLocalStorage.ConvertPathToStorageKey(dataPath));
+	}
+
+	/// <summary>
 	/// Saves the index to localStorage
 	/// </summary>
 	protected override void Save(Indices indices)
 	{
 		string json = JsonSerializer.Serialize(indices);
-		SerializerLocalStorage.SetItem(IndexStorageKey, json);
+
+		// Throw instead of silently dropping the write, the items would be saved but
+		// never show up again since indexed views enumerate through the index
+		if (!SerializerLocalStorage.SetItem(IndexStorageKey, json))
+		{
+			throw new SerializerException("Failed to save index to localStorage, it may be out of space",
+				new Tag("Key", IndexStorageKey),
+				new Tag("Size", json.Length));
+		}
 	}
 
 	/// <summary>

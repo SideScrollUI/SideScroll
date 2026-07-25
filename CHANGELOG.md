@@ -85,6 +85,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `ItemQueueCollection.MaxCount` and `TaskInstanceCollection.MaxTasks` not applying to items added through a base class reference or `AddRange()`
 - Fixed `ProcessUtils.OpenFolder()` opening a file explorer at a default location when the path doesn't exist
 - Updated `Serializer.Clone()` to report types it can't create an instance of instead of throwing a `MissingMethodException`
+- Fixed `DataRepoIndexLocalStorage.Load()` not validating the index, so entries whose data was removed still counted against `MaxItems` and a bad `NextIndex` could repeat an index
+- Fixed `DataRepoIndexLocalStorage.Save()` ignoring failed localStorage writes, which silently stopped recording items once the quota was reached
 - Fixed `ObjectExtensions.ToUniqueString` throwing exceptions on write-only properties and properties with index parameters
 - Fixed `ConcurrentRateLimiter` allowing bursts exceeding the configured RPS after idle periods
 - Fixed `ProcessUtils.OpenFolder` throwing `FileNotFoundException` when called on non-existent paths
