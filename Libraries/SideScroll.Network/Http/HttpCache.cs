@@ -56,7 +56,17 @@ public class HttpCache : IDisposable
 	public string BasePath { get; }
 
 	/// <summary>Gets the current total size in bytes of the data file.</summary>
-	public long Size => _dataStream.Length;
+	public long Size
+	{
+		get
+		{
+			// FileStream isn't thread safe, AddEntry() could be writing to it
+			lock (_entryLock)
+			{
+				return _dataStream.Length;
+			}
+		}
+	}
 
 	private readonly Dictionary<string, Entry> _cache = [];
 
@@ -104,12 +114,15 @@ public class HttpCache : IDisposable
 
 		if (disposing)
 		{
-			// Dispose managed resources
-			_indexStream.Dispose();
-			_dataStream.Dispose();
+			lock (_entryLock)
+			{
+				// Dispose managed resources
+				_indexStream.Dispose();
+				_dataStream.Dispose();
 
-			// Clear collections
-			_cache.Clear();
+				// Clear collections
+				_cache.Clear();
+			}
 		}
 
 		_disposed = true;
@@ -178,19 +191,37 @@ public class HttpCache : IDisposable
 	}
 
 	/// <summary>Gets a snapshot list of all cached entries.</summary>
-	public List<Entry> Entries => _cache.Values.ToList();
+	public List<Entry> Entries
+	{
+		get
+		{
+			// Adding an entry while this enumerates would throw
+			lock (_entryLock)
+			{
+				return _cache.Values.ToList();
+			}
+		}
+	}
 
 	/// <summary>Gets a snapshot list of all entries as <see cref="LoadableEntry"/> instances with a reference back to this cache.</summary>
-	public List<LoadableEntry> LoadableEntries =>
-		_cache.Values.Select(entry => new LoadableEntry
+	public List<LoadableEntry> LoadableEntries
+	{
+		get
 		{
-			Uri = entry.Uri,
-			Size = entry.Size,
-			Offset = entry.Offset,
-			Downloaded = entry.Downloaded,
-			Cache = this
-		})
-			.ToList();
+			lock (_entryLock)
+			{
+				return _cache.Values.Select(entry => new LoadableEntry
+				{
+					Uri = entry.Uri,
+					Size = entry.Size,
+					Offset = entry.Offset,
+					Downloaded = entry.Downloaded,
+					Cache = this
+				})
+					.ToList();
+			}
+		}
+	}
 
 	/// <summary>Appends the response bytes for <paramref name="uri"/> to the cache, ignoring the call if the URI is already cached.</summary>
 	public void AddEntry(string uri, byte[] bytes)
@@ -231,7 +262,10 @@ public class HttpCache : IDisposable
 	/// <summary>Returns <c>true</c> if a response for <paramref name="uri"/> exists in the cache.</summary>
 	public bool ContainsKey(string uri)
 	{
-		return _cache.ContainsKey(uri);
+		lock (_entryLock)
+		{
+			return _cache.ContainsKey(uri);
+		}
 	}
 
 	/// <summary>Reads and returns the raw bytes for the cached response for <paramref name="uri"/>, or <c>null</c> if not found.</summary>

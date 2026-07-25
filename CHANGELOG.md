@@ -64,6 +64,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `HttpCache` throwing when opening a cache that doesn't exist read only
 - Fixed `HttpCache` failing to open after an interrupted write. It now keeps every complete entry and drops the partial one
 - Fixed the `HttpUtils` retry delay being 4x longer than intended on the first retry
+- Fixed `HttpCache.Entries`, `LoadableEntries`, `ContainsKey()`, and `Size` reading without the lock that `AddEntry()` writes under, which could throw while entries were being added. `HttpCacheManager` is now locked too
+- Fixed `HttpUtils.GetHeadAsync()` using its own `HttpClient` that followed redirects, unlike the client the GET requests use
+- Fixed `HttpMemoryCache` throwing an `InvalidCastException` when a uri was already cached as a different type. It's now treated as a cache miss
+- Fixed `HttpGetProgress.Percent` returning `NaN` when the total length is zero
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark

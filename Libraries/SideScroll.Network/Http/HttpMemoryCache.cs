@@ -101,10 +101,12 @@ public class HttpMemoryCache
 			return false;
 		}
 
-		if (MemoryCache.TryGetValue(uri, out object? result))
+		// Entries are keyed by uri only, so the same one requested as another type won't match.
+		// Fetch it again and replace it instead of throwing an InvalidCastException
+		if (MemoryCache.TryGetValue(uri, out object? result) && result is T cached)
 		{
 			call.Log.Add("Found cached copy", new Tag("Uri", uri));
-			t = (T?)result;
+			t = cached;
 			return true;
 		}
 

@@ -21,7 +21,11 @@ public static class HttpUtils
 	public static TimeSpan BaseRetryDelay { get; set; } = TimeSpan.FromMilliseconds(500); // < ^ MaxAttempts
 
 	/// <summary>Gets or sets the shared <see cref="HttpClient"/> used for HEAD requests.</summary>
-	public static HttpClient Client { get; set; } = new();
+	/// <remarks>
+	/// Uses the same client as the GET requests so both follow the same redirect policy,
+	/// otherwise a HEAD would report the redirect target's status and a GET the redirect itself
+	/// </remarks>
+	public static HttpClient Client { get; set; } = HttpClientManager.GetClient(new HttpClientConfig());
 
 	/// <summary>Gets or sets the encoding used to decode response bodies.</summary>
 	public static Encoding DefaultEncoding { get; set; } = Encoding.UTF8;
@@ -50,7 +54,7 @@ public static class HttpUtils
 		public long TotalLength { get; set; }
 
 		/// <summary>Gets the download completion percentage (0–100).</summary>
-		public double Percent => 100.0 * Downloaded / TotalLength;
+		public double Percent => TotalLength > 0 ? 100.0 * Downloaded / TotalLength : 0;
 	}
 
 	/// <summary>Synchronously fetches <paramref name="uri"/> and returns the response body as text, or <c>null</c> on failure.</summary>

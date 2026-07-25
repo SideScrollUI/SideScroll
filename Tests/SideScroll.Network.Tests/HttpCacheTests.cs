@@ -95,6 +95,34 @@ public class HttpCacheTests : BaseTest
 		Assert.That(readOnly.GetString("http://example.com/a"), Is.EqualTo("first"));
 	}
 
+	[Test, Description("Listing entries while adding them shouldn't throw a collection modified exception")]
+	public void ConcurrentAddAndList()
+	{
+		using var cache = new HttpCache(_cachePath, true);
+		using var cancellation = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+
+		Task adding = Task.Run(() =>
+		{
+			for (int i = 0; i < 2_000 && !cancellation.IsCancellationRequested; i++)
+			{
+				cache.AddEntry($"http://example.com/{i}", GetBytes("value"));
+			}
+		});
+
+		Assert.DoesNotThrow(() =>
+		{
+			while (!adding.IsCompleted)
+			{
+				_ = cache.Entries.Count;
+				_ = cache.LoadableEntries.Count;
+				_ = cache.ContainsKey("http://example.com/1");
+				_ = cache.Size;
+			}
+		});
+
+		Assert.That(adding.Exception, Is.Null);
+	}
+
 	// Simulates the process dying partway through appending an entry
 	private void AppendPartialEntry(string uri)
 	{
