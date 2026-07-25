@@ -84,18 +84,27 @@ public class ConcurrentRateLimiter : IDisposable
 			earnedTokens += stopwatch.Elapsed.TotalSeconds * rps; // Calculate tokens based on elapsed time
 			stopwatch.Restart();
 
+			// Cap earnedTokens at the number of outstanding requests to prevent accumulating excess tokens when idle
+			int queueCount = _requestTimestamps.Count;
+			if (earnedTokens > queueCount)
+			{
+				earnedTokens = queueCount;
+			}
+
 			int tokensToRelease = (int)earnedTokens;
 			if (tokensToRelease <= 0) continue;
 
-			earnedTokens -= tokensToRelease; // Whole tokens are spent below, unreleased ones are discarded
-
+			int releasedCount = 0;
 			for (int i = 0; i < tokensToRelease; i++)
 			{
 				if (!_requestTimestamps.TryDequeue(out _))
 					break;
 
 				_rateSemaphore?.Release();
+				releasedCount++;
 			}
+
+			earnedTokens -= releasedCount;
 		}
 	}
 

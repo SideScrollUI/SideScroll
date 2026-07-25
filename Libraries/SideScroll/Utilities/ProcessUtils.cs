@@ -103,12 +103,15 @@ public static class ProcessUtils
 	{
 		// Select file instead if in folder path
 		// Trying to open a file will use the default app to open it
-		if (Path.GetDirectoryName(folder) is { } directoryName &&
-			Path.GetFileName(folder) is { } fileName &&
-			!File.GetAttributes(folder).HasFlag(FileAttributes.Directory))
+		if (File.Exists(folder) || Directory.Exists(folder))
 		{
-			folder = directoryName;
-			selection = fileName;
+			if (Path.GetDirectoryName(folder) is { } directoryName &&
+				Path.GetFileName(folder) is { } fileName &&
+				!File.GetAttributes(folder).HasFlag(FileAttributes.Directory))
+			{
+				folder = directoryName;
+				selection = fileName;
+			}
 		}
 
 		try
@@ -209,8 +212,20 @@ public static class ProcessUtils
 			if (line == null) continue;
 
 			string[] parts = line.Split(' ', 3);
-			var runtime = new DotnetRuntimeInfo(parts[0], Version.Parse(parts[1]), parts[2]);
-			runtimes.Add(runtime);
+			if (parts.Length < 3) continue;
+
+			string versionStr = parts[1];
+			int dashIndex = versionStr.IndexOf('-');
+			if (dashIndex > 0)
+			{
+				versionStr = versionStr.Substring(0, dashIndex);
+			}
+
+			if (Version.TryParse(versionStr, out Version? parsedVersion))
+			{
+				var runtime = new DotnetRuntimeInfo(parts[0], parsedVersion, parts[2]);
+				runtimes.Add(runtime);
+			}
 		}
 		return runtimes;
 	}

@@ -78,6 +78,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed the Json and LocalStorage serializers finishing a `TaskInstance` they didn't own, before deserializing. They now report progress like the Atlas serializer does
 - Fixed `Linker.AddLinkAsync()` only measuring the encoded bookmark against `MaxLength`, which allowed creating links that were too large for `GetLinkAsync()` to open
 - Fixed `[Inline]` members expanding without a depth limit, which could overflow the stack for self referencing values
+- Fixed `ObjectExtensions.ToUniqueString` throwing exceptions on write-only properties and properties with index parameters
+- Fixed `ConcurrentRateLimiter` allowing bursts exceeding the configured RPS after idle periods
+- Fixed `ProcessUtils.OpenFolder` throwing `FileNotFoundException` when called on non-existent paths
+- Fixed `ProcessUtils.GetDotnetRuntimes` failing to parse .NET runtime lists containing preview version suffixes
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark

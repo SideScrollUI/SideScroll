@@ -232,10 +232,13 @@ public static class ObjectExtensions
 		PropertyInfo[] properties = type.GetProperties();
 		foreach (PropertyInfo propertyInfo in properties)
 		{
-			object? propertyValue = propertyInfo.GetValue(obj);
-			string? toString = propertyValue?.ToUniqueString();
-			if (toString != null)
-				return toString;
+			if (propertyInfo.CanRead && propertyInfo.GetIndexParameters().Length == 0)
+			{
+				object? propertyValue = propertyInfo.GetValue(obj);
+				string? toString = propertyValue?.ToUniqueString();
+				if (toString != null)
+					return toString;
+			}
 		}
 
 		// Return first non-null field value
