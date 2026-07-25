@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SideScroll.Serialize.Atlas.Schema;
 using SideScroll.Attributes;
 using SideScroll.Serialize.Atlas;
 
@@ -228,5 +229,58 @@ public class SerializeClassConstructorTests : SerializeBaseTest
 
 		Assert.That(output, Is.Not.Null);
 		Assert.That(output.A, Is.EqualTo(input.A));
+	}
+
+	public class PublicEmptyConstructor
+	{
+		public string? A { get; set; }
+	}
+
+	public class NonPublicEmptyConstructor
+	{
+		public string? A { get; set; }
+
+		private NonPublicEmptyConstructor() { }
+
+		public NonPublicEmptyConstructor(string a) { A = a; }
+	}
+
+	public class NonPublicParamConstructorOnly
+	{
+		public string? A { get; set; }
+
+		private NonPublicParamConstructorOnly(string a) { A = a; }
+	}
+
+	public struct StructWithParamConstructor
+	{
+		public string A { get; }
+
+		public StructWithParamConstructor(string a) { A = a; }
+	}
+
+	public struct StructWithNoConstructor
+	{
+		public string? A { get; set; }
+	}
+
+	[Test, Description("A non public parameterless constructor still counts, Activator.CreateInstance(type, true) can use it")]
+	public void TypeHasEmptyConstructorIncludesNonPublic()
+	{
+		Assert.That(TypeSchema.TypeHasEmptyConstructor(typeof(PublicEmptyConstructor)), Is.True);
+		Assert.That(TypeSchema.TypeHasEmptyConstructor(typeof(NonPublicEmptyConstructor)), Is.True);
+		Assert.That(TypeSchema.TypeHasEmptyConstructor(typeof(StructWithNoConstructor)), Is.True);
+	}
+
+	[Test, Description("Types whose constructors all take parameters need the custom constructor path")]
+	public void TypeHasEmptyConstructorExcludesParameterizedOnly()
+	{
+		Assert.That(TypeSchema.TypeHasEmptyConstructor(typeof(NoConstructorBaseClass)), Is.False);
+
+		// Was reported as having one because its only constructor isn't public
+		Assert.That(TypeSchema.TypeHasEmptyConstructor(typeof(NonPublicParamConstructorOnly)), Is.False);
+
+		// Declaring one means read only members have to come from it, like Avalonia's Color
+		Assert.That(TypeSchema.TypeHasEmptyConstructor(typeof(StructWithParamConstructor)), Is.False);
 	}
 }

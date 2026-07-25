@@ -494,4 +494,39 @@ public class CloneTests : SerializeBaseTest
 			A = 3
 		};
 	}
+
+	public class NonPublicEmptyConstructor
+	{
+		public string? Value { get; set; }
+
+		private NonPublicEmptyConstructor() { }
+
+		public NonPublicEmptyConstructor(string value) { Value = value; }
+	}
+
+	public class ParameterizedConstructorOnly
+	{
+		public string Value { get; }
+
+		public ParameterizedConstructorOnly(string value) { Value = value; }
+	}
+
+	[Test, Description("Activator.CreateInstance(type, true) can use a non public parameterless constructor")]
+	public void CloneNonPublicEmptyConstructor()
+	{
+		var input = new NonPublicEmptyConstructor("abc");
+
+		var output = _serializer.Clone(Log, input)!;
+
+		Assert.That(output, Is.Not.SameAs(input));
+		Assert.That(output.Value, Is.EqualTo("abc"));
+	}
+
+	[Test, Description("There's no instance to copy into, so report it instead of a MissingMethodException")]
+	public void CloneParameterizedConstructorOnly()
+	{
+		var input = new ParameterizedConstructorOnly("abc");
+
+		Assert.That(() => _serializer.Clone(Log, input), Throws.InstanceOf<SerializerException>());
+	}
 }

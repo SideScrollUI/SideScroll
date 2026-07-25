@@ -168,12 +168,33 @@ public class ItemQueueCollection<T> : ItemCollection<T>
 	public int MaxCount { get; set; } = 100;
 
 	/// <summary>
-	/// Adds an item to the collection, removing the oldest item if MaxCount is exceeded
+	/// Inserts an item, removing the oldest items if MaxCount is exceeded
 	/// </summary>
-	public new void Add(T item)
+	/// <remarks>
+	/// Overriding this instead of hiding Add() so the limit still applies to items
+	/// added through a base class reference
+	/// </remarks>
+	protected override void InsertItem(int index, T item)
 	{
-		base.Add(item);
-		if (Count > MaxCount)
+		base.InsertItem(index, item);
+
+		TrimToMaxCount();
+	}
+
+	/// <summary>
+	/// Adds multiple items, removing the oldest items if MaxCount is exceeded
+	/// </summary>
+	public override void AddRange(IEnumerable<T> collection)
+	{
+		// Adds to Items directly, so it never reaches InsertItem()
+		base.AddRange(collection);
+
+		TrimToMaxCount();
+	}
+
+	private void TrimToMaxCount()
+	{
+		while (Count > MaxCount)
 		{
 			RemoveAt(0);
 		}

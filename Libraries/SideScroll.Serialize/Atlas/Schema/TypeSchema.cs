@@ -313,9 +313,26 @@ public class TypeSchema
 	/// </summary>
 	public static bool TypeHasEmptyConstructor(Type type)
 	{
-		ConstructorInfo? constructorInfo = type.GetConstructor(Type.EmptyTypes); // doesn't find constructor if none declared
-		var constructors = type.GetConstructors();
-		return (constructorInfo != null || constructors.Length == 0);
+		// Objects get created with Activator.CreateInstance(type, true), which can use a non public
+		// constructor. Only checking the public ones treats a type with a single private constructor
+		// that takes parameters as having an empty one, and creating it then throws
+		ConstructorInfo? constructorInfo = type.GetConstructor(
+			BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+			null,
+			Type.EmptyTypes,
+			null);
+
+		if (constructorInfo != null)
+			return true;
+
+		// Structs always have an implicit parameterless constructor, but ones that declare their own
+		// still need the custom constructor path to restore read only members like Color's
+		if (type.IsValueType)
+			return type.GetConstructors().Length == 0;
+
+		// A class with no declared constructors gets an implicit public parameterless one, which would
+		// have been found above. So every constructor here takes parameters, whatever their visibility
+		return false;
 	}
 
 	/// <summary>
@@ -350,7 +367,7 @@ public class TypeSchema
 
 		if (members.Count == 0) return null;
 
-		ConstructorInfo[] constructors = Type!.GetConstructors();
+		ConstructorInfo[] constructors = Type.GetConstructors();
 		foreach (ConstructorInfo constructor in constructors)
 		{
 			ParameterInfo[] parameters = constructor.GetParameters();

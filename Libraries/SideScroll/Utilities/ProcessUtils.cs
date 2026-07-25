@@ -101,17 +101,18 @@ public static class ProcessUtils
 	/// </summary>
 	public static void OpenFolder(string folder, string? selection = null)
 	{
+		// There's nothing to show, and explorer.exe opens a default folder instead of doing nothing
+		if (!File.Exists(folder) && !Directory.Exists(folder))
+			return;
+
 		// Select file instead if in folder path
 		// Trying to open a file will use the default app to open it
-		if (File.Exists(folder) || Directory.Exists(folder))
+		if (Path.GetDirectoryName(folder) is { } directoryName &&
+			Path.GetFileName(folder) is { } fileName &&
+			!File.GetAttributes(folder).HasFlag(FileAttributes.Directory))
 		{
-			if (Path.GetDirectoryName(folder) is { } directoryName &&
-				Path.GetFileName(folder) is { } fileName &&
-				!File.GetAttributes(folder).HasFlag(FileAttributes.Directory))
-			{
-				folder = directoryName;
-				selection = fileName;
-			}
+			folder = directoryName;
+			selection = fileName;
 		}
 
 		try

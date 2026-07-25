@@ -672,9 +672,16 @@ public class Serializer : IDisposable
 			// struct
 			return obj; // move this earlier to primitive check?
 		}
-		else
+		else if (typeRepo.TypeSchema.HasEmptyConstructor)
 		{
 			clone = Activator.CreateInstance(type, true)!;
+		}
+		else
+		{
+			// There's nothing to copy into. A custom constructor can't help either, it would need
+			// the member values before they've been cloned
+			throw new SerializerException("Type can't be cloned without an empty constructor, add [CloneReference] to share it instead",
+				new Tag("Type", type));
 		}
 
 		Clones[obj] = clone;

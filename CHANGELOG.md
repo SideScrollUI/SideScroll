@@ -81,6 +81,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `[Inline]` members expanding without a depth limit, which could overflow the stack for self referencing values
 - Fixed `TypeSchema` recomputing `HasSubType` from the current type when loading instead of using the saved value. Sealing a class could misparse object references in files saved before it
 - Fixed `SkipObjectRef()` throwing a `NullReferenceException` for a type that no longer exists
+- Fixed `TypeSchema.TypeHasEmptyConstructor()` only checking public constructors, so a type with a single non public constructor that takes parameters looked constructible and then silently failed to load
+- Fixed `ItemQueueCollection.MaxCount` and `TaskInstanceCollection.MaxTasks` not applying to items added through a base class reference or `AddRange()`
+- Fixed `ProcessUtils.OpenFolder()` opening a file explorer at a default location when the path doesn't exist
+- Updated `Serializer.Clone()` to report types it can't create an instance of instead of throwing a `MissingMethodException`
 - Fixed `ObjectExtensions.ToUniqueString` throwing exceptions on write-only properties and properties with index parameters
 - Fixed `ConcurrentRateLimiter` allowing bursts exceeding the configured RPS after idle periods
 - Fixed `ProcessUtils.OpenFolder` throwing `FileNotFoundException` when called on non-existent paths
