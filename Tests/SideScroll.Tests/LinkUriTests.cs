@@ -44,6 +44,27 @@ public class LinkUriTests : BaseTest
 		Assert.That(uri.Query, Is.EqualTo("query"));
 	}
 
+	[Test, Description("A uri without a query round trips without gaining a trailing '?'")]
+	public void TestParseWithoutQuery()
+	{
+		const string url = "sidescroll://type/v3.1/path";
+
+		Assert.That(LinkUri.TryParse(url, out LinkUri? uri));
+
+		Assert.That(uri!.Query, Is.Null);
+		Assert.That(uri.ToUri(), Is.EqualTo(url));
+	}
+
+	[Test]
+	public void TestParseWithQueryRoundTrips()
+	{
+		const string url = "sidescroll://type/v3.1/path?query";
+
+		Assert.That(LinkUri.TryParse(url, out LinkUri? uri));
+
+		Assert.That(uri!.ToUri(), Is.EqualTo(url));
+	}
+
 	[Test]
 	public void TestParseVersionedPath()
 	{

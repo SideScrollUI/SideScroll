@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SideScroll.Tasks;
 
 namespace SideScroll.Tests;
 
@@ -45,5 +46,41 @@ public class CallTests : BaseTest
 		Assert.That(result.Keys, Is.EquivalentTo(_input));
 		Assert.That(result.Values, Is.EquivalentTo(_input));
 		Assert.That(result.NonNullValues, Is.EquivalentTo([0, 1]));
+	}
+
+	[Test, Description("Cancelling returns only the items that ran, not empty placeholders")]
+	public async Task RunAsyncCancelled()
+	{
+		Call call = new()
+		{
+			TaskInstance = new TaskInstance(),
+		};
+		call.TaskInstance!.Cancel();
+
+		var result = await call.RunAsync(EchoAsync, _input);
+
+		Assert.That(result, Is.Empty);
+	}
+
+	[Test, Description("Cancelling partway keeps the results that already started")]
+	public async Task RunAsyncCancelledPartway()
+	{
+		Call call = new()
+		{
+			TaskInstance = new TaskInstance(),
+		};
+
+		List<int?> items = [1, 2, 3, 4];
+
+		// One at a time so the second item can't start until the first has already cancelled
+		var result = await call.RunAsync(async (c, item) =>
+		{
+			call.TaskInstance!.Cancel();
+			await Task.Delay(1);
+			return item;
+		}, items, maxConcurrentRequests: 1);
+
+		Assert.That(result, Has.Count.EqualTo(1));
+		Assert.That(result.Keys, Is.EqualTo(new int?[] { 1 }));
 	}
 }

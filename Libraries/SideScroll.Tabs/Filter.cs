@@ -434,7 +434,10 @@ public class Filter
 		return true;
 	}
 
-	private static void GetItemSearchText(object obj, List<PropertyInfo> columnProperties, List<string> uppercaseValues)
+	// Inner values can reference each other, limit the nesting instead of overflowing the stack
+	private const int MaxSearchTextDepth = 4;
+
+	private static void GetItemSearchText(object obj, List<PropertyInfo> columnProperties, List<string> uppercaseValues, int depth = MaxSearchTextDepth)
 	{
 		if (obj.ToString()?.ToUpper() is { } objText)
 		{
@@ -464,10 +467,14 @@ public class Filter
 		{
 			if (innerValue is IList list)
 			{
+				if (depth <= 0) return;
+
 				List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleElementProperties(list);
 				foreach (var item in list)
 				{
-					GetItemSearchText(item, visibleProperties, uppercaseValues);
+					if (item == null) continue;
+
+					GetItemSearchText(item, visibleProperties, uppercaseValues, depth - 1);
 				}
 			}
 			else

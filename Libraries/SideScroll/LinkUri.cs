@@ -126,7 +126,8 @@ public class LinkUri
 			Type = match.Groups["type"].Value.ToLower(),
 			Version = ParseVersion(match.Groups["version"].Value),
 			Path = match.Groups["path"].Value,
-			Query = match.Groups["query"].Value,
+			// A missing group's Value is "", which ToUri() would turn into a trailing '?'
+			Query = match.Groups["query"].Success ? match.Groups["query"].Value : null,
 		};
 		return true;
 	}

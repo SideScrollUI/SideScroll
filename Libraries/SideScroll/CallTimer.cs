@@ -11,6 +11,8 @@ public class CallTimer : Call, IDisposable
 	private readonly Stopwatch _stopwatch = new();
 	private readonly System.Timers.Timer _timer = new();
 
+	private int _stopped;
+
 	/// <summary>
 	/// Gets or sets whether this timer is associated with a task instance.
 	/// </summary>
@@ -34,10 +36,14 @@ public class CallTimer : Call, IDisposable
 	}
 
 	/// <summary>
-	/// Stops the timer and logs the final duration.
+	/// Stops the timer and logs the final duration. Does nothing if already stopped.
 	/// </summary>
 	public void Stop()
 	{
+		// Dispose() also calls this, so stopping early shouldn't finish the task or log twice
+		if (Interlocked.Exchange(ref _stopped, 1) != 0)
+			return;
+
 		_stopwatch.Stop();
 
 		_timer.Stop();

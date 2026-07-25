@@ -81,15 +81,17 @@ public class SerializerFileJson : SerializerFile
 
 		byte[] jsonBytes = File.ReadAllBytes(DataPath!);
 
-		taskInstance?.SetFinished();
+		// Use expectedType if provided, otherwise fallback to Dictionary
+		object? obj = expectedType != null
+			? JsonSerializer.Deserialize(jsonBytes, expectedType, options)
+			: JsonSerializer.Deserialize<Dictionary<string, object?>>(jsonBytes, options);
 
-		// Use expectedType if provided
-		if (expectedType != null)
+		// Report progress instead of finishing, the caller owns the task and the work isn't done until here
+		if (taskInstance != null)
 		{
-			return JsonSerializer.Deserialize(jsonBytes, expectedType, options);
+			taskInstance.Percent = 100;
 		}
 
-		// Fallback to Dictionary
-		return JsonSerializer.Deserialize<Dictionary<string, object?>>(jsonBytes, options);
+		return obj;
 	}
 }

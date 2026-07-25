@@ -68,6 +68,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `HttpUtils.GetHeadAsync()` using its own `HttpClient` that followed redirects, unlike the client the GET requests use
 - Fixed `HttpMemoryCache` throwing an `InvalidCastException` when a uri was already cached as a different type. It's now treated as a cache miss
 - Fixed `HttpGetProgress.Percent` returning `NaN` when the total length is zero
+- Fixed `TypeRepoType` aborting the rest of an object's members when a `Type`'s assembly is missing, instead of just that member
+- Fixed `TaskInstance.SetFinished()` completing twice when called again before its posted `OnFinished()` ran
+- Fixed `LinkUri.ToUri()` adding a trailing '?' for parsed uris that had no query
+- Fixed `Filter` searching nested lists without a depth limit, which could overflow the stack for self referencing values
+- Fixed `DataRepoInstance` and `DataRepoView` using a null key when an item has no `[DataKey]`, which failed later with an unrelated error
+- Fixed `Call.RunAsync()` returning empty placeholder results for items that never ran after cancelling
+- Fixed `CallTimer.Stop()` logging the duration and finishing the task again when called before `Dispose()`
+- Fixed the Json and LocalStorage serializers finishing a `TaskInstance` they didn't own, before deserializing. They now report progress like the Atlas serializer does
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark

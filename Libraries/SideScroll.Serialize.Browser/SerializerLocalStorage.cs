@@ -112,16 +112,18 @@ public partial class SerializerLocalStorage : SerializerFile
 				new Tag("Key", StorageKey),
 				new Tag("Size", json.Length));
 
-			taskInstance?.SetFinished();
+			// Use expectedType if provided, otherwise fallback to Dictionary
+			object? obj = expectedType != null
+				? JsonSerializer.Deserialize(json, expectedType, options)
+				: JsonSerializer.Deserialize<Dictionary<string, object?>>(json, options);
 
-			// Use expectedType if provided
-			if (expectedType != null)
+			// Report progress instead of finishing, the caller owns the task and the work isn't done until here
+			if (taskInstance != null)
 			{
-				return JsonSerializer.Deserialize(json, expectedType, options);
+				taskInstance.Percent = 100;
 			}
 
-			// Fallback to Dictionary
-			return JsonSerializer.Deserialize<Dictionary<string, object?>>(json, options);
+			return obj;
 		}
 		catch (Exception e)
 		{

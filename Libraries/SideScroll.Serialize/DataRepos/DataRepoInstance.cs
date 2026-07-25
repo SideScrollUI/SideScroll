@@ -169,8 +169,18 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	/// </summary>
 	public virtual void Delete(Call? call, T item)
 	{
-		string key = ObjectUtils.GetObjectId(item)!;
-		Delete(call, key);
+		Delete(call, GetItemKey(item));
+	}
+
+	/// <summary>
+	/// Returns the key to store an item under, from its [DataKey] or its unique string
+	/// </summary>
+	/// <exception cref="ArgumentException">The item has no usable key</exception>
+	protected static string GetItemKey(T item)
+	{
+		// A null key would fail later with an unrelated error, like hashing a null path
+		return ObjectUtils.GetObjectId(item)
+			?? throw new ArgumentException($"No key found for {typeof(T)}, add a [DataKey] to one of its members", nameof(item));
 	}
 
 	/// <summary>

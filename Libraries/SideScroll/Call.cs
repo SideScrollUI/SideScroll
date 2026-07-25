@@ -534,6 +534,7 @@ public class Call
 
 		var tasks = new List<Task>();
 		var results = new KeyValuePair<TItem, TResult?>[items.Count];
+		int startedCount = 0;
 
 		foreach (var (index, item) in items.WithIndex())
 		{
@@ -546,6 +547,7 @@ public class Call
 				break;
 			}
 
+			startedCount = index + 1;
 			tasks.Add(Task.Run(async () =>
 			{
 				try
@@ -566,7 +568,8 @@ public class Call
 		}
 		await Task.WhenAll(tasks);
 
-		return new ItemResultCollection<TItem, TResult>(results);
+		// Cancelling leaves the remaining entries unset, don't return them as empty results
+		return new ItemResultCollection<TItem, TResult>(results.Take(startedCount));
 	}
 
 	/// <summary>
@@ -586,6 +589,7 @@ public class Call
 
 		var tasks = new List<Task>();
 		var results = new KeyValuePair<TItem, TResult?>[items.Count];
+		int startedCount = 0;
 		foreach (var (index, item) in items.WithIndex())
 		{
 			var limitToken = await rateLimiter.WaitAsync();
@@ -597,6 +601,7 @@ public class Call
 				break;
 			}
 
+			startedCount = index + 1;
 			tasks.Add(Task.Run(async () =>
 			{
 				try
@@ -617,7 +622,8 @@ public class Call
 		}
 		await Task.WhenAll(tasks);
 
-		return new ItemResultCollection<TItem, TResult>(results);
+		// Cancelling leaves the remaining entries unset, don't return them as empty results
+		return new ItemResultCollection<TItem, TResult>(results.Take(startedCount));
 	}
 
 	/// <summary>
@@ -638,6 +644,7 @@ public class Call
 
 		var tasks = new List<Task>();
 		var results = new KeyValuePair<TItem, TResult?>[items.Count];
+		int startedCount = 0;
 		foreach (var (index, item) in items.WithIndex())
 		{
 			var limitToken = await rateLimiter.WaitAsync();
@@ -649,6 +656,7 @@ public class Call
 				break;
 			}
 
+			startedCount = index + 1;
 			tasks.Add(Task.Run(async () =>
 			{
 				try
@@ -669,7 +677,8 @@ public class Call
 		}
 		await Task.WhenAll(tasks);
 
-		return new ItemResultCollection<TItem, TResult>(results);
+		// Cancelling leaves the remaining entries unset, don't return them as empty results
+		return new ItemResultCollection<TItem, TResult>(results.Take(startedCount));
 	}
 }
 

@@ -155,6 +155,8 @@ public class TaskInstance : INotifyPropertyChanged
 
 	private readonly Stopwatch _stopwatch = new();
 
+	private int _finishing;
+
 	/// <summary>Returns the task's <see cref="Label"/>.</summary>
 	public override string? ToString() => Label;
 
@@ -347,7 +349,9 @@ public class TaskInstance : INotifyPropertyChanged
 	/// </summary>
 	public void SetFinished()
 	{
-		if (Finished)
+		// Finished doesn't get set until OnFinished() runs, which can be posted to another
+		// context, so it can't guard against a second call before that happens
+		if (Interlocked.Exchange(ref _finishing, 1) != 0)
 			return;
 
 		_stopwatch.Stop(); // Both Send and Post adds some delay
