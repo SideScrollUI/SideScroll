@@ -67,7 +67,8 @@ public static class HttpUtils
 	public static async Task<string?> GetStringAsync(Call call, string uri)
 	{
 		var response = await GetBytesAsync(call, uri);
-		response?.Response?.EnsureSuccessStatusCode();
+		if (response?.Response?.IsSuccessStatusCode != true) return null;
+
 		byte[]? bytes = response?.Bytes;
 		if (bytes == null) return null;
 
@@ -104,6 +105,12 @@ public static class HttpUtils
 				Stopwatch stopwatch = Stopwatch.StartNew();
 				HttpResponseMessage response = await client.GetAsync(uri);
 
+				if (IsTransient(response.StatusCode) && attempt < MaxAttempts)
+				{
+					getCall.Log.Add($"Transient error {response.StatusCode} on attempt {attempt}");
+					continue;
+				}
+
 				byte[] bytes = await ReadContentAsync(response.Content, progress);
 
 				stopwatch.Stop();
@@ -128,8 +135,7 @@ public static class HttpUtils
 			{
 				getCall.Log.Add(exception);
 
-				// Status codes won't change between attempts
-				if (exception.StatusCode != null)
+				if (exception.StatusCode != null && (!IsTransient(exception.StatusCode) || attempt >= MaxAttempts))
 					break;
 			}
 			catch (TaskCanceledException exception) // Timed out
@@ -191,6 +197,12 @@ public static class HttpUtils
 			{
 				HttpResponseMessage response = await Client.SendAsync(request);
 
+				if (IsTransient(response.StatusCode) && attempt < MaxAttempts)
+				{
+					headCall.Log.Add($"Transient error {response.StatusCode} on attempt {attempt}");
+					continue;
+				}
+
 				//response.Close();
 				call.Log.Add("Uri Response",
 					new Tag("Uri", request.RequestUri),
@@ -202,8 +214,7 @@ public static class HttpUtils
 			{
 				headCall.Log.Add(exception);
 
-				// Status codes won't change between attempts
-				if (exception.StatusCode != null)
+				if (exception.StatusCode != null && (!IsTransient(exception.StatusCode) || attempt >= MaxAttempts))
 					break;
 			}
 			catch (TaskCanceledException exception) // Timed out
@@ -212,6 +223,17 @@ public static class HttpUtils
 			}
 		}
 		return null;
+	}
+
+	private static bool IsTransient(HttpStatusCode? statusCode)
+	{
+		return statusCode is 
+			HttpStatusCode.RequestTimeout or 
+			HttpStatusCode.TooManyRequests or 
+			HttpStatusCode.InternalServerError or 
+			HttpStatusCode.BadGateway or 
+			HttpStatusCode.ServiceUnavailable or 
+			HttpStatusCode.GatewayTimeout;
 	}
 }
 
