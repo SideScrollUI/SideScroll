@@ -663,13 +663,30 @@ public abstract class TypeRepo : IDisposable
 	}
 
 	/// <summary>
-	/// Validates that the requested number of bytes is available in the stream
+	/// Validates that the requested number of bytes could fit in this type's data.
+	/// Use this instead of <see cref="ValidateBytesAvailable(int)"/> when the reader isn't
+	/// positioned inside this type's data yet, like when allocating from a header count
+	/// </summary>
+	public void ValidateDataSize(int requested)
+	{
+		if (requested > TypeSchema.DataSize)
+		{
+			throw new SerializerException("Requested byte count is larger than the data size",
+				new Tag("Requested", requested),
+				new Tag("DataSize", TypeSchema.DataSize));
+		}
+	}
+
+	/// <summary>
+	/// Validates that the requested number of bytes is available in the stream.
+	/// Only valid while the reader is positioned inside this type's data
 	/// </summary>
 	public void ValidateBytesAvailable(int requested)
 	{
-		long available = TypeSchema.EndDataOffset - Reader!.BaseStream.Position;
+		ValidateDataSize(requested);
 
-		if (requested > TypeSchema.DataSize || requested > available)
+		long available = TypeSchema.EndDataOffset - Reader!.BaseStream.Position;
+		if (requested > available)
 		{
 			throw new SerializerException("Requested byte count is larger than available size",
 				new Tag("Requested", requested),

@@ -55,12 +55,6 @@ public class TypeRepoTimeSpan(Serializer serializer, TypeSchema typeSchema) : Ty
 		return obj;
 	}
 
-	public override object LoadObject()
-	{
-		object obj = Enum.ToObject(TypeSchema.Type!, Reader!.ReadInt32());
-		return obj;
-	}
-
 	// not called, it's a struct and a value
 	public override void Clone(object source, object dest)
 	{

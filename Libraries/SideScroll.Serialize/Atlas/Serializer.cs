@@ -636,11 +636,16 @@ public class Serializer : IDisposable
 		Log log = new();
 		TypeRepo typeRepo = GetOrCreateRepo(log, type);
 
+		// Immutable types can be shared instead of copied. Version, Uri, and TimeZoneInfo also
+		// have no parameterless constructor to clone into (Version would clone as an empty 0.0)
 		if (typeRepo is
 			TypeRepoPrimitive or
 			Atlas.TypeRepos.TypeRepoString or
 			TypeRepoEnum or
-			TypeRepoType)
+			TypeRepoType or
+			TypeRepoVersion or
+			TypeRepoUri or
+			TypeRepoTimeZoneInfo)
 		{
 			Clones[obj] = obj; // optional
 			return obj;
@@ -654,7 +659,13 @@ public class Serializer : IDisposable
 
 		if (typeRepo is TypeRepoArray or TypeRepoArrayBytes)
 		{
-			clone = Array.CreateInstance(type.GetElementType()!, ((Array)obj).Length);
+			var sourceArray = (Array)obj;
+			int[] lengths = new int[sourceArray.Rank];
+			for (int dimension = 0; dimension < lengths.Length; dimension++)
+			{
+				lengths[dimension] = sourceArray.GetLength(dimension);
+			}
+			clone = Array.CreateInstance(type.GetElementType()!, lengths);
 		}
 		else if (type.IsValueType)
 		{
