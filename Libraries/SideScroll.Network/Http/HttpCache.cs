@@ -224,11 +224,11 @@ public class HttpCache : IDisposable
 		}
 	}
 
-	/// <summary>Returns the cached response for <paramref name="uri"/> decoded as an ASCII string.</summary>
+	/// <summary>Returns the cached response for <paramref name="uri"/> decoded as text.</summary>
 	public string GetString(string uri)
 	{
 		byte[] bytes = GetBytes(uri)!;
-		string text = Encoding.ASCII.GetString(bytes);
+		string text = HttpUtils.DecodeString(bytes);
 		return text;
 	}
 }

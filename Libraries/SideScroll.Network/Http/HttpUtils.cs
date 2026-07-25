@@ -23,6 +23,23 @@ public static class HttpUtils
 	/// <summary>Gets or sets the shared <see cref="HttpClient"/> used for HEAD requests.</summary>
 	public static HttpClient Client { get; set; } = new();
 
+	/// <summary>Gets or sets the encoding used to decode response bodies.</summary>
+	public static Encoding DefaultEncoding { get; set; } = Encoding.UTF8;
+
+	private const char ByteOrderMark = (char)0xFEFF;
+
+	/// <summary>Decodes response bytes as text using <see cref="DefaultEncoding"/>.</summary>
+	/// <remarks>
+	/// Responses are usually UTF-8, decoding them as ASCII replaces every byte over 0x7F with a '?'
+	/// </remarks>
+	public static string DecodeString(byte[] bytes)
+	{
+		string text = DefaultEncoding.GetString(bytes);
+
+		// A byte order mark decodes to a zero width character that breaks parsers like JsonSerializer
+		return text.TrimStart(ByteOrderMark);
+	}
+
 	/// <summary>Tracks download progress for a streaming HTTP GET request.</summary>
 	public class HttpGetProgress
 	{
@@ -36,13 +53,13 @@ public static class HttpUtils
 		public double Percent => 100.0 * Downloaded / TotalLength;
 	}
 
-	/// <summary>Synchronously fetches <paramref name="uri"/> and returns the response body as an ASCII string, or <c>null</c> on failure.</summary>
+	/// <summary>Synchronously fetches <paramref name="uri"/> and returns the response body as text, or <c>null</c> on failure.</summary>
 	public static string? GetString(Call call, string uri)
 	{
 		return Task.Run(() => GetStringAsync(call, uri)).GetAwaiter().GetResult();
 	}
 
-	/// <summary>Asynchronously fetches <paramref name="uri"/> and returns the response body as an ASCII string, or <c>null</c> on failure.</summary>
+	/// <summary>Asynchronously fetches <paramref name="uri"/> and returns the response body as text, or <c>null</c> on failure.</summary>
 	public static async Task<string?> GetStringAsync(Call call, string uri)
 	{
 		var response = await GetBytesAsync(call, uri);
@@ -50,7 +67,7 @@ public static class HttpUtils
 		byte[]? bytes = response?.Bytes;
 		if (bytes == null) return null;
 
-		return Encoding.ASCII.GetString(bytes);
+		return DecodeString(bytes);
 	}
 
 	/// <summary>Synchronously fetches <paramref name="uri"/> and returns a <see cref="ViewHttpResponse"/>, or <c>null</c> on failure.</summary>
@@ -102,18 +119,17 @@ public static class HttpUtils
 
 				return viewResponse;
 			}
-			catch (WebException exception)
+			catch (HttpRequestException exception)
 			{
 				getCall.Log.Add(exception);
 
-				if (exception.Response != null)
-				{
-					string response = await new StreamReader(exception.Response.GetResponseStream()).ReadToEndAsync();
-					getCall.Log.AddError("Exception: " + response);
-				}
-
-				if (exception.Status == WebExceptionStatus.ProtocolError)
+				// Status codes won't change between attempts
+				if (exception.StatusCode != null)
 					break;
+			}
+			catch (TaskCanceledException exception) // Timed out
+			{
+				getCall.Log.Add(exception);
 			}
 		}
 		return null;
@@ -176,18 +192,17 @@ public static class HttpUtils
 
 				return response;
 			}
-			catch (WebException exception)
+			catch (HttpRequestException exception)
 			{
 				headCall.Log.Add(exception);
 
-				if (exception.Response != null)
-				{
-					string response = await new StreamReader(exception.Response.GetResponseStream()).ReadToEndAsync();
-					headCall.Log.AddError("Exception: " + response);
-				}
-
-				if (exception.Status == WebExceptionStatus.ProtocolError)
+				// Status codes won't change between attempts
+				if (exception.StatusCode != null)
 					break;
+			}
+			catch (TaskCanceledException exception) // Timed out
+			{
+				headCall.Log.Add(exception);
 			}
 		}
 		return null;
@@ -204,9 +219,9 @@ public class ViewHttpResponse
 	/// <summary>Gets or sets the filename extracted from the last URI path segment.</summary>
 	public string? Filename { get; set; }
 
-	/// <summary>Gets the response body decoded as an ASCII string.</summary>
+	/// <summary>Gets the response body decoded as text.</summary>
 	[HiddenColumn]
-	public string Body => Encoding.ASCII.GetString(Bytes!);
+	public string Body => HttpUtils.DecodeString(Bytes!);
 
 	/// <summary>Gets the HTTP status code of the response.</summary>
 	public HttpStatusCode? Status => Response?.StatusCode;

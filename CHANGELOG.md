@@ -55,6 +55,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed unused `LoadObject()` overrides from the `DateTime`, `DateTimeOffset`, and `TimeSpan` type repos that were copied from `TypeRepoEnum` and would have read the wrong number of bytes
 - Fixed `TimeRangeValue.FillAndMerge()` extending the `EndTime` of the values passed in, so charting the same series twice kept widening its time ranges
 - Fixed `TimeRangeValue.FillAndMerge()` converting inserted gaps to UTC while leaving the surrounding values unconverted, which mixed `DateTimeKind`s within a series
+- Fixed HTTP requests never retrying, the retry loops caught `WebException` which `HttpClient` doesn't throw. They now catch `HttpRequestException` and timeouts, so `HttpUtils` returns null after all attempts instead of throwing on the first
+- Fixed HTTP responses decoding as ASCII, which replaced every byte over 0x7F with a '?'. They now use `HttpUtils.DefaultEncoding` (UTF-8) and skip a leading byte order mark
+- Fixed binned Charts drawing a line straight through gaps instead of breaking it, only a leading gap ever added the `NaN` that breaks the line
+- Fixed binned Charts treating a bin whose values sum to zero as a gap, and misaligning bins for negative X values
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark

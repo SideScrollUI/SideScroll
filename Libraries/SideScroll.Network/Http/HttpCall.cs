@@ -1,6 +1,3 @@
-using System.Net;
-using System.Text;
-
 namespace SideScroll.Network.Http;
 
 /// <summary>
@@ -18,11 +15,11 @@ public class HttpCall(Call call)
 	/// <summary>Gets the logging call context used for timing and diagnostics.</summary>
 	public Call Call => call;
 
-	/// <summary>Fetches <paramref name="uri"/> and returns the response body as an ASCII string.</summary>
+	/// <summary>Fetches <paramref name="uri"/> and returns the response body as text.</summary>
 	public virtual async Task<string?> GetStringAsync(string uri, string? accept = null)
 	{
 		byte[] bytes = await GetResponseAsync(uri, accept);
-		return Encoding.ASCII.GetString(bytes);
+		return HttpUtils.DecodeString(bytes);
 	}
 
 	/// <summary>Fetches <paramref name="uri"/> and returns the raw response bytes.</summary>
@@ -62,15 +59,17 @@ public class HttpCall(Call call)
 
 				return data;
 			}
-			catch (WebException exception)
+			catch (HttpRequestException exception)
 			{
 				getCall.Log.AddError("URI request " + request.RequestUri + " failed: " + exception.Message);
 
-				if (exception.Response != null)
-				{
-					string response = await new StreamReader(exception.Response.GetResponseStream()).ReadToEndAsync();
-					Call.Log.AddError(response);
-				}
+				// Status codes won't change between attempts
+				if (exception.StatusCode != null)
+					break;
+			}
+			catch (TaskCanceledException exception) // Timed out
+			{
+				getCall.Log.AddError("URI request " + request.RequestUri + " timed out: " + exception.Message);
 			}
 
 			if (attempt >= MaxAttempts)
