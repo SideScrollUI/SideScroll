@@ -50,14 +50,13 @@ public class HeadlessTabView(TabInstance instance, string label)
 
 	private readonly HashSet<IList> _truncatedLists = [];
 
-	/// <summary>Item lists that were not fully expanded into children (per-list cap reached with items remaining).</summary>
+	/// <summary>
+	/// Item lists that weren't fully listed: the per-list item cap was reached with rows remaining,
+	/// traversal was cancelled partway, or rows were dropped by <see cref="HeadlessTabOptions.TabFilter"/>.
+	/// </summary>
 	public IReadOnlySet<IList> TruncatedLists => _truncatedLists;
 
-	/// <summary>
-	/// True when any item list was not fully listed because the applicable per-list item cap
-	/// (<see cref="HeadlessTabOptions.MaxAllowedItems"/> or <see cref="HeadlessTabOptions.MaxOtherItems"/>)
-	/// was reached with rows remaining.
-	/// </summary>
+	/// <summary>True when any item list was not fully listed. See <see cref="TruncatedLists"/>.</summary>
 	public bool ItemsTruncated => _truncatedLists.Count > 0;
 
 	/// <summary>
@@ -152,10 +151,9 @@ public class HeadlessTabView(TabInstance instance, string label)
 	/// </summary>
 	private bool IsElementTypeAllowed(IList itemList)
 	{
-		Type listType = itemList.GetType();
-		Type elementType = listType.IsGenericType
-			? listType.GetGenericArguments()[0]
-			: typeof(object);
+		// Same element type resolution the data grid and Preload() use, so arrays and non-generic
+		// list subclasses aren't silently demoted to object (and their [Explorable] attribute missed)
+		Type elementType = itemList.GetType().GetElementTypeForAll() ?? typeof(object);
 
 		// [Explorable] / [Explorable(false)] on the element type overrides the allowlist.
 		if (elementType.GetCustomAttribute<ExplorableAttribute>() is { } explorable)
@@ -310,8 +308,8 @@ public class HeadlessTabView(TabInstance instance, string label)
 	/// <summary>
 	/// Lists up to <paramref name="maxItems"/> rows of <paramref name="items"/> (by label) and explores
 	/// up to <paramref name="maxChildren"/> of them into child views (loaded and recursable). Each cap
-	/// uses: negative = unlimited, <c>0</c> = none, positive = cap. When rows are omitted past the item
-	/// cap, the list is flagged in <see cref="TruncatedLists"/>.
+	/// uses: negative = unlimited, <c>0</c> = none, positive = cap. Whenever a row is omitted rather
+	/// than listed, the list is flagged in <see cref="TruncatedLists"/>.
 	/// </summary>
 	public async Task SelectItemsAsync(Call call, IList items, int maxItems, int maxChildren)
 	{
@@ -334,7 +332,11 @@ public class HeadlessTabView(TabInstance instance, string label)
 		for (int i = 0; i < snapshot.Count; i++)
 		{
 			if (IsCancelled(call))
+			{
+				// Stopped before reaching this row, so the list isn't fully represented
+				_truncatedLists.Add(items);
 				break;
+			}
 
 			object obj = snapshot[i];
 
@@ -343,9 +345,11 @@ public class HeadlessTabView(TabInstance instance, string label)
 				continue; // not a listable row
 
 			// Leaf values have no navigable content, so list them as labels without consuming the
-			// child-exploration budget: scalars (strings, primitives) and empty collections.
-			bool isLeaf = value.GetType().IsPrimitive
-				|| value is string
+			// child-exploration budget. TabUtils has the framework's rule for this (it excludes
+			// strings, primitives, enums, decimals, DateTimes, and TimeSpans, and honors IHasLinks),
+			// and TabModel.AddItems() uses it as the final gate for what a sub tab can show.
+			// Enums are the exception: AddItems() expands them into a value list before that gate.
+			bool isLeaf = (value is not Enum && !TabUtils.ObjectHasLinks(obj))
 				|| value is ICollection { Count: 0 };
 
 			HeadlessTabView? child = null;
@@ -355,7 +359,11 @@ public class HeadlessTabView(TabInstance instance, string label)
 				{
 					child = await TryCreateChildViewAsync(call, obj);
 					if (child == null)
-						continue; // filtered out or not navigable
+					{
+						// Filtered out or not navigable: the row is dropped instead of listed
+						_truncatedLists.Add(items);
+						continue;
+					}
 
 					child.SourceList = items;
 					ChildViews.Add(child);
@@ -364,7 +372,8 @@ public class HeadlessTabView(TabInstance instance, string label)
 				else if (Options.TabFilter != null && value is ITab or ITabCreatorAsync or ILoadAsync)
 				{
 					// Navigable but beyond the child budget: don't list (or leak) tab-like rows we
-					// can't filter without resolving them.
+					// can't filter without resolving them. They're omitted, so flag the list
+					_truncatedLists.Add(items);
 					continue;
 				}
 			}
@@ -403,6 +412,11 @@ public class HeadlessTabView(TabInstance instance, string label)
 		// ILoadAsync: wrap in TabInstanceLoadAsync so TabInstance.Load calls LoadAsync
 		if (value is ILoadAsync loadAsync)
 		{
+			// Apply the optional type filter before loading, the result gets added to the model
+			// and SelectItemsAsync treats ILoadAsync rows as filterable for the same reason
+			if (Options.TabFilter != null && !Options.TabFilter(loadAsync.GetType()))
+				return null;
+
 			var childTabInstance = new TabInstanceLoadAsync(loadAsync)
 			{
 				Project = Instance.Project,

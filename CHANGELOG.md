@@ -91,6 +91,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `ConcurrentRateLimiter` allowing bursts exceeding the configured RPS after idle periods
 - Fixed `ProcessUtils.OpenFolder` throwing `FileNotFoundException` when called on non-existent paths
 - Fixed `ProcessUtils.GetDotnetRuntimes` failing to parse .NET runtime lists containing preview version suffixes
+- Fixed `HeadlessTabView` treating scalar rows that aren't `IsPrimitive` (`DateTime`, `TimeSpan`, `decimal`) as navigable, so they spent the child exploration budget on tabs that always loaded empty. It now uses `TabUtils.ObjectHasLinks()`, the same rule `TabModel.AddItems()` gates on
+- Fixed `HeadlessTabOptions.TabFilter` not being applied to `ILoadAsync` rows, so a `[PrivateData]` loader was resolved and added to the public schema
+- Fixed `HeadlessTabView` resolving item list element types without `GetElementTypeForAll()`, so arrays and non-generic list subclasses fell back to `object` and missed their element type's `[Explorable]` attribute and allowlist entry
+- Fixed `HeadlessTabView` not flagging a list as truncated when rows were dropped by `TabFilter` or left unlisted by cancellation, which made the exported schema claim the list was complete
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark

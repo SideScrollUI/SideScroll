@@ -1019,4 +1019,197 @@ public class HeadlessTabViewerTests : BaseTest
 			Is.EqualTo(new[] { "FromSecond" }),
 			"The matched row must be the second 'Dup' (index 1), confirmed by its child.");
 	}
+
+	// ─── Leaf detection ──────────────────────────────────────────────────
+
+	/// <summary>Rows mixing a scalar value with a navigable tab, to check which one spends the child budget.</summary>
+	private class ScalarAndTabRowsTab : ITab
+	{
+		public override string ToString() => "Mixed";
+
+		public TabInstance Create() => new Instance();
+
+		private class Instance : TabInstance
+		{
+			public override void Load(Call call, TabModel model)
+			{
+				model.Name = "Mixed";
+				model.Items = new List<ListItem>
+				{
+					new("Updated", new DateTime(2026, 7, 25, 0, 0, 0, DateTimeKind.Utc)),
+					new("Child", new NamedTab("Child")),
+				};
+			}
+		}
+	}
+
+	[Test, Description(
+		"Scalars that aren't IsPrimitive (DateTime, TimeSpan, decimal) are still leaves - TabModel.AddItems " +
+		"gates on TabUtils.ObjectHasLinks, so expanding them produces an empty tab. They must not spend " +
+		"the child budget and starve a real navigable row.")]
+	public async Task SelectAllItemsAsync_DateTimeRow_DoesNotConsumeChildBudget()
+	{
+		var viewer = new HeadlessTabViewer(new Project())
+		{
+			Options = new HeadlessTabOptions { MaxAllowedChildren = 1 },
+		};
+
+		HeadlessTabView rootView = await viewer.LoadTabAsync(Call, new ScalarAndTabRowsTab());
+		await rootView.SelectAllItemsAsync(Call);
+
+		Assert.That(rootView.ListItems.Single().Value, Has.Count.EqualTo(2),
+			"Both rows should still be listed as labels.");
+		Assert.That(rootView.ChildViews.Select(c => c.Label), Is.EqualTo(new[] { "Child" }),
+			"The DateTime row is a leaf, so the single child slot goes to the navigable tab.");
+	}
+
+	// ─── Element type resolution ─────────────────────────────────────────
+
+	/// <summary>Adds a non-generic list directly, bypassing AddItems() normalizing it to ItemCollection&lt;T&gt;.</summary>
+	private class RawListTab(System.Collections.IList rows) : ITab
+	{
+		public override string ToString() => "Rows";
+
+		public TabInstance Create() => new Instance(rows);
+
+		private class Instance(System.Collections.IList rows) : TabInstance
+		{
+			public override void Load(Call call, TabModel model)
+			{
+				model.Name = "Rows";
+				model.ItemLists.Add(rows);
+			}
+		}
+	}
+
+	[Test, Description(
+		"An array's element type resolves through GetElementTypeForAll() like the data grid and Preload() " +
+		"use, so [Explorable(false)] on the element type isn't missed by falling back to object.")]
+	public async Task SelectAllItemsAsync_ArrayList_ResolvesElementTypeForExplorable()
+	{
+		var viewer = new HeadlessTabViewer(new Project())
+		{
+			Options = new HeadlessTabOptions { MaxOtherChildren = 1 },
+		};
+		var rows = new NotExplorableRow[] { new("A"), new("B"), new("C") };
+
+		HeadlessTabView rootView = await viewer.LoadTabAsync(Call, new RawListTab(rows));
+		await rootView.SelectAllItemsAsync(Call);
+
+		Assert.That(rootView.ListItems.Single().Value, Has.Count.EqualTo(3),
+			"All rows are still listed as labels.");
+		Assert.That(rootView.ChildViews, Has.Count.EqualTo(1),
+			"[Explorable(false)] on the array's element type should force the sampled child cap.");
+	}
+
+	// ─── Type filter coverage ────────────────────────────────────────────
+
+	/// <summary>An ILoadAsync marked [PrivateData] — should be filtered from the public schema.</summary>
+	[PrivateData]
+	private class PrivateStringLoader(string value) : ILoadAsync
+	{
+		public override string ToString() => value;
+
+		public Task<object?> LoadAsync(Call call) =>
+			Task.FromResult<object?>(value);
+	}
+
+	[Test, Description(
+		"The type filter applies to ILoadAsync rows too, not just ITab tabs and [ListItem] aggregators. " +
+		"Resolving one adds its result to the model, so a [PrivateData] loader must not be expanded.")]
+	public async Task TryCreateChildViewAsync_TypeFilter_ExcludesPrivateDataLoadAsync()
+	{
+		var viewer = new HeadlessTabViewer(new Project())
+		{
+			Options = new HeadlessTabOptions
+			{
+				TabFilter = type => !type.IsDefined(typeof(PrivateDataAttribute), inherit: true),
+			},
+		};
+		HeadlessTabView root = await viewer.LoadTabAsync(Call, new NamedTab("Root"));
+
+		HeadlessTabView? filtered = await root.TryCreateChildViewAsync(Call, new PrivateStringLoader("secret"));
+		Assert.That(filtered, Is.Null, "[PrivateData] ILoadAsync should be filtered out.");
+
+		HeadlessTabView? allowed = await root.TryCreateChildViewAsync(Call, new StringLoader("public"));
+		Assert.That(allowed, Is.Not.Null, "A loader without [PrivateData] should still be expanded.");
+	}
+
+	// ─── Truncation flagging for omitted rows ────────────────────────────
+
+	/// <summary>An ITab marked [PrivateData] — should be filtered from the public schema.</summary>
+	[PrivateData]
+	private class PrivateNamedTab(string name) : ITab
+	{
+		public override string ToString() => name;
+
+		public TabInstance Create() => new NamedTab(name).Create();
+	}
+
+	[Test, Description(
+		"A row dropped by the type filter leaves the list incomplete, so it's flagged truncated instead " +
+		"of the schema claiming the list holds only the rows that survived.")]
+	public async Task SelectAllItemsAsync_FilteredOutRow_FlagsTruncated()
+	{
+		var viewer = new HeadlessTabViewer(new Project())
+		{
+			Options = new HeadlessTabOptions
+			{
+				TabFilter = type => !type.IsDefined(typeof(PrivateDataAttribute), inherit: true),
+			},
+		};
+		var root = new NamedTab("Root", new NamedTab("Public"), new PrivateNamedTab("Secret"));
+
+		HeadlessTabView rootView = await viewer.LoadTabAsync(Call, root);
+		await rootView.SelectAllItemsAsync(Call);
+
+		Assert.That(rootView.ChildViews.Select(c => c.Label), Is.EqualTo(new[] { "Public" }),
+			"The [PrivateData] tab should not be expanded.");
+		Assert.That(rootView.ItemsTruncated, Is.True,
+			"The filtered row is missing from the list, so it isn't fully listed.");
+	}
+
+	[Test, Description(
+		"With a type filter set, tab-like rows past the child budget are dropped rather than listed " +
+		"(their labels can't be filtered without resolving them), so the list is flagged truncated.")]
+	public async Task SelectAllItemsAsync_FilterDropsRowsPastChildBudget_FlagsTruncated()
+	{
+		var viewer = new HeadlessTabViewer(new Project())
+		{
+			Options = new HeadlessTabOptions
+			{
+				TabFilter = _ => true, // Accepts everything, but its presence forces the skip
+				MaxAllowedChildren = 1,
+			},
+		};
+		var root = new NamedTab("Root",
+			new NamedTab("A"), new NamedTab("B"), new NamedTab("C"));
+
+		HeadlessTabView rootView = await viewer.LoadTabAsync(Call, root);
+		await rootView.SelectAllItemsAsync(Call);
+
+		Assert.That(rootView.ChildViews, Has.Count.EqualTo(1), "Only MaxAllowedChildren rows explored.");
+		Assert.That(rootView.ListItems.Single().Value, Has.Count.EqualTo(1),
+			"B and C are dropped rather than listed, so an unfiltered label can't leak.");
+		Assert.That(rootView.ItemsTruncated, Is.True,
+			"Dropped rows must flag the list as truncated.");
+	}
+
+	[Test, Description(
+		"A traversal cancelled partway (e.g. the MaxTime budget elapsed) leaves rows unlisted, " +
+		"so the list is flagged truncated rather than appearing complete.")]
+	public async Task SelectAllItemsAsync_Cancelled_FlagsTruncated()
+	{
+		var viewer = new HeadlessTabViewer(new Project());
+		HeadlessTabView rootView = await viewer.LoadTabAsync(Call, new NamedTab("Root", new NamedTab("A")));
+
+		using CallTimer timer = Call.StartTask("Traverse");
+		timer.TaskInstance!.TokenSource.Cancel(); // Simulate the time budget elapsing
+
+		await rootView.SelectAllItemsAsync(timer);
+
+		Assert.That(rootView.ChildViews, Is.Empty, "Cancellation stops before exploring any row.");
+		Assert.That(rootView.ItemsTruncated, Is.True,
+			"Rows that were never listed must flag the list as truncated.");
+	}
 }

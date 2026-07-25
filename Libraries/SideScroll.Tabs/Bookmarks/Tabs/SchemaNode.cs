@@ -427,7 +427,7 @@ public class SchemaList : SchemaObject
 	[InnerValue]
 	public List<SchemaItem>? Items { get; set; }
 
-	/// <summary>True when the list was not fully expanded (per-list item limit reached).</summary>
+	/// <summary>True when the list was not fully listed (item limit reached, cancelled, or rows filtered out).</summary>
 	public bool Truncated { get; set; }
 
 	/// <summary>Builds a list object from <paramref name="list"/> using the child views from <paramref name="view"/>.</summary>
