@@ -108,6 +108,45 @@ public class LazyClass
 	/// </summary>
 	public Dictionary<PropertyInfo, LazyProperty> LazyProperties { get; } = [];
 
+	// Each instance emits a new dynamic assembly that can never be unloaded, so reuse them.
+	// The generated type only overrides the properties it was created for, so a different
+	// set of properties (i.e. a file saved by another version) needs its own type
+	private static readonly Dictionary<(Type Type, string Properties), LazyClass> LazyClasses = [];
+
+	/// <summary>
+	/// Returns a cached LazyClass for the type and properties, creating it if it doesn't exist yet
+	/// </summary>
+	public static LazyClass GetOrCreate(Type type, List<TypeRepoObject.PropertyRepo> propertyRepos)
+	{
+		var key = (type, string.Join(',', propertyRepos.Select(p => p.PropertySchema.Name)));
+
+		lock (LazyClasses)
+		{
+			if (LazyClasses.TryGetValue(key, out LazyClass? lazyClass))
+			{
+				lazyClass.UpdatePropertyRepos(propertyRepos);
+				return lazyClass;
+			}
+
+			lazyClass = new LazyClass(type, propertyRepos);
+			LazyClasses.Add(key, lazyClass);
+			return lazyClass;
+		}
+	}
+
+	// The constructor assigns these while generating the type, so a reused LazyClass
+	// has to assign them to each new load's PropertyRepos
+	private void UpdatePropertyRepos(List<TypeRepoObject.PropertyRepo> propertyRepos)
+	{
+		foreach (TypeRepoObject.PropertyRepo propertyRepo in propertyRepos)
+		{
+			if (LazyProperties.TryGetValue(propertyRepo.PropertySchema.PropertyInfo, out LazyProperty? lazyProperty))
+			{
+				propertyRepo.LazyProperty = lazyProperty;
+			}
+		}
+	}
+
 	/// <summary>
 	/// Initializes a new instance of the LazyClass for the specified type
 	/// </summary>
@@ -198,7 +237,14 @@ public class LazyClass
 		// check result and jump to Ret if are equals
 		getIl.Emit(OpCodes.Ldarg_0); // load this
 		getIl.Emit(OpCodes.Ldfld, fieldBuilderLoaded);
-		getIl.Emit(OpCodes.Brtrue_S, returnValue);
+		getIl.Emit(OpCodes.Brtrue, returnValue);
+
+		// Return the current value if there's no TypeRef to load, which happens when loading
+		// never reached this property. Calling Load() on it would throw a NullReferenceException.
+		// Don't set Loaded here, a TypeRef can still get assigned afterwards
+		getIl.Emit(OpCodes.Ldarg_0); // load this
+		getIl.Emit(OpCodes.Ldfld, fieldBuilderTypeRef);
+		getIl.Emit(OpCodes.Brfalse, returnValue);
 
 		// set IsModified to true
 		getIl.Emit(OpCodes.Ldarg_0); // load this
@@ -213,6 +259,17 @@ public class LazyClass
 		getIl.Emit(OpCodes.Ldarg_0); // load this
 		getIl.Emit(OpCodes.Ldfld, fieldBuilderTypeRef);
 		getIl.Emit(OpCodes.Call, methodInfoLoad);
+
+		// Load() returns an object, convert it before calling a setter that takes anything else.
+		// Value types have to be unboxed, passing the boxed reference through is undefined behavior
+		if (propertyType.IsValueType)
+		{
+			getIl.Emit(OpCodes.Unbox_Any, propertyType);
+		}
+		else if (propertyType != typeof(object))
+		{
+			getIl.Emit(OpCodes.Castclass, propertyType);
+		}
 
 		getIl.Emit(OpCodes.Call, setMethod);
 

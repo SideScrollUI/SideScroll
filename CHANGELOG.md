@@ -43,6 +43,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `LogSettings.Clone()` not copying the `Context`, so Logs added entries on the calling thread instead of the UI thread after calling `Call.DebugLogAll()` or `Log.SetLogLevel()`
 - Fixed `CompressionUtils.Compress()` logging the compressed size before the `GZipStream` finished writing
 - Renamed the `CompressionUtils.Decompress()` size tags, the decompressed size was labeled as the compressed size
+- Fixed lazy loading emitting a new dynamic assembly for every load, which could never be unloaded. Generated types are now cached and reused per type and property set
+- Fixed lazy loaded properties throwing a `NullReferenceException` when read after a partial load left them without a `TypeRef`. They now return their current value instead
+- Fixed lazy loading value type properties (`DateTime`, `Guid`, `TimeSpan`, ...) throwing an `InvalidProgramException`, the generated setter call was missing the unboxing conversion
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark
