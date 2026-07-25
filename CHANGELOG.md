@@ -53,6 +53,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `TypeRepoArray` and `TypeRepoArrayBytes` validating the available bytes before the reader was positioned in their data, which could reject valid arrays
 - Updated `TypeRepoArrayBytes` to use `ReadExactly()`, a short `Read()` is allowed and isn't an error
 - Removed unused `LoadObject()` overrides from the `DateTime`, `DateTimeOffset`, and `TimeSpan` type repos that were copied from `TypeRepoEnum` and would have read the wrong number of bytes
+- Fixed `TimeRangeValue.FillAndMerge()` extending the `EndTime` of the values passed in, so charting the same series twice kept widening its time ranges
+- Fixed `TimeRangeValue.FillAndMerge()` converting inserted gaps to UTC while leaving the surrounding values unconverted, which mixed `DateTimeKind`s within a series
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark

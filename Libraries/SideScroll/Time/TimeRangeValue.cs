@@ -102,6 +102,17 @@ public class TimeRangeValue : ITags
 		Tags = tags;
 	}
 
+	/// <summary>
+	/// Initializes a new instance copying another instance's time range, value, and tags
+	/// </summary>
+	public TimeRangeValue(TimeRangeValue timeRangeValue)
+	{
+		StartTime = timeRangeValue.StartTime;
+		EndTime = timeRangeValue.EndTime;
+		Value = timeRangeValue.Value;
+		Tags = timeRangeValue.Tags;
+	}
+
 	private static TimeSpan GetMinGap(List<TimeRangeValue> input, TimeSpan periodDuration)
 	{
 		if (input.Count < 10)
@@ -125,10 +136,11 @@ public class TimeRangeValue : ITags
 	}
 
 	/// <summary>
-	/// Fills gaps with NaN and merges consecutive identical values for efficient charting
+	/// Fills gaps with NaN values for efficient charting
 	/// </summary>
 	/// <remarks>
-	/// Inserts NaN values between gaps greater than the minimum detected gap so charts will display line breaks
+	/// Inserts NaN values between gaps greater than the minimum detected gap so charts will display line breaks.
+	/// Identical values are not merged, use the overload that takes a start and end time for that
 	/// </remarks>
 	public static List<TimeRangeValue> FillAndMerge(IEnumerable<TimeRangeValue> input, TimeSpan periodDuration)
 	{
@@ -147,8 +159,9 @@ public class TimeRangeValue : ITags
 				{
 					TimeRangeValue insertedPoint = new()
 					{
-						StartTime = expectedTime.ToUniversalTime(),
-						EndTime = startTime.ToUniversalTime(),
+						// Don't convert, the gaps have to use the same DateTimeKind as the values around them
+						StartTime = expectedTime,
+						EndTime = startTime,
 						Value = double.NaN,
 					};
 					output.Add(insertedPoint);
@@ -191,27 +204,6 @@ public class TimeRangeValue : ITags
 		return output;
 	}
 
-	private static List<TimeRangeValue> MergeIdenticalValues(IEnumerable<TimeRangeValue> input)
-	{
-		var sorted = input.OrderBy(p => p.StartTime);
-
-		// Merge continuous points with the same value together to improve storage speeds
-		List<TimeRangeValue> merged = [];
-		TimeRangeValue? prevPoint = null;
-		foreach (TimeRangeValue timeRangeValue in sorted)
-		{
-			if (prevPoint != null && prevPoint.EndTime == timeRangeValue.StartTime && prevPoint.Value == timeRangeValue.Value)
-			{
-				prevPoint.EndTime = timeRangeValue.EndTime;
-				continue;
-			}
-			merged.Add(timeRangeValue);
-			prevPoint = timeRangeValue;
-		}
-
-		return merged;
-	}
-
 	// Merge all continuous identical values, increasing the size of the first and leaving the last
 	// This works better for line graphs since the end point will still be represented
 	private static List<TimeRangeValue> MergeIdenticalMiddleValues(IEnumerable<TimeRangeValue> input)
@@ -237,7 +229,9 @@ public class TimeRangeValue : ITags
 					}
 					else
 					{
-						firstValue = previousValue;
+						// Copy it since the EndTime gets extended above, the input values shouldn't change
+						firstValue = new TimeRangeValue(previousValue);
+						merged[^1] = firstValue;
 					}
 				}
 				else
