@@ -139,6 +139,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SideScroll.Tabs.Tools: Fixed `TabDirectory` Delete building its path by combining the directory with the selected row's display label, which could resolve outside the directory being viewed (`..` or an absolute path) and recursively delete it. It now uses the row's `[DataKey]` path and skips anything that isn't inside. One failed delete no longer skips the rest
 - SideScroll.Tabs.Tools: Fixed `TabZipFile` showing an empty tab instead of an error for a corrupt or unreadable archive
 - SideScroll.Tabs.Tools: Fixed `.atlas` files only opening in the serialized viewer when the extension was lowercase, the file system is case insensitive on Windows and macOS
+- Fixed `Filter.Matches(IList)` passing the list itself to the single item overload instead of iterating it, so it matched against the list's type name rather than its contents, and threw an `IndexOutOfRangeException` for arrays
+- Fixed `SearchFilter.IsMatch()` and `FindMatches()` throwing a `NullReferenceException` for values with nothing to show in a tab (`DateTime`, `int`, `string`). Scalars now match on their own text
+- Fixed DataGrid Search collecting text from nested lists without any limit, which searched every item of every inner list for every row on each keystroke. Capped by the new `Filter.MaxSearchTextValues` (1,000)
+- Fixed a DataGrid Search depth prefix with too many digits (e.g. `+99999999999`) throwing an `OverflowException` while typing
+- Fixed DataGrid Search uppercasing with the current culture before comparing ordinally, so case insensitive search stopped working for any term containing an `i` in cultures where it doesn't uppercase to `I` (e.g. searching `ibm` didn't match `IBM` in tr-TR)
+- Fixed `ToolbarToggleButton` never releasing the `ListProperty` it binds to, which leaked the tab. The bound object holds the `ListProperty`, which held the button and its `TabInstance`, and toolbars bind to objects owned by the parent tab (like the file viewer's Favorite star), so a tab was retained for every time it was opened. Disposing the button now unsubscribes and disposes the binding
 - SideScroll.Tabs.Tools: Fixed file type detection lowercasing extensions with the current culture, so an extension containing an `I` (like `.ZIP`) became `.zıp` and matched nothing in cultures where `I` doesn't lowercase to `i`. `TabFile.ExtensionTypes` now ignores case, and the directory file extension filter compares ordinally
 
 ### Changed

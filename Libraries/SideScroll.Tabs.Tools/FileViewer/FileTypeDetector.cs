@@ -37,7 +37,11 @@ public class FileProbeContext
 	/// <summary>Gets the leading bytes of the file used for magic-number / content-based detection.</summary>
 	public ReadOnlyMemory<byte> HeaderBytes { get; }
 
-	/// <summary>Gets the lower-case file extension (without the leading dot) of the file being probed.</summary>
+	/// <summary>
+	/// Gets the file extension of the file being probed, lower cased and including the leading dot
+	/// (e.g. <c>".json"</c>), or an empty string when the file has no extension.
+	/// Matches <see cref="Path.GetExtension(string)"/> and the <c>TabFile.ExtensionTypes</c> keys
+	/// </summary>
 	public string Extension { get; }
 
 	/// <summary>Gets the total size of the file in bytes.</summary>
