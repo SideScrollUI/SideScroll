@@ -8,22 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Added DataGrid Search support for excluding terms with a leading `-` or `!` (e.g. `-foo`, `!(foo | bar)`)
-- Added Atlas Serializer support for renaming types via `TypeSchema.RegisterDeprecatedType()`
-- Added Toolbar Radio Button theming for the pressed circle fill and border, and the selected pressed circle border
-- Added Context Menu theming for the pressed item background and foreground
 
 ### Fixed
-- Updated Avalonia Headless Tab Loading to handle delays better
-- Fixed `TaskInstance.ProgressMax` not updating for sub-tasks
-- Fixed Light theme read-only CheckBox check color to stand out more than the border
-- Fixed custom theme Radio Button label foregrounds showing the default variant color when pressed
-- Fixed ListSeries Totals for time ranges without any entries
-- Fixed TabFormattedComboBox null handling
-- Fixed calling  `TabViewer.LoadTab()` multiple times
-- Fixed `ListSeries.GetTimeWindow()` when there's no data points
-- Fixed `ListSeries.GetTotal()` throwing when all Y values are null
-- Fixed `SerializerMemoryAtlas.Load()` and `Validate()` closing the stream, which made a second `Load()` throw an `ObjectDisposedException`
 - Fixed `DateTime.Ceil()` rounding to seconds instead of the passed tick interval
 - Fixed `TimeSpan.FormattedShort()` dropping the larger units for negative durations (e.g. -90 seconds showed as `-30` instead of `-1:30`)
 - Fixed `TimeSpan.FormattedShort()` throwing an `OverflowException` for `TimeSpan.MinValue`, which `Formatted()` reaches for every `TimeSpan` shown in a row or cell
@@ -162,12 +148,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `DateTime.FormatId()` formatting with the current culture, so the same instant produced a different identifier in cultures whose default calendar isn't Gregorian (`th-TH` is Buddhist, `ar-SA` is Hijri)
 
 ### Changed
+- SideScroll.Serialize: Made the `name` parameter in `SerializerFile` and its subclasses (`SerializerFileAtlas`, `SerializerFileJson`) nullable, and updated the `Name` property to accurately support `null` names.
+- SideScroll.Serialize: Added a static `CreateForFile` method to `SerializerFileAtlas` to simplify instantiation for specific file paths, and updated `TabFileSerialized` to use it.
+
+## [0.22] - 2026-07-26
+
+### Added
+- Added DataGrid Search support for excluding terms with a leading `-` or `!` (e.g. `-foo`, `!(foo | bar)`)
+- Added Atlas Serializer support for renaming types via `TypeSchema.RegisterDeprecatedType()`
+- Added Toolbar Radio Button theming for the pressed circle fill and border, and the selected pressed circle border
+- Added Context Menu theming for the pressed item background and foreground
+
+### Fixed
+- Updated Avalonia Headless Tab Loading to handle delays better
+- Fixed `TaskInstance.ProgressMax` not updating for sub-tasks
+- Fixed Light theme read-only CheckBox check color to stand out more than the border
+- Fixed custom theme Radio Button label foregrounds showing the default variant color when pressed
+- Fixed ListSeries Totals for time ranges without any entries
+- Fixed TabFormattedComboBox null handling
+- Fixed calling  `TabViewer.LoadTab()` multiple times
+- Fixed `ListSeries.GetTimeWindow()` when there's no data points
+- Fixed `ListSeries.GetTotal()` throwing when all Y values are null
+- Fixed `SerializerMemoryAtlas.Load()` and `Validate()` closing the stream, which made a second `Load()` throw an `ObjectDisposedException`
+
+### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark
 - Improved Atlas Serializer save performance (~20% faster, ~20% fewer allocations) by skipping per-object debug log tag allocations and primitive member boxing during the object graph walk
 - Improved Atlas Serializer load performance (~20% faster, ~15% fewer allocations) by replacing the `dynamic` default-value comparison for primitive properties with `Equals()`
 - Updated `TabInstance` to lazily create its default `Project`, so child tab creation no longer allocates a throwaway `Project` (~1.4 KB per tab load)
-- SideScroll.Serialize: Made the `name` parameter in `SerializerFile` and its subclasses (`SerializerFileAtlas`, `SerializerFileJson`) nullable, and updated the `Name` property to accurately support `null` names.
-- SideScroll.Serialize: Added a static `CreateForFile` method to `SerializerFileAtlas` to simplify instantiation for specific file paths, and updated `TabFileSerialized` to use it.
 
 ## [0.21] - 2026-06-29
 
