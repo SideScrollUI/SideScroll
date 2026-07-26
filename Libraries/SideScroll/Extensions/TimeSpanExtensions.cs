@@ -32,7 +32,10 @@ public static class TimeSpanExtensions
 	public static string FormattedDecimal(this TimeSpan timeSpan)
 	{
 		string format = "#,0.#";
-		var absTimeSpan = new TimeSpan(Math.Abs(timeSpan.Ticks));
+
+		// MinValue has no positive counterpart, both Duration() and Math.Abs() overflow on it
+		TimeSpan absTimeSpan = timeSpan == TimeSpan.MinValue ? TimeSpan.MaxValue : timeSpan.Duration();
+
 		foreach (TimeUnit timeUnit in TimeUnits)
 		{
 			if (absTimeSpan < timeUnit.TimeSpan)
@@ -41,6 +44,8 @@ public static class TimeSpanExtensions
 			double units = timeSpan / timeUnit.TimeSpan;
 			string value = units.ToString(format) + " " + timeUnit.Name;
 
+			// Anything longer than a single unit is plural, even when the format rounds it back
+			// down to "1" (7 days 5 hours is 1.03 weeks, so it reads "1 Weeks")
 			if (absTimeSpan > timeUnit.TimeSpan)
 			{
 				value += "s";
@@ -172,7 +177,12 @@ public static class TimeSpanExtensions
 	/// </summary>
 	public static TimeSpan Ceil(this TimeSpan timeSpan, long ticks = TimeSpan.TicksPerSecond)
 	{
-		return new TimeSpan(ticks * ((timeSpan.Ticks + ticks - 1) / ticks));
+		long remainder = timeSpan.Ticks % ticks;
+		if (remainder == 0) return timeSpan;
+
+		// Integer division truncates toward zero, so a negative value is already rounded up.
+		// Adding the interval first (Ticks + ticks - 1) would round it toward zero instead
+		return new TimeSpan(timeSpan.Ticks - remainder + (timeSpan.Ticks > 0 ? ticks : 0));
 	}
 
 	/// <summary>

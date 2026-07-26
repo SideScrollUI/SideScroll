@@ -147,6 +147,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed DataGrid Search uppercasing with the current culture before comparing ordinally, so case insensitive search stopped working for any term containing an `i` in cultures where it doesn't uppercase to `I` (e.g. searching `ibm` didn't match `IBM` in tr-TR)
 - Fixed `ToolbarToggleButton` never releasing the `ListProperty` it binds to, which leaked the tab. The bound object holds the `ListProperty`, which held the button and its `TabInstance`, and toolbars bind to objects owned by the parent tab (like the file viewer's Favorite star), so a tab was retained for every time it was opened. Disposing the button now unsubscribes and disposes the binding
 - SideScroll.Tabs.Tools: Fixed file type detection lowercasing extensions with the current culture, so an extension containing an `I` (like `.ZIP`) became `.zıp` and matched nothing in cultures where `I` doesn't lowercase to `i`. `TabFile.ExtensionTypes` now ignores case, and the directory file extension filter compares ordinally
+- Fixed `ObjectExtensions.EnumerableToString` throwing a `NullReferenceException` when formatting collections containing `null` items.
+- Fixed `Extensions.Merge(object, object)` throwing a `TargetException` when attempting to merge properties from an object of a different type or `null` by adding type validation.
+- Fixed `StringExtensions.Reverse` corrupting text containing surrogate pairs or combining characters (like emojis) by using `StringInfo` to reverse grapheme clusters rather than raw 16-bit characters.
+- Fixed `TypeExtensions.GetElementTypeForAll` resolving the element type from the first generic ancestor's first type argument, which returned the wrong element type for collections like `Dictionary<TKey, TValue>` (returning `TKey` instead of `KeyValuePair<TKey, TValue>`) or custom non-generic collections. It now searches for `IEnumerable<T>` first.
+- Fixed `ObjectExtensions.ToUniqueString` throwing a `NullReferenceException` when evaluating a default `DictionaryEntry` struct with a `null` key.
+- SideScroll.Avalonia: Fixed `DataGridExtensions.ColumnToStringTable` and `SelectedColumnToString` throwing a `NullReferenceException` when the DataGrid has no data (a null `ItemsSource` or `SelectedItems`).
+- Fixed `DateTime.Max()` and `Min()` comparing `Ticks`, which are wall clock readings that aren't comparable across `DateTimeKind`s, and labeling the result with the first value's `Kind` regardless of which one won. Charts combining a UTC series with a Local one got a time window shifted by the UTC offset
+- Fixed `DateTimeOffset.Trim()` discarding the offset and returning the value as UTC, unlike `DateTime.Trim()` which keeps its `Kind`
+- Fixed `DateTime.FormatId()` formatting with the current culture, so the same instant produced a different identifier in cultures whose default calendar isn't Gregorian (`th-TH` is Buddhist, `ar-SA` is Hijri)
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark

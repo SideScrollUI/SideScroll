@@ -40,9 +40,15 @@ public static class SideScrollExtensions
 	/// <summary>
 	/// Merges properties from newObject into obj, setting only null properties in obj
 	/// </summary>
-	public static void Merge(this object obj, object newObject)
+	public static void Merge(this object obj, object? newObject)
 	{
+		if (newObject == null)
+			return;
+
 		Type type = obj.GetType();
+		if (!type.IsInstanceOfType(newObject))
+			throw new ArgumentException($"Cannot merge object of type {newObject.GetType()} into {type}", nameof(newObject));
+
 		PropertyInfo[] propertyInfos = type.GetProperties();
 		foreach (PropertyInfo propertyInfo in propertyInfos)
 		{

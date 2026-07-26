@@ -131,7 +131,7 @@ public static class ObjectExtensions
 
 		if (obj is DictionaryEntry dictionaryEntry)
 		{
-			return dictionaryEntry.Key.ToString();
+			return dictionaryEntry.Key?.ToString();
 		}
 
 		string? valueString = obj.ToString();
@@ -156,7 +156,7 @@ public static class ObjectExtensions
 		List<string?> strings = [];
 		foreach (var item in enumerable)
 		{
-			strings.Add(item.ToString());
+			strings.Add(item?.ToString());
 		}
 
 		return string.Join(", ", strings);

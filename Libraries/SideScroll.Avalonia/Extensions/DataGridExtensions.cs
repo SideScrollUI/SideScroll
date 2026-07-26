@@ -29,10 +29,13 @@ public static class DataGridExtensions
 		ArgumentNullException.ThrowIfNull(column);
 
 		StringBuilder sb = new();
-		foreach (var item in dataGrid.ItemsSource)
+		if (dataGrid.ItemsSource is { } itemsSource)
 		{
-			string? value = GetCellValue(column, item);
-			sb.AppendLine(value);
+			foreach (var item in itemsSource)
+			{
+				string? value = GetCellValue(column, item);
+				sb.AppendLine(value);
+			}
 		}
 		return sb.ToString();
 	}
@@ -46,10 +49,13 @@ public static class DataGridExtensions
 		ArgumentNullException.ThrowIfNull(column);
 
 		StringBuilder sb = new();
-		foreach (var item in dataGrid.SelectedItems)
+		if (dataGrid.SelectedItems is { } selectedItems)
 		{
-			string? value = GetCellValue(column, item);
-			sb.AppendLine(value);
+			foreach (var item in selectedItems)
+			{
+				string? value = GetCellValue(column, item);
+				sb.AppendLine(value);
+			}
 		}
 		return sb.ToString();
 	}

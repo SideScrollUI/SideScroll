@@ -100,7 +100,21 @@ public static class TypeExtensions
 		{
 			return type.GetElementType();
 		}
-		else if (type.GenericTypeArguments.Length > 0)
+
+		if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+		{
+			return type.GetGenericArguments()[0];
+		}
+
+		Type? enumerableType = type.GetInterfaces()
+			.FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+
+		if (enumerableType != null)
+		{
+			return enumerableType.GetGenericArguments()[0];
+		}
+
+		if (type.GenericTypeArguments.Length > 0)
 		{
 			return type.GenericTypeArguments[0];
 		}

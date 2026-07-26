@@ -23,9 +23,17 @@ public static class StringExtensions
 	/// </summary>
 	public static string Reverse(this string input)
 	{
-		char[] chars = input.ToCharArray();
-		Array.Reverse(chars);
-		return new string(chars);
+		if (string.IsNullOrEmpty(input))
+			return input;
+
+		var enumerator = System.Globalization.StringInfo.GetTextElementEnumerator(input);
+		var elements = new List<string>();
+		while (enumerator.MoveNext())
+		{
+			elements.Add(enumerator.GetTextElement());
+		}
+		elements.Reverse();
+		return string.Concat(elements);
 	}
 
 	/// <summary>

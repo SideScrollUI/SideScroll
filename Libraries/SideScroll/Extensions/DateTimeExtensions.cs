@@ -1,4 +1,5 @@
 using SideScroll.Time;
+using System.Globalization;
 
 namespace SideScroll.Extensions;
 
@@ -181,7 +182,10 @@ public static class DateTimeExtensions
 	public static string FormatId(this DateTime dateTime)
 	{
 		dateTime = TimeZoneView.Utc.ConvertTimeToUtc(dateTime);
-		return dateTime.ToString(DateTimeFormatId);
+
+		// Invariant, this identifies a value. The current culture's calendar would render the same
+		// instant differently on each machine (th-TH is Buddhist, ar-SA is Hijri)
+		return dateTime.ToString(DateTimeFormatId, CultureInfo.InvariantCulture);
 	}
 
 	/// <summary>
@@ -205,8 +209,9 @@ public static class DateTimeExtensions
 	/// </summary>
 	public static DateTimeOffset Trim(this DateTimeOffset dateTimeOffset, long ticks)
 	{
-		DateTime dateTime = dateTimeOffset.UtcDateTime; // DateTime defaults to Unspecified
-		return new DateTimeOffset(dateTime.Trim(ticks));
+		// Trim the wall clock time and keep the offset, the way DateTime.Trim() keeps its Kind.
+		// DateTime is Unspecified here, which is what the DateTimeOffset(DateTime, TimeSpan) overload wants
+		return new DateTimeOffset(dateTimeOffset.DateTime.Trim(ticks), dateTimeOffset.Offset);
 	}
 
 	/// <summary>
@@ -222,7 +227,9 @@ public static class DateTimeExtensions
 	/// </summary>
 	public static DateTime Max(this DateTime first, DateTime second)
 	{
-		return new DateTime(Math.Max(first.Ticks, second.Ticks), first.Kind);
+		// Compare the instants, Ticks are wall clock readings that aren't comparable across Kinds.
+		// Returning the value itself keeps its own Kind instead of relabeling it with the other's
+		return first.ToUniversalTime() >= second.ToUniversalTime() ? first : second;
 	}
 
 	/// <summary>
@@ -230,7 +237,7 @@ public static class DateTimeExtensions
 	/// </summary>
 	public static DateTime Min(this DateTime first, DateTime second)
 	{
-		return new DateTime(Math.Min(first.Ticks, second.Ticks), first.Kind);
+		return first.ToUniversalTime() <= second.ToUniversalTime() ? first : second;
 	}
 
 	/// <summary>
