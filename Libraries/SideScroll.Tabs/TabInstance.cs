@@ -95,7 +95,7 @@ public class TabCreatorAsync(ITabCreatorAsync creatorAsync) : TabInstance, ITabA
 	/// </summary>
 	public override void LoadUI(Call call, TabModel model)
 	{
-		_innerChildInstance!.LoadUI(call, model);
+		_innerChildInstance?.LoadUI(call, model);
 	}
 }
 

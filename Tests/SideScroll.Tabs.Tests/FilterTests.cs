@@ -400,6 +400,18 @@ public class FilterTests : BaseTest
 	}
 
 	[Test]
+	public void Constructor_TokenBeforeParentheses_ParsesCorrectly()
+	{
+		var filter = new Filter("A(B)");
+
+		Assert.That(filter.RootNode, Is.InstanceOf<FilterOperatorNode>());
+
+		var operatorNode = (FilterOperatorNode)filter.RootNode!;
+		Assert.That(operatorNode.Operator, Is.EqualTo(FilterOperator.And));
+		Assert.That(operatorNode.Children, Has.Count.EqualTo(2));
+	}
+
+	[Test]
 	public void Constructor_MultipleParenthesesGroups_ParsesCorrectly()
 	{
 		var filter = new Filter("(foo | bar) & (baz | qux)");

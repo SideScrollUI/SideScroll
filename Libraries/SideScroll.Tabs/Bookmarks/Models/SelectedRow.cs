@@ -91,7 +91,6 @@ public class SelectedRow : IEquatable<SelectedRow>
 	{
 		return (Label?.GetHashCode() ?? 0)
 			^ (DataKey?.GetHashCode() ?? 0)
-			^ (DataValue?.GetHashCode() ?? 0)
-			^ (RowIndex?.GetHashCode() ?? 0);
+			^ (DataValue?.GetHashCode() ?? 0);
 	}
 }

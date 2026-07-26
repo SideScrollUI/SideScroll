@@ -28,11 +28,11 @@ public class LazyJsonNode
 		{
 			return new LazyJsonObject(obj);
 		}
-		else if (jsonNode.GetValue<JsonElement>() is JsonElement jsonElement)
+		else if (jsonNode is JsonValue jsonValue)
 		{
-			return jsonElement.ToString();
+			return jsonValue.ToString();
 		}
-		throw new Exception("Invalid JSON Node Type");
+		throw new Exception($"Invalid JSON Node Type: {jsonNode.GetType().Name}");
 	}
 
 	/// <summary>

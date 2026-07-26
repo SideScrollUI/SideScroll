@@ -74,7 +74,7 @@ public class ListToString
 		foreach (object obj in enumerable)
 		{
 			list.Add(new ListToString(obj));
-			if (list.Count > limit)
+			if (list.Count >= limit)
 				break;
 		}
 		return list;

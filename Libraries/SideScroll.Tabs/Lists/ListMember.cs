@@ -61,7 +61,7 @@ public interface IMaxDesiredHeight
 /// Base class for representing object members (properties, fields, methods) as list items with reflection support
 /// </summary>
 public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair, IListItem, INotifyPropertyChanged,
-	IListAutoSelect, IMaxDesiredWidth, IMaxDesiredHeight
+	IListAutoSelect, IMaxDesiredWidth, IMaxDesiredHeight, IDisposable
 {
 	/// <summary>
 	/// Gets or sets the maximum string length to display (default: 1000)
@@ -180,6 +180,10 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 
 	/// <summary>Returns the member's <see cref="Name"/>.</summary>
 	public override string? ToString() => Name;
+
+	public virtual void Dispose()
+	{
+	}
 
 	/// <summary>
 	/// Raises the PropertyChanged event for the Value property

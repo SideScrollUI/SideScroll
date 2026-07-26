@@ -217,7 +217,14 @@ public class Filter
 			else if (!insideQuotes && c == '(')
 			{
 				// A pending - or ! token negates the subexpression: -(foo | bar)
-				bool negate = input[tokenStart..i].Trim() is "-" or "!";
+				string prefix = input[tokenStart..i].Trim();
+				bool negate = prefix is "-" or "!";
+
+				if (!negate && prefix.Length > 0)
+				{
+					AddToken(input, tokenStart, i, nodes);
+					operators.Add(FilterOperator.And);
+				}
 
 				// Parse subexpression
 				var subNode = ParseExpression(input, i + 1, out int closeParen);

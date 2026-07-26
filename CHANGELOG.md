@@ -108,6 +108,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `Atlas.Serializer` crashing silently when deserializing non-generic collections like `Hashtable` and `ArrayList`
 - Fixed `Atlas.Serializer` failing to resolve generic arguments for custom collections inheriting from `HashSet<T>` and `IEnumerable<T>`
 - Fixed `TypeRepo` throwing `ArgumentOutOfRangeException` or exhausting memory on maliciously crafted large or negative object counts by enforcing `ValidateDataSize` checks across all collection repos
+- SideScroll.Tabs: Fixed a memory leak where `ListProperty` items did not unsubscribe from `INotifyPropertyChanged.PropertyChanged` events, preventing source objects and tab collections from being garbage-collected when tabs closed.
+- SideScroll.Tabs: Fixed a bug in the `SearchFilter` text parser where search terms immediately preceding an open parenthesis (e.g. `Method(Param)`) were silently dropped from the search query.
+- SideScroll.Tabs: Fixed `TabUtils.ObjectHasLinks` throwing a `NullReferenceException` when evaluating an `IListItem` with a null value.
+- SideScroll.Tabs: Fixed `TabCreatorAsync.LoadUI` throwing a `NullReferenceException` when its underlying async creator returns null.
+- SideScroll.Tabs: Fixed `LazyJsonNode.Create` throwing an `InvalidOperationException` when trying to wrap a `JsonValue` that isn't backed by a `JsonElement` (e.g., dynamically created nodes).
+- SideScroll.Tabs: Fixed `SelectedRow.GetHashCode()` violating the `Equals` contract by omitting `RowIndex`, which is treated as a wildcard when null.
+- SideScroll.Tabs: Fixed an off-by-one error in `BookmarkNavigator.TrimHistory()` that allowed the bookmark history to exceed `MaxHistorySize` by one.
+- SideScroll.Tabs: Fixed `TabDataColumns.GetPropertyColumns` scrambling the natural order of remaining properties after applying the user-specified `ColumnNameOrder` due to unordered `Dictionary.Values` iteration.
+- SideScroll.Tabs: Fixed `ListToString.Create()` returning `limit + 1` items due to an off-by-one error.
+- SideScroll.Tabs: Fixed a logical error in `ReflectionCache.ComputeFieldDisplayName` where `[DebugOnly]` markers were only applied if *both* the field and its type had the attribute, rather than either of them.
+- SideScroll.Tabs: Fixed `ListField.Value` setter throwing `InvalidCastException` on nullable types or null assignments by adopting the same robust type conversion logic used in `ListProperty`.
+- SideScroll.Tabs: Fixed `ListEnumValue.Create` throwing an `OverflowException` for `ulong` enums with high bits set by using `Enum.Format` instead of `Convert.ToInt64`.
+- SideScroll.Tabs: Fixed `ListMethod` throwing a `RuntimeBinderException` when invoking methods returning non-generic or internal Task types (like `async Task`) due to unsafe `dynamic` binding, by correctly awaiting the inner task and using reflection for the result.
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark

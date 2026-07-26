@@ -47,9 +47,13 @@ public static class TabUtils
 			return false;
 
 		if (value is IListItem listItem)
+		{
 			value = listItem.Value;
+			if (value == null)
+				return false;
+		}
 
-		Type type = value!.GetType();
+		Type type = value.GetType();
 		if (type.IsPrimitive ||
 			type.IsEnum ||
 			type == typeof(string) ||

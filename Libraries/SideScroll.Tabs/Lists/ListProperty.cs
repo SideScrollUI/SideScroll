@@ -158,6 +158,15 @@ public class ListProperty : ListMember, IPropertyIsEditable
 		}
 	}
 
+	public override void Dispose()
+	{
+		if (Object is INotifyPropertyChanged notifyPropertyChanged)
+		{
+			notifyPropertyChanged.PropertyChanged -= ListProperty_PropertyChanged;
+		}
+		base.Dispose();
+	}
+
 	/// <summary>
 	/// Initializes a new ListProperty by property name
 	/// </summary>

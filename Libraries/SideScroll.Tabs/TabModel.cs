@@ -594,6 +594,20 @@ public class TabModel
 	/// </summary>
 	public void Clear()
 	{
+		foreach (var list in ItemLists)
+		{
+			if (list is IEnumerable enumerable)
+			{
+				foreach (var item in enumerable)
+				{
+					if (item is IDisposable disposable)
+					{
+						disposable.Dispose();
+					}
+				}
+			}
+		}
+
 		Objects.Clear();
 		ItemLists.Clear();
 #pragma warning disable CS0618 // Type or member is obsolete

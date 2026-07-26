@@ -94,9 +94,24 @@ public class ListMethod : ListMember
 
 		var result = Task.Run(() => MethodInfo.Invoke(Object, parameters)).GetAwaiter().GetResult();
 
-		if (result is Task)
+		if (result is Task task)
 		{
-			return ((dynamic)result).Result;
+			task.GetAwaiter().GetResult();
+
+			Type type = task.GetType();
+			if (type.IsGenericType)
+			{
+				PropertyInfo? resultProperty = type.GetProperty("Result");
+				if (resultProperty != null)
+				{
+					object? taskResult = resultProperty.GetValue(task);
+					if (taskResult?.GetType().FullName != "System.Threading.Tasks.VoidTaskResult")
+					{
+						return taskResult;
+					}
+				}
+			}
+			return null;
 		}
 
 		return result;

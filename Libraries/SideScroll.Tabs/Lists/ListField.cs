@@ -53,7 +53,31 @@ public class ListField : ListMember, IPropertyIsEditable
 				return null;
 			}
 		}
-		set => FieldInfo.SetValue(Object, Convert.ChangeType(value, FieldInfo.FieldType));
+		set
+		{
+			if (value != null)
+			{
+				Type type = FieldInfo.FieldType.GetNonNullableType();
+
+				if (!type.IsInstanceOfType(value))
+				{
+					if (value is IConvertible)
+					{
+						value = Convert.ChangeType(value, type);
+					}
+					else if (type == typeof(string))
+					{
+						value = value.ToString();
+					}
+					else
+					{
+						throw new InvalidCastException($"Cannot convert {value} to type {type}");
+					}
+				}
+			}
+
+			FieldInfo.SetValue(Object, value);
+		}
 	}
 
 	/// <summary>
