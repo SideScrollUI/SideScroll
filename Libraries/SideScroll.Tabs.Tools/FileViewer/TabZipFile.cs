@@ -38,7 +38,7 @@ public class TabZipFile : ITab, IFileTypeView
 
 			try
 			{
-				List<ZipNodeView> nodes = LoadZipContents(call, tab.Path);
+				List<ZipNodeView> nodes = LoadZipContents(tab.Path);
 				model.AddItems(nodes);
 			}
 			catch (Exception ex)
@@ -48,56 +48,50 @@ public class TabZipFile : ITab, IFileTypeView
 			}
 		}
 
-		private static List<ZipNodeView> LoadZipContents(Call call, string zipPath)
+		// Throws for a corrupt or unreadable archive so Load() can show the error instead of an empty list
+		private static List<ZipNodeView> LoadZipContents(string zipPath)
 		{
 			var rootNodes = new List<ZipNodeView>();
 			var directories = new Dictionary<string, ZipDirectoryView>(StringComparer.OrdinalIgnoreCase);
 
-			try
+			using var archive = ZipFile.OpenRead(zipPath);
+
+			foreach (var entry in archive.Entries)
 			{
-				using var archive = ZipFile.OpenRead(zipPath);
+				string fullName = entry.FullName.Replace('\\', '/');
 
-				foreach (var entry in archive.Entries)
+				// Skip empty entries (sometimes present in zip files)
+				if (string.IsNullOrEmpty(fullName))
+					continue;
+
+				// Check if this is a directory entry
+				if (fullName.EndsWith('/'))
 				{
-					string fullName = entry.FullName.Replace('\\', '/');
+					string dirPath = fullName.TrimEnd('/');
+					EnsureDirectoryPath(directories, dirPath, rootNodes);
+				}
+				else
+				{
+					// It's a file
+					string dirPath = System.IO.Path.GetDirectoryName(fullName)?.Replace('\\', '/') ?? "";
+					ZipDirectoryView? parentDir = null;
 
-					// Skip empty entries (sometimes present in zip files)
-					if (string.IsNullOrEmpty(fullName))
-						continue;
-
-					// Check if this is a directory entry
-					if (fullName.EndsWith('/'))
+					if (!string.IsNullOrEmpty(dirPath))
 					{
-						string dirPath = fullName.TrimEnd('/');
-						EnsureDirectoryPath(directories, dirPath, rootNodes);
+						parentDir = EnsureDirectoryPath(directories, dirPath, rootNodes);
+					}
+
+					var fileView = new ZipFileView(entry);
+
+					if (parentDir != null)
+					{
+						parentDir.Children.Add(fileView);
 					}
 					else
 					{
-						// It's a file
-						string dirPath = System.IO.Path.GetDirectoryName(fullName)?.Replace('\\', '/') ?? "";
-						ZipDirectoryView? parentDir = null;
-
-						if (!string.IsNullOrEmpty(dirPath))
-						{
-							parentDir = EnsureDirectoryPath(directories, dirPath, rootNodes);
-						}
-
-						var fileView = new ZipFileView(entry);
-
-						if (parentDir != null)
-						{
-							parentDir.Children.Add(fileView);
-						}
-						else
-						{
-							rootNodes.Add(fileView);
-						}
+						rootNodes.Add(fileView);
 					}
 				}
-			}
-			catch (Exception ex)
-			{
-				call.Log.Add(ex);
 			}
 
 			return rootNodes;

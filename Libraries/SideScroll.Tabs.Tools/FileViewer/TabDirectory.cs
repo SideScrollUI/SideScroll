@@ -25,6 +25,41 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 
 	public TabInstance Create() => new Instance(this);
 
+	/// <summary>
+	/// Resolves the file system path for a selected row, or <c>null</c> when it doesn't resolve to
+	/// something inside <paramref name="directoryPath"/>.
+	/// Selected rows are restored from deserialized view settings, so the path comes from the row's
+	/// <c>[DataKey]</c> rather than recombining its display label, and it's checked before use
+	/// </summary>
+	public static string? GetSelectedPath(string directoryPath, SelectedRow selectedRow)
+	{
+		if (string.IsNullOrEmpty(selectedRow.DataKey)) return null;
+
+		string root;
+		string path;
+		try
+		{
+			root = System.IO.Path.GetFullPath(directoryPath);
+			path = System.IO.Path.GetFullPath(selectedRow.DataKey);
+		}
+		catch (Exception)
+		{
+			return null; // Invalid characters, or too long
+		}
+
+		// Reject anything outside the directory being viewed, including the directory itself.
+		// GetRelativePath() returns a rooted path when there's no shared root (a different drive)
+		string relative = System.IO.Path.GetRelativePath(root, path);
+		if (relative is "." or ".." ||
+			relative.StartsWith(".." + System.IO.Path.DirectorySeparatorChar, StringComparison.Ordinal) ||
+			System.IO.Path.IsPathRooted(relative))
+		{
+			return null;
+		}
+
+		return path;
+	}
+
 	public class Toolbar : TabToolbar
 	{
 		public ToolToggleButton? ButtonStar { get; set; }
@@ -90,7 +125,8 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 				return Directory.EnumerateFiles(tab.Path)
 					.Where(name =>
 						fileExtensions == null ||
-						fileExtensions.Any(ext => ext.Equals(System.IO.Path.GetExtension(name), StringComparison.CurrentCultureIgnoreCase)))
+						// Ordinal, tr-TR doesn't treat 'I' and 'i' as the same letter when ignoring case
+						fileExtensions.Any(ext => ext.Equals(System.IO.Path.GetExtension(name), StringComparison.OrdinalIgnoreCase)))
 					.Select(name => new FileView(name, tab.FileSelectorOptions))
 					.ToList();
 			}
@@ -146,16 +182,29 @@ public class TabDirectory(DirectoryView directoryView) : ITab
 			List<SelectedRow> selectedRows = GetSelectedRows();
 			foreach (SelectedRow selectedRow in selectedRows)
 			{
-				string path = Paths.Combine(tab.Path, selectedRow.Label);
-
-				if (Directory.Exists(path))
+				if (GetSelectedPath(tab.Path, selectedRow) is not { } path)
 				{
-					Directory.Delete(path, true);
+					call.Log.AddWarning("Skipped deleting a row that isn't in this directory",
+						new Tag("Directory", tab.Path),
+						new Tag("Row", selectedRow.DataKey ?? selectedRow.Label));
+					continue;
 				}
 
-				if (File.Exists(path))
+				// Keep deleting the rest if one entry is locked or already gone
+				try
 				{
-					File.Delete(path);
+					if (Directory.Exists(path))
+					{
+						Directory.Delete(path, true);
+					}
+					else if (File.Exists(path))
+					{
+						File.Delete(path);
+					}
+				}
+				catch (Exception e)
+				{
+					call.Log.Add(e, new Tag("Path", path));
 				}
 			}
 			Reload();

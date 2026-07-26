@@ -196,7 +196,8 @@ public class FileView : NodeView
 			Debug.WriteLine(e);
 		}
 
-		if (Filename.EndsWith(".atlas"))
+		// Ordinal ignore case, the file system is case insensitive on Windows and macOS
+		if (Filename.EndsWith(".atlas", StringComparison.OrdinalIgnoreCase))
 		{
 			Tab = new TabFileSerialized(path);
 		}

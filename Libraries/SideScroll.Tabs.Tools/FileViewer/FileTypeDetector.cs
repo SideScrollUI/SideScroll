@@ -143,7 +143,8 @@ public static class FileTypeDetector
 			// Read header bytes for probing
 			byte[] headerBytes;
 			long fileSize;
-			string extension = Path.GetExtension(filePath).ToLower();
+			// Invariant so 'I' still lowercases to 'i' in cultures where it doesn't (tr-TR)
+			string extension = Path.GetExtension(filePath).ToLowerInvariant();
 
 			using (var stream = File.OpenRead(filePath))
 			{

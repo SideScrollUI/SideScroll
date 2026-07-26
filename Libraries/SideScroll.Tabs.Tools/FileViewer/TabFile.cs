@@ -23,7 +23,9 @@ public class TabFile(FileView fileView) : ITab
 
 	public string Path => fileView.Path;
 
-	public static Dictionary<string, Type> ExtensionTypes { get; set; } = new()
+	// Ordinal so extensions match regardless of case, without ToLower() mangling them in
+	// cultures where 'I' doesn't lowercase to 'i' (tr-TR turns ".ZIP" into ".zıp")
+	public static Dictionary<string, Type> ExtensionTypes { get; set; } = new(StringComparer.OrdinalIgnoreCase)
 	{
 		[".zip"] = typeof(TabZipFile),
 	};
@@ -52,8 +54,8 @@ public class TabFile(FileView fileView) : ITab
 		if (probedType != null)
 			return probedType;
 
-		// Fall back to extension-based detection
-		string extension = System.IO.Path.GetExtension(path).ToLower();
+		// Fall back to extension-based detection, ExtensionTypes ignores case
+		string extension = System.IO.Path.GetExtension(path);
 		if (ExtensionTypes.TryGetValue(extension, out Type? type))
 		{
 			return type;
@@ -117,7 +119,7 @@ public class TabFile(FileView fileView) : ITab
 
 			List<ListItem> items = [];
 
-			string extension = System.IO.Path.GetExtension(path).ToLower();
+			string extension = System.IO.Path.GetExtension(path).ToLowerInvariant();
 
 			// Use probe-based detection or fall back to extension-based detection
 			Type? type = DetectFileType(path);

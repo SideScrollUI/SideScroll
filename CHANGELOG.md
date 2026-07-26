@@ -136,6 +136,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `ListToString.Create()` still creating one item when passed a limit of zero or less
 - Fixed `SelectedRow.Equals()` treating a missing `RowIndex` as a wildcard, which made it intransitive. A `HashSet<SelectedRow>` dropped a selected row depending on the order rows were added, and `DeepClone()` aliased two distinct rows into one instance and lost their `RowIndex` (bookmarks are deep cloned every time a link is opened). Lookups that need the wildcard now call the new `SelectedRow.Matches()`
 - Fixed `SelectedRow.Equals()` comparing `DataValue` by reference while `GetHashCode()` used its value, so equal rows could disagree and a deserialized row never matched a live one
+- SideScroll.Tabs.Tools: Fixed `TabDirectory` Delete building its path by combining the directory with the selected row's display label, which could resolve outside the directory being viewed (`..` or an absolute path) and recursively delete it. It now uses the row's `[DataKey]` path and skips anything that isn't inside. One failed delete no longer skips the rest
+- SideScroll.Tabs.Tools: Fixed `TabZipFile` showing an empty tab instead of an error for a corrupt or unreadable archive
+- SideScroll.Tabs.Tools: Fixed `.atlas` files only opening in the serialized viewer when the extension was lowercase, the file system is case insensitive on Windows and macOS
+- SideScroll.Tabs.Tools: Fixed file type detection lowercasing extensions with the current culture, so an extension containing an `I` (like `.ZIP`) became `.zıp` and matched nothing in cultures where `I` doesn't lowercase to `i`. `TabFile.ExtensionTypes` now ignores case, and the directory file extension filter compares ordinally
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark
