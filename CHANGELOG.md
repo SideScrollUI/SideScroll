@@ -126,12 +126,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SideScroll.Network: Fixed `HttpCall` completely failing on the first attempt when it receives a transient server error (e.g., 502, 503) instead of properly retrying, by checking `HttpUtils.IsTransient`.
 - SideScroll.Network: Fixed `HttpCache.LoadIndex` failing to truncate orphaned bytes from the data stream when a crash leaves an incomplete trailing entry, resolving a long-standing `todo`.
 - SideScroll.Network: Fixed `HttpCache.GetString` potentially throwing a `NullReferenceException` if the cache entry bytes could not be retrieved, now gracefully returning `null`.
+- SideScroll.Tabs.Tools: Fixed `TabUserSettings.Reset` mutating the global `DefaultUserSettings` template by incorrectly performing a reference assignment instead of a deep clone.
+- SideScroll.Tabs.Tools: Fixed `TabFileSerialized` incorrectly defaulting to loading `Data.atlas` when a different `.atlas` file (e.g. `Settings.atlas`) was opened in the File Viewer.
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark
 - Improved Atlas Serializer save performance (~20% faster, ~20% fewer allocations) by skipping per-object debug log tag allocations and primitive member boxing during the object graph walk
 - Improved Atlas Serializer load performance (~20% faster, ~15% fewer allocations) by replacing the `dynamic` default-value comparison for primitive properties with `Equals()`
 - Updated `TabInstance` to lazily create its default `Project`, so child tab creation no longer allocates a throwaway `Project` (~1.4 KB per tab load)
+- SideScroll.Serialize: Made the `name` parameter in `SerializerFile` and its subclasses (`SerializerFileAtlas`, `SerializerFileJson`) nullable, and updated the `Name` property to accurately support `null` names.
+- SideScroll.Serialize: Added a static `CreateForFile` method to `SerializerFileAtlas` to simplify instantiation for specific file paths, and updated `TabFileSerialized` to use it.
 
 ## [0.21] - 2026-06-29
 

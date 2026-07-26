@@ -36,7 +36,7 @@ public class TabUserSettings : ITab
 
 		private void Reset(Call call)
 		{
-			Project.UserSettings = Project.ProjectSettings.DefaultUserSettings;
+			Project.UserSettings = Project.ProjectSettings.DefaultUserSettings.DeepClone(call);
 			Refresh();
 		}
 

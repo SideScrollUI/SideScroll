@@ -27,7 +27,7 @@ public class SerializerFileJson : SerializerFile
 	/// <summary>
 	/// Initializes a new instance of the SerializerFileJson class
 	/// </summary>
-	public SerializerFileJson(string basePath, string name = "") : base(basePath, name)
+	public SerializerFileJson(string basePath, string? name = null) : base(basePath, name)
 	{
 		DataPath = Paths.Combine(basePath, DataFileName);
 	}

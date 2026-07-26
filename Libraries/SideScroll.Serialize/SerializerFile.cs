@@ -8,10 +8,8 @@ namespace SideScroll.Serialize;
 /// <summary>
 /// Base class for file-based serialization operations
 /// </summary>
-public abstract class SerializerFile(string basePath, string name = "")
+public abstract class SerializerFile(string basePath, string? name = null)
 {
-	private const string DefaultName = "<Default>";
-
 	/// <summary>
 	/// Gets the base path for the serializer files
 	/// </summary>
@@ -30,7 +28,7 @@ public abstract class SerializerFile(string basePath, string name = "")
 	/// <summary>
 	/// Gets or sets the name of this serializer instance
 	/// </summary>
-	public string Name { get; set; } = name;
+	public string? Name { get; set; } = name;
 
 	/// <summary>
 	/// Gets whether the data file exists and is non-empty
@@ -67,7 +65,7 @@ public abstract class SerializerFile(string basePath, string name = "")
 	{
 		ArgumentNullException.ThrowIfNull(obj);
 
-		name ??= DefaultName;
+		name ??= Name;
 
 		using CallTimer callTimer = call.Timer(LogLevel.Debug, "Saving object",
 			new Tag("Name", name),
