@@ -150,6 +150,26 @@ public class SerializeCollectionTests : SerializeBaseTest
 		Assert.That(output.Contains("abc"), Is.True);
 	}
 
+	// The class's own type argument isn't the element type, only IEnumerable<T> names that
+	public class KeyedStringHashSet<TKey> : HashSet<string> { }
+
+	[Test, Description("Serialize a generic HashSet subclass whose type argument isn't the element type")]
+	public void SerializeCustomGenericHashSet()
+	{
+		var input = new KeyedStringHashSet<int>
+		{
+			"abc",
+			"123",
+		};
+
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<KeyedStringHashSet<int>>(Call);
+
+		Assert.That(output, Has.Exactly(2).Items);
+		Assert.That(output, Does.Contain("abc"));
+		Assert.That(output, Does.Contain("123"));
+	}
+
 	[Test, Description("Serialize Hashtable")]
 	public void SerializeHashtable()
 	{

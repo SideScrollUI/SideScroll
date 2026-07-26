@@ -76,21 +76,35 @@ public class SelectedRow : IEquatable<SelectedRow>
 	}
 
 	/// <summary>
-	/// Determines whether this selected row equals another by comparing label, data key, data value, and optionally row index
+	/// Determines whether this selected row is the same row as another, comparing label, data key,
+	/// data value, and row index.
+	/// This is identity, so it has to stay transitive for <see cref="HashSet{T}"/> and the
+	/// serializer's clone map. Use <see cref="Matches(SelectedRow)"/> to look a row up instead
 	/// </summary>
 	public bool Equals(SelectedRow? other)
 	{
 		return other != null &&
 			   Label == other.Label &&
 			   DataKey == other.DataKey &&
-			   DataValue == other.DataValue &&
-			   (RowIndex == other.RowIndex || RowIndex == null || other.RowIndex == null); // Allow matching on missing rows
+			   Equals(DataValue, other.DataValue) &&
+			   RowIndex == other.RowIndex;
 	}
 
 	public override int GetHashCode()
 	{
-		return (Label?.GetHashCode() ?? 0)
-			^ (DataKey?.GetHashCode() ?? 0)
-			^ (DataValue?.GetHashCode() ?? 0);
+		return HashCode.Combine(Label, DataKey, DataValue, RowIndex);
+	}
+
+	/// <summary>
+	/// Determines whether this selected row identifies <paramref name="other"/>, treating a missing
+	/// <see cref="RowIndex"/> on either side as a wildcard so rows can be looked up without one.
+	/// That makes it intransitive, so it can't be used for equality
+	/// </summary>
+	public bool Matches(SelectedRow other)
+	{
+		return Label == other.Label &&
+			   DataKey == other.DataKey &&
+			   Equals(DataValue, other.DataValue) &&
+			   (RowIndex == other.RowIndex || RowIndex == null || other.RowIndex == null); // Allow matching on missing rows
 	}
 }

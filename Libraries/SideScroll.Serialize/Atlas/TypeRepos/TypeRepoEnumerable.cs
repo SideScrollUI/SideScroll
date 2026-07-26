@@ -28,43 +28,39 @@ public class TypeRepoEnumerable : TypeRepo
 	{
 		if (LoadableType != null)
 		{
-			Type? baseType = LoadableType;
-			while (baseType != null && baseType != typeof(object))
-			{
-				if (baseType.IsGenericType)
-				{
-					Type[] types = baseType.GetGenericArguments();
-					if (types.Length > 0)
-					{
-						ElementType = types[0];
-						break;
-					}
-				}
-				baseType = baseType.BaseType;
-			}
-
-			if (ElementType == null)
-			{
-				Type[] types = LoadableType
-					.GetInterfaces()
-					.FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>))?
-					.GetGenericArguments() ?? [];
-				
-				if (types.Length > 0)
-				{
-					ElementType = types[0];
-				}
-				else
-				{
-					ElementType = typeof(object);
-				}
-			}
+			ElementType = GetElementType(LoadableType) ?? typeof(object);
 
 			AddMethod = LoadableType.GetMethods()
 				.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Length == 1);
 
 			_countPropertyInfo = LoadableType.GetProperty("Count");
 		}
+	}
+
+	/// <summary>
+	/// Resolves the collection's element type, or null if it can't be determined
+	/// </summary>
+	private static Type? GetElementType(Type type)
+	{
+		// IEnumerable<T> names the element type directly, so prefer it over walking the base types.
+		// A generic ancestor's first argument isn't always the element type (class Cache<TKey> : HashSet<string>)
+		Type? enumerableType = type.GetInterfaces()
+			.FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+		if (enumerableType != null)
+		{
+			return enumerableType.GetGenericArguments()[0];
+		}
+
+		// Only implements the non-generic IEnumerable, fall back to the nearest generic ancestor
+		for (Type? baseType = type; baseType != null && baseType != typeof(object); baseType = baseType.BaseType)
+		{
+			if (baseType.IsGenericType && baseType.GetGenericArguments() is { Length: > 0 } arguments)
+			{
+				return arguments[0];
+			}
+		}
+
+		return null;
 	}
 
 	/*public static bool CanAssign(Type type)

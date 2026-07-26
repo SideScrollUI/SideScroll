@@ -244,7 +244,7 @@ internal static class ReflectionCache
 		var nameAttr = fieldInfo.GetCustomAttribute<NameAttribute>();
 		string name = nameAttr?.Name ?? fieldInfo.Name.WordSpaced();
 
-		// Note: original uses && (both field AND field type must have [DebugOnly])
+		// Marked when either the field or its type is [DebugOnly]
 		if (fieldInfo.GetCustomAttribute<DebugOnlyAttribute>() != null ||
 			fieldInfo.FieldType.GetCustomAttribute<DebugOnlyAttribute>() != null)
 		{

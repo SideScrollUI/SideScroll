@@ -38,6 +38,7 @@ public class HttpCall(Call call)
 		};
 		HttpClient client = HttpClientManager.GetClient(clientConfig);
 
+		Exception? lastException = null;
 		for (int attempt = 1; ; attempt++)
 		{
 			var request = new HttpRequestMessage(HttpMethod.Get, uri);
@@ -65,6 +66,7 @@ public class HttpCall(Call call)
 			catch (HttpRequestException exception)
 			{
 				getCall.Log.AddError("URI request " + request.RequestUri + " failed: " + exception.Message);
+				lastException = exception;
 
 				// Only rethrow if the error is permanent (e.g. 404), allow transient errors (e.g. 503) to retry
 				if (exception.StatusCode != null && !HttpUtils.IsTransient(exception.StatusCode))
@@ -73,6 +75,7 @@ public class HttpCall(Call call)
 			catch (TaskCanceledException exception) // Timed out
 			{
 				getCall.Log.AddError("URI request " + request.RequestUri + " timed out: " + exception.Message);
+				lastException = exception;
 			}
 
 			if (attempt >= MaxAttempts)
@@ -80,6 +83,15 @@ public class HttpCall(Call call)
 
 			await Task.Delay(SleepMilliseconds * attempt);
 		}
-		throw new Exception("HTTP request failed " + MaxAttempts + " times: " + uri);
+
+		string message = "HTTP request failed " + MaxAttempts + " times: " + uri;
+
+		// Keep the status code, callers check it to tell a retried 503 apart from a network failure
+		if (lastException is HttpRequestException httpException)
+		{
+			throw new HttpRequestException(message, httpException, httpException.StatusCode);
+		}
+
+		throw new Exception(message, lastException);
 	}
 }

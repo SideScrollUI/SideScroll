@@ -1191,7 +1191,9 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	{
 		if (TabInstance.FilterBookmarkNode != null)
 		{
-			return TabInstance.FilterBookmarkNode.SelectedRows.Contains(new SelectedRow(obj));
+			// The row built here has no RowIndex, so this relies on Matches() wildcarding it
+			var selectedRow = new SelectedRow(obj);
+			return TabInstance.FilterBookmarkNode.SelectedRows.Any(row => row.Matches(selectedRow));
 		}
 		else
 		{

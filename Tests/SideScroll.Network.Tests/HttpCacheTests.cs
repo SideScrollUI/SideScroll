@@ -177,4 +177,44 @@ public class HttpCacheTests : BaseTest
 		}));
 		Assert.That(reopened.GetString("http://example.com/b"), Is.EqualTo("second"));
 	}
+
+	// Corrupt bytes can still decode as a complete entry, just with a nonsense offset
+	private void AppendCorruptEntry(string uri, long offset, int size)
+	{
+		string indexPath = Path.Combine(_cachePath, "http.index");
+
+		using var stream = new FileStream(indexPath, FileMode.Append, FileAccess.Write);
+		using var writer = new BinaryWriter(stream);
+
+		writer.Write(uri);
+		writer.Write(offset);
+		writer.Write(size);
+		writer.Write(DateTime.Now.Ticks);
+	}
+
+	[TestCase(-5000, 4, TestName = "CorruptIndexOffset_Negative")]
+	[TestCase(0, 1, TestName = "CorruptIndexOffset_BeforeValidData")]
+	[Description(
+		"A corrupt entry's offset must not be trusted when truncating orphaned data: a negative one " +
+		"would throw while opening, and one pointing before real data would delete it.")]
+	public void CorruptIndexOffsetKeepsCacheUsable(long offset, int size)
+	{
+		using (var cache = new HttpCache(_cachePath, true))
+		{
+			cache.AddEntry("http://example.com/a", GetBytes("first"));
+			cache.AddEntry("http://example.com/b", GetBytes("second"));
+		}
+
+		AppendCorruptEntry("http://example.com/corrupt", offset, size);
+
+		HttpCache? reopened = null;
+		Assert.DoesNotThrow(() => reopened = new HttpCache(_cachePath, true),
+			"A corrupt offset shouldn't stop the cache from opening.");
+
+		using (reopened)
+		{
+			Assert.That(reopened!.GetString("http://example.com/a"), Is.EqualTo("first"));
+			Assert.That(reopened.GetString("http://example.com/b"), Is.EqualTo("second"));
+		}
+	}
 }

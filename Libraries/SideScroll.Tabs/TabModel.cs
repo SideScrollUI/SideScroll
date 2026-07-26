@@ -594,25 +594,39 @@ public class TabModel
 	/// </summary>
 	public void Clear()
 	{
-		foreach (var list in ItemLists)
-		{
-			if (list is IEnumerable enumerable)
-			{
-				foreach (var item in enumerable)
-				{
-					if (item is IDisposable disposable)
-					{
-						disposable.Dispose();
-					}
-				}
-			}
-		}
+		DisposeItems();
 
 		Objects.Clear();
 		ItemLists.Clear();
 #pragma warning disable CS0618 // Type or member is obsolete
 		Actions = null;
 #pragma warning restore CS0618 // Type or member is obsolete
+	}
+
+	/// <summary>
+	/// Disposes the rows created for this model so they unsubscribe from their source objects.
+	/// Only <see cref="ListMember"/> rows are owned here, the item lists can also hold the caller's
+	/// own objects (see <see cref="AddList"/>) which stay alive after the tab closes
+	/// </summary>
+	private void DisposeItems()
+	{
+		foreach (IList list in ItemLists)
+		{
+			try
+			{
+				foreach (object? item in list)
+				{
+					if (item is ListMember listMember)
+					{
+						listMember.Dispose();
+					}
+				}
+			}
+			catch (Exception)
+			{
+				// Clearing still has to finish, a custom list can throw while enumerating
+			}
+		}
 	}
 
 	// todo: split Actions out of ListMethod since those return values?

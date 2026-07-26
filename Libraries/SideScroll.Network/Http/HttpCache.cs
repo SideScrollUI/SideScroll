@@ -177,7 +177,15 @@ public class HttpCache : IDisposable
 				_cache[entry.Uri] = entry;
 
 				lastCompletePosition = _indexStream.Position;
-				lastDataPosition = entry.Offset + entry.Size;
+
+				// Track the furthest entry instead of the last one. Writes append in order so they
+				// match, but a corrupt entry can still parse with a garbage offset, and truncating
+				// below a surviving entry would drop data the index still points at
+				long entryEnd = entry.Offset + entry.Size;
+				if (entryEnd > lastDataPosition)
+				{
+					lastDataPosition = entryEnd;
+				}
 			}
 		}
 		catch (Exception)
@@ -193,7 +201,9 @@ public class HttpCache : IDisposable
 				_indexStream.SetLength(lastCompletePosition);
 			}
 
-			if (lastDataPosition < _dataStream.Length)
+			// Only trust a position inside the file, a negative offset would make SetLength() throw
+			// here, outside the try/catch that keeps a corrupt cache openable
+			if (lastDataPosition >= 0 && lastDataPosition < _dataStream.Length)
 			{
 				// Drop any orphaned data that doesn't have a complete index entry
 				_dataStream.SetLength(lastDataPosition);

@@ -36,7 +36,10 @@ public class SerializerFileAtlas : SerializerFile
 	/// </summary>
 	public static SerializerFileAtlas CreateForFile(string filePath, string? name = null)
 	{
-		return new SerializerFileAtlas(System.IO.Path.GetDirectoryName(filePath) ?? "", name)
+		// GetDirectoryName() returns "" for a bare filename, which makes EnsureStorageExists() throw
+		string? directory = System.IO.Path.GetDirectoryName(filePath);
+
+		return new SerializerFileAtlas(string.IsNullOrEmpty(directory) ? "." : directory, name)
 		{
 			HeaderPath = filePath,
 			DataPath = filePath,

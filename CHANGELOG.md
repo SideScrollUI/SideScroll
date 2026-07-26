@@ -128,6 +128,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SideScroll.Network: Fixed `HttpCache.GetString` potentially throwing a `NullReferenceException` if the cache entry bytes could not be retrieved, now gracefully returning `null`.
 - SideScroll.Tabs.Tools: Fixed `TabUserSettings.Reset` mutating the global `DefaultUserSettings` template by incorrectly performing a reference assignment instead of a deep clone.
 - SideScroll.Tabs.Tools: Fixed `TabFileSerialized` incorrectly defaulting to loading `Data.atlas` when a different `.atlas` file (e.g. `Settings.atlas`) was opened in the File Viewer.
+- Fixed `TabModel.Clear()` disposing every `IDisposable` in its item lists, which disposed the caller's own objects when a tab closed. Only the `ListMember` rows the model created are disposed now, and a list that throws while enumerating no longer stops `TabInstance.Dispose()`
+- Fixed `HttpCache` failing to open, or truncating live data, when a corrupt index entry parsed with a garbage offset. Truncation now uses the furthest entry and ignores offsets outside the data file
+- Fixed `TypeRepoEnumerable` resolving the element type from the first generic ancestor's first type argument, which deserialized nothing for collections whose type argument isn't the element type (e.g. `class Cache<TKey> : HashSet<string>`). It now reads `IEnumerable<T>` first
+- Fixed `HttpCall` throwing a plain `Exception` after retrying a transient error, losing the `HttpRequestException.StatusCode` that callers use to tell a 503 apart from a network failure
+- Fixed `SerializerFileAtlas.CreateForFile()` leaving an empty `BasePath` for a filename with no directory, which made saving throw before writing anything
+- Fixed `ListToString.Create()` still creating one item when passed a limit of zero or less
+- Fixed `SelectedRow.Equals()` treating a missing `RowIndex` as a wildcard, which made it intransitive. A `HashSet<SelectedRow>` dropped a selected row depending on the order rows were added, and `DeepClone()` aliased two distinct rows into one instance and lost their `RowIndex` (bookmarks are deep cloned every time a link is opened). Lookups that need the wildcard now call the new `SelectedRow.Matches()`
+- Fixed `SelectedRow.Equals()` comparing `DataValue` by reference while `GetHashCode()` used its value, so equal rows could disagree and a deserialized row never matched a live one
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark
