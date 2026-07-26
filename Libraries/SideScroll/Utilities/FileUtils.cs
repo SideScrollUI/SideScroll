@@ -130,6 +130,16 @@ public static class FileUtils
 					+ sourceDirPath);
 			}
 
+			// The destination is created below before the source subdirectories are enumerated, so a
+			// destination inside the source would be found by GetDirectories() and copied into
+			// itself, nesting until the path length limit stops it
+			if (copySubDirs && IsSameOrInside(sourceDirPath, destDirPath))
+			{
+				throw new ArgumentException(
+					$"Destination directory can't be inside the source directory: {destDirPath}",
+					nameof(destDirPath));
+			}
+
 			// Create destination directory
 			if (!Directory.Exists(destDirPath))
 			{
@@ -156,6 +166,19 @@ public static class FileUtils
 				}
 			}
 		}
+	}
+
+	/// <summary>
+	/// Returns whether <paramref name="path"/> is <paramref name="basePath"/> itself or sits inside it
+	/// </summary>
+	private static bool IsSameOrInside(string basePath, string path)
+	{
+		string relative = Path.GetRelativePath(Path.GetFullPath(basePath), Path.GetFullPath(path));
+
+		// GetRelativePath() returns a rooted path when there's no shared root (a different drive)
+		return !Path.IsPathRooted(relative) &&
+			relative != ".." &&
+			!relative.StartsWith(".." + Path.DirectorySeparatorChar, StringComparison.Ordinal);
 	}
 
 	/// <summary>

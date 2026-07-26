@@ -219,7 +219,18 @@ public static class DateTimeExtensions
 	/// </summary>
 	public static DateTime Ceil(this DateTime dateTime, long ticks = TimeSpan.TicksPerSecond)
 	{
-		return new DateTime(dateTime.Ticks + ticks - 1, dateTime.Kind).Trim(ticks);
+		long remainder = dateTime.Ticks % ticks;
+		if (remainder == 0) return dateTime;
+
+		// Saturate, the last interval before MaxValue has nothing above it to round up to.
+		// Comparing what's left rather than the rounded value avoids overflowing to find the overflow
+		long remaining = DateTime.MaxValue.Ticks - dateTime.Ticks;
+		if (remaining < ticks - remainder)
+		{
+			return new DateTime(DateTime.MaxValue.Ticks, dateTime.Kind);
+		}
+
+		return new DateTime(dateTime.Ticks - remainder + ticks, dateTime.Kind);
 	}
 
 	/// <summary>

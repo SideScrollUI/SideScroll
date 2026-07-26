@@ -43,6 +43,49 @@ public class DateTimeExtensionsTests : BaseTest
 		Assert.That(dateTime.Ceil(), Is.EqualTo(dateTime));
 	}
 
+	[Test, Description(
+		"There's nothing above the final interval to round up to, so it saturates. Rounding past " +
+		"MaxValue used to throw an ArgumentOutOfRangeException")]
+	public void Ceil_MaxValue_Saturates()
+	{
+		Assert.That(DateTime.MaxValue.Ceil(), Is.EqualTo(DateTime.MaxValue));
+		Assert.That(DateTime.MaxValue.Ceil(TimeSpan.TicksPerMinute), Is.EqualTo(DateTime.MaxValue));
+		Assert.That(DateTime.MaxValue.Ceil(TimeSpan.TicksPerDay), Is.EqualTo(DateTime.MaxValue));
+	}
+
+	[Test, Description("Every value inside the final interval saturates, not just MaxValue itself")]
+	public void Ceil_WithinTheFinalInterval_Saturates()
+	{
+		DateTime lastTick = new(DateTime.MaxValue.Ticks - 1, DateTimeKind.Utc);
+
+		Assert.That(lastTick.Ceil(), Is.EqualTo(new DateTime(DateTime.MaxValue.Ticks, DateTimeKind.Utc)));
+	}
+
+	[Test]
+	public void Ceil_Saturated_KeepsTheKind()
+	{
+		DateTime maxUtc = new(DateTime.MaxValue.Ticks, DateTimeKind.Utc);
+
+		Assert.That(maxUtc.Ceil().Kind, Is.EqualTo(DateTimeKind.Utc));
+	}
+
+	[Test, Description("A value a full interval below MaxValue still rounds up normally")]
+	public void Ceil_BelowTheFinalInterval_RoundsUp()
+	{
+		DateTime dateTime = new(DateTime.MaxValue.Ticks - TimeSpan.TicksPerSecond, DateTimeKind.Utc);
+
+		DateTime result = dateTime.Ceil();
+
+		Assert.That(result, Is.LessThan(DateTime.MaxValue), "It shouldn't have saturated.");
+		Assert.That(result.Ticks % TimeSpan.TicksPerSecond, Is.Zero, "It should land on a second.");
+	}
+
+	[Test]
+	public void Ceil_MinValue_IsUnchanged()
+	{
+		Assert.That(DateTime.MinValue.Ceil(), Is.EqualTo(DateTime.MinValue));
+	}
+
 	// ─── Max / Min ───────────────────────────────────────────────────────
 
 	// Ticks are wall clock readings, so a Local and a Utc value for the same instant have

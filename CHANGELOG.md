@@ -26,6 +26,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `SerializerMemoryAtlas.Load()` and `Validate()` closing the stream, which made a second `Load()` throw an `ObjectDisposedException`
 - Fixed `DateTime.Ceil()` rounding to seconds instead of the passed tick interval
 - Fixed `TimeSpan.FormattedShort()` dropping the larger units for negative durations (e.g. -90 seconds showed as `-30` instead of `-1:30`)
+- Fixed `TimeSpan.FormattedShort()` throwing an `OverflowException` for `TimeSpan.MinValue`, which `Formatted()` reaches for every `TimeSpan` shown in a row or cell
+- Fixed `TimeSpan.FormattedShort()` dropping a unit for durations past ~4,000 years, since the totals were cast to `int` to test them and wrapped (`TimeSpan.MaxValue` rendered without its minutes)
+- Fixed `DateTime.Ceil()` throwing an `ArgumentOutOfRangeException` for values in the final rounding interval before `DateTime.MaxValue`, which has nothing above it to round up to. It saturates at `MaxValue` now
+- Fixed `FileUtils.DirectoryCopy()` recursing into its own destination when copying into a subdirectory of the source. The destination was created before the source subdirectories were listed, so it copied itself into itself until the stack overflowed, leaving behind a directory tree too deep for `rmdir` to remove. Copying into the source is now rejected
 - Fixed `ByteFormatter.Format()` ignoring the passed `decimalPlaces` for negative values
 - Removed the unused `FileUtils.chmod()` interop declaration, which marshaled paths as UTF-16 instead of the UTF-8 that libc expects
 - Removed the unused `TypeRepo.LoadObjectRef(byte[], ref int)` overload, which read the null flag and field order incorrectly

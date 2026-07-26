@@ -71,16 +71,21 @@ public static class TimeSpanExtensions
 		if (timeSpan.Ticks < 0)
 		{
 			sb.Append('-');
-			timeSpan = timeSpan.Duration();
+
+			// MinValue has no positive counterpart, so Duration() overflows on it. MaxValue is one
+			// tick away and renders identically at millisecond resolution
+			timeSpan = timeSpan == TimeSpan.MinValue ? TimeSpan.MaxValue : timeSpan.Duration();
 		}
 
-		if ((int)timeSpan.TotalDays > 0)
+		// Compare the totals directly, casting to int wraps for durations past ~4,000 years and
+		// silently dropped the unit (TimeSpan.MaxValue lost its minutes)
+		if (timeSpan.TotalDays >= 1)
 		{
-			sb.Append((int)timeSpan.TotalDays);
+			sb.Append(timeSpan.Days);
 			sb.Append(':');
 		}
 
-		if ((int)timeSpan.TotalHours > 0)
+		if (timeSpan.TotalHours >= 1)
 		{
 			sb.Append(timeSpan.Hours);
 			sb.Append(':');
@@ -90,7 +95,7 @@ public static class TimeSpanExtensions
 			}
 		}
 
-		if ((int)timeSpan.TotalMinutes > 0)
+		if (timeSpan.TotalMinutes >= 1)
 		{
 			sb.Append(timeSpan.Minutes);
 			sb.Append(':');
