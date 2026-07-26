@@ -28,4 +28,14 @@ public class ByteFormatterTests : BaseTest
 		Assert.That(ByteFormatter.Format(-1536), Is.EqualTo("-1.5 KB"));
 		Assert.That(ByteFormatter.Format(-1536, 2), Is.EqualTo("-1.50 KB"));
 	}
+
+	[Test, Description(
+		"Negating long.MinValue as a long overflows back onto itself, which used to recurse until " +
+		"the stack overflowed and took the process down")]
+	public void Format_LongMinValue()
+	{
+		Assert.That(ByteFormatter.Format(long.MinValue), Is.EqualTo("-8.0 EB"));
+		Assert.That(ByteFormatter.Format(long.MinValue + 1), Is.EqualTo("-8.0 EB"));
+		Assert.That(ByteFormatter.Format(long.MaxValue), Is.EqualTo("8.0 EB"));
+	}
 }

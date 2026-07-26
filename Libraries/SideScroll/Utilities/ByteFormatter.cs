@@ -19,13 +19,11 @@ public class ByteFormatter : ICustomFormatter
 	/// <returns>A formatted string representing the byte value with appropriate size suffix</returns>
 	public static string Format(long value, int decimalPlaces = 1)
 	{
-		if (value < 0)
-		{
-			return "-" + Format(-value, decimalPlaces);
-		}
+		// Take the magnitude as a decimal, negating long.MinValue as a long overflows back onto itself
+		string sign = value < 0 ? "-" : "";
+		decimal dValue = Math.Abs((decimal)value);
 
 		int i = 0;
-		decimal dValue = value;
 		while (Math.Round(dValue, decimalPlaces) >= 1024)
 		{
 			dValue /= 1024;
@@ -37,7 +35,7 @@ public class ByteFormatter : ICustomFormatter
 			decimalPlaces = 0; // No fractional bytes
 		}
 
-		return string.Format("{0:n" + decimalPlaces + "} {1}", dValue, SizeSuffixes[i]);
+		return sign + string.Format("{0:n" + decimalPlaces + "} {1}", dValue, SizeSuffixes[i]);
 	}
 
 	/// <summary>

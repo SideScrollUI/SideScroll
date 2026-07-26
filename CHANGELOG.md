@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `TimeSpan.FormattedShort()` throwing an `OverflowException` for `TimeSpan.MinValue`, which `Formatted()` reaches for every `TimeSpan` shown in a row or cell
 - Fixed `TimeSpan.FormattedShort()` dropping a unit for durations past ~4,000 years, since the totals were cast to `int` to test them and wrapped (`TimeSpan.MaxValue` rendered without its minutes)
 - Fixed `DateTime.Ceil()` throwing an `ArgumentOutOfRangeException` for values in the final rounding interval before `DateTime.MaxValue`, which has nothing above it to round up to. It saturates at `MaxValue` now
+- Fixed `LinkUri.TryParse()` throwing instead of returning false for a malformed version like `v1..2`, `v1.2.3.4.5`, or one too large for an `int`
+- Fixed `ByteFormatter.Format()` recursing until the process died with a `StackOverflowException` for `long.MinValue`, which negates back onto itself
+- Fixed `TimeRangeValue.FillAndMerge()` breaking a chart line inside time that was already covered. A shorter range nested inside a longer one moved the running end time backwards, so a later point inserted a `NaN` gap into the longer range's span
+- Fixed `ObjectUtils.AreEqual()` throwing for values that can't be converted to each other's type (an Enum against a string, two different Enums, a `Guid` against a string). It's used to evaluate `[Hide]`, `[HideRow]`, and `[HideColumn]`, so an unconvertible pair broke rendering instead of comparing unequal
 - Fixed `FileUtils.DirectoryCopy()` recursing into its own destination when copying into a subdirectory of the source. The destination was created before the source subdirectories were listed, so it copied itself into itself until the stack overflowed, leaving behind a directory tree too deep for `rmdir` to remove. Copying into the source is now rejected
 - Fixed `ByteFormatter.Format()` ignoring the passed `decimalPlaces` for negative values
 - Removed the unused `FileUtils.chmod()` interop declaration, which marshaled paths as UTF-16 instead of the UTF-8 that libc expects

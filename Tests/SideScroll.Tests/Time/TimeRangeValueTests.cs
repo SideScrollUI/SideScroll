@@ -93,6 +93,55 @@ public class TimeRangeValueTests : BaseTest
 		Assert.That(gaps[0].EndTime, Is.EqualTo(localStart.AddMinutes(10)));
 	}
 
+	// ─── Overlapping ranges ──────────────────────────────────────────────
+
+	// A long range, a short one nested inside it, then a later one also inside it
+	private static List<TimeRangeValue> CreateNested() =>
+	[
+		new(StartTime, StartTime.AddMinutes(60), 1),
+		new(StartTime.AddMinutes(10), StartTime.AddMinutes(20), 2),
+		new(StartTime.AddMinutes(50), StartTime.AddMinutes(55), 3),
+	];
+
+	[Test, Description(
+		"A shorter range nested inside a longer one used to move the running end time backwards, so " +
+		"a later point inserted a gap into time the longer range already covered")]
+	public void FillGapsNestedRangesHaveNoGaps()
+	{
+		List<TimeRangeValue> output = TimeRangeValue.FillAndMerge(CreateNested(), TimeSpan.FromMinutes(5));
+
+		Assert.That(output.Where(v => double.IsNaN(v.Value)), Is.Empty,
+			"Every point falls inside the first range, so there's nothing to break the line for.");
+		Assert.That(output, Has.Count.EqualTo(3));
+	}
+
+	[Test, Description("The same nested ranges filled across a window, including the trailing gap")]
+	public void FillAndMergeNestedRangesHaveNoGaps()
+	{
+		List<TimeRangeValue> output = TimeRangeValue.FillAndMerge(
+			CreateNested(), StartTime, StartTime.AddMinutes(60), TimeSpan.FromMinutes(5));
+
+		Assert.That(output.Where(v => double.IsNaN(v.Value)), Is.Empty);
+		Assert.That(output, Has.Count.EqualTo(3));
+	}
+
+	[Test, Description("A real gap after an overlapping run is still detected")]
+	public void FillGapsAfterNestedRangesStillBreaks()
+	{
+		List<TimeRangeValue> input =
+		[
+			.. CreateNested(),
+			new(StartTime.AddMinutes(90), StartTime.AddMinutes(95), 4),
+		];
+
+		List<TimeRangeValue> output = TimeRangeValue.FillAndMerge(input, TimeSpan.FromMinutes(5));
+
+		List<TimeRangeValue> gaps = [.. output.Where(v => double.IsNaN(v.Value))];
+		Assert.That(gaps, Has.Count.EqualTo(1));
+		Assert.That(gaps[0].StartTime, Is.EqualTo(StartTime.AddMinutes(65)), "Starts after the longest range.");
+		Assert.That(gaps[0].EndTime, Is.EqualTo(StartTime.AddMinutes(90)));
+	}
+
 	[Test]
 	public void CopyConstructorCopiesValues()
 	{

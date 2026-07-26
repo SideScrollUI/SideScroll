@@ -169,7 +169,11 @@ public class TimeRangeValue : ITags
 			}
 
 			output.Add(point);
-			prevTime = point.EndTime;
+
+			// Track the furthest point reached. A shorter range nested inside a longer one would
+			// otherwise move this backwards, and a later point would insert a gap into time the
+			// longer range already covers
+			prevTime = prevTime == null ? point.EndTime : prevTime.Value.Max(point.EndTime);
 		}
 
 		return output;
@@ -198,7 +202,9 @@ public class TimeRangeValue : ITags
 		{
 			AddGap(prevTime, point.StartTime, periodDuration, output);
 			output.Add(point);
-			prevTime = point.EndTime;
+
+			// The furthest point reached, so a range nested inside a longer one doesn't move it back
+			prevTime = prevTime.Max(point.EndTime);
 		}
 		AddGap(prevTime, endTime, periodDuration, output);
 		return output;
