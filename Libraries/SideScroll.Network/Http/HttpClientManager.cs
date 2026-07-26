@@ -20,9 +20,9 @@ public static class HttpClientManager
 		AllowAutoRedirect = false,
 	};
 
-	private static readonly HttpClient _defaultClient = new(_handler);
+	private static readonly HttpClient _defaultClient = new(_handler, disposeHandler: false);
 
-	private static readonly Dictionary<string, HttpClient> _clients = [];
+	private static readonly Dictionary<HttpClientConfig, HttpClient> _clients = [];
 
 	/// <summary>Returns a shared <see cref="HttpClient"/> matching the given <paramref name="config"/>, creating and caching a new one if needed.</summary>
 	public static HttpClient GetClient(HttpClientConfig config)
@@ -31,10 +31,10 @@ public static class HttpClientManager
 
 		lock (_clients)
 		{
-			string id = config.ToString();
-			if (_clients.TryGetValue(id, out HttpClient? client)) return client;
+			if (_clients.TryGetValue(config, out HttpClient? client)) return client;
 
-			client = new HttpClient(_handler);
+			// Shared handlers shouldn't be disposed by any single client instance
+			client = new HttpClient(_handler, disposeHandler: false);
 
 			if (config.Accept != null)
 			{
@@ -46,7 +46,7 @@ public static class HttpClientManager
 				client.Timeout = timeout;
 			}
 
-			_clients[id] = client;
+			_clients[config] = client;
 			return client;
 		}
 	}

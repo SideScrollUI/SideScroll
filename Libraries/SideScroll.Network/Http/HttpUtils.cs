@@ -225,7 +225,7 @@ public static class HttpUtils
 		return null;
 	}
 
-	private static bool IsTransient(HttpStatusCode? statusCode)
+	public static bool IsTransient(HttpStatusCode? statusCode)
 	{
 		return statusCode is 
 			HttpStatusCode.RequestTimeout or 

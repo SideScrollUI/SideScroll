@@ -121,6 +121,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SideScroll.Tabs: Fixed `ListField.Value` setter throwing `InvalidCastException` on nullable types or null assignments by adopting the same robust type conversion logic used in `ListProperty`.
 - SideScroll.Tabs: Fixed `ListEnumValue.Create` throwing an `OverflowException` for `ulong` enums with high bits set by using `Enum.Format` instead of `Convert.ToInt64`.
 - SideScroll.Tabs: Fixed `ListMethod` throwing a `RuntimeBinderException` when invoking methods returning non-generic or internal Task types (like `async Task`) due to unsafe `dynamic` binding, by correctly awaiting the inner task and using reflection for the result.
+- SideScroll.Network: Fixed `HttpClientManager` using an inefficient string allocation as the dictionary key when pooling `HttpClient` instances.
+- SideScroll.Network: Fixed `HttpClientManager` passing the shared `HttpClientHandler` into the default client without `disposeHandler: false`, preventing a shared handler disposal crash.
+- SideScroll.Network: Fixed `HttpCall` completely failing on the first attempt when it receives a transient server error (e.g., 502, 503) instead of properly retrying, by checking `HttpUtils.IsTransient`.
+- SideScroll.Network: Fixed `HttpCache.LoadIndex` failing to truncate orphaned bytes from the data stream when a crash leaves an incomplete trailing entry, resolving a long-standing `todo`.
+- SideScroll.Network: Fixed `HttpCache.GetString` potentially throwing a `NullReferenceException` if the cache entry bytes could not be retrieved, now gracefully returning `null`.
 
 ### Changed
 - Updated Headless Tab Viewer to no longer update the Current Bookmark

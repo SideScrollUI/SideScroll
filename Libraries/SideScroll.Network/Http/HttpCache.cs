@@ -160,6 +160,7 @@ public class HttpCache : IDisposable
 		// Writes aren't atomic, so the last entry can be incomplete if the process was interrupted.
 		// Keep everything up to the last complete entry instead of failing to open the cache at all
 		long lastCompletePosition = _indexStream.Position;
+		long lastDataPosition = 0;
 		try
 		{
 			// PeekChar() decodes the next bytes as a character, which isn't what a length prefix is
@@ -176,6 +177,7 @@ public class HttpCache : IDisposable
 				_cache[entry.Uri] = entry;
 
 				lastCompletePosition = _indexStream.Position;
+				lastDataPosition = entry.Offset + entry.Size;
 			}
 		}
 		catch (Exception)
@@ -183,10 +185,19 @@ public class HttpCache : IDisposable
 			// Truncated or corrupt, keep the entries that already loaded
 		}
 
-		if (_writeable && lastCompletePosition < _indexStream.Length)
+		if (_writeable)
 		{
-			// Drop the partial entry, appending after it would orphan everything written later
-			_indexStream.SetLength(lastCompletePosition);
+			if (lastCompletePosition < _indexStream.Length)
+			{
+				// Drop the partial entry, appending after it would orphan everything written later
+				_indexStream.SetLength(lastCompletePosition);
+			}
+
+			if (lastDataPosition < _dataStream.Length)
+			{
+				// Drop any orphaned data that doesn't have a complete index entry
+				_dataStream.SetLength(lastDataPosition);
+			}
 		}
 	}
 
@@ -239,7 +250,7 @@ public class HttpCache : IDisposable
 				Downloaded = DateTime.Now,
 			};
 
-			// todo: seek to last entry instead since the last entry might be incomplete
+			// Seek to end; the file was truncated in LoadIndex if the last entry was incomplete
 			using (var dataWriter = new BinaryWriter(_dataStream, Encoding.Default, true))
 			{
 				dataWriter.Seek(0, SeekOrigin.End);
@@ -285,9 +296,11 @@ public class HttpCache : IDisposable
 	}
 
 	/// <summary>Returns the cached response for <paramref name="uri"/> decoded as text.</summary>
-	public string GetString(string uri)
+	public string? GetString(string uri)
 	{
-		byte[] bytes = GetBytes(uri)!;
+		byte[]? bytes = GetBytes(uri);
+		if (bytes == null) return null;
+
 		string text = HttpUtils.DecodeString(bytes);
 		return text;
 	}

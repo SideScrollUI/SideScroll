@@ -66,8 +66,8 @@ public class HttpCall(Call call)
 			{
 				getCall.Log.AddError("URI request " + request.RequestUri + " failed: " + exception.Message);
 
-				// Status codes won't change between attempts, rethrow so the caller sees which one
-				if (exception.StatusCode != null)
+				// Only rethrow if the error is permanent (e.g. 404), allow transient errors (e.g. 503) to retry
+				if (exception.StatusCode != null && !HttpUtils.IsTransient(exception.StatusCode))
 					throw;
 			}
 			catch (TaskCanceledException exception) // Timed out
