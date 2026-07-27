@@ -133,14 +133,13 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 			return indexItems
 				.Skip(PageSize * page)
 				.Take(PageSize)
-				.Select(item => DataRepo.LoadPath<T>(
+				.Select(item => DataRepoInstance.LoadDataItem(
 					call,
 					DataRepoInstance.DataRepo.GetDataPath(
 						DataRepoInstance.DataType,
 						DataRepoInstance.GroupId,
 						item.Key),
-					useJson: DataRepoInstance.DataRepo.UseJson,
-					key: item.Key))
+					item.Key))
 				.OfType<DataItem<T>>()
 				.ToList();
 		}
@@ -150,7 +149,7 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 		return _allPaths
 			.Skip(PageSize * page)
 			.Take(PageSize)
-			.Select(path => DataRepo.LoadPath<T>(call, path, useJson: DataRepoInstance.DataRepo.UseJson))
+			.Select(path => DataRepoInstance.LoadDataItem(call, path))
 			.OfType<DataItem<T>>()
 			.Select(dataItem => new DataItem<T>(dataItem.Key, dataItem.Value))
 			.ToList();

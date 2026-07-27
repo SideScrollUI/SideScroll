@@ -81,7 +81,7 @@ public class DataRepoIndexLocalStorage<T>(DataRepoInstance<T> dataRepoInstance, 
 	private bool DataExists(string key)
 	{
 		string dataPath = DataRepoInstance.DataRepo.GetDataPath(DataRepoInstance.DataType, GroupId, key);
-		return SerializerLocalStorage.ItemExists(SerializerLocalStorage.ConvertPathToStorageKey(dataPath));
+		return SerializerLocalStorage.PathExists(dataPath);
 	}
 
 	/// <summary>

@@ -1,4 +1,5 @@
 using System.Runtime.Versioning;
+using SideScroll.Serialize.Atlas;
 using SideScroll.Serialize.DataRepos;
 
 namespace SideScroll.Serialize.Browser;
@@ -39,10 +40,9 @@ public class DataRepoInstanceLocalStorage<T> : DataRepoInstance<T>
 		}
 
 		// Otherwise, scan localStorage keys
-		string keyPrefix = SerializerLocalStorage.ConvertPathToStorageKey(GroupPath);
 		var allKeys = SerializerLocalStorage.GetAllKeys();
 		var matchingKeys = allKeys
-			.Where(k => k.StartsWith(keyPrefix + '_'))
+			.Where(k => SerializerLocalStorage.IsDataKeyInGroup(k, GroupPath))
 			.ToList();
 
 		if (matchingKeys.Count == 0)
@@ -52,5 +52,33 @@ public class DataRepoInstanceLocalStorage<T> : DataRepoInstance<T>
 		var scannedPaths = matchingKeys.Select(SerializerLocalStorage.ConvertStorageKeyToPath);
 
 		return ascending ? scannedPaths : scannedPaths.Reverse();
+	}
+
+	/// <inheritdoc/>
+	public override DataItem<T>? LoadDataItem(Call call, string path, string? key = null)
+	{
+		var serializer = new SerializerLocalStorage(path, key ?? "");
+		if (!serializer.Exists) return null;
+
+		T? obj = serializer.Load<T>(call);
+		if (obj == null) return null;
+
+		string itemKey = key
+			?? serializer.LoadHeader(call).Name
+			?? SideScroll.Utilities.ObjectUtils.GetObjectId(obj)
+			?? obj.ToString()
+			?? "";
+		return new DataItem<T>(itemKey, obj, path);
+	}
+
+	/// <inheritdoc/>
+	public override List<SerializerHeader> LoadHeaders(Call? call = null)
+	{
+		call ??= new();
+		return SerializerLocalStorage.GetAllKeys()
+			.Where(key => SerializerLocalStorage.IsDataKeyInGroup(key, GroupPath))
+			.Select(SerializerLocalStorage.ConvertStorageKeyToPath)
+			.Select(path => new SerializerLocalStorage(path).LoadHeader(call))
+			.ToList();
 	}
 }

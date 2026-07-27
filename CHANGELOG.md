@@ -221,6 +221,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `DataRepo.LoadAll()` and `LoadHeaders()` looking for Atlas files when the repository uses JSON
 - Added JSON repository key headers and preserved index keys during bulk and paged loading
 - Added validation preventing negative `DataRepoIndex.MaxItems` retention limits from crashing pruning
+- Replaced lossy browser localStorage path keys with reversible encoded keys
+- Added browser repository key metadata so bulk loads preserve every saved key
+- Routed browser paging and index rebuilding through localStorage instead of filesystem serializers
 
 ### Changed
 - SideScroll.Serialize: Made the `name` parameter in `SerializerFile` and its subclasses (`SerializerFileAtlas`, `SerializerFileJson`) nullable, and updated the `Name` property to accurately support `null` names.

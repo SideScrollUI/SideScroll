@@ -1,6 +1,8 @@
 using System.Runtime.InteropServices.JavaScript;
 using System.Runtime.Versioning;
 using System.Text.Json;
+using SideScroll.Serialize.Atlas;
+using SideScroll.Serialize.DataRepos;
 using SideScroll.Serialize.Json;
 using SideScroll.Tasks;
 
@@ -14,6 +16,13 @@ namespace SideScroll.Serialize.Browser;
 public partial class SerializerLocalStorage : SerializerFile
 {
 	private const string StoragePrefix = "SideScroll_Data_";
+	private const string HeaderStoragePrefix = "SideScroll_Header_";
+
+	private sealed class StorageHeader
+	{
+		public int Version { get; set; } = 1;
+		public string? Name { get; set; }
+	}
 
 	/// <summary>
 	/// Gets the localStorage key for this serializer instance
@@ -65,6 +74,12 @@ public partial class SerializerLocalStorage : SerializerFile
 		{
 			string json = JsonSerializer.Serialize(obj, obj.GetType(), options);
 			bool success = SetLocalStorageItem(StorageKey, json);
+
+			if (success)
+			{
+				string headerJson = JsonSerializer.Serialize(new StorageHeader { Name = name });
+				success = SetLocalStorageItem(ConvertPathToHeaderStorageKey(BasePath), headerJson);
+			}
 
 			if (success)
 			{
@@ -132,6 +147,23 @@ public partial class SerializerLocalStorage : SerializerFile
 		}
 	}
 
+	/// <inheritdoc/>
+	public override SerializerHeader LoadHeader(Call call)
+	{
+		string? json = GetLocalStorageItem(ConvertPathToHeaderStorageKey(BasePath));
+		if (string.IsNullOrEmpty(json))
+		{
+			return new SerializerHeader { Name = Name };
+		}
+
+		StorageHeader? header = JsonSerializer.Deserialize<StorageHeader>(json);
+		return new SerializerHeader
+		{
+			Version = header?.Version is { } version ? checked((ushort)version) : null,
+			Name = header?.Name,
+		};
+	}
+
 	/// <summary>
 	/// Gets all localStorage keys with the SideScroll data prefix
 	/// </summary>
@@ -155,11 +187,14 @@ public partial class SerializerLocalStorage : SerializerFile
 	/// </summary>
 	public static string ConvertPathToStorageKey(string path)
 	{
-		string pathKey = path
-			.Replace('\\', '_')
-			.Replace('/', '_')
-			.Replace(":", "");
-		return StoragePrefix + pathKey;
+		string normalizedPath = path.Replace('\\', '/');
+		return StoragePrefix + Uri.EscapeDataString(normalizedPath);
+	}
+
+	private static string ConvertPathToHeaderStorageKey(string path)
+	{
+		string normalizedPath = path.Replace('\\', '/');
+		return HeaderStoragePrefix + Uri.EscapeDataString(normalizedPath);
 	}
 
 	/// <summary>
@@ -167,8 +202,27 @@ public partial class SerializerLocalStorage : SerializerFile
 	/// </summary>
 	public static string ConvertStorageKeyToPath(string storageKey)
 	{
-		return storageKey[StoragePrefix.Length..]
-			.Replace('_', '/');
+		string encodedPath = storageKey[StoragePrefix.Length..];
+		return Uri.UnescapeDataString(encodedPath);
+	}
+
+	/// <summary>Returns whether a storage key represents item data directly within the given logical group path.</summary>
+	public static bool IsDataKeyInGroup(string storageKey, string groupPath)
+	{
+		string normalizedGroup = groupPath.Replace('\\', '/').TrimEnd('/');
+		string path = ConvertStorageKeyToPath(storageKey).Replace('\\', '/');
+		if (!path.StartsWith(normalizedGroup + '/', StringComparison.Ordinal))
+			return false;
+
+		string relativePath = path[(normalizedGroup.Length + 1)..];
+		return !relativePath.Contains('/') &&
+			!relativePath.Equals(DataRepo.PrimaryIndexFileName, StringComparison.Ordinal);
+	}
+
+	/// <summary>Returns whether data exists at either the current or legacy key for a logical path.</summary>
+	public static bool PathExists(string path)
+	{
+		return ExistsInStorage(ConvertPathToStorageKey(path));
 	}
 
 	/// <summary>
@@ -206,6 +260,14 @@ public partial class SerializerLocalStorage : SerializerFile
 	public static void RemoveItem(string key)
 	{
 		RemoveLocalStorageItem(key);
+	}
+
+	/// <summary>Removes data and metadata stored for a logical path.</summary>
+	public static void RemovePath(string path)
+	{
+		string key = ConvertPathToStorageKey(path);
+		RemoveLocalStorageItem(key);
+		RemoveLocalStorageItem(ConvertPathToHeaderStorageKey(path));
 	}
 
 	// JavaScript interop methods - using globalThis.BrowserStorage

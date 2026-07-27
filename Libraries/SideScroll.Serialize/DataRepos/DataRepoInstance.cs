@@ -159,9 +159,15 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	/// <summary>
 	/// Loads all serializer headers for the items in this group
 	/// </summary>
-	public List<SerializerHeader> LoadHeaders(Call? call = null)
+	public virtual List<SerializerHeader> LoadHeaders(Call? call = null)
 	{
 		return DataRepo.LoadHeaders(typeof(T), GroupId, call);
+	}
+
+	/// <summary>Loads one repository item from its storage path.</summary>
+	public virtual DataItem<T>? LoadDataItem(Call call, string path, string? key = null)
+	{
+		return DataRepo.LoadPath<T>(call, path, useJson: DataRepo.UseJson, key: key);
 	}
 
 	/// <summary>
@@ -252,11 +258,10 @@ public class DataRepoInstance<T> : IDataRepoInstance
 			}
 
 			return indexItems
-				.Select(item => DataRepo.LoadPath<T>(
+				.Select(item => LoadDataItem(
 					call,
 					DataRepo.GetDataPath(DataType, GroupId, item.Key),
-					useJson: DataRepo.UseJson,
-					key: item.Key))
+					item.Key))
 				.OfType<DataItem<T>>();
 		}
 
@@ -264,7 +269,7 @@ public class DataRepoInstance<T> : IDataRepoInstance
 		if (pathIterator == null) return [];
 
 		return pathIterator
-			.Select(path => DataRepo.LoadPath<T>(call, path, useJson: DataRepo.UseJson))
+			.Select(path => LoadDataItem(call, path))
 			.OfType<DataItem<T>>()
 			.Select(dataItem => new DataItem<T>(dataItem.Key, dataItem.Value));
 	}

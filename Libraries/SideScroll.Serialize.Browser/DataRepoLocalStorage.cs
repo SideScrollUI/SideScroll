@@ -77,12 +77,9 @@ public class DataRepoLocalStorage(string repoPath, string? repoName = null)
 
 		// Get the group path pattern to match localStorage keys
 		string groupPath = GetGroupPath(typeof(T), groupId);
-		string keyPrefix = SerializerLocalStorage.ConvertPathToStorageKey(groupPath);
-
-		// Get all localStorage keys that start with this prefix
 		var allKeys = SerializerLocalStorage.GetAllKeys();
 		var matchingKeys = allKeys
-			.Where(k => k.StartsWith(keyPrefix + '_'))
+			.Where(k => SerializerLocalStorage.IsDataKeyInGroup(k, groupPath))
 			.ToList();
 
 		foreach (string storageKey in matchingKeys)
@@ -99,7 +96,10 @@ public class DataRepoLocalStorage(string repoPath, string? repoName = null)
 				T? obj = serializerFile.Load<T>(call, lazy);
 				if (obj == null) continue;
 
-				string name = serializerFile.Name;
+				string name = serializerFile.LoadHeader(call).Name
+					?? SideScroll.Utilities.ObjectUtils.GetObjectId(obj)
+					?? obj.ToString()
+					?? "";
 				entries.Add(name, obj);
 			}
 			catch (Exception e)
@@ -120,18 +120,16 @@ public class DataRepoLocalStorage(string repoPath, string? repoName = null)
 		groupId ??= DefaultGroupId;
 
 		string dataPath = GetDataPath(type, groupId, key);
-		string storageKey = SerializerLocalStorage.ConvertPathToStorageKey(dataPath);
-
 		try
 		{
-			SerializerLocalStorage.RemoveItem(storageKey);
-			call.Log.Add("Deleted from localStorage", new Tag("Key", storageKey));
+			SerializerLocalStorage.RemovePath(dataPath);
+			call.Log.Add("Deleted from localStorage", new Tag("Path", dataPath));
 		}
 		catch (Exception e)
 		{
 			call.Log.Add(e,
 				new Tag("Type", type),
-				new Tag("Key", storageKey));
+				new Tag("Path", dataPath));
 		}
 	}
 
@@ -144,12 +142,9 @@ public class DataRepoLocalStorage(string repoPath, string? repoName = null)
 		groupId ??= DefaultGroupId;
 
 		string groupPath = GetGroupPath(type, groupId);
-		string keyPrefix = SerializerLocalStorage.ConvertPathToStorageKey(groupPath);
-
-		// Get all localStorage keys that start with this prefix
 		var allKeys = SerializerLocalStorage.GetAllKeys();
 		var matchingKeys = allKeys
-			.Where(k => k.StartsWith(keyPrefix + '_'))
+			.Where(k => SerializerLocalStorage.IsDataKeyInGroup(k, groupPath))
 			.ToList();
 
 		using CallTimer callTimer = call.Timer("Deleting items from localStorage",
@@ -161,7 +156,8 @@ public class DataRepoLocalStorage(string repoPath, string? repoName = null)
 		{
 			try
 			{
-				SerializerLocalStorage.RemoveItem(storageKey);
+				SerializerLocalStorage.RemovePath(
+					SerializerLocalStorage.ConvertStorageKeyToPath(storageKey));
 			}
 			catch (Exception e)
 			{

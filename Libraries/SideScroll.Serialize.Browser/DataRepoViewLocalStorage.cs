@@ -1,4 +1,5 @@
 using System.Runtime.Versioning;
+using SideScroll.Serialize.Atlas;
 using SideScroll.Serialize.DataRepos;
 
 namespace SideScroll.Serialize.Browser;
@@ -39,10 +40,9 @@ public class DataRepoViewLocalStorage<T> : DataRepoView<T>
 		}
 
 		// Fallback: scan localStorage keys for unindexed views
-		string keyPrefix = SerializerLocalStorage.ConvertPathToStorageKey(GroupPath);
 		var allKeys = SerializerLocalStorage.GetAllKeys();
 		var matchingKeys = allKeys
-			.Where(k => k.StartsWith(keyPrefix + "_"))
+			.Where(k => SerializerLocalStorage.IsDataKeyInGroup(k, GroupPath))
 			.ToList();
 
 		if (matchingKeys.Count == 0)
@@ -69,15 +69,8 @@ public class DataRepoViewLocalStorage<T> : DataRepoView<T>
 		{
 			try
 			{
-				var serializer = new SerializerLocalStorage(path);
-				if (!serializer.Exists)
-					continue;
-
-				T? obj = serializer.Load<T>(call, lazy: false);
-				if (obj == null) continue;
-
-				string key = SideScroll.Utilities.ObjectUtils.GetObjectId(obj) ?? serializer.Name;
-				items.Add(new DataItem<T>(key, obj, path));
+				DataItem<T>? item = LoadDataItem(call, path);
+				if (item != null) items.Add(item);
 			}
 			catch (Exception e)
 			{
@@ -86,5 +79,33 @@ public class DataRepoViewLocalStorage<T> : DataRepoView<T>
 		}
 
 		return items;
+	}
+
+	/// <inheritdoc/>
+	public override DataItem<T>? LoadDataItem(Call call, string path, string? key = null)
+	{
+		var serializer = new SerializerLocalStorage(path, key ?? "");
+		if (!serializer.Exists) return null;
+
+		T? obj = serializer.Load<T>(call);
+		if (obj == null) return null;
+
+		string itemKey = key
+			?? serializer.LoadHeader(call).Name
+			?? SideScroll.Utilities.ObjectUtils.GetObjectId(obj)
+			?? obj.ToString()
+			?? "";
+		return new DataItem<T>(itemKey, obj, path);
+	}
+
+	/// <inheritdoc/>
+	public override List<SerializerHeader> LoadHeaders(Call? call = null)
+	{
+		call ??= new();
+		return SerializerLocalStorage.GetAllKeys()
+			.Where(key => SerializerLocalStorage.IsDataKeyInGroup(key, GroupPath))
+			.Select(SerializerLocalStorage.ConvertStorageKeyToPath)
+			.Select(path => new SerializerLocalStorage(path).LoadHeader(call))
+			.ToList();
 	}
 }
