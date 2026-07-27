@@ -243,6 +243,23 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	/// </summary>
 	public virtual IEnumerable<DataItem<T>> LoadAllDataItems(Call call, bool ascending = true)
 	{
+		if (Index != null)
+		{
+			IEnumerable<DataRepoIndex<T>.Item> indexItems = Index.Load(call).Items;
+			if (!ascending)
+			{
+				indexItems = indexItems.Reverse();
+			}
+
+			return indexItems
+				.Select(item => DataRepo.LoadPath<T>(
+					call,
+					DataRepo.GetDataPath(DataType, GroupId, item.Key),
+					useJson: DataRepo.UseJson,
+					key: item.Key))
+				.OfType<DataItem<T>>();
+		}
+
 		var pathIterator = GetPathEnumerable(call, ascending);
 		if (pathIterator == null) return [];
 

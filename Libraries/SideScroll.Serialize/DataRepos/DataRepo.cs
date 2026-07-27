@@ -2,6 +2,7 @@ using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Serialize.Atlas;
 using SideScroll.Serialize.Json;
+using SideScroll.Utilities;
 using System.Diagnostics;
 
 namespace SideScroll.Serialize.DataRepos;
@@ -281,7 +282,7 @@ public class DataRepo
 	/// <summary>
 	/// Loads a data item from the specified file path
 	/// </summary>
-	public static DataItem<T>? LoadPath<T>(Call? call, string path, bool lazy = false, bool useJson = false)
+	public static DataItem<T>? LoadPath<T>(Call? call, string path, bool lazy = false, bool useJson = false, string? key = null)
 	{
 		call ??= new();
 
@@ -291,10 +292,10 @@ public class DataRepo
 			T? obj = serializerFile.Load<T>(call, lazy);
 			if (obj != null)
 			{
-				// Get name from header (Atlas) or use path directory name (JSON)
-				string name = useJson
-					? obj.ToString() ?? ""
-					: serializerFile.LoadHeader(call).Name ?? "";
+				string? savedName = key ?? serializerFile.LoadHeader(call).Name;
+				string name = !string.IsNullOrEmpty(savedName)
+					? savedName
+					: ObjectUtils.GetObjectId(obj) ?? obj.ToString() ?? "";
 				return new DataItem<T>(name, obj);
 			}
 		}
@@ -316,13 +317,17 @@ public class DataRepo
 		{
 			foreach (string filePath in Directory.EnumerateDirectories(groupPath))
 			{
-				var serializerFile = SerializerFile.Create(filePath);
+				var serializerFile = SerializerFile.Create(filePath, useJson: UseJson);
 				if (!serializerFile.Exists) continue;
 
 				T? obj = serializerFile.Load<T>(call, lazy);
 				if (obj != null)
 				{
-					entries.Add(serializerFile.LoadHeader(call).Name ?? "", obj);
+					string? savedName = serializerFile.LoadHeader(call).Name;
+					string key = !string.IsNullOrEmpty(savedName)
+						? savedName
+						: ObjectUtils.GetObjectId(obj) ?? obj.ToString() ?? "";
+					entries.Add(key, obj);
 				}
 			}
 		}
@@ -344,10 +349,15 @@ public class DataRepo
 		{
 			foreach (string filePath in Directory.EnumerateDirectories(groupPath))
 			{
-				var serializerFile = SerializerFile.Create(filePath);
+				var serializerFile = SerializerFile.Create(filePath, useJson: UseJson);
 				if (!serializerFile.Exists) continue;
 
 				SerializerHeader header = serializerFile.LoadHeader(call);
+				if (UseJson && string.IsNullOrEmpty(header.Name))
+				{
+					object? obj = serializerFile.Load(call, expectedType: type);
+					header.Name = ObjectUtils.GetObjectId(obj) ?? obj?.ToString();
+				}
 				headers.Add(header);
 			}
 		}

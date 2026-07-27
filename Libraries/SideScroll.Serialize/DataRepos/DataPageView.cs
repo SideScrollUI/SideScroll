@@ -119,10 +119,34 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 	/// </summary>
 	public List<DataItem<T>> GetPage(int page, Call? call = null)
 	{
-		_allPaths ??= GetPathEnumerable(call ?? new())?.ToList();
+		call ??= new();
+		_allPaths ??= GetPathEnumerable(call)?.ToList();
+
+		if (DataRepoInstance.Index != null)
+		{
+			IEnumerable<DataRepoIndex<T>.Item> indexItems = DataRepoInstance.Index.Load(call).Items;
+			if (!Ascending)
+			{
+				indexItems = indexItems.Reverse();
+			}
+
+			return indexItems
+				.Skip(PageSize * page)
+				.Take(PageSize)
+				.Select(item => DataRepo.LoadPath<T>(
+					call,
+					DataRepoInstance.DataRepo.GetDataPath(
+						DataRepoInstance.DataType,
+						DataRepoInstance.GroupId,
+						item.Key),
+					useJson: DataRepoInstance.DataRepo.UseJson,
+					key: item.Key))
+				.OfType<DataItem<T>>()
+				.ToList();
+		}
+
 		if (_allPaths == null) return [];
 
-		call ??= new();
 		return _allPaths
 			.Skip(PageSize * page)
 			.Take(PageSize)

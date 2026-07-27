@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using SideScroll.Serialize.Atlas;
 using SideScroll.Serialize.DataRepos;
+using SideScroll.Serialize.Json;
 
 namespace SideScroll.Serialize.Tests;
 
@@ -137,6 +138,57 @@ public class DataRepoTests : SerializeBaseTest
 		jsonRepo.CleanupCache(Call, TimeSpan.FromDays(1));
 
 		Assert.That(jsonRepo.Load<int>("item", Call), Is.EqualTo(5));
+	}
+
+	[Test, Description("JSON DataRepo bulk loading preserves saved keys and headers")]
+	public void JsonDataRepoLoadAllPreservesKeys()
+	{
+		const string groupId = "JsonLoadAll";
+		var jsonRepo = new DataRepo(Path.Combine(TestPath, groupId), "Test", useJson: true);
+		jsonRepo.DeleteRepo();
+		jsonRepo.Save(groupId, "saved-key", 5, Call);
+
+		DataItemCollection<int> items = jsonRepo.LoadAll<int>(Call, groupId);
+		List<SerializerHeader> headers = jsonRepo.LoadHeaders(typeof(int), groupId, Call);
+
+		Assert.That(items, Has.Count.EqualTo(1));
+		Assert.That(items[0].Key, Is.EqualTo("saved-key"));
+		Assert.That(items[0].Value, Is.EqualTo(5));
+		Assert.That(headers.Select(header => header.Name), Is.EqualTo(new[] { "saved-key" }));
+
+		string itemPath = jsonRepo.GetDataPath(typeof(int), groupId, "saved-key");
+		string headerJson = File.ReadAllText(Path.Combine(itemPath, SerializerFileJson.HeaderFileName));
+		Assert.That(headerJson, Does.Contain("\"Version\":1"));
+		Assert.That(headerJson, Does.Contain("\"Name\":\"saved-key\""));
+	}
+
+	[Test, Description("Indexed JSON bulk and page loading use the persisted index keys")]
+	public void IndexedJsonDataRepoPreservesKeys()
+	{
+		const string groupId = "JsonIndexedKeys";
+		var jsonRepo = new DataRepo(Path.Combine(TestPath, groupId), "Test", useJson: true);
+		jsonRepo.DeleteRepo();
+		DataRepoInstance<int> instance = jsonRepo.Open<int>(groupId, indexed: true);
+		instance.Save(Call, "first-key", 5);
+		instance.Save(Call, "second-key", 5);
+
+		DataItemCollection<int> items = instance.LoadAll(Call);
+		DataPageView<int> page = instance.LoadPageView(Call);
+		List<DataItem<int>> pageItems = page.Next(Call);
+
+		Assert.That(items.Keys, Is.EqualTo(new[] { "first-key", "second-key" }));
+		Assert.That(pageItems.Select(item => item.Key), Is.EqualTo(new[] { "first-key", "second-key" }));
+	}
+
+	[Test, Description("DataRepo indices reject negative retention limits")]
+	public void DataRepoIndexRejectsNegativeMaxItems()
+	{
+		DataRepoInstance<int> instance = OpenRepo();
+
+		Assert.Throws<ArgumentOutOfRangeException>(() => new DataRepoIndex<int>(instance, -1));
+
+		var index = new DataRepoIndex<int>(instance);
+		Assert.Throws<ArgumentOutOfRangeException>(() => index.MaxItems = -1);
 	}
 
 	[Test, Description("Items deleted by CleanupCache are pruned from the index on load")]

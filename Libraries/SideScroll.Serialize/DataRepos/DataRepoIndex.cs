@@ -21,7 +21,22 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 	/// <summary>
 	/// Gets or sets the maximum number of items to retain in the index
 	/// </summary>
-	public int? MaxItems { get; set; } = maxItems;
+	public int? MaxItems
+	{
+		get => _maxItems;
+		set
+		{
+			ArgumentOutOfRangeException.ThrowIfNegative(value ?? 0);
+			_maxItems = value;
+		}
+	}
+	private int? _maxItems = ValidateMaxItems(maxItems);
+
+	private static int? ValidateMaxItems(int? value)
+	{
+		ArgumentOutOfRangeException.ThrowIfNegative(value ?? 0);
+		return value;
+	}
 
 	/// <summary>
 	/// Gets the group identifier
