@@ -50,7 +50,7 @@ public enum TextType
 /// A read-only or editable syntax-highlighted text editor supporting JSON and XML highlighting,
 /// monospace font, line numbers, and optional property data binding.
 /// </summary>
-public class TabAvaloniaEdit : Border
+public class TabAvaloniaEdit : Border, IDisposable
 {
 	/// <summary>The maximum file size in bytes that is loaded automatically without truncation.</summary>
 	public const int MaxAutoLoadSize = 1_000_000;
@@ -263,6 +263,7 @@ public class TabAvaloniaEdit : Border
 
 		if (ListProperty != null)
 		{
+			// Unsubscribed in Dispose(), the bound object holds the ListProperty which holds this editor
 			ListProperty.PropertyChanged += ListProperty_PropertyChanged;
 		}
 
@@ -289,5 +290,22 @@ public class TabAvaloniaEdit : Border
 		{
 			TextEditor.Text = value;
 		}
+	}
+
+	/// <summary>
+	/// Releases the subscription to the bound property's changes
+	/// </summary>
+	/// <remarks>
+	/// The bound object holds the ListProperty, which holds this editor, so the event would
+	/// otherwise keep it alive. TabSplitGrid disposes controls when clearing them
+	/// </remarks>
+	public void Dispose()
+	{
+		if (ListProperty != null)
+		{
+			ListProperty.PropertyChanged -= ListProperty_PropertyChanged;
+		}
+
+		GC.SuppressFinalize(this);
 	}
 }

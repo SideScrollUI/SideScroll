@@ -196,6 +196,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `LogWriterText` now accepts filenames without a directory component
 - Significant-figure rounding now rejects zero and negative precision
 - Empty `ViewHttpResponse` instances now expose an empty body instead of throwing
+- Fixed `TabAvaloniaEdit`, `TabColorPicker`, `TabFormattedComboBox`, and `TabForm` keeping themselves alive after being cleared. Each subscribes to change notifications on the object it's bound to, and the bound object outlives the control, so the subscription held the control and its whole visual subtree. They're `IDisposable` now, which the existing `TabSplitGrid` and `TabControlToolbar` cleanup already calls. Reloading a `TabForm` also releases the controls it replaces
 - Fixed Atlas serialization failing for every type with a custom constructor in Turkish locales. Constructor parameters were matched to their members by lowercasing both with the culture-sensitive `ToLower()`, and `tr-TR` turns a member named `Id` into `ıd` while the parameter `id` stays `id`, so they never matched. Matching is ordinal now
 - Fixed CSV exports not quoting or escaping the header row, so a column name containing a comma or a quote shifted every column after it
 - Fixed `string.CamelCased()` using culture-sensitive casing, which turned a leading `i` into `İ` in Turkish locales

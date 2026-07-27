@@ -4,6 +4,7 @@ using SideScroll.Avalonia.Controls;
 using SideScroll.Tabs.Lists;
 using System.Collections;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace SideScroll.Avalonia.Tests;
 
@@ -138,5 +139,40 @@ public class TabFormattedComboBoxTests
 
 		Assert.That(property.IsEditable, Is.False);
 		Assert.That(comboBox.IsEnabled, Is.False);
+	}
+
+	// ─── Lifetime ────────────────────────────────────────────────────────
+
+	// Kept out of the test method so the combo box has no local still referencing it
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private static WeakReference CreateAndRelease(TestItem testItem, bool dispose)
+	{
+		TabFormattedComboBox comboBox = CreateComboBox(testItem, new List<string> { "A", "B" });
+		if (dispose)
+		{
+			comboBox.Dispose();
+		}
+		return new WeakReference(comboBox);
+	}
+
+	[TestCase(true, false, TestName = "Disposed combo box is collected")]
+	[TestCase(false, true, TestName = "Undisposed combo box is held by the bound object")]
+	[NUnit.Framework.Description(
+		"The bound object's PropertyChanged holds the combo box, so it outlives the control until " +
+		"Dispose() unsubscribes. The undisposed case proves the collection check can actually fail")]
+	public void DisposeReleasesBoundObject(bool dispose, bool expectedAlive)
+	{
+		var testItem = new TestItem { Text = "A" };
+
+		WeakReference reference = CreateAndRelease(testItem, dispose);
+
+		GC.Collect();
+		GC.WaitForPendingFinalizers();
+		GC.Collect();
+
+		Assert.That(reference.IsAlive, Is.EqualTo(expectedAlive));
+
+		// The bound object has to stay reachable, it's what would be holding the combo box
+		GC.KeepAlive(testItem);
 	}
 }
