@@ -34,6 +34,7 @@ public class TabFormattedComboBox : ComboBox
 	public TabFormattedComboBox(ListProperty property, IList list)
 	{
 		Property = property;
+		IsEnabled = property.IsEditable;
 		Items = list;
 
 		InitializeComponent();

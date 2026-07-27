@@ -2,6 +2,7 @@ using NUnit.Framework;
 using SideScroll.Serialize.Atlas.Schema;
 using SideScroll.Attributes;
 using SideScroll.Serialize.Atlas;
+using System.Globalization;
 
 namespace SideScroll.Serialize.Tests;
 
@@ -282,5 +283,53 @@ public class SerializeClassConstructorTests : SerializeBaseTest
 
 		// Declaring one means read only members have to come from it, like Avalonia's Color
 		Assert.That(TypeSchema.TypeHasEmptyConstructor(typeof(StructWithParamConstructor)), Is.False);
+	}
+
+	// ─── Culture ─────────────────────────────────────────────────────────
+
+	// "Id" is the discriminator: tr-TR lowercases 'I' to the dotless 'ı', so a ToLower() based
+	// match turns the member into "ıd" while the parameter "id" stays "id". "Title" still matches
+	// either way, since a lowercase 'i' is unchanged
+	public record ItemWithId
+	{
+		public int Id { get; } = 0;
+		public string Title { get; } = "";
+
+		public ItemWithId(int id, string title)
+		{
+			Id = id;
+			Title = title;
+		}
+	}
+
+	[Test, SetCulture("tr-TR"), Description(
+		"Constructor parameters match their members by ordinal case, not by the current culture's casing")]
+	public void CustomConstructorMatchesMembersInTurkishCulture()
+	{
+		Assert.That(TypeSchema.TypeGetCustomConstructor(typeof(ItemWithId)), Is.Not.Null,
+			"The (id, title) constructor has to match the Id and Title members.");
+	}
+
+	[TestCase("en-US")]
+	[TestCase("tr-TR")]
+	[Description("The round trip gives the same result in a culture with a dotless lowercase i")]
+	public void SerializeCustomConstructorIsCultureInvariant(string culture)
+	{
+		CultureInfo previous = CultureInfo.CurrentCulture;
+		CultureInfo.CurrentCulture = new CultureInfo(culture);
+		try
+		{
+			var input = new ItemWithId(5, "Test");
+
+			_serializer.Save(Call, input);
+			var output = _serializer.Load<ItemWithId>(Call);
+
+			Assert.That(output.Id, Is.EqualTo(5), "Id is only restored if its constructor parameter matched.");
+			Assert.That(output.Title, Is.EqualTo("Test"));
+		}
+		finally
+		{
+			CultureInfo.CurrentCulture = previous;
+		}
 	}
 }

@@ -220,7 +220,7 @@ public class TabAvaloniaEdit : Border
 				Text = json;
 				TextType = TextType.Json;
 			}
-			else if (XmlUtils.TryFormat(text, out string? formatted) || text.StartsWith("<?xml"))
+			else if (XmlUtils.TryFormat(text, out string? formatted) || text.StartsWith("<?xml", StringComparison.Ordinal))
 			{
 				Text = formatted ?? text;
 				TextType = TextType.Xml;

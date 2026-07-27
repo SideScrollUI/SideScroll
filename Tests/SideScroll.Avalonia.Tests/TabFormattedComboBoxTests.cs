@@ -25,6 +25,11 @@ public class TabFormattedComboBoxTests
 		}
 	}
 
+	private class ReadOnlyTestItem
+	{
+		public string Text => "A";
+	}
+
 	private static TabFormattedComboBox CreateComboBox(TestItem testItem, IList list)
 	{
 		var property = new ListProperty(testItem, nameof(TestItem.Text));
@@ -121,5 +126,17 @@ public class TabFormattedComboBoxTests
 
 		Assert.That(((ComboBox)comboBox).SelectedItem, Is.Null);
 		Assert.That(comboBox.SelectedItem, Is.Null);
+	}
+
+	[Test]
+	public void FixedListDisablesEditingForReadOnlyProperty()
+	{
+		var testItem = new ReadOnlyTestItem();
+		var property = new ListProperty(testItem, nameof(ReadOnlyTestItem.Text));
+
+		var comboBox = new TabFormattedComboBox(property, new List<string> { "A", "B" });
+
+		Assert.That(property.IsEditable, Is.False);
+		Assert.That(comboBox.IsEnabled, Is.False);
 	}
 }

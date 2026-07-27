@@ -1,4 +1,4 @@
-using SideScroll.Attributes;
+﻿using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Logs;
 using System.Collections;
@@ -350,15 +350,17 @@ public class TypeSchema
 	{
 		if (HasEmptyConstructor || Type == null) return null;
 
+		// Ordinal so a member matches its constructor parameter regardless of case, without
+		// ToLower() mangling them in cultures where 'I' doesn't lowercase to 'i' (tr-TR turns
+		// "Id" into "ıd" while the parameter "id" stays "id", so they'd never match)
 		var members = ReadOnlyPropertySchemas
 			.Where(p => p.IsReadable)
-			.Select(p => p.Name.ToLower())
-			.ToHashSet();
+			.Select(p => p.Name)
+			.ToHashSet(StringComparer.OrdinalIgnoreCase);
 
 		var fieldMembers = FieldSchemas
 			.Where(f => f.IsReadable)
-			.Select(f => f.Name.ToLower())
-			.ToHashSet();
+			.Select(f => f.Name);
 
 		foreach (var member in fieldMembers)
 		{
@@ -372,7 +374,7 @@ public class TypeSchema
 		{
 			ParameterInfo[] parameters = constructor.GetParameters();
 			// Skip optional parameters (with default values) when checking for matching constructor
-			if (parameters.All(p => p.HasDefaultValue || members.Contains(p.Name?.ToLower() ?? "- invalid -")))
+			if (parameters.All(p => p.HasDefaultValue || members.Contains(p.Name ?? "- invalid -")))
 			{
 				return constructor;
 			}
@@ -389,7 +391,9 @@ public class TypeSchema
 
 		foreach (var param in CustomConstructor.GetParameters())
 		{
-			var prop = ReadOnlyPropertySchemas.FirstOrDefault(p => p.Name.Equals(param.Name, StringComparison.CurrentCultureIgnoreCase));
+			// Ordinal, tr-TR treats 'I' and 'i' as different letters so a culture aware compare
+			// wouldn't match a property named "Id" to its "id" parameter
+			var prop = ReadOnlyPropertySchemas.FirstOrDefault(p => p.Name.Equals(param.Name, StringComparison.OrdinalIgnoreCase));
 			if (prop != null)
 			{
 				prop.IsRequired = true;

@@ -41,6 +41,10 @@ public class MemoryTypeCache<T> : IDisposable
 			throw new ArgumentOutOfRangeException(nameof(cacheDuration), "Cache duration must be positive.");
 
 		MaxItems = maxItems ?? DefaultMaxItems;
+
+		// A SizeLimit of 0 isn't rejected by MemoryCache, it just makes every Set() exceed the limit
+		// so nothing is ever cached and every lookup silently misses
+		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(MaxItems, nameof(maxItems));
 		CacheDuration = cacheDuration;
 
 		MemoryCacheOptions options = new()

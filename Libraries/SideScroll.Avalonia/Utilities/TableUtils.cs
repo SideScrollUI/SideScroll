@@ -1,4 +1,4 @@
-using Avalonia.Media;
+﻿using Avalonia.Media;
 using SideScroll.Extensions;
 using System.Collections;
 using System.Text;
@@ -36,13 +36,53 @@ public static class TableUtils
 	/// </summary>
 	public static string TableToString(List<ColumnInfo> columns, List<List<string>> contentRows, int? maxColumnWidth = null)
 	{
+		int effectiveMaxColumnWidth = maxColumnWidth ?? MaxColumnWidth;
+		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(effectiveMaxColumnWidth);
+
 		List<int> columnNameWidths = columns
 			.Select(c => c.Name.Length)
 			.ToList();
 
-		List<List<string>> cellValues = GetCellValues(contentRows, maxColumnWidth ?? MaxColumnWidth, columnNameWidths);
+		List<List<string>> cellValues = GetCellValues(contentRows, effectiveMaxColumnWidth, columnNameWidths);
 
 		return TableValuesToString(columns, columnNameWidths, cellValues);
+	}
+
+	/// <summary>
+	/// Converts table data to CSV, quoting and escaping the header row and every cell
+	/// </summary>
+	public static string TableToCsv(List<ColumnInfo> columns, List<List<string>> contentRows)
+	{
+		StringBuilder stringBuilder = new();
+
+		AppendCsvRow(stringBuilder, columns.Select(c => c.Name));
+
+		foreach (List<string> row in contentRows)
+		{
+			AppendCsvRow(stringBuilder, row);
+		}
+
+		return stringBuilder.ToString();
+	}
+
+	private static void AppendCsvRow(StringBuilder stringBuilder, IEnumerable<string?> values)
+	{
+		bool addComma = false;
+		foreach (string? value in values)
+		{
+			if (addComma)
+			{
+				stringBuilder.Append(',');
+			}
+			addComma = true;
+
+			// Quote every value and double any quote inside it. Headers used to be written raw, so a
+			// column name containing a comma split it into two columns for every reader of the file
+			stringBuilder.Append('"');
+			stringBuilder.Append((value ?? "").Replace("\"", "\"\""));
+			stringBuilder.Append('"');
+		}
+		stringBuilder.Append('\n');
 	}
 
 	private static List<List<string>> GetCellValues(List<List<string>> contentRows, int maxColumnWidth, List<int> columnNameWidths)

@@ -122,9 +122,10 @@ public static class ProcessUtils
 				folder = folder.Replace('/', '\\');
 
 				string argument = '"' + folder + '"';
-				if (selection != null)
+				if (selection != null && !Path.IsPathRooted(selection))
 				{
-					// Ignore bad selections
+					// Ignore bad selections. Path.Combine() discards the folder when the selection is
+					// rooted, which would select a file somewhere else entirely
 					string fullPath = Path.Combine(folder, selection);
 					if (File.Exists(fullPath))
 					{
@@ -210,7 +211,7 @@ public static class ProcessUtils
 		};
 
 		List<DotnetRuntimeInfo> runtimes = [];
-		Process process = Process.Start(processStartInfo)!;
+		using Process process = Process.Start(processStartInfo)!;
 		while (!process.StandardOutput.EndOfStream)
 		{
 			string? line = process.StandardOutput.ReadLine();

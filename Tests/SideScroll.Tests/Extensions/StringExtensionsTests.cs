@@ -21,6 +21,15 @@ public class StringExtensionsTests : BaseTest
 		Assert.That("HELLO world".CamelCased(), Is.EqualTo("Hello world"));
 	}
 
+	[Test, SetCulture("tr-TR"), Description(
+		"Casing is invariant, tr-TR uppercases 'i' to 'İ' (U+0130) and lowercases 'I' to 'ı' (U+0131)")]
+	public void CamelCasedIsCultureInvariant()
+	{
+		Assert.That("item".CamelCased(), Is.EqualTo("Item"), "Would be 'İtem' with culture casing.");
+		Assert.That("ITEM".CamelCased(), Is.EqualTo("Item"), "Would be 'Item' via the dotless 'ı'.");
+		Assert.That("Windows".CamelCased(), Is.EqualTo("Windows"));
+	}
+
 	[Test]
 	public void Range_MaximumEnd_ReturnsThroughEndOfString()
 	{

@@ -29,6 +29,21 @@ public class DataRepoTests : SerializeBaseTest
 		return instance;
 	}
 
+	[Test]
+	public void DataItemCollectionEnumerableConstructorPopulatesLookup()
+	{
+		var items = new DataItemCollection<int>(
+		[
+			new("b", 2),
+			new("a", 1),
+		]);
+
+		Assert.That(items.ContainsKey("a"), Is.True);
+		Assert.That(items.TryGetValue("b", out int value), Is.True);
+		Assert.That(value, Is.EqualTo(2));
+		Assert.That(items.SortedValues, Is.EqualTo(new[] { 1, 2 }));
+	}
+
 	[Test, Description("DataRepo int Save Load")]
 	public void DataRepoSaveLoadInt()
 	{

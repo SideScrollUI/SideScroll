@@ -342,13 +342,16 @@ public class TypeRepoObject : TypeRepo
 	{
 		if (TypeSchema.CustomConstructor == null) return;
 
-		var fields = FieldRepos.ToDictionary(f => f.FieldSchema.Name.ToLower());
-		var properties = PropertyRepos.ToDictionary(f => f.PropertySchema.Name.ToLower());
+		// Ordinal so a member matches its constructor parameter regardless of case, without
+		// ToLower() mangling them in cultures where 'I' doesn't lowercase to 'i' (tr-TR turns
+		// "Id" into "ıd" while the parameter "id" stays "id", so they'd never match)
+		var fields = FieldRepos.ToDictionary(f => f.FieldSchema.Name, StringComparer.OrdinalIgnoreCase);
+		var properties = PropertyRepos.ToDictionary(f => f.PropertySchema.Name, StringComparer.OrdinalIgnoreCase);
 
 		var parameters = TypeSchema.CustomConstructor.GetParameters();
 		foreach (var param in parameters)
 		{
-			string name = param.Name!.ToLower();
+			string name = param.Name!;
 			if (fields.TryGetValue(name, out var field))
 			{
 				_constructorParams.Add(field);

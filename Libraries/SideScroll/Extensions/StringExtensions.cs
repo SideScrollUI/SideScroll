@@ -1,4 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -109,8 +109,9 @@ public static class StringExtensions
 		if (text.Length == 0)
 			return text;
 
-		string lowerCased = text.ToLower();
-		string camelCased = char.ToUpper(lowerCased[0]) + lowerCased[1..];
+		// Invariant, tr-TR would uppercase a leading 'i' to 'İ' and lowercase 'I' to 'ı'
+		string lowerCased = text.ToLowerInvariant();
+		string camelCased = char.ToUpperInvariant(lowerCased[0]) + lowerCased[1..];
 		return camelCased;
 	}
 

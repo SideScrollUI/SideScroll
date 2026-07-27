@@ -19,7 +19,7 @@ namespace SideScroll.Avalonia.Controls.ScreenCapture;
 /// An interactive screen capture control that renders a faded snapshot of a control and allows the user
 /// to select a region by dragging, then copy or save the selection.
 /// </summary>
-public class ScreenCapture : Grid
+public class ScreenCapture : Grid, IDisposable
 {
 	/// <summary>Gets or sets the minimum pixel dimension (width or height) required before a selection can be copied.</summary>
 	public static int MinClipboardSize { get; set; } = 10;
@@ -41,6 +41,7 @@ public class ScreenCapture : Grid
 	public TabViewer TabViewer { get; }
 
 	private string? _lastSavePath;
+	private bool _disposed;
 
 	/// <summary>
 	/// A <see cref="ITabViewerPlugin"/> that registers the screen capture snapshot button on the tab viewer toolbar.
@@ -151,7 +152,7 @@ public class ScreenCapture : Grid
 
 	private async Task SaveAsync(Call call)
 	{
-		RenderTargetBitmap? bitmap = GetSelectedBitmap();
+		using RenderTargetBitmap? bitmap = GetSelectedBitmap();
 		if (bitmap == null) return;
 
 		Window? window = GetWindow(this);
@@ -185,6 +186,7 @@ public class ScreenCapture : Grid
 
 	private void Close(Call call)
 	{
+		Dispose();
 		TabViewer.ClearContent();
 	}
 
@@ -278,7 +280,9 @@ public class ScreenCapture : Grid
 	private void UpdateSelectionImage()
 	{
 		Size sourceSize = _originalBitmap!.Size;
-		_selectionBitmap = new RenderTargetBitmap(new PixelSize((int)sourceSize.Width, (int)sourceSize.Height), new Vector(96, 96));
+		var selectionBitmap = new RenderTargetBitmap(
+			new PixelSize((int)sourceSize.Width, (int)sourceSize.Height),
+			new Vector(96, 96));
 
 		var borderRect = new Rect(
 			new Point(
@@ -288,12 +292,45 @@ public class ScreenCapture : Grid
 
 		var outerPen = new Pen(SideScrollTheme.BorderFocusPrimary, 3, lineCap: PenLineCap.Square);
 		var innerPen = new Pen(SideScrollTheme.BorderFocusSecondary, 1, lineCap: PenLineCap.Square);
-		using (var ctx = _selectionBitmap.CreateDrawingContext())
+		using (var ctx = selectionBitmap.CreateDrawingContext())
 		{
 			ctx.DrawImage(_originalBitmap, _selectionRect, _selectionRect);
 			ctx.DrawRectangle(null, outerPen, borderRect.Inflate(1));
 			ctx.DrawRectangle(null, innerPen, borderRect);
 		}
-		_selectionImage!.Source = _selectionBitmap;
+
+		RenderTargetBitmap? previousBitmap = _selectionBitmap;
+		_selectionBitmap = selectionBitmap;
+		_selectionImage!.Source = selectionBitmap;
+		previousBitmap?.Dispose();
+	}
+
+	/// <summary>Releases captured bitmap resources and pointer event subscriptions.</summary>
+	public void Dispose()
+	{
+		if (_disposed)
+			return;
+
+		if (_contentGrid != null)
+		{
+			_contentGrid.PointerPressed -= ScreenCapture_PointerPressed;
+			_contentGrid.PointerReleased -= ScreenCapture_PointerReleased;
+			_contentGrid.PointerMoved -= ScreenCapture_PointerMoved;
+		}
+
+		if (_backgroundImage != null)
+			_backgroundImage.Source = null;
+		if (_selectionImage != null)
+			_selectionImage.Source = null;
+
+		_selectionBitmap?.Dispose();
+		_selectionBitmap = null;
+		_backgroundBitmap?.Dispose();
+		_backgroundBitmap = null;
+		_originalBitmap?.Dispose();
+		_originalBitmap = null;
+
+		_disposed = true;
+		GC.SuppressFinalize(this);
 	}
 }

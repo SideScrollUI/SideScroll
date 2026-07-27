@@ -196,6 +196,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `LogWriterText` now accepts filenames without a directory component
 - Significant-figure rounding now rejects zero and negative precision
 - Empty `ViewHttpResponse` instances now expose an empty body instead of throwing
+- Fixed Atlas serialization failing for every type with a custom constructor in Turkish locales. Constructor parameters were matched to their members by lowercasing both with the culture-sensitive `ToLower()`, and `tr-TR` turns a member named `Id` into `ıd` while the parameter `id` stays `id`, so they never matched. Matching is ordinal now
+- Fixed CSV exports not quoting or escaping the header row, so a column name containing a comma or a quote shifted every column after it
+- Fixed `string.CamelCased()` using culture-sensitive casing, which turned a leading `i` into `İ` in Turkish locales
+- Fixed `ProcessUtils.OpenFolder()` selecting an unrelated file when passed a rooted selection, which `Path.Combine()` uses in place of the folder
+- Fixed `ProcessUtils.GetDotnetRuntimes()` not disposing the `dotnet --list-runtimes` process
+- `MemoryTypeCache` now rejects a zero or negative `maxItems` instead of silently caching nothing, since a `SizeLimit` of 0 makes every entry exceed the limit
 - Fixed `Call.RunAsync()` not observing cancellation while waiting for a rate limiter slot. The cancel token wasn't passed into the wait, so work that never finished held every slot and kept the cancellation from being noticed
 - Empty `LinkUri` query strings no longer produce an unparseable trailing question mark
 - `ListSeries` now infers element types from non-generic lists
@@ -224,6 +230,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replaced lossy browser localStorage path keys with reversible encoded keys
 - Added browser repository key metadata so bulk loads preserve every saved key
 - Routed browser paging and index rebuilding through localStorage instead of filesystem serializers
+- Fixed table formatting hanging indefinitely when the maximum column width is zero
+- Fixed `DataItemCollection(IEnumerable)` leaving its key lookup empty
+- Fixed screen capture retaining replaced, saved, and closed-session bitmap resources
+- Fixed fixed-list formatted combo boxes allowing edits to read-only properties
 
 ### Changed
 - SideScroll.Serialize: Made the `name` parameter in `SerializerFile` and its subclasses (`SerializerFileAtlas`, `SerializerFileJson`) nullable, and updated the `Name` property to accurately support `null` names.
