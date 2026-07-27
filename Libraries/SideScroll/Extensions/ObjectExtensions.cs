@@ -202,6 +202,9 @@ public static class ObjectExtensions
 		if (obj is string text)
 			return text;
 
+		if (obj is DictionaryEntry dictionaryEntry)
+			return dictionaryEntry.Key?.ToString();
+
 		if (type.IsNumeric())
 		{
 			// Identifiers must preserve the complete value and stay stable across cultures.
@@ -230,9 +233,6 @@ public static class ObjectExtensions
 				return obj.ToString();
 			}
 		}
-
-		if (obj is DictionaryEntry dictionaryEntry)
-			return dictionaryEntry.Key.ToString();
 
 		string? valueString = obj.ToString();
 		if (valueString != type.ToString())

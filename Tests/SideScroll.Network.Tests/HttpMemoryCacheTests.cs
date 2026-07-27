@@ -72,6 +72,15 @@ public class HttpMemoryCacheTests : BaseTest
 		}
 	}
 
+	[Test]
+	public void Dispose_ReleasesUnderlyingCache()
+	{
+		var cache = new HttpMemoryCache();
+
+		Assert.DoesNotThrow(cache.Dispose);
+		Assert.That(cache, Is.InstanceOf<IDisposable>());
+	}
+
 	private sealed class NullJsonHandler : HttpMessageHandler
 	{
 		protected override Task<HttpResponseMessage> SendAsync(

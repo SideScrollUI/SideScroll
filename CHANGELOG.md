@@ -182,6 +182,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Zero-retention logs no longer remain subscribed to child logs they immediately remove
 - Time-range tag consolidation now retains distinct non-string values
 - `ProcessUtils.GetDotnetRuntimes()` now returns usable paths without display brackets
+- `TimeZoneView` identity now uses time-zone IDs instead of display names
+- Unix timestamp parsing now supports signed values and dates beyond the `uint` seconds range
+- `ObjectExtensions.ToUniqueString()` now handles a `DictionaryEntry` with a null key
+- Memory cache wrappers can now be disposed deterministically
 
 ### Changed
 - SideScroll.Serialize: Made the `name` parameter in `SerializerFile` and its subclasses (`SerializerFileAtlas`, `SerializerFileJson`) nullable, and updated the `Name` property to accurately support `null` names.

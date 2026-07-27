@@ -56,14 +56,29 @@ public class TimeZoneViewTests : BaseTest
 	}
 
 	[Test]
-	public void Equals_EqualNames_HaveEqualHashCodes()
+	public void Equals_EqualNamesWithDifferentZoneIds_AreNotEqual()
 	{
 		var first = new TimeZoneView("A", "Shared", TimeZoneInfo.Utc);
 		var second = new TimeZoneView("B", "Shared", TimeZoneInfo.Local);
 
-		Assert.That(first, Is.EqualTo(second));
-		Assert.That(first.GetHashCode(), Is.EqualTo(second.GetHashCode()));
-		Assert.That(new HashSet<TimeZoneView> { first, second }, Has.Count.EqualTo(1));
+		Assert.That(first, Is.Not.EqualTo(second));
+		Assert.That(new HashSet<TimeZoneView> { first, second }, Has.Count.EqualTo(2));
+	}
+
+	[Test]
+	public void Convert_CustomZoneNamedUtc_UsesItsOffset()
+	{
+		TimeZoneInfo customZone = TimeZoneInfo.CreateCustomTimeZone(
+			"SideScroll-Named-Utc",
+			TimeSpan.FromHours(4),
+			"Utc",
+			"Utc");
+		var view = new TimeZoneView("Utc", "Utc", customZone);
+		DateTime utc = new(2026, 1, 15, 12, 0, 0, DateTimeKind.Utc);
+
+		DateTime result = view.Convert(utc);
+
+		Assert.That(result, Is.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(utc, customZone)));
 	}
 
 	[Test]

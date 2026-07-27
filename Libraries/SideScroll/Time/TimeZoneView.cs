@@ -74,14 +74,14 @@ public class TimeZoneView : IComparable
 	/// </summary>
 	public DateTime Convert(DateTime dateTime)
 	{
-		if (Equals(Utc)) return ConvertTimeToUtc(dateTime);
+		if (IsUtc) return ConvertTimeToUtc(dateTime);
 
 		if (dateTime.Kind == DateTimeKind.Utc)
 		{
 			return TimeZoneInfo.ConvertTimeFromUtc(dateTime, TimeZoneInfo!);
 		}
 
-		if (Equals(Local))
+		if (IsLocal)
 		{
 			return DateTime.SpecifyKind(dateTime, DateTimeKind.Local);
 		}
@@ -99,7 +99,7 @@ public class TimeZoneView : IComparable
 	/// </summary>
 	public DateTime ConvertTimeToUtc(DateTime dateTime)
 	{
-		if (Equals(Utc))
+		if (IsUtc)
 		{
 			if (dateTime.Kind == DateTimeKind.Utc)
 			{
@@ -114,7 +114,7 @@ public class TimeZoneView : IComparable
 			return DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
 		}
 
-		if (Equals(Local))
+		if (IsLocal)
 		{
 			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Local);
 			return dateTime.ToUniversalTime();
@@ -133,22 +133,31 @@ public class TimeZoneView : IComparable
 	}
 
 	/// <summary>
-	/// Determines whether the specified object is a TimeZoneView with the same name
+	/// Determines whether the specified object represents the same time zone
 	/// </summary>
 	public override bool Equals(object? obj)
 	{
-		if (obj is TimeZoneView timeZoneView)
-		{
-			return timeZoneView.Name == Name;
-		}
+		if (obj is not TimeZoneView timeZoneView)
+			return false;
 
-		return false;
+		if (TimeZoneInfo != null && timeZoneView.TimeZoneInfo != null)
+			return StringComparer.Ordinal.Equals(TimeZoneInfo.Id, timeZoneView.TimeZoneInfo.Id);
+
+		return TimeZoneInfo == null
+			&& timeZoneView.TimeZoneInfo == null
+			&& StringComparer.Ordinal.Equals(Name, timeZoneView.Name);
 	}
 
 	public override int GetHashCode()
 	{
-		return StringComparer.Ordinal.GetHashCode(Name ?? string.Empty);
+		return StringComparer.Ordinal.GetHashCode(TimeZoneInfo?.Id ?? Name ?? string.Empty);
 	}
+
+	private bool IsUtc => TimeZoneInfo != null
+		&& StringComparer.Ordinal.Equals(TimeZoneInfo.Id, System.TimeZoneInfo.Utc.Id);
+
+	private bool IsLocal => TimeZoneInfo != null
+		&& StringComparer.Ordinal.Equals(TimeZoneInfo.Id, System.TimeZoneInfo.Local.Id);
 
 	/// <summary>
 	/// UTC time zone

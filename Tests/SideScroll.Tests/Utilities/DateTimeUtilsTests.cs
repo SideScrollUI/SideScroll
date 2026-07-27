@@ -381,6 +381,25 @@ public class DateTimeUtilsTests : BaseTest
 		Assert.That(result.Kind, Is.EqualTo(DateTimeKind.Utc));
 	}
 
+	[TestCase("-1", -1)]
+	[TestCase("4294967296", 4294967296)]
+	public void TryParseDateTime_SignedOrLargeUnixEpochSeconds(string text, long seconds)
+	{
+		bool success = DateTimeUtils.TryParseDateTime(text, out DateTime result);
+
+		Assert.That(success, Is.True);
+		Assert.That(result, Is.EqualTo(DateTimeUtils.EpochTime.AddSeconds(seconds)));
+	}
+
+	[Test]
+	public void TryParseDateTime_NegativeUnixEpochMilliseconds()
+	{
+		bool success = DateTimeUtils.TryParseDateTime("-2208988800000", out DateTime result);
+
+		Assert.That(success, Is.True);
+		Assert.That(result, Is.EqualTo(new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc)));
+	}
+
 	[Test]
 	public void TryParseDateTime_StandardFormat()
 	{

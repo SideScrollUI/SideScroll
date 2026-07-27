@@ -10,7 +10,7 @@ namespace SideScroll.Collections;
 /// </summary>
 /// <typeparam name="T">The type of objects to cache</typeparam>
 [Unserialized]
-public class MemoryTypeCache<T>
+public class MemoryTypeCache<T> : IDisposable
 {
 	/// <summary>
 	/// Gets or sets the default maximum number of items for new cache instances
@@ -114,5 +114,12 @@ public class MemoryTypeCache<T>
 		}
 		value = default;
 		return false;
+	}
+
+	/// <summary>Releases the underlying memory cache.</summary>
+	public void Dispose()
+	{
+		MemoryCache.Dispose();
+		GC.SuppressFinalize(this);
 	}
 }

@@ -8,7 +8,7 @@ namespace SideScroll.Network.Http;
 /// <summary>
 /// HTTP response cache that stores deserialized objects with optional expiration
 /// </summary>
-public class HttpMemoryCache
+public class HttpMemoryCache : IDisposable
 {
 	/// <summary>
 	/// Gets or sets the default maximum number of items for new cache instances
@@ -130,5 +130,12 @@ public class HttpMemoryCache
 		}
 		t = default;
 		return false;
+	}
+
+	/// <summary>Releases the underlying memory cache.</summary>
+	public void Dispose()
+	{
+		MemoryCache.Dispose();
+		GC.SuppressFinalize(this);
 	}
 }

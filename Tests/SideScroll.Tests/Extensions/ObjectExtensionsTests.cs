@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using SideScroll.Extensions;
+using System.Collections;
 
 namespace SideScroll.Tests.Extensions;
 
@@ -55,5 +56,11 @@ public class ObjectExtensionsTests : BaseTest
 	{
 		Assert.That(1.5.ToUniqueString(), Is.EqualTo("1.5"));
 		Assert.That(1.5m.ToUniqueString(), Is.EqualTo("1.5"));
+	}
+
+	[Test]
+	public void ToUniqueString_DefaultDictionaryEntry_ReturnsNull()
+	{
+		Assert.That(default(DictionaryEntry).ToUniqueString(), Is.Null);
 	}
 }
