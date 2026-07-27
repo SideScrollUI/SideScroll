@@ -41,7 +41,7 @@ public class LogWriterText : IDisposable
 		string indentation = new('\t', e.Entries.Count);
 
 		LogEntry newLog = e.Entries[0];
-		string line = Log.Created.ToString("yyyy-M-d H:mm:ss") + indentation + newLog.Message;
+		string line = newLog.Created.ToString("yyyy-M-d H:mm:ss") + indentation + newLog.Message;
 		_textStreamWriter.WriteLine(line);
 		_textStreamWriter.Flush();
 	}

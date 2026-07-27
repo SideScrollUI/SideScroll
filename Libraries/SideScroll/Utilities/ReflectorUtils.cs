@@ -43,7 +43,11 @@ public static class ReflectorUtils
 				var properties = currentType.GetProperties()
 					.Where(x => x.Name == subPropertyName)
 					.ToList();
-				PropertyInfo property = properties.FirstOrDefault(x => x.DeclaringType == currentType) ?? properties.First();
+				PropertyInfo? property = properties.FirstOrDefault(x => x.DeclaringType == currentType)
+					?? properties.FirstOrDefault();
+				if (property == null)
+					return null;
+
 				obj = property.GetValue(obj, null);
 
 				if (brackStart > 0)

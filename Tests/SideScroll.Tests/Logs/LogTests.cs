@@ -92,4 +92,31 @@ public class LogTests : BaseTest
 
 		Assert.That(log.Settings!.Context, Is.SameAs(context));
 	}
+
+	[Test]
+	public void LogWriterText_UsesEachEntriesTimestamp()
+	{
+		string path = Path.GetTempFileName();
+		try
+		{
+			Log log = new()
+			{
+				Created = new DateTime(2000, 1, 1),
+			};
+
+			LogEntry entry;
+			using (new LogWriterText(log, path))
+			{
+				entry = log.Add("Message")!;
+			}
+
+			string line = File.ReadAllText(path);
+			Assert.That(line, Does.StartWith(entry.Created.ToString("yyyy-M-d H:mm:ss")));
+			Assert.That(line, Does.Not.StartWith(log.Created.ToString("yyyy-M-d H:mm:ss")));
+		}
+		finally
+		{
+			File.Delete(path);
+		}
+	}
 }

@@ -52,15 +52,25 @@ public class ConcurrentRateLimiter : IDisposable
 	/// </summary>
 	public async Task<IDisposable> WaitAsync(CancellationToken cancellationToken = default)
 	{
-		if (_rateSemaphore != null)
-		{
-			await _rateSemaphore.WaitAsync(cancellationToken);
-			_requestTimestamps.Enqueue(DateTime.UtcNow);
-		}
-
 		await _concurrencySemaphore.WaitAsync(cancellationToken);
 
-		return new ConcurrencyRelease(_concurrencySemaphore);
+		try
+		{
+			if (_rateSemaphore != null)
+			{
+				await _rateSemaphore.WaitAsync(cancellationToken);
+				_requestTimestamps.Enqueue(DateTime.UtcNow);
+			}
+
+			return new ConcurrencyRelease(_concurrencySemaphore);
+		}
+		catch
+		{
+			// Cancellation or disposal while waiting for a rate token must not strand
+			// the concurrency slot acquired above
+			_concurrencySemaphore.Release();
+			throw;
+		}
 	}
 
 	private async Task RefillTokensAsync(CancellationToken cancellationToken)

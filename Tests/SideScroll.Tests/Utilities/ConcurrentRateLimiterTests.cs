@@ -72,4 +72,24 @@ public class ConcurrentRateLimiterTests : BaseTest
 		// If tokens were lost/discarded due to jitter, it would take much longer (e.g. > 500ms).
 		Assert.That(stopwatch.Elapsed.TotalMilliseconds, Is.LessThanOrEqualTo(600));
 	}
+
+	[Test, Description("Cancelling while rate-limited releases the concurrency slot")]
+	public async Task RateLimiter_CancelledRateWait_DoesNotLeakConcurrencySlot()
+	{
+		using var limiter = new ConcurrentRateLimiter(maxConcurrentRequests: 1, maxRequestsPerSecond: 1);
+
+		// Consume the initial rate token, then release only the concurrency slot
+		using (await limiter.WaitAsync())
+		{
+		}
+
+		using var cancellation = new CancellationTokenSource(TimeSpan.FromMilliseconds(10));
+		Assert.ThrowsAsync<OperationCanceledException>(async () =>
+			await limiter.WaitAsync(cancellation.Token));
+
+		// This needs the concurrency slot released by the cancelled wait. A rate token
+		// should arrive in about one second; a leaked concurrency slot would block indefinitely
+		using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+		using IDisposable release = await limiter.WaitAsync(timeout.Token);
+	}
 }

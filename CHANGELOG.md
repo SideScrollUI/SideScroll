@@ -150,6 +150,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `DateTime.Max()` and `Min()` comparing `Ticks`, which are wall clock readings that aren't comparable across `DateTimeKind`s, and labeling the result with the first value's `Kind` regardless of which one won. Charts combining a UTC series with a Local one got a time window shifted by the UTC offset
 - Fixed `DateTimeOffset.Trim()` discarding the offset and returning the value as UTC, unlike `DateTime.Trim()` which keeps its `Kind`
 - Fixed `DateTime.FormatId()` formatting with the current culture, so the same instant produced a different identifier in cultures whose default calendar isn't Gregorian (`th-TH` is Buddhist, `ar-SA` is Hijri)
+- Fixed cancelling `Call.RunAsync()` while it was waiting for a concurrency or rate-limit slot, which could leave cancellation blocked behind work that had not finished
+- Fixed `ReflectorUtils.FollowPropertyPath()` throwing an `InvalidOperationException` when a property path segment does not exist instead of returning `null`
+- Fixed `TimeZoneView.ConvertTimeToUtc()` interpreting times from custom time zones as if they came from the machine's local time zone
+- Fixed `TimeZoneView` returning different hash codes for equal instances and sorting its values in reverse order
+- Fixed `LogWriterText` writing the root log's creation time on every line instead of each entry's timestamp
 
 ### Changed
 - SideScroll.Serialize: Made the `name` parameter in `SerializerFile` and its subclasses (`SerializerFileAtlas`, `SerializerFileJson`) nullable, and updated the `Name` property to accurately support `null` names.

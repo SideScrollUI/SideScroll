@@ -83,4 +83,54 @@ public class CallTests : BaseTest
 		Assert.That(result, Has.Count.EqualTo(1));
 		Assert.That(result.Keys, Is.EqualTo(new int?[] { 1 }));
 	}
+
+	[Test, Description(
+		"Cancelling takes effect while every slot is still held. Waiting for a slot has to pass the " +
+		"cancel token in, or work that never finishes would keep the cancellation from being noticed")]
+	[CancelAfter(30_000)]
+	public async Task RunAsyncCancelledWaitingForSlot()
+	{
+		Call call = new()
+		{
+			TaskInstance = new TaskInstance(),
+		};
+
+		TaskCompletionSource cancelLogged = new(TaskCreationOptions.RunContinuationsAsynchronously);
+		call.Log.OnMessage += (_, e) =>
+		{
+			if (e.Entries.Any(entry => entry.Text == "Cancelled"))
+			{
+				cancelLogged.TrySetResult();
+			}
+		};
+
+		// The only slot stays held until the gate opens, so the second item has to wait for it
+		TaskCompletionSource gate = new(TaskCreationOptions.RunContinuationsAsynchronously);
+		TaskCompletionSource holding = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		Task<ItemResultCollection<int?, int?>> run = call.RunAsync(async (c, item) =>
+		{
+			holding.TrySetResult();
+			await gate.Task;
+			return item;
+		}, new int?[] { 1, 2 }, maxConcurrentRequests: 1);
+
+		await holding.Task;
+		call.TaskInstance!.Cancel();
+
+		// Would only complete once the gate opened if the wait ignored the token
+		try
+		{
+			await cancelLogged.Task.WaitAsync(TimeSpan.FromSeconds(2));
+		}
+		finally
+		{
+			// Always release the running item, including when the assertion times out
+			gate.TrySetResult();
+		}
+
+		ItemResultCollection<int?, int?> result = await run;
+
+		Assert.That(result.Keys, Is.EqualTo(new int?[] { 1 }), "The second item never started.");
+	}
 }

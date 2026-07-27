@@ -87,9 +87,8 @@ public class TimeZoneView : IComparable
 		}
 		else if (dateTime.Kind != DateTimeKind.Unspecified)
 		{
-			TimeSpan utcOffset = TimeZoneInfo!.GetUtcOffset(dateTime);
-			DateTime utcDateTime = ConvertTimeToUtc(dateTime).Add(utcOffset);
-			return DateTime.SpecifyKind(utcDateTime, DateTimeKind.Unspecified);
+			DateTime utcDateTime = dateTime.ToUniversalTime();
+			return TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, TimeZoneInfo!);
 		}
 
 		return dateTime;
@@ -106,17 +105,23 @@ public class TimeZoneView : IComparable
 			{
 				return dateTime;
 			}
-		}
-		else if (Equals(Local))
-		{
-			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Local);
-		}
-		else
-		{
-			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
+
+			if (dateTime.Kind == DateTimeKind.Local)
+			{
+				return dateTime.ToUniversalTime();
+			}
+
+			return DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
 		}
 
-		return TimeZoneInfo.ConvertTimeToUtc(dateTime);
+		if (Equals(Local))
+		{
+			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Local);
+			return dateTime.ToUniversalTime();
+		}
+
+		dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
+		return System.TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo!);
 	}
 
 	/// <summary>
@@ -124,7 +129,7 @@ public class TimeZoneView : IComparable
 	/// </summary>
 	public int CompareTo(object? obj)
 	{
-		return obj?.ToString()?.CompareTo(ToString()) ?? 1;
+		return string.Compare(ToString(), obj?.ToString(), StringComparison.CurrentCulture);
 	}
 
 	/// <summary>
@@ -140,10 +145,9 @@ public class TimeZoneView : IComparable
 		return false;
 	}
 
-	// Override to make compiler happy
 	public override int GetHashCode()
 	{
-		return base.GetHashCode();
+		return StringComparer.Ordinal.GetHashCode(Name ?? string.Empty);
 	}
 
 	/// <summary>
