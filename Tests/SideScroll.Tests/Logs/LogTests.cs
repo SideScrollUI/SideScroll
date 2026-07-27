@@ -204,4 +204,19 @@ public class LogTests : BaseTest
 		Assert.That(parent.Items, Is.Empty);
 		Assert.That(parent.Entries, Is.EqualTo(entriesAfterRemoval));
 	}
+
+	[Test]
+	public void LoweredRetentionLimitTrimsAllExcessItems()
+	{
+		var settings = new LogSettings { MaxLogItems = 5 };
+		Log log = new() { Settings = settings };
+		for (int i = 0; i < 5; i++)
+			log.Add($"Entry {i}");
+
+		settings.MaxLogItems = 2;
+		log.Add("Newest");
+
+		Assert.That(log.Items, Has.Count.EqualTo(2));
+		Assert.That(log.Items[^1].Text, Is.EqualTo("Newest"));
+	}
 }

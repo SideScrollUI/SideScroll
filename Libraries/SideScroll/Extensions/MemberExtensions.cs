@@ -30,7 +30,7 @@ public static class MemberExtensions
 	/// </summary>
 	public static bool IsRowVisible(this PropertyInfo propertyInfo)
 	{
-		if (propertyInfo.DeclaringType!.IsNotPublic)
+		if (propertyInfo.DeclaringType!.IsNotPublic || propertyInfo.GetMethod?.IsPublic != true)
 			return false;
 
 #if !DEBUG
@@ -47,7 +47,7 @@ public static class MemberExtensions
 	/// </summary>
 	public static bool IsColumnVisible(this PropertyInfo propertyInfo)
 	{
-		if (propertyInfo.DeclaringType!.IsNotPublic)
+		if (propertyInfo.DeclaringType!.IsNotPublic || propertyInfo.GetMethod?.IsPublic != true)
 			return false;
 
 #if !DEBUG

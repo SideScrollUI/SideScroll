@@ -141,6 +141,10 @@ public static class HttpUtils
 				if (exception.StatusCode != null && (!IsTransient(exception.StatusCode) || attempt >= MaxAttempts))
 					break;
 			}
+			catch (IOException exception)
+			{
+				getCall.Log.Add(exception);
+			}
 			catch (TaskCanceledException exception) // Timed out
 			{
 				getCall.Log.Add(exception);

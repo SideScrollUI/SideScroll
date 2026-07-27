@@ -10,10 +10,10 @@ public readonly struct FilePath(string path)
 	/// <summary>
 	/// Gets the file path string
 	/// </summary>
-	public string Path => path;
+	public string Path => path ?? string.Empty;
 
 	/// <summary>Returns the file path string.</summary>
-	public override string ToString() => path;
+	public override string ToString() => path ?? string.Empty;
 }
 
 /// <summary>

@@ -49,6 +49,23 @@ public class ItemCollectionUITests : BaseTest
 		Assert.That(items, Is.EqualTo(new[] { 1, 2 }));
 	}
 
+	[Test, Description("A posted removal follows its item when an insert changes the original index")]
+	public void RemoveItemResolvesCurrentIndexInCallback()
+	{
+		var context = new QueuedContext();
+		ItemCollectionUI<string> items = new(["a", "b"])
+		{
+			Context = context,
+			PostOnly = true,
+		};
+
+		items.RemoveAt(1);
+		items.Insert(0, "new");
+		context.DrainReverse();
+
+		Assert.That(items, Is.EqualTo(new[] { "new", "a" }));
+	}
+
 	private sealed class QueuedContext : SynchronizationContext
 	{
 		private readonly Queue<(SendOrPostCallback Callback, object? State)> _callbacks = new();
@@ -64,6 +81,15 @@ public class ItemCollectionUITests : BaseTest
 			{
 				work.Callback(work.State);
 			}
+		}
+
+		public void DrainReverse()
+		{
+			foreach (var work in _callbacks.Reverse())
+			{
+				work.Callback(work.State);
+			}
+			_callbacks.Clear();
 		}
 	}
 }

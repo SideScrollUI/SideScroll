@@ -135,7 +135,7 @@ public static class TypeExtensions
 			.Where(p => p.GetCustomAttribute<HiddenAttribute>() == null)
 			.Where(p => p.GetCustomAttribute<HiddenColumnAttribute>() == null)
 			.Where(p => p.GetIndexParameters().Length == 0)
-			.Where(p => !p.GetAccessors(nonPublic: true)[0].IsStatic)
+			.Where(p => p.GetMethod is { IsPublic: true, IsStatic: false })
 			.OrderBy(p => p.Module.Name)
 			.ThenBy(p => p.MetadataToken)
 			.ToList();

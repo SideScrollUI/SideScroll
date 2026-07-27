@@ -274,7 +274,8 @@ public class Log : LogEntry
 			addedLog.OnMessage += ChildLog_OnMessage;
 		}
 
-		if (Items.Count > Settings!.MaxLogItems)
+		int maxLogItems = Math.Max(0, Settings!.MaxLogItems);
+		while (Items.Count > maxLogItems)
 		{
 			// Entries counts everything added, including trimmed entries
 			LogEntry removedEntry = Items[0];

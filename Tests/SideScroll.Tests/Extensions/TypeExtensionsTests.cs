@@ -6,6 +6,14 @@ namespace SideScroll.Tests.Extensions;
 [Category("Core")]
 public class TypeExtensionsTests : BaseTest
 {
+	public class WriteOnlyModel
+	{
+		public string Value
+		{
+			set { }
+		}
+	}
+
 	[OneTimeSetUp]
 	public void BaseSetup()
 	{
@@ -58,5 +66,15 @@ public class TypeExtensionsTests : BaseTest
 		string shortName = typeof(List<Tag>[,]).GetAssemblyQualifiedShortName();
 
 		Assert.That(shortName, Is.EqualTo("System.Collections.Generic.List`1[[SideScroll.Tag, SideScroll]][,], System.Private.CoreLib"));
+	}
+
+	[Test]
+	public void VisibleProperties_ExcludesWriteOnlyProperties()
+	{
+		var property = typeof(WriteOnlyModel).GetProperty(nameof(WriteOnlyModel.Value))!;
+
+		Assert.That(typeof(WriteOnlyModel).GetVisibleProperties(), Does.Not.Contain(property));
+		Assert.That(property.IsRowVisible(), Is.False);
+		Assert.That(property.IsColumnVisible(), Is.False);
 	}
 }

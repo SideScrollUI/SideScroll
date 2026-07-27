@@ -52,6 +52,30 @@ public class HttpCallTests : BaseTest
 			await request.WaitAsync(TimeSpan.FromSeconds(1)));
 	}
 
+	[Test]
+	public async Task GetBytesAsyncRetriesBodyReadIOException()
+	{
+		int attempts = 0;
+		using var client = new HttpClient(new StubHandler((request, _) =>
+		{
+			attempts++;
+			HttpContent content = attempts == 1
+				? new StreamContent(new ThrowingReadStream())
+				: new ByteArrayContent([1, 2]);
+			return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+			{
+				Content = content,
+				RequestMessage = request,
+			});
+		}));
+		var httpCall = new TestHttpCall(Call, client);
+
+		byte[] result = await httpCall.GetBytesAsync("http://example.com/value");
+
+		Assert.That(result, Is.EqualTo(new byte[] { 1, 2 }));
+		Assert.That(attempts, Is.EqualTo(2));
+	}
+
 	private sealed class TestHttpCall(Call call, HttpClient client) : HttpCall(call)
 	{
 		protected override HttpClient GetClient(HttpClientConfig clientConfig) => client;
@@ -64,5 +88,13 @@ public class HttpCallTests : BaseTest
 			HttpRequestMessage request,
 			CancellationToken cancellationToken) =>
 			sendAsync(request, cancellationToken);
+	}
+
+	private sealed class ThrowingReadStream : MemoryStream
+	{
+		public override ValueTask<int> ReadAsync(
+			Memory<byte> buffer,
+			CancellationToken cancellationToken = default) =>
+			ValueTask.FromException<int>(new IOException("Connection dropped"));
 	}
 }

@@ -28,6 +28,15 @@ public class FileUtilsTests : BaseTest
 		Assert.That(reader.ReadToEnd(), Is.EqualTo("plain text"));
 	}
 
+	[Test]
+	public void DefaultFilePath_IsEmpty()
+	{
+		FilePath path = default;
+
+		Assert.That(path.Path, Is.Empty);
+		Assert.That(path.ToString(), Is.Empty);
+	}
+
 	// ─── DirectoryCopy ───────────────────────────────────────────────────
 
 	private string _basePath = null!;

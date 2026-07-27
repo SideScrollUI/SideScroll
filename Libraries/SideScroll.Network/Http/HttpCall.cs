@@ -73,6 +73,11 @@ public class HttpCall(Call call)
 				if (exception.StatusCode != null && !HttpUtils.IsTransient(exception.StatusCode))
 					throw;
 			}
+			catch (IOException exception)
+			{
+				getCall.Log.AddError("URI response " + request.RequestUri + " failed while reading: " + exception.Message);
+				lastException = exception;
+			}
 			catch (TaskCanceledException exception) when (!cancelToken.IsCancellationRequested) // Timed out
 			{
 				getCall.Log.AddError("URI request " + request.RequestUri + " timed out: " + exception.Message);

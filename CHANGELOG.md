@@ -202,6 +202,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Object formatting now rejects negative maximum lengths explicitly
 - `FileUtils.IsTextStream(StreamReader)` now preserves seekable reader positions
 - Memory cache wrappers now reject non-positive expiration durations during construction
+- Posted `ItemCollectionUI` removals now follow the intended item when its index changes
+- HTTP downloads now retry when the connection fails while reading the response body
+- Visible-property discovery now excludes write-only properties
+- Logs now remove every excess item after their retention limit is lowered
+- Default `FilePath` values now expose an empty path instead of null
 
 ### Changed
 - SideScroll.Serialize: Made the `name` parameter in `SerializerFile` and its subclasses (`SerializerFileAtlas`, `SerializerFileJson`) nullable, and updated the `Name` property to accurately support `null` names.
