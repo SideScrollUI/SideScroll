@@ -39,14 +39,6 @@ public abstract class SerializerFile(string basePath, string? name = null)
 	public override string ToString() => BasePath;
 
 	/// <summary>
-	/// Tests whether the data file is writable and has no open locks
-	/// </summary>
-	public void TestWrite()
-	{
-		File.WriteAllText(DataPath!, "");
-	}
-
-	/// <summary>
 	/// Ensures the storage location exists before saving.
 	/// Override in derived classes for non-filesystem storage (e.g., localStorage).
 	/// </summary>

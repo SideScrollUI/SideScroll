@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SideScroll.Extensions;
 using SideScroll.Time;
 
 namespace SideScroll.Tests.Time;
@@ -79,6 +80,31 @@ public class TimeZoneViewTests : BaseTest
 		DateTime result = view.Convert(utc);
 
 		Assert.That(result, Is.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(utc, customZone)));
+	}
+
+	[Test]
+	public void Convert_UnconfiguredZone_DoesNotChangeValue()
+	{
+		var view = new TimeZoneView();
+		DateTime value = new(2026, 1, 15, 12, 0, 0, DateTimeKind.Unspecified);
+
+		Assert.That(view.Convert(value), Is.EqualTo(value));
+		Assert.That(view.ConvertTimeToUtc(value), Is.EqualTo(DateTime.SpecifyKind(value, DateTimeKind.Utc)));
+	}
+
+	[Test]
+	public void DateTimeFormat_UnconfiguredCurrentZone_DoesNotThrow()
+	{
+		TimeZoneView original = TimeZoneView.Current;
+		TimeZoneView.Current = new TimeZoneView();
+		try
+		{
+			Assert.DoesNotThrow(() => DateTime.UtcNow.Format());
+		}
+		finally
+		{
+			TimeZoneView.Current = original;
+		}
 	}
 
 	[Test]

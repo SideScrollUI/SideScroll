@@ -74,6 +74,9 @@ public class TimeZoneView : IComparable
 	/// </summary>
 	public DateTime Convert(DateTime dateTime)
 	{
+		if (TimeZoneInfo == null)
+			return dateTime;
+
 		if (IsUtc) return ConvertTimeToUtc(dateTime);
 
 		if (dateTime.Kind == DateTimeKind.Utc)
@@ -99,6 +102,16 @@ public class TimeZoneView : IComparable
 	/// </summary>
 	public DateTime ConvertTimeToUtc(DateTime dateTime)
 	{
+		if (TimeZoneInfo == null)
+		{
+			return dateTime.Kind switch
+			{
+				DateTimeKind.Utc => dateTime,
+				DateTimeKind.Local => dateTime.ToUniversalTime(),
+				_ => DateTime.SpecifyKind(dateTime, DateTimeKind.Utc),
+			};
+		}
+
 		if (IsUtc)
 		{
 			if (dateTime.Kind == DateTimeKind.Utc)

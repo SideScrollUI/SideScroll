@@ -216,7 +216,7 @@ public static class FileUtils
 	public static bool IsTextFile(string path)
 	{
 		string extension = Path.GetExtension(path);
-		if (TextExtensions.Contains(extension))
+		if (TextExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
 			return true;
 
 		try

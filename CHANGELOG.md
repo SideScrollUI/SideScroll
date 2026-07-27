@@ -213,6 +213,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Completed zero-item tasks now report 100% progress
 - Root tasks can now dispose their owned cancellation source without subtasks disposing the shared source
 - Completed task contexts can now create later timers without encountering a disposed cancellation source
+- `ConcurrentRateLimiter` now releases its cancellation and semaphore resources when disposed
+- Unconfigured `TimeZoneView` instances no longer break date conversion or formatting
+- Text-file extension detection is now case insensitive
+- Removed `SerializerFile.TestWrite()`, whose purported writability test truncated existing serialized data
+- Fixed public JSON serialization allowing generic collections whose concrete element types were not approved for public export
 
 ### Changed
 - SideScroll.Serialize: Made the `name` parameter in `SerializerFile` and its subclasses (`SerializerFileAtlas`, `SerializerFileJson`) nullable, and updated the `Name` property to accurately support `null` names.

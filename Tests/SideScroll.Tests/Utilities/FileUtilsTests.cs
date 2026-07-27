@@ -19,6 +19,13 @@ public class FileUtilsTests : BaseTest
 	}
 
 	[Test]
+	public void IsTextFile_ExtensionCheckIsCaseInsensitive()
+	{
+		Assert.That(FileUtils.IsTextFile("missing.TXT"), Is.True);
+		Assert.That(FileUtils.IsTextFile("missing.Md"), Is.True);
+	}
+
+	[Test]
 	public void IsTextStream_StreamReaderPreservesPosition()
 	{
 		using var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes("plain text"));
