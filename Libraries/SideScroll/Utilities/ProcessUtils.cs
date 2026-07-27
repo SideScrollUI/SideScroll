@@ -228,7 +228,13 @@ public static class ProcessUtils
 
 			if (Version.TryParse(versionStr, out Version? parsedVersion))
 			{
-				var runtime = new DotnetRuntimeInfo(parts[0], parsedVersion, parts[2]);
+				string path = parts[2];
+				if (path.Length >= 2 && path[0] == '[' && path[^1] == ']')
+				{
+					path = path[1..^1];
+				}
+
+				var runtime = new DotnetRuntimeInfo(parts[0], parsedVersion, path);
 				runtimes.Add(runtime);
 			}
 		}

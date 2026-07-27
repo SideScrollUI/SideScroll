@@ -267,6 +267,13 @@ public class Log : LogEntry
 		// later errors wouldn't show up in the Tasks that check it
 		UpdateStats(logEntry);
 
+		// Subscribe before trimming so an entry removed immediately (for example when MaxLogItems
+		// is zero) follows the same unsubscribe path as any previously retained child.
+		if (logEntry is Log addedLog)
+		{
+			addedLog.OnMessage += ChildLog_OnMessage;
+		}
+
 		if (Items.Count > Settings!.MaxLogItems)
 		{
 			// Entries counts everything added, including trimmed entries
@@ -280,12 +287,6 @@ public class Log : LogEntry
 		}
 
 		NotifyLogMessage(logEntry);
-
-		// Update if there can be child entries
-		if (logEntry is Log log)
-		{
-			log.OnMessage += ChildLog_OnMessage;
-		}
 	}
 
 	// Update stats when a new child log entry gets added at any level below

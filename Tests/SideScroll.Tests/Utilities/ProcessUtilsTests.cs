@@ -30,4 +30,15 @@ public class ProcessUtilsTests : BaseTest
 			Assert.That(runtimes, Is.Not.Null);
 		});
 	}
+
+	[Test, Description("Runtime paths are usable paths rather than bracketed dotnet display fields")]
+	public void GetDotnetRuntimes_ReturnsUnwrappedPaths()
+	{
+		List<DotnetRuntimeInfo> runtimes = ProcessUtils.GetDotnetRuntimes();
+
+		Assert.That(runtimes, Is.Not.Empty);
+		Assert.That(runtimes.Select(runtime => runtime.Path), Has.None.StartsWith("["));
+		Assert.That(runtimes.Select(runtime => runtime.Path), Has.None.EndsWith("]"));
+		Assert.That(runtimes.All(runtime => Directory.Exists(runtime.Path)), Is.True);
+	}
 }

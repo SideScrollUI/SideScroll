@@ -202,6 +202,66 @@ public class TimeRangePeriodTests : BaseTest
 		Assert.That(grouped![0].Value, Is.EqualTo(2));
 	}
 
+	[Test, Description("CalculateTotal retains fractional values above fifty")]
+	public void ListSeriesCalculateTotalDoesNotFloorLargeValues()
+	{
+		var series = new ListSeries(new List<double> { 50.75 })
+		{
+			SeriesType = SeriesType.Sum,
+		};
+
+		Assert.That(series.CalculateTotal(), Is.EqualTo(50.75));
+		Assert.That(series.Total, Is.EqualTo(50.75));
+	}
+
+	[Test, Description("A point exactly at the inclusive window start participates in min and max totals")]
+	public void TotalMinMaxIncludePointAtWindowStart()
+	{
+		TimeWindow window = new(StartTime, StartTime.AddMinutes(1));
+		List<TimeRangeValue> values =
+		[
+			new(StartTime, StartTime, 7),
+			new(StartTime.AddSeconds(10), StartTime.AddSeconds(10), 10),
+		];
+
+		Assert.That(TimeRangePeriod.TotalMinimum(values, window), Is.EqualTo(7));
+		Assert.That(TimeRangePeriod.TotalMaximum(values, window), Is.EqualTo(10));
+	}
+
+	[Test, Description("Tag values are deduplicated by exact value rather than substring")]
+	public void TagsKeepDistinctSubstringValues()
+	{
+		TimeRangePeriod period = new()
+		{
+			AllTags =
+			[
+				new Tag("Name", "foobar"),
+				new Tag("Name", "foo"),
+				new Tag("Name", "foobar"),
+			],
+		};
+
+		Assert.That(period.Tags, Has.Count.EqualTo(1));
+		Assert.That(period.Tags[0].Value, Is.EqualTo("foobar, foo"));
+	}
+
+	[Test, Description("Duplicate non-string tags retain every distinct value exactly once")]
+	public void TagsKeepDistinctNonStringValues()
+	{
+		TimeRangePeriod period = new()
+		{
+			AllTags =
+			[
+				new Tag("Status", 1),
+				new Tag("Status", 2),
+				new Tag("Status", 1),
+			],
+		};
+
+		Assert.That(period.Tags, Has.Count.EqualTo(1));
+		Assert.That(period.Tags[0].Value, Is.EqualTo("1, 2"));
+	}
+
 	[Test]
 	public void PeriodSumsDifferentlyAlignedTimeWindows()
 	{
@@ -334,7 +394,7 @@ public class TimeRangePeriodTests : BaseTest
 		Assert.That(total1, Is.Not.Null, "First time window total should not be null");
 		Assert.That(total2, Is.Not.Null, "Second time window total should not be null");
 
-		// Check the raw sum before flooring
+		// CalculateTotal and GetTotal both preserve the exact aggregate
 		double? rawTotal2 = listSeries2.GetTotal(timeWindow2);
 		double expectedWindow2Raw = 55.0 + (11.0 * 60 + 59) / (12.0 * 60); // 55 + 719/720 = 55.99861...
 
@@ -342,9 +402,10 @@ public class TimeRangePeriodTests : BaseTest
 		Assert.That(rawTotal2, Is.EqualTo(expectedWindow2Raw).Within(0.01),
 			$"Window2 raw sum should be proportionally less. Expected: {expectedWindow2Raw}, Actual: {rawTotal2}");
 
-		// After flooring (CalculateTotal floors values > 50), both should be 55 and 56
+		// The aligned window receives the full sum; the offset window keeps its fractional sum
 		Assert.That(total1, Is.EqualTo(56), "Window1 should equal 56");
-		Assert.That(total2, Is.EqualTo(55), "Window2 should equal 55 after flooring");
+		Assert.That(total2, Is.EqualTo(expectedWindow2Raw).Within(0.01),
+			"Window2 should retain its proportional fractional sum");
 		Assert.That(total1, Is.GreaterThan(total2!),
 			"Window1 (aligned) should have a higher sum than Window2 (offset)");
 

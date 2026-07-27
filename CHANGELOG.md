@@ -176,6 +176,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `ReflectorUtils.FollowPropertyPath()` now returns `null` for unresolved indexed paths
 - `Log.Throw()` now preserves the original exception stack trace
 - `LogEntry` now raises property changes directly when no synchronization context is configured
+- `ListSeries.CalculateTotal()` now retains exact fractional totals above 50
+- Time-range min/max totals now include point values at the window start
+- Time-range tags are now deduplicated by exact value instead of substring
+- Zero-retention logs no longer remain subscribed to child logs they immediately remove
+- Time-range tag consolidation now retains distinct non-string values
+- `ProcessUtils.GetDotnetRuntimes()` now returns usable paths without display brackets
 
 ### Changed
 - SideScroll.Serialize: Made the `name` parameter in `SerializerFile` and its subclasses (`SerializerFileAtlas`, `SerializerFileJson`) nullable, and updated the `Name` property to accurately support `null` names.

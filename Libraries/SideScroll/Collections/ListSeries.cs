@@ -221,10 +221,6 @@ public class ListSeries
 	{
 		timeWindow = timeWindow?.Selection ?? timeWindow;
 		Total = GetTotal(timeWindow);
-		if (Total is > 50)
-		{
-			Total = Math.Floor(Total.Value);
-		}
 		return Total;
 	}
 

@@ -170,4 +170,20 @@ public class LogTests : BaseTest
 	{
 		throw new InvalidOperationException("Expected");
 	}
+
+	[Test, Description("A child removed immediately by a zero retention limit no longer updates its parent")]
+	public void ZeroRetentionDoesNotKeepChildSubscription()
+	{
+		Log parent = new()
+		{
+			Settings = new LogSettings { MaxLogItems = 0 },
+		};
+		Log child = parent.AddChild("Child");
+		int entriesAfterRemoval = parent.Entries;
+
+		child.Add("Hidden child entry");
+
+		Assert.That(parent.Items, Is.Empty);
+		Assert.That(parent.Entries, Is.EqualTo(entriesAfterRemoval));
+	}
 }
