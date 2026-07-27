@@ -207,6 +207,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Visible-property discovery now excludes write-only properties
 - Logs now remove every excess item after their retention limit is lowered
 - Default `FilePath` values now expose an empty path instead of null
+- Synchronous `TaskCreator.Run()` calls no longer dereference a missing background task
+- Background task failures are now observed and recorded in their task log
+- Subtask calls now reference the child task for correct nested progress attribution
+- Completed zero-item tasks now report 100% progress
+- Root tasks can now dispose their owned cancellation source without subtasks disposing the shared source
+- Completed task contexts can now create later timers without encountering a disposed cancellation source
 
 ### Changed
 - SideScroll.Serialize: Made the `name` parameter in `SerializerFile` and its subclasses (`SerializerFileAtlas`, `SerializerFileJson`) nullable, and updated the `Name` property to accurately support `null` names.

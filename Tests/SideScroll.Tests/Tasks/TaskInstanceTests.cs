@@ -122,4 +122,80 @@ public class TaskInstanceTests : BaseTest
 		Assert.That(task.Message, Is.EqualTo("Expected"));
 		Assert.That(task.Log.Level, Is.GreaterThanOrEqualTo(SideScroll.Logs.LogLevel.Error));
 	}
+
+	[Test]
+	public void TaskCreatorRun_SynchronousActionCompletesWithoutTask()
+	{
+		bool invoked = false;
+		var creator = new TaskAction("Run", () => invoked = true);
+
+		Assert.DoesNotThrow(() => creator.Run(new Call()));
+		Assert.That(invoked, Is.True);
+	}
+
+	[Test]
+	public void BackgroundTaskFailureIsLogged()
+	{
+		var creator = new TaskAction(
+			"Fail",
+			() => throw new InvalidOperationException("Background failure"),
+			useTask: true);
+
+		TaskInstance task = creator.Start(new Call());
+
+		Assert.That(SpinWait.SpinUntil(() => task.Finished, TimeSpan.FromSeconds(1)), Is.True);
+		Assert.That(task.Errored, Is.True);
+		Assert.That(task.Message, Is.EqualTo("Background failure"));
+		Assert.That(task.Log.Level, Is.GreaterThanOrEqualTo(SideScroll.Logs.LogLevel.Error));
+		Assert.That(task.Log.Items.Any(entry => entry.Text == "Background failure"), Is.True);
+	}
+
+	[Test]
+	public void SubTaskCallPointsToSubTask()
+	{
+		TaskInstance parent = new();
+		Call childCall = new("Child");
+
+		TaskInstance child = parent.AddSubTask(childCall);
+
+		Assert.That(childCall.TaskInstance, Is.SameAs(child));
+	}
+
+	[Test]
+	public void CompletedZeroItemTaskReportsOneHundredPercent()
+	{
+		TaskInstance task = new() { TaskCount = 0 };
+
+		task.SetFinished();
+
+		Assert.That(task.Finished, Is.True);
+		Assert.That(task.Percent, Is.EqualTo(100));
+	}
+
+	[Test]
+	public void RootDisposeReleasesOwnedCancellationSource()
+	{
+		TaskInstance task = new();
+		CancellationToken token = task.CancelToken;
+
+		task.SetFinished();
+		Assert.DoesNotThrow(() => task.AddSubTask(new Call()));
+
+		task.Dispose();
+
+		Assert.DoesNotThrow(() => _ = token.IsCancellationRequested);
+		Assert.Throws<ObjectDisposedException>(() => _ = task.TokenSource.Token);
+		Assert.DoesNotThrow(task.Cancel);
+	}
+
+	[Test]
+	public void SubTaskDisposeDoesNotDisposeSharedCancellationSource()
+	{
+		TaskInstance parent = new();
+		TaskInstance child = parent.AddSubTask(new Call());
+
+		child.Dispose();
+
+		Assert.DoesNotThrow(parent.Cancel);
+	}
 }

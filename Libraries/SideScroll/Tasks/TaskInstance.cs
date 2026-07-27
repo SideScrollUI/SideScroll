@@ -21,7 +21,7 @@ public class ShowMessageEventArgs(string message) : EventArgs
 /// Represents a running or completed task instance with progress tracking, cancellation support, and logging
 /// </summary>
 [Unserialized]
-public class TaskInstance : INotifyPropertyChanged
+public class TaskInstance : INotifyPropertyChanged, IDisposable
 {
 	/// <summary>
 	/// Event raised when a property value changes
@@ -87,12 +87,28 @@ public class TaskInstance : INotifyPropertyChanged
 	/// <summary>
 	/// Gets or sets the cancellation token source for this task
 	/// </summary>
-	public CancellationTokenSource TokenSource { get; set; } = new();
+	public CancellationTokenSource TokenSource
+	{
+		get => _tokenSource;
+		set
+		{
+			ArgumentNullException.ThrowIfNull(value);
+			if (_ownsTokenSource && !ReferenceEquals(_tokenSource, value))
+				_tokenSource.Dispose();
+
+			_tokenSource = value;
+			_cancelToken = value.Token;
+		}
+	}
+	private CancellationTokenSource _tokenSource = new();
+	private CancellationToken _cancelToken;
+	private bool _ownsTokenSource = true;
+	private bool _disposed;
 
 	/// <summary>
 	/// Gets the cancellation token from the TokenSource
 	/// </summary>
-	public CancellationToken CancelToken => TokenSource.Token;
+	public CancellationToken CancelToken => _cancelToken;
 
 	/// <summary>
 	/// Gets or sets the current status message
@@ -165,6 +181,7 @@ public class TaskInstance : INotifyPropertyChanged
 	/// </summary>
 	public TaskInstance()
 	{
+		_cancelToken = _tokenSource.Token;
 		Call.TaskInstance = this;
 
 		_stopwatch.Start();
@@ -175,6 +192,7 @@ public class TaskInstance : INotifyPropertyChanged
 	/// </summary>
 	public TaskInstance(string? label)
 	{
+		_cancelToken = _tokenSource.Token;
 		Label = label;
 
 		Call.TaskInstance = this;
@@ -187,11 +205,14 @@ public class TaskInstance : INotifyPropertyChanged
 	/// </summary>
 	public TaskInstance(Call call, TaskInstance parentTask)
 	{
+		_cancelToken = _tokenSource.Token;
 		Label = call.Name;
 		Call = call;
 		Creator = parentTask.Creator;
 		TokenSource = parentTask.TokenSource;
+		_ownsTokenSource = false;
 		ParentTask = parentTask;
+		call.TaskInstance = this;
 
 		// Every sub-task contributes a percentage from 0 to 100. Deriving this from
 		// the child's own empty SubTasks collection made the first child max out at 0.
@@ -325,6 +346,9 @@ public class TaskInstance : INotifyPropertyChanged
 	[ButtonColumn("-", nameof(CancelVisible))]
 	public void Cancel()
 	{
+		if (_disposed)
+			return;
+
 		TokenSource.Cancel();
 	}
 
@@ -379,11 +403,14 @@ public class TaskInstance : INotifyPropertyChanged
 		{
 			Status = "Cancelled";
 		}
-		else
-		{
-			Progress = ProgressMax;
+			else
+			{
+				if (ProgressMax > 0)
+					Progress = ProgressMax;
+				else
+					Percent = 100;
 
-			if (Call.Log.Level >= LogLevel.Error)
+				if (Call.Log.Level >= LogLevel.Error)
 			{
 				Status = Call.Log.Level.ToString();
 				Errored = true;
@@ -479,7 +506,11 @@ public class TaskInstance : INotifyPropertyChanged
 
 			// ContinueWith works whether the task is already completed, running, or not yet started
 			// Don't pass CancelToken, SetFinished is short and required
-			Task.ContinueWith(_ => SetFinished());
+			Task.ContinueWith(
+				OnTaskCompleted,
+				CancellationToken.None,
+				TaskContinuationOptions.ExecuteSynchronously,
+				TaskScheduler.Default);
 		}
 		else
 		{
@@ -499,5 +530,33 @@ public class TaskInstance : INotifyPropertyChanged
 				SetFinished();
 			}
 		}
+	}
+
+	private void OnTaskCompleted(Task task)
+	{
+		if (task.Exception is { } aggregateException)
+		{
+			IReadOnlyList<Exception> exceptions = aggregateException.Flatten().InnerExceptions;
+			foreach (Exception exception in exceptions)
+				Call.Log.Add(exception);
+
+			Errored = true;
+			Message ??= exceptions.FirstOrDefault()?.Message;
+		}
+
+		SetFinished();
+	}
+
+	/// <summary>Releases the cancellation source owned by a root task.</summary>
+	public void Dispose()
+	{
+		if (_disposed)
+			return;
+
+		if (_ownsTokenSource)
+			_tokenSource.Dispose();
+
+		_disposed = true;
+		GC.SuppressFinalize(this);
 	}
 }

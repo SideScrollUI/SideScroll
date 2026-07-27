@@ -120,7 +120,7 @@ public abstract class TaskCreator : INotifyPropertyChanged
 	public void Run(Call call)
 	{
 		TaskInstance taskInstance = Start(call);
-		taskInstance.Task!.GetAwaiter().GetResult();
+		taskInstance.Task?.GetAwaiter().GetResult();
 	}
 
 	/// <summary>
