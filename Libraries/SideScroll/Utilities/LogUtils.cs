@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace SideScroll.Utilities;
 
 /// <summary>
@@ -26,7 +24,5 @@ public static class LogUtils
 		Console.WriteLine(filePath);
 		Console.WriteLine();
 		Console.WriteLine(message);
-
-		Debug.Fail(message);
 	}
 }
