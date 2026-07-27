@@ -81,6 +81,14 @@ public class HttpMemoryCacheTests : BaseTest
 		Assert.That(cache, Is.InstanceOf<IDisposable>());
 	}
 
+	[TestCase(0)]
+	[TestCase(-1)]
+	public void Constructor_RejectsNonPositiveDuration(int milliseconds)
+	{
+		Assert.Throws<ArgumentOutOfRangeException>(() =>
+			new HttpMemoryCache(cacheDuration: TimeSpan.FromMilliseconds(milliseconds)));
+	}
+
 	private sealed class NullJsonHandler : HttpMessageHandler
 	{
 		protected override Task<HttpResponseMessage> SendAsync(

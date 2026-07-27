@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using SideScroll.Collections;
 using SideScroll.Time;
+using System.Collections;
 
 namespace SideScroll.Tests.Time;
 
@@ -39,6 +40,24 @@ public class TimeRangePeriodTests : BaseTest
 
 		Assert.That(values, Has.Count.EqualTo(1));
 		Assert.That(values![0].Value, Is.EqualTo(2));
+	}
+
+	[Test]
+	public void ListSeries_NonGenericListInfersRuntimeElementType()
+	{
+		var points = new ArrayList
+		{
+			new NullablePoint { Time = StartTime, Value = 3 },
+		};
+
+		var series = new ListSeries(
+			"Values",
+			points,
+			nameof(NullablePoint.Time),
+			nameof(NullablePoint.Value));
+
+		Assert.That(series.TimeRangeValues, Has.Count.EqualTo(1));
+		Assert.That(series.TimeRangeValues![0].Value, Is.EqualTo(3));
 	}
 
 	[Test]

@@ -172,7 +172,9 @@ public class ListSeries
 		List = list;
 		SeriesType = seriesType;
 
-		Type elementType = list.GetType().GetElementTypeForAll()!;
+		Type? elementType = GetListElementType(list);
+		if (elementType == null)
+			return;
 		if (xPropertyName != null)
 		{
 			XPropertyInfo = elementType.GetProperty(xPropertyName);
@@ -200,9 +202,17 @@ public class ListSeries
 		if (list == null)
 			return;
 
-		Type elementType = list.GetType().GetElementTypeForAll()!;
+		Type? elementType = GetListElementType(list);
+		if (elementType == null)
+			return;
 		XPropertyInfo = elementType.GetPropertyWithAttribute<XAxisAttribute>();
 		YPropertyInfo = elementType.GetPropertyWithAttribute<YAxisAttribute>();
+	}
+
+	private static Type? GetListElementType(IList list)
+	{
+		return list.GetType().GetElementTypeForAll()
+			?? list.Cast<object?>().FirstOrDefault(item => item != null)?.GetType();
 	}
 
 	private static double GetObjectValue(object obj)

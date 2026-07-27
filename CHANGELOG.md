@@ -197,6 +197,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Significant-figure rounding now rejects zero and negative precision
 - Empty `ViewHttpResponse` instances now expose an empty body instead of throwing
 - Fixed `Call.RunAsync()` not observing cancellation while waiting for a rate limiter slot. The cancel token wasn't passed into the wait, so work that never finished held every slot and kept the cancellation from being noticed
+- Empty `LinkUri` query strings no longer produce an unparseable trailing question mark
+- `ListSeries` now infers element types from non-generic lists
+- Object formatting now rejects negative maximum lengths explicitly
+- `FileUtils.IsTextStream(StreamReader)` now preserves seekable reader positions
+- Memory cache wrappers now reject non-positive expiration durations during construction
 
 ### Changed
 - SideScroll.Serialize: Made the `name` parameter in `SerializerFile` and its subclasses (`SerializerFileAtlas`, `SerializerFileJson`) nullable, and updated the `Name` property to accurately support `null` names.

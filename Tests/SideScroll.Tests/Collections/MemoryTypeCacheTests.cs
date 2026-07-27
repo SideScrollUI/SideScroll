@@ -70,4 +70,12 @@ public class MemoryTypeCacheTests : BaseTest
 		Assert.DoesNotThrow(cache.Dispose);
 		Assert.That(cache, Is.InstanceOf<IDisposable>());
 	}
+
+	[TestCase(0)]
+	[TestCase(-1)]
+	public void Constructor_RejectsNonPositiveDuration(int milliseconds)
+	{
+		Assert.Throws<ArgumentOutOfRangeException>(() =>
+			new MemoryTypeCache<string>(cacheDuration: TimeSpan.FromMilliseconds(milliseconds)));
+	}
 }

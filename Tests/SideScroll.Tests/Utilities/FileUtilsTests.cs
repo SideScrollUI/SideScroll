@@ -18,6 +18,16 @@ public class FileUtilsTests : BaseTest
 		Assert.That(FileUtils.IsFileOpen("not_a_file"), Is.False);
 	}
 
+	[Test]
+	public void IsTextStream_StreamReaderPreservesPosition()
+	{
+		using var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes("plain text"));
+		using var reader = new StreamReader(stream);
+
+		Assert.That(FileUtils.IsTextStream(reader), Is.True);
+		Assert.That(reader.ReadToEnd(), Is.EqualTo("plain text"));
+	}
+
 	// ─── DirectoryCopy ───────────────────────────────────────────────────
 
 	private string _basePath = null!;

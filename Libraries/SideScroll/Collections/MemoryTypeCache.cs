@@ -37,6 +37,9 @@ public class MemoryTypeCache<T> : IDisposable
 	/// </summary>
 	public MemoryTypeCache(int? maxItems = null, TimeSpan? cacheDuration = null)
 	{
+		if (cacheDuration <= TimeSpan.Zero)
+			throw new ArgumentOutOfRangeException(nameof(cacheDuration), "Cache duration must be positive.");
+
 		MaxItems = maxItems ?? DefaultMaxItems;
 		CacheDuration = cacheDuration;
 

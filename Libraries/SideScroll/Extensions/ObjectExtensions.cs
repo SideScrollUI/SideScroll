@@ -52,6 +52,7 @@ public static class ObjectExtensions
 		}
 
 		int maxFormatLength = maxLength ?? DefaultMaxFormattedLength;
+		ArgumentOutOfRangeException.ThrowIfNegative(maxFormatLength);
 
 		if (!type.IsPrimitive)
 		{

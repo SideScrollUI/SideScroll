@@ -87,7 +87,7 @@ public class LinkUri
 
 		uri += Path;
 
-		if (Query != null)
+		if (!string.IsNullOrEmpty(Query))
 		{
 			uri += '?' + Query;
 		}

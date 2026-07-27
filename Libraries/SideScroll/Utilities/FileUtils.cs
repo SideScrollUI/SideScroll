@@ -266,6 +266,11 @@ public static class FileUtils
 	/// <returns>True if the stream contains text; otherwise, false</returns>
 	public static bool IsTextStream(StreamReader streamReader)
 	{
+		Stream stream = streamReader.BaseStream;
+		if (!stream.CanSeek)
+			return false;
+
+		long originalPosition = stream.Position;
 		try
 		{
 			var buffer = new char[TextCheckBufferSize]; // 100 won't detect pdf's as binary
@@ -276,6 +281,11 @@ public static class FileUtils
 		catch (Exception)
 		{
 			return false;
+		}
+		finally
+		{
+			streamReader.DiscardBufferedData();
+			stream.Position = originalPosition;
 		}
 	}
 

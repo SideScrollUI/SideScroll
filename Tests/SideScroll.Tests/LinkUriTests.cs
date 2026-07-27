@@ -76,6 +76,15 @@ public class LinkUriTests : BaseTest
 	}
 
 	[Test]
+	public void EmptyQuery_DoesNotAddQuestionMark()
+	{
+		var link = new LinkUri("side", "type", new Version(1, 0), "path", "");
+
+		Assert.That(link.ToUri(), Is.EqualTo("side://type/v1/path"));
+		Assert.That(LinkUri.TryParse(link.ToUri(), out _), Is.True);
+	}
+
+	[Test]
 	public void TestParseVersionedPath()
 	{
 		Assert.That(LinkUri.TryParse("sidescroll://type/v3.1/path?query", out LinkUri? uri));

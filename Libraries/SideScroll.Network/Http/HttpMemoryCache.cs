@@ -42,6 +42,9 @@ public class HttpMemoryCache : IDisposable
 	/// </summary>
 	public HttpMemoryCache(int? maxItems = null, TimeSpan? cacheDuration = null)
 	{
+		if (cacheDuration <= TimeSpan.Zero)
+			throw new ArgumentOutOfRangeException(nameof(cacheDuration), "Cache duration must be positive.");
+
 		MaxItems = maxItems ?? DefaultMaxItems;
 		CacheDuration = cacheDuration;
 

@@ -63,4 +63,10 @@ public class ObjectExtensionsTests : BaseTest
 	{
 		Assert.That(default(DictionaryEntry).ToUniqueString(), Is.Null);
 	}
+
+	[Test]
+	public void Formatted_RejectsNegativeMaximumLength()
+	{
+		Assert.Throws<ArgumentOutOfRangeException>(() => "value".Formatted(-1));
+	}
 }
