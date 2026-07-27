@@ -66,6 +66,16 @@ public class LinkUriTests : BaseTest
 	}
 
 	[Test]
+	[SetCulture("tr-TR")]
+	public void TestParse_NormalizationIsCultureInvariant()
+	{
+		Assert.That(LinkUri.TryParse("SIDE://ITEM/path", out LinkUri? uri));
+
+		Assert.That(uri!.Prefix, Is.EqualTo("side"));
+		Assert.That(uri.Type, Is.EqualTo("item"));
+	}
+
+	[Test]
 	public void TestParseVersionedPath()
 	{
 		Assert.That(LinkUri.TryParse("sidescroll://type/v3.1/path?query", out LinkUri? uri));

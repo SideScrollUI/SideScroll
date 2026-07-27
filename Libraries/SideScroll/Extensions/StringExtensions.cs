@@ -71,12 +71,14 @@ public static class StringExtensions
 	public static string Range(this string input, int start, int end)
 	{
 		start = Math.Max(0, start);
-		end++;
-		end = Math.Min(end, input.Length);
+		if (start >= input.Length)
+			return "";
+
+		end = Math.Min(end, input.Length - 1);
 		if (end < start)
 			return "";
 
-		return input[start..end];
+		return input[start..(end + 1)];
 	}
 
 	/// <summary>

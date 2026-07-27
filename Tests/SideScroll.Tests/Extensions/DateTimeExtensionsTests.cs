@@ -86,6 +86,18 @@ public class DateTimeExtensionsTests : BaseTest
 		Assert.That(DateTime.MinValue.Ceil(), Is.EqualTo(DateTime.MinValue));
 	}
 
+	[TestCase(0)]
+	[TestCase(-1)]
+	public void RoundingRejectsNonPositiveIntervals(long ticks)
+	{
+		DateTime value = DateTime.UtcNow;
+		DateTimeOffset offsetValue = DateTimeOffset.UtcNow;
+
+		Assert.Throws<ArgumentOutOfRangeException>(() => value.Trim(ticks));
+		Assert.Throws<ArgumentOutOfRangeException>(() => value.Ceil(ticks));
+		Assert.Throws<ArgumentOutOfRangeException>(() => offsetValue.Trim(ticks));
+	}
+
 	// ─── Max / Min ───────────────────────────────────────────────────────
 
 	// Ticks are wall clock readings, so a Local and a Utc value for the same instant have

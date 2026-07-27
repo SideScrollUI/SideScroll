@@ -124,8 +124,8 @@ public class LinkUri
 		linkUri = new LinkUri
 		{
 			Url = url,
-			Prefix = match.Groups["prefix"].Value.ToLower(),
-			Type = match.Groups["type"].Value.ToLower(),
+			Prefix = match.Groups["prefix"].Value.ToLowerInvariant(),
+			Type = match.Groups["type"].Value.ToLowerInvariant(),
 			Version = version,
 			Path = match.Groups["path"].Value,
 			// A missing group's Value is "", which ToUri() would turn into a trailing '?'

@@ -155,6 +155,19 @@ public class HttpUtilsTests : BaseTest
 		}
 	}
 
+	[Test]
+	public void ViewHttpResponseDispose_DisposesOwnedResponse()
+	{
+		var content = new TrackingContent();
+		var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = content };
+		var view = new ViewHttpResponse(response, []);
+
+		view.Dispose();
+
+		Assert.That(content.Disposed, Is.True);
+		Assert.That(view.Response, Is.Null);
+	}
+
 	private sealed class StubHandler(
 		Func<HttpRequestMessage, CancellationToken, Task<HttpResponseMessage>> sendAsync) : HttpMessageHandler
 	{

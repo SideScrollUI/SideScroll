@@ -193,6 +193,7 @@ public static class DateTimeExtensions
 	/// </summary>
 	public static DateTime Trim(this DateTime dateTime, long ticks = TimeSpan.TicksPerSecond)
 	{
+		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(ticks);
 		return new DateTime(dateTime.Ticks - (dateTime.Ticks % ticks), dateTime.Kind);
 	}
 
@@ -209,6 +210,7 @@ public static class DateTimeExtensions
 	/// </summary>
 	public static DateTimeOffset Trim(this DateTimeOffset dateTimeOffset, long ticks)
 	{
+		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(ticks);
 		// Trim the wall clock time and keep the offset, the way DateTime.Trim() keeps its Kind.
 		// DateTime is Unspecified here, which is what the DateTimeOffset(DateTime, TimeSpan) overload wants
 		return new DateTimeOffset(dateTimeOffset.DateTime.Trim(ticks), dateTimeOffset.Offset);
@@ -219,6 +221,7 @@ public static class DateTimeExtensions
 	/// </summary>
 	public static DateTime Ceil(this DateTime dateTime, long ticks = TimeSpan.TicksPerSecond)
 	{
+		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(ticks);
 		long remainder = dateTime.Ticks % ticks;
 		if (remainder == 0) return dateTime;
 

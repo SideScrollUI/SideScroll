@@ -262,7 +262,7 @@ public static class HttpUtils
 }
 
 /// <summary>Captures the result of an HTTP GET request including status, headers, raw bytes, and elapsed time.</summary>
-public class ViewHttpResponse
+public class ViewHttpResponse : IDisposable
 {
 	/// <summary>Gets or sets the request URI.</summary>
 	[HiddenColumn]
@@ -304,5 +304,13 @@ public class ViewHttpResponse
 	{
 		Response = response;
 		Bytes = bytes;
+	}
+
+	/// <summary>Releases the owned HTTP response.</summary>
+	public void Dispose()
+	{
+		Response?.Dispose();
+		Response = null;
+		GC.SuppressFinalize(this);
 	}
 }

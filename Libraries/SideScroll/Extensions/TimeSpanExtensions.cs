@@ -168,6 +168,7 @@ public static class TimeSpanExtensions
 	/// </summary>
 	public static TimeSpan Trim(this TimeSpan timeSpan, long ticks = TimeSpan.TicksPerSecond)
 	{
+		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(ticks);
 		return new TimeSpan(timeSpan.Ticks - (timeSpan.Ticks % ticks));
 	}
 
@@ -184,6 +185,7 @@ public static class TimeSpanExtensions
 	/// </summary>
 	public static TimeSpan Ceil(this TimeSpan timeSpan, long ticks = TimeSpan.TicksPerSecond)
 	{
+		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(ticks);
 		long remainder = timeSpan.Ticks % ticks;
 		if (remainder == 0) return timeSpan;
 
