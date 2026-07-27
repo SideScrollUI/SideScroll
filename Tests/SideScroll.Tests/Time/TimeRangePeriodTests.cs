@@ -9,10 +9,36 @@ public class TimeRangePeriodTests : BaseTest
 {
 	private static readonly DateTime StartTime = new(2000, 1, 1);
 
+	private sealed class NullablePoint
+	{
+		public DateTime Time { get; init; }
+		public double? Value { get; init; }
+	}
+
 	[OneTimeSetUp]
 	public void BaseSetup()
 	{
 		Initialize("Core");
+	}
+
+	[Test]
+	public void TimeRangeValues_SkipsNullYValues()
+	{
+		var points = new List<NullablePoint>
+		{
+			new() { Time = StartTime, Value = null },
+			new() { Time = StartTime.AddMinutes(1), Value = 2 },
+		};
+		var series = new ListSeries(
+			"Values",
+			points,
+			nameof(NullablePoint.Time),
+			nameof(NullablePoint.Value));
+
+		List<TimeRangeValue>? values = series.TimeRangeValues;
+
+		Assert.That(values, Has.Count.EqualTo(1));
+		Assert.That(values![0].Value, Is.EqualTo(2));
 	}
 
 	[Test]

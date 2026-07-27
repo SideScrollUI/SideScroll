@@ -23,8 +23,8 @@ public class LogWriterText : IDisposable
 		Log = log;
 		SaveFilePath = saveFilePath;
 
-		string parentDirectory = Path.GetDirectoryName(SaveFilePath)!;
-		if (!Directory.Exists(parentDirectory))
+		string? parentDirectory = Path.GetDirectoryName(SaveFilePath);
+		if (!string.IsNullOrEmpty(parentDirectory) && !Directory.Exists(parentDirectory))
 		{
 			Directory.CreateDirectory(parentDirectory);
 		}

@@ -332,7 +332,9 @@ public class ListSeries
 				double value = 1;
 				if (YPropertyInfo != null)
 				{
-					object yObj = YPropertyInfo.GetValue(obj)!;
+					object? yObj = YPropertyInfo.GetValue(obj);
+					if (yObj == null)
+						continue;
 					value = Convert.ToDouble(yObj);
 				}
 				DateTime startTime = timestamp;

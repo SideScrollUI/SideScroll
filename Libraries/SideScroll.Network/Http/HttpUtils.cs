@@ -66,7 +66,7 @@ public static class HttpUtils
 	/// <summary>Asynchronously fetches <paramref name="uri"/> and returns the response body as text, or <c>null</c> on failure.</summary>
 	public static async Task<string?> GetStringAsync(Call call, string uri)
 	{
-		var response = await GetBytesAsync(call, uri);
+		using ViewHttpResponse? response = await GetBytesAsync(call, uri);
 		if (response?.Response?.IsSuccessStatusCode != true) return null;
 
 		byte[]? bytes = response?.Bytes;
@@ -273,7 +273,7 @@ public class ViewHttpResponse : IDisposable
 
 	/// <summary>Gets the response body decoded as text.</summary>
 	[HiddenColumn]
-	public string Body => HttpUtils.DecodeString(Bytes!);
+	public string Body => HttpUtils.DecodeString(Bytes ?? []);
 
 	/// <summary>Gets the HTTP status code of the response.</summary>
 	public HttpStatusCode? Status => Response?.StatusCode;

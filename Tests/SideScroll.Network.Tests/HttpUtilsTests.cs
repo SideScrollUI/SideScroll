@@ -100,6 +100,32 @@ public class HttpUtilsTests : BaseTest
 		Assert.That(HttpUtils.DecodeString([]), Is.EqualTo(""));
 	}
 
+	[Test]
+	public void EmptyViewHttpResponse_HasEmptyBody()
+	{
+		Assert.That(new ViewHttpResponse().Body, Is.Empty);
+	}
+
+	[Test]
+	public async Task GetStringAsync_DisposesResponse()
+	{
+		HttpClient original = HttpUtils.Client;
+		var content = new TrackingContent([1]);
+		HttpUtils.Client = new HttpClient(new StubHandler((_, _) =>
+			Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = content })));
+
+		try
+		{
+			Assert.That(await HttpUtils.GetStringAsync(Call, "http://example.com/value"), Is.EqualTo("\u0001"));
+			Assert.That(content.Disposed, Is.True);
+		}
+		finally
+		{
+			HttpUtils.Client.Dispose();
+			HttpUtils.Client = original;
+		}
+	}
+
 	[Test, Description("A transient response must release its connection before the retry")]
 	public async Task GetBytesAsyncDisposesTransientResponses()
 	{
@@ -184,6 +210,10 @@ public class HttpUtilsTests : BaseTest
 	private sealed class TrackingContent : ByteArrayContent
 	{
 		public TrackingContent() : base([])
+		{
+		}
+
+		public TrackingContent(byte[] bytes) : base(bytes)
 		{
 		}
 

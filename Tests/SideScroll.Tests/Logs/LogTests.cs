@@ -121,6 +121,24 @@ public class LogTests : BaseTest
 	}
 
 	[Test]
+	public void LogWriterText_AcceptsFilenameWithoutDirectory()
+	{
+		string fileName = $"SideScroll-{Guid.NewGuid():N}.log";
+		try
+		{
+			using (new LogWriterText(new Log(), fileName))
+			{
+			}
+
+			Assert.That(File.Exists(fileName), Is.True);
+		}
+		finally
+		{
+			File.Delete(fileName);
+		}
+	}
+
+	[Test]
 	public void LogTimer_DisposeIsIdempotent()
 	{
 		Log log = new();

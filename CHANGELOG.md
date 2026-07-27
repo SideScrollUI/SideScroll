@@ -191,6 +191,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `LinkUri` normalization is now culture invariant
 - Date and time rounding helpers now reject zero and negative intervals
 - `StringExtensions.Range()` now handles `int.MaxValue` as its inclusive end index
+- `HttpUtils.GetStringAsync()` now disposes its HTTP response after decoding the body
+- Time-series conversion now skips points whose Y value is null
+- `LogWriterText` now accepts filenames without a directory component
+- Significant-figure rounding now rejects zero and negative precision
+- Empty `ViewHttpResponse` instances now expose an empty body instead of throwing
+- Fixed `Call.RunAsync()` not observing cancellation while waiting for a rate limiter slot. The cancel token wasn't passed into the wait, so work that never finished held every slot and kept the cancellation from being noticed
 
 ### Changed
 - SideScroll.Serialize: Made the `name` parameter in `SerializerFile` and its subclasses (`SerializerFileAtlas`, `SerializerFileJson`) nullable, and updated the `Name` property to accurately support `null` names.
