@@ -166,6 +166,7 @@ public class HttpCache : IDisposable
 			// PeekChar() decodes the next bytes as a character, which isn't what a length prefix is
 			while (_indexStream.Position < _indexStream.Length)
 			{
+				long entryStartPosition = _indexStream.Position;
 				var entry = new Entry
 				{
 					Uri = indexReader.ReadString(),
@@ -174,13 +175,24 @@ public class HttpCache : IDisposable
 				};
 				long ticks = indexReader.ReadInt64();
 				entry.Downloaded = new DateTime(ticks);
-				_cache[entry.Uri] = entry;
 
+				bool validRange =
+					entry.Offset >= 0 &&
+					entry.Size >= 0 &&
+					entry.Offset == lastDataPosition &&
+					entry.Offset <= _dataStream.Length &&
+					entry.Size <= _dataStream.Length - entry.Offset;
+				if (!validRange)
+				{
+					// Treat a complete entry with invalid metadata like a partial final write.
+					// Appending after it would leave the bad entry in front of future valid ones.
+					lastCompletePosition = entryStartPosition;
+					break;
+				}
+
+				_cache[entry.Uri!] = entry;
 				lastCompletePosition = _indexStream.Position;
 
-				// Track the furthest entry instead of the last one. Writes append in order so they
-				// match, but a corrupt entry can still parse with a garbage offset, and truncating
-				// below a surviving entry would drop data the index still points at
 				long entryEnd = entry.Offset + entry.Size;
 				if (entryEnd > lastDataPosition)
 				{

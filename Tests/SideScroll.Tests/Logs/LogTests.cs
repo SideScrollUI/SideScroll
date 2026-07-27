@@ -119,4 +119,18 @@ public class LogTests : BaseTest
 			File.Delete(path);
 		}
 	}
+
+	[Test]
+	public void LogTimer_DisposeIsIdempotent()
+	{
+		Log log = new();
+		LogTimer timer = log.Timer("Work");
+
+		Assert.DoesNotThrow(() =>
+		{
+			timer.Dispose();
+			timer.Dispose();
+		});
+		Assert.That(timer.Items.Count(entry => entry.Text == "Finished"), Is.EqualTo(1));
+	}
 }

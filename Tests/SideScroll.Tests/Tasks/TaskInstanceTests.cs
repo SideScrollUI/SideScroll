@@ -84,4 +84,17 @@ public class TaskInstanceTests : BaseTest
 
 		Assert.That(completed, Is.EqualTo(1));
 	}
+
+	[Test]
+	public void FirstSubTask_ReportsProgressToParent()
+	{
+		TaskInstance parent = new();
+		TaskInstance child = parent.AddSubTask(new Call());
+
+		child.Progress = 50;
+
+		Assert.That(child.ProgressMax, Is.EqualTo(100));
+		Assert.That(child.Percent, Is.EqualTo(50));
+		Assert.That(parent.Percent, Is.EqualTo(50));
+	}
 }

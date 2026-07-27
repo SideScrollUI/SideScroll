@@ -90,20 +90,22 @@ public static class HttpUtils
 		{
 			Timeout = timeout,
 		};
-		HttpClient client = HttpClientManager.GetClient(clientConfig);
+		HttpClient client = clientConfig.IsDefault ? Client : HttpClientManager.GetClient(clientConfig);
+		CancellationToken cancelToken = call.TaskInstance?.CancelToken ?? default;
 
 		for (int attempt = 1; attempt <= MaxAttempts; attempt++)
 		{
-			if (attempt > 1)
-			{
-				// The first retry waits the base delay, doubling for each one after
-				await Task.Delay(BaseRetryDelay * Math.Pow(2, attempt - 2));
-			}
-
+			HttpResponseMessage? response = null;
 			try
 			{
+				if (attempt > 1)
+				{
+					// The first retry waits the base delay, doubling for each one after
+					await Task.Delay(BaseRetryDelay * Math.Pow(2, attempt - 2), cancelToken);
+				}
+
 				Stopwatch stopwatch = Stopwatch.StartNew();
-				HttpResponseMessage response = await client.GetAsync(uri);
+				response = await client.GetAsync(uri, cancelToken);
 
 				if (IsTransient(response.StatusCode) && attempt < MaxAttempts)
 				{
@@ -111,7 +113,7 @@ public static class HttpUtils
 					continue;
 				}
 
-				byte[] bytes = await ReadContentAsync(response.Content, progress);
+				byte[] bytes = await ReadContentAsync(response.Content, progress, cancelToken);
 
 				stopwatch.Stop();
 
@@ -129,6 +131,7 @@ public static class HttpUtils
 					new Tag("Uri", response.RequestMessage.RequestUri),
 					new Tag("Size", bytes.Length));
 
+				response = null; // Ownership transfers to the returned ViewHttpResponse
 				return viewResponse;
 			}
 			catch (HttpRequestException exception)
@@ -141,25 +144,34 @@ public static class HttpUtils
 			catch (TaskCanceledException exception) // Timed out
 			{
 				getCall.Log.Add(exception);
+				if (cancelToken.IsCancellationRequested)
+					break;
+			}
+			finally
+			{
+				response?.Dispose();
 			}
 		}
 		return null;
 	}
 
-	private static async Task<byte[]> ReadContentAsync(HttpContent content, IProgress<HttpGetProgress>? progress = null)
+	private static async Task<byte[]> ReadContentAsync(
+		HttpContent content,
+		IProgress<HttpGetProgress>? progress,
+		CancellationToken cancelToken)
 	{
 		if (content.Headers.ContentLength == null || progress == null)
 		{
-			return await content.ReadAsByteArrayAsync();
+			return await content.ReadAsByteArrayAsync(cancelToken);
 		}
 
-		await using var contentStream = await content.ReadAsStreamAsync();
+		await using var contentStream = await content.ReadAsStreamAsync(cancelToken);
 		using var memoryStream = new MemoryStream();
 
 		var buffer = new byte[ReadBufferSize];
 
 		int bytes;
-		while ((bytes = await contentStream.ReadAsync(buffer)) > 0)
+		while ((bytes = await contentStream.ReadAsync(buffer, cancelToken)) > 0)
 		{
 			memoryStream.Write(buffer, 0, bytes);
 			progress.Report(new HttpGetProgress
@@ -182,20 +194,22 @@ public static class HttpUtils
 	public static async Task<HttpResponseMessage?> GetHeadAsync(Call call, string uri)
 	{
 		using CallTimer headCall = call.Timer("Head Uri", new Tag("Uri", uri));
+		CancellationToken cancelToken = call.TaskInstance?.CancelToken ?? default;
 
 		for (int attempt = 1; attempt <= MaxAttempts; attempt++)
 		{
-			if (attempt > 1)
-			{
-				// The first retry waits the base delay, doubling for each one after
-				await Task.Delay(BaseRetryDelay * Math.Pow(2, attempt - 2));
-			}
-
-			HttpRequestMessage request = new(HttpMethod.Head, uri);
-
+			HttpRequestMessage? request = null;
+			HttpResponseMessage? response = null;
 			try
 			{
-				HttpResponseMessage response = await Client.SendAsync(request);
+				if (attempt > 1)
+				{
+					// The first retry waits the base delay, doubling for each one after
+					await Task.Delay(BaseRetryDelay * Math.Pow(2, attempt - 2), cancelToken);
+				}
+
+				request = new HttpRequestMessage(HttpMethod.Head, uri);
+				response = await Client.SendAsync(request, cancelToken);
 
 				if (IsTransient(response.StatusCode) && attempt < MaxAttempts)
 				{
@@ -208,7 +222,10 @@ public static class HttpUtils
 					new Tag("Uri", request.RequestUri),
 					new Tag("Response", response));
 
-				return response;
+				HttpResponseMessage result = response;
+				request = null; // Kept by response.RequestMessage for the caller
+				response = null; // Ownership transfers to the caller
+				return result;
 			}
 			catch (HttpRequestException exception)
 			{
@@ -220,6 +237,13 @@ public static class HttpUtils
 			catch (TaskCanceledException exception) // Timed out
 			{
 				headCall.Log.Add(exception);
+				if (cancelToken.IsCancellationRequested)
+					break;
+			}
+			finally
+			{
+				response?.Dispose();
+				request?.Dispose();
 			}
 		}
 		return null;

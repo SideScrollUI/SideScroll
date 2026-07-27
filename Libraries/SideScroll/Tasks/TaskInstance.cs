@@ -193,10 +193,9 @@ public class TaskInstance : INotifyPropertyChanged
 		TokenSource = parentTask.TokenSource;
 		ParentTask = parentTask;
 
-		if (parentTask.ProgressMax > 0)
-		{
-			_progressMax = 100;
-		}
+		// Every sub-task contributes a percentage from 0 to 100. Deriving this from
+		// the child's own empty SubTasks collection made the first child max out at 0.
+		_progressMax = 100;
 		_stopwatch.Start();
 	}
 

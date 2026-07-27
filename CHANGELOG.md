@@ -155,6 +155,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `TimeZoneView.ConvertTimeToUtc()` interpreting times from custom time zones as if they came from the machine's local time zone
 - Fixed `TimeZoneView` returning different hash codes for equal instances and sorting its values in reverse order
 - Fixed `LogWriterText` writing the root log's creation time on every line instead of each entry's timestamp
+- Fixed `ObjectExtensions.ToUniqueString()` rounding distinct floating-point values to the same identifier and formatting numeric identifiers differently across cultures
+- Fixed the first dynamically added `TaskInstance` sub-task having a progress maximum of zero, which prevented it from reporting progress to its parent
+- Fixed disposing a `LogTimer` more than once logging multiple `Finished` entries
+- Fixed `Paths.Combine()` allowing a Windows-style leading backslash in a later segment to discard the accumulated base path
+- HTTP retries now dispose transient responses and observe task cancellation
+- HTTP caches now discard entries whose data ranges are invalid
+- HTTP memory cache lookups no longer report JSON `null` as a successful result
 
 ### Changed
 - SideScroll.Serialize: Made the `name` parameter in `SerializerFile` and its subclasses (`SerializerFileAtlas`, `SerializerFileJson`) nullable, and updated the `Name` property to accurately support `null` names.

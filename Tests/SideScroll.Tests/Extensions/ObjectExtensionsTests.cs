@@ -42,4 +42,18 @@ public class ObjectExtensionsTests : BaseTest
 		string? result = obj.ToUniqueString();
 		Assert.That(result, Is.EqualTo("Test"));
 	}
+
+	[Test]
+	public void ToUniqueString_DistinctDoublesRemainDistinct()
+	{
+		Assert.That(1.001.ToUniqueString(), Is.Not.EqualTo(1.002.ToUniqueString()));
+	}
+
+	[Test]
+	[SetCulture("de-DE")]
+	public void ToUniqueString_NumericValueIsCultureInvariant()
+	{
+		Assert.That(1.5.ToUniqueString(), Is.EqualTo("1.5"));
+		Assert.That(1.5m.ToUniqueString(), Is.EqualTo("1.5"));
+	}
 }

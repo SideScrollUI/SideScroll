@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using SideScroll.Network.Http;
+using System.Net;
 
 namespace SideScroll.Network.Tests;
 
@@ -48,5 +49,40 @@ public class HttpMemoryCacheTests : BaseTest
 		// The entry it was actually cached as still resolves
 		Assert.That(cache.TryGetValue(Call, Key, out Order? order), Is.True);
 		Assert.That(order!.Id, Is.EqualTo(5));
+	}
+
+	[Test, Description("A JSON null response is not a successful lookup and is not cached")]
+	public void JsonNullIsNotFound()
+	{
+		HttpClient original = HttpUtils.Client;
+		HttpUtils.Client = new HttpClient(new NullJsonHandler());
+
+		try
+		{
+			HttpMemoryCache cache = new();
+
+			Assert.That(cache.TryGetValue(Call, "http://example.com/null", out Order? order), Is.False);
+			Assert.That(order, Is.Null);
+			Assert.That(cache.MemoryCache.TryGetValue("http://example.com/null", out _), Is.False);
+		}
+		finally
+		{
+			HttpUtils.Client.Dispose();
+			HttpUtils.Client = original;
+		}
+	}
+
+	private sealed class NullJsonHandler : HttpMessageHandler
+	{
+		protected override Task<HttpResponseMessage> SendAsync(
+			HttpRequestMessage request,
+			CancellationToken cancellationToken)
+		{
+			return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+			{
+				Content = new StringContent("null"),
+				RequestMessage = request,
+			});
+		}
 	}
 }

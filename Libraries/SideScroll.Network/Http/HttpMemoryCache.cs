@@ -117,6 +117,9 @@ public class HttpMemoryCache
 			{
 				string escaped = JsonUtils.EscapeUnescapedControlCharactersInStrings(text);
 				t = JsonSerializer.Deserialize<T>(escaped, JsonSerializerOptions);
+				if (t == null)
+					return false;
+
 				Add(uri, t);
 				return true;
 			}

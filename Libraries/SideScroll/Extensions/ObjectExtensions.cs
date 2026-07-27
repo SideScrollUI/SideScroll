@@ -202,6 +202,20 @@ public static class ObjectExtensions
 		if (obj is string text)
 			return text;
 
+		if (type.IsNumeric())
+		{
+			// Identifiers must preserve the complete value and stay stable across cultures.
+			// The default "N" format rounds floating-point values to two decimal places.
+			return obj switch
+			{
+				float value => value.ToString("R", CultureInfo.InvariantCulture),
+				double value => value.ToString("R", CultureInfo.InvariantCulture),
+				decimal value => value.ToString("G29", CultureInfo.InvariantCulture),
+				IFormattable value => value.ToString(null, CultureInfo.InvariantCulture),
+				_ => obj.ToString(),
+			};
+		}
+
 		if (!type.IsPrimitive)
 		{
 			if (obj is DateTime dateTime)
@@ -215,12 +229,6 @@ public static class ObjectExtensions
 			{
 				return obj.ToString();
 			}
-		}
-
-		if (type.IsNumeric())
-		{
-			string format = type.IsDecimal() ? "N" : "N0";
-			return ((IFormattable)obj).ToString(format, CultureInfo.CurrentCulture);
 		}
 
 		if (obj is DictionaryEntry dictionaryEntry)

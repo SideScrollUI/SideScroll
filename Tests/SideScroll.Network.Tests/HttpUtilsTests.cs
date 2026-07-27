@@ -1,5 +1,7 @@
 using NUnit.Framework;
 using SideScroll.Network.Http;
+using SideScroll.Tasks;
+using System.Net;
 using System.Text;
 
 namespace SideScroll.Network.Tests;
@@ -96,5 +98,88 @@ public class HttpUtilsTests : BaseTest
 	public void DecodeStringEmpty()
 	{
 		Assert.That(HttpUtils.DecodeString([]), Is.EqualTo(""));
+	}
+
+	[Test, Description("A transient response must release its connection before the retry")]
+	public async Task GetBytesAsyncDisposesTransientResponses()
+	{
+		HttpClient original = HttpUtils.Client;
+		var transientContent = new TrackingContent();
+		int attempts = 0;
+		HttpUtils.Client = new HttpClient(new StubHandler((request, _) =>
+		{
+			attempts++;
+			return Task.FromResult(attempts == 1
+				? new HttpResponseMessage(HttpStatusCode.ServiceUnavailable) { Content = transientContent }
+				: new HttpResponseMessage(HttpStatusCode.OK) { Content = new ByteArrayContent([1]) });
+		}));
+
+		try
+		{
+			ViewHttpResponse? result = await HttpUtils.GetBytesAsync(Call, "http://example.com/value");
+
+			Assert.That(result, Is.Not.Null);
+			Assert.That(transientContent.Disposed, Is.True);
+			result!.Response!.Dispose();
+		}
+		finally
+		{
+			HttpUtils.Client.Dispose();
+			HttpUtils.Client = original;
+		}
+	}
+
+	[Test, Description("Cancelling the Call aborts an in-flight HTTP request")]
+	public async Task GetBytesAsyncObservesCallCancellation()
+	{
+		HttpClient original = HttpUtils.Client;
+		HttpUtils.Client = new HttpClient(new StubHandler(async (_, cancelToken) =>
+		{
+			await Task.Delay(Timeout.InfiniteTimeSpan, cancelToken);
+			return new HttpResponseMessage(HttpStatusCode.OK);
+		}));
+		var taskInstance = new TaskInstance();
+		Call cancellableCall = new() { TaskInstance = taskInstance };
+
+		try
+		{
+			Task<ViewHttpResponse?> request = HttpUtils.GetBytesAsync(cancellableCall, "http://example.com/value");
+			taskInstance.Cancel();
+
+			Assert.That(await request.WaitAsync(TimeSpan.FromSeconds(1)), Is.Null);
+		}
+		finally
+		{
+			HttpUtils.Client.Dispose();
+			HttpUtils.Client = original;
+		}
+	}
+
+	private sealed class StubHandler(
+		Func<HttpRequestMessage, CancellationToken, Task<HttpResponseMessage>> sendAsync) : HttpMessageHandler
+	{
+		protected override async Task<HttpResponseMessage> SendAsync(
+			HttpRequestMessage request,
+			CancellationToken cancellationToken)
+		{
+			HttpResponseMessage response = await sendAsync(request, cancellationToken);
+			response.RequestMessage ??= request;
+			return response;
+		}
+	}
+
+	private sealed class TrackingContent : ByteArrayContent
+	{
+		public TrackingContent() : base([])
+		{
+		}
+
+		public bool Disposed { get; private set; }
+
+		protected override void Dispose(bool disposing)
+		{
+			Disposed = true;
+			base.Dispose(disposing);
+		}
 	}
 }

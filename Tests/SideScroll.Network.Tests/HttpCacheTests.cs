@@ -215,6 +215,26 @@ public class HttpCacheTests : BaseTest
 		{
 			Assert.That(reopened!.GetString("http://example.com/a"), Is.EqualTo("first"));
 			Assert.That(reopened.GetString("http://example.com/b"), Is.EqualTo("second"));
+			Assert.That(reopened.ContainsKey("http://example.com/corrupt"), Is.False);
 		}
+	}
+
+	[TestCase(1000L, 4, TestName = "CorruptIndexRange_AfterData")]
+	[TestCase(long.MaxValue, 1, TestName = "CorruptIndexRange_Overflow")]
+	[TestCase(0L, -1, TestName = "CorruptIndexRange_NegativeSize")]
+	public void CorruptIndexRangeIsDiscarded(long offset, int size)
+	{
+		using (var cache = new HttpCache(_cachePath, true))
+		{
+			cache.AddEntry("http://example.com/a", GetBytes("first"));
+		}
+
+		AppendCorruptEntry("http://example.com/corrupt", offset, size);
+
+		using var reopened = new HttpCache(_cachePath, true);
+
+		Assert.That(reopened.ContainsKey("http://example.com/corrupt"), Is.False);
+		Assert.That(reopened.GetBytes("http://example.com/corrupt"), Is.Null);
+		Assert.That(reopened.GetString("http://example.com/a"), Is.EqualTo("first"));
 	}
 }
