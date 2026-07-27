@@ -92,4 +92,33 @@ public class ConcurrentRateLimiterTests : BaseTest
 		using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(2));
 		using IDisposable release = await limiter.WaitAsync(timeout.Token);
 	}
+
+	[Test, Description("Disposing a lease twice must not release two concurrency slots or throw")]
+	public async Task RateLimiter_LeaseDispose_IsIdempotent()
+	{
+		using var limiter = new ConcurrentRateLimiter(maxConcurrentRequests: 1);
+		IDisposable release = await limiter.WaitAsync();
+
+		release.Dispose();
+		Assert.DoesNotThrow(release.Dispose);
+
+		using IDisposable nextRelease = await limiter.WaitAsync();
+		using var cancellation = new CancellationTokenSource(TimeSpan.FromMilliseconds(20));
+		Assert.ThrowsAsync<OperationCanceledException>(async () =>
+			await limiter.WaitAsync(cancellation.Token));
+	}
+
+	[Test, Description("Disposing the limiter cancels pending waits and active leases remain disposable")]
+	public async Task RateLimiter_Dispose_CancelsWaitersAndAllowsLeaseCleanup()
+	{
+		var limiter = new ConcurrentRateLimiter(maxConcurrentRequests: 1);
+		IDisposable release = await limiter.WaitAsync();
+		Task<IDisposable> waiting = limiter.WaitAsync();
+
+		limiter.Dispose();
+
+		Assert.ThrowsAsync<OperationCanceledException>(async () =>
+			await waiting.WaitAsync(TimeSpan.FromSeconds(1)));
+		Assert.DoesNotThrow(release.Dispose);
+	}
 }

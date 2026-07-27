@@ -162,7 +162,8 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	{
 		if (UsePost)
 		{
-			Context!.Post(AddRangeCallback, collection);
+			// The callback can run after the caller mutates or disposes the source enumerable.
+			Context!.Post(AddRangeCallback, collection.ToList());
 		}
 		else
 		{
@@ -193,7 +194,7 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	{
 		if (UsePost)
 		{
-			Context!.Post(ReplaceCallback, collection);
+			Context!.Post(ReplaceCallback, collection.ToList());
 		}
 		else
 		{

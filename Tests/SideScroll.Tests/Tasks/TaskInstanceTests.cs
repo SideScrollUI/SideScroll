@@ -97,4 +97,16 @@ public class TaskInstanceTests : BaseTest
 		Assert.That(child.Percent, Is.EqualTo(50));
 		Assert.That(parent.Percent, Is.EqualTo(50));
 	}
+
+	[Test, Description("A negative task limit is treated as zero instead of removing from an empty collection")]
+	public void TaskCollection_NegativeMaxTasks_IsClampedToZero()
+	{
+		TaskInstanceCollection tasks = [new TaskInstance(), new TaskInstance()];
+
+		Assert.DoesNotThrow(() => tasks.MaxTasks = -1);
+		Assert.That(tasks.MaxTasks, Is.Zero);
+		Assert.That(tasks, Is.Empty);
+		Assert.DoesNotThrow(() => tasks.Add(new TaskInstance()));
+		Assert.That(tasks, Is.Empty);
+	}
 }

@@ -36,7 +36,8 @@ public class HttpCall(Call call)
 		{
 			Accept = accept,
 		};
-		HttpClient client = HttpClientManager.GetClient(clientConfig);
+		HttpClient client = GetClient(clientConfig);
+		CancellationToken cancelToken = Call.TaskInstance?.CancelToken ?? default;
 
 		Exception? lastException = null;
 		for (int attempt = 1; ; attempt++)
@@ -45,15 +46,15 @@ public class HttpCall(Call call)
 
 			try
 			{
-				using HttpResponseMessage response = await client.SendAsync(request);
+				using HttpResponseMessage response = await client.SendAsync(request, cancelToken);
 
 				// Don't return error responses, HttpCachedCall would cache them permanently
 				response.EnsureSuccessStatusCode();
 
-				Stream dataStream = await response.Content.ReadAsStreamAsync();
+				Stream dataStream = await response.Content.ReadAsStreamAsync(cancelToken);
 
 				MemoryStream memoryStream = new();
-				await dataStream.CopyToAsync(memoryStream);
+				await dataStream.CopyToAsync(memoryStream, cancelToken);
 				byte[] data = memoryStream.ToArray();
 				dataStream.Close();
 
@@ -72,7 +73,7 @@ public class HttpCall(Call call)
 				if (exception.StatusCode != null && !HttpUtils.IsTransient(exception.StatusCode))
 					throw;
 			}
-			catch (TaskCanceledException exception) // Timed out
+			catch (TaskCanceledException exception) when (!cancelToken.IsCancellationRequested) // Timed out
 			{
 				getCall.Log.AddError("URI request " + request.RequestUri + " timed out: " + exception.Message);
 				lastException = exception;
@@ -81,7 +82,7 @@ public class HttpCall(Call call)
 			if (attempt >= MaxAttempts)
 				break;
 
-			await Task.Delay(SleepMilliseconds * attempt);
+			await Task.Delay(SleepMilliseconds * attempt, cancelToken);
 		}
 
 		string message = "HTTP request failed " + MaxAttempts + " times: " + uri;
@@ -93,5 +94,11 @@ public class HttpCall(Call call)
 		}
 
 		throw new Exception(message, lastException);
+	}
+
+	/// <summary>Returns the HTTP client used for a request.</summary>
+	protected virtual HttpClient GetClient(HttpClientConfig clientConfig)
+	{
+		return HttpClientManager.GetClient(clientConfig);
 	}
 }

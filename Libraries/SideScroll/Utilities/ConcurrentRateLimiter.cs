@@ -52,13 +52,17 @@ public class ConcurrentRateLimiter : IDisposable
 	/// </summary>
 	public async Task<IDisposable> WaitAsync(CancellationToken cancellationToken = default)
 	{
-		await _concurrencySemaphore.WaitAsync(cancellationToken);
+		using CancellationTokenSource linkedCancellation =
+			CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, _cts.Token);
+		CancellationToken waitToken = linkedCancellation.Token;
+
+		await _concurrencySemaphore.WaitAsync(waitToken);
 
 		try
 		{
 			if (_rateSemaphore != null)
 			{
-				await _rateSemaphore.WaitAsync(cancellationToken);
+				await _rateSemaphore.WaitAsync(waitToken);
 				_requestTimestamps.Enqueue(DateTime.UtcNow);
 			}
 
@@ -138,10 +142,6 @@ public class ConcurrentRateLimiter : IDisposable
 			{
 				// Expected when cancellation occurs
 			}
-			_cts.Dispose();
-			_rateSemaphore?.Dispose();
-			_concurrencySemaphore.Dispose();
-
 			// Clear queue
 			_requestTimestamps.Clear();
 		}
@@ -157,6 +157,11 @@ public class ConcurrentRateLimiter : IDisposable
 
 	private class ConcurrencyRelease(SemaphoreSlim semaphore) : IDisposable
 	{
-		public void Dispose() => semaphore.Release();
+		private SemaphoreSlim? _semaphore = semaphore;
+
+		public void Dispose()
+		{
+			Interlocked.Exchange(ref _semaphore, null)?.Release();
+		}
 	}
 }

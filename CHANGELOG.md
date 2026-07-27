@@ -162,6 +162,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - HTTP retries now dispose transient responses and observe task cancellation
 - HTTP caches now discard entries whose data ranges are invalid
 - HTTP memory cache lookups no longer report JSON `null` as a successful result
+- `HttpCall` requests and retry delays now observe task cancellation
+- `ConcurrentRateLimiter` leases can now be safely disposed more than once
+- Exception logs created within the same second no longer overwrite each other
+- Disposing a `ConcurrentRateLimiter` now cancels pending waits without breaking active lease cleanup
+- Posted `ItemCollectionUI` bulk operations now snapshot their input before returning
+- Negative `TaskInstanceCollection.MaxTasks` values are now treated as zero
 
 ### Changed
 - SideScroll.Serialize: Made the `name` parameter in `SerializerFile` and its subclasses (`SerializerFileAtlas`, `SerializerFileJson`) nullable, and updated the `Name` property to accurately support `null` names.
