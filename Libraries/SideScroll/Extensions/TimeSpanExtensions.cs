@@ -152,6 +152,8 @@ public static class TimeSpanExtensions
 	/// </summary>
 	public static TimeSpan PeriodDuration(this TimeSpan timeSpan, int numPeriods = 100)
 	{
+		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(numPeriods);
+
 		TimeSpan maxPeriodDuration = timeSpan.Multiply(2.0 / numPeriods);
 		foreach (TimeSpan periodMin in CommonTimeSpans.Reverse<TimeSpan>())
 		{

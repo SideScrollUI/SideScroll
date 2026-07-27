@@ -38,6 +38,12 @@ public static class ReflectorUtils
 			{
 				int brackStart = propertyName.IndexOf('[');
 				int brackEnd = propertyName.IndexOf(']');
+				bool hasBracket = brackStart >= 0 || brackEnd >= 0;
+				if (hasBracket &&
+					(brackStart <= 0 || brackEnd != propertyName.Length - 1 || brackEnd <= brackStart + 1))
+				{
+					return null;
+				}
 				string subPropertyName = brackStart > 0 ? propertyName[..brackStart] : propertyName;
 
 				var properties = currentType.GetProperties()
@@ -52,24 +58,50 @@ public static class ReflectorUtils
 
 				if (brackStart > 0)
 				{
+					if (obj == null)
+						return null;
+
 					string index = propertyName.Substring(brackStart + 1, brackEnd - brackStart - 1);
-					foreach (Type iType in obj!.GetType().GetInterfaces())
+					bool indexed = false;
+					foreach (Type iType in obj.GetType().GetInterfaces())
 					{
 						if (iType.IsGenericType && iType.GetGenericTypeDefinition() == typeof(IDictionary<,>))
 						{
-							obj = typeof(ReflectorUtils).GetMethod(nameof(GetDictionaryElement))!
-								.MakeGenericMethod(iType.GetGenericArguments())
-								.Invoke(null, [obj, index]);
+							indexed = true;
+							try
+							{
+								obj = typeof(ReflectorUtils).GetMethod(nameof(GetDictionaryElement))!
+									.MakeGenericMethod(iType.GetGenericArguments())
+									.Invoke(null, [obj, index]);
+							}
+							catch (TargetInvocationException e) when (
+								e.InnerException is KeyNotFoundException or InvalidCastException or
+									FormatException or OverflowException)
+							{
+								return null;
+							}
 							break;
 						}
 						if (iType.IsGenericType && iType.GetGenericTypeDefinition() == typeof(IList<>))
 						{
-							obj = typeof(ReflectorUtils).GetMethod(nameof(GetListElement))!
-								.MakeGenericMethod(iType.GetGenericArguments())
-								.Invoke(null, [obj, index]);
+							indexed = true;
+							try
+							{
+								obj = typeof(ReflectorUtils).GetMethod(nameof(GetListElement))!
+									.MakeGenericMethod(iType.GetGenericArguments())
+									.Invoke(null, [obj, index]);
+							}
+							catch (TargetInvocationException e) when (
+								e.InnerException is ArgumentOutOfRangeException or
+									IndexOutOfRangeException or FormatException or OverflowException)
+							{
+								return null;
+							}
 							break;
 						}
 					}
+					if (!indexed)
+						return null;
 				}
 
 				currentType = obj?.GetType(); //property.PropertyType;

@@ -2,6 +2,7 @@ using SideScroll.Attributes;
 using SideScroll.Collections;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Text;
 
 namespace SideScroll.Logs;
@@ -156,7 +157,7 @@ public class Log : LogEntry
 	public void Throw(Exception e)
 	{
 		Add(e);
-		throw e;
+		ExceptionDispatchInfo.Capture(e).Throw();
 	}
 
 	/// <summary>
@@ -239,9 +240,9 @@ public class Log : LogEntry
 		logEntry.RootLog = RootLog;
 		logEntry.Settings = Settings;
 
-		if (Settings.Context != null)
+		if (Settings.Context is { } context)
 		{
-			Settings.Context.Post(AddEntryCallback, logEntry);
+			context.Post(AddEntryCallback, logEntry);
 		}
 		else
 		{

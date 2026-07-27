@@ -80,4 +80,27 @@ public class ItemQueueCollectionTests : BaseTest
 
 		Assert.That(queue, Is.EqualTo(new[] { 1, 2 }));
 	}
+
+	[Test, Description("A negative queue limit is treated as zero instead of removing from an empty collection")]
+	public void NegativeMaxCountIsClampedToZero()
+	{
+		ItemQueueCollection<int> queue = CreateQueue();
+		queue.AddRange([1, 2]);
+
+		Assert.DoesNotThrow(() => queue.MaxCount = -1);
+		Assert.That(queue.MaxCount, Is.Zero);
+		Assert.That(queue, Is.Empty);
+		Assert.DoesNotThrow(() => queue.Add(3));
+		Assert.That(queue, Is.Empty);
+	}
+
+	[Test, Description("Adding a collection to itself snapshots the source before mutation")]
+	public void AddRangeFromSelf()
+	{
+		ItemQueueCollection<int> queue = CreateQueue(maxCount: 10);
+		queue.AddRange([1, 2]);
+
+		Assert.DoesNotThrow(() => queue.AddRange(queue));
+		Assert.That(queue, Is.EqualTo(new[] { 1, 2, 1, 2 }));
+	}
 }

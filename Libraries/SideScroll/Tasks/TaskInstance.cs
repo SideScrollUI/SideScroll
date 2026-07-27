@@ -483,9 +483,21 @@ public class TaskInstance : INotifyPropertyChanged
 		}
 		else
 		{
-			Action action = Creator.CreateAction(Call);
-			action.Invoke();
-			SetFinished();
+			try
+			{
+				Action action = Creator.CreateAction(Call);
+				action.Invoke();
+			}
+			catch (Exception e)
+			{
+				Errored = true;
+				Message = e.Message;
+				Call.Log.Add(e);
+			}
+			finally
+			{
+				SetFinished();
+			}
 		}
 	}
 }

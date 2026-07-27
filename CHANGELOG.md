@@ -168,6 +168,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Disposing a `ConcurrentRateLimiter` now cancels pending waits without breaking active lease cleanup
 - Posted `ItemCollectionUI` bulk operations now snapshot their input before returning
 - Negative `TaskInstanceCollection.MaxTasks` values are now treated as zero
+- Synchronous task failures now finish their `TaskInstance` and are recorded in its log
+- `ItemCollection.AddRange()` now snapshots input before mutating the collection
+- Negative `ItemQueueCollection.MaxCount` values are now treated as zero
+- `TimeSpan.PeriodDuration()` now rejects non-positive period counts explicitly
+- Count-based `ListSeries` now group time periods by item count instead of average value
+- `ReflectorUtils.FollowPropertyPath()` now returns `null` for unresolved indexed paths
+- `Log.Throw()` now preserves the original exception stack trace
+- `LogEntry` now raises property changes directly when no synchronization context is configured
 
 ### Changed
 - SideScroll.Serialize: Made the `name` parameter in `SerializerFile` and its subclasses (`SerializerFileAtlas`, `SerializerFileJson`) nullable, and updated the `Name` property to accurately support `null` names.

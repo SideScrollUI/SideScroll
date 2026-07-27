@@ -115,7 +115,10 @@ public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComp
 	/// </summary>
 	public virtual void AddRange(IEnumerable<T> collection)
 	{
-		foreach (T item in collection)
+		// Enumerate before mutating so self-adds work and a failing/deferred enumerable cannot leave
+		// the backing collection partially changed without the Reset notification below.
+		List<T> items = collection.ToList();
+		foreach (T item in items)
 		{
 			Items.Add(item);
 		}
@@ -165,7 +168,16 @@ public class ItemQueueCollection<T> : ItemCollection<T>
 	/// <summary>
 	/// The maximum number of items to keep in the collection (default: 100)
 	/// </summary>
-	public int MaxCount { get; set; } = 100;
+	public int MaxCount
+	{
+		get => _maxCount;
+		set
+		{
+			_maxCount = Math.Max(0, value);
+			TrimToMaxCount();
+		}
+	}
+	private int _maxCount = 100;
 
 	/// <summary>
 	/// Inserts an item, removing the oldest items if MaxCount is exceeded

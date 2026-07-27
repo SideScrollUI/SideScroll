@@ -133,4 +133,41 @@ public class LogTests : BaseTest
 		});
 		Assert.That(timer.Items.Count(entry => entry.Text == "Finished"), Is.EqualTo(1));
 	}
+
+	[Test]
+	public void PropertyChangedWithoutContextIsRaised()
+	{
+		var entry = new LogEntry(new LogSettings(), LogLevel.Info, "Test", null);
+		string? changedProperty = null;
+		entry.PropertyChanged += (_, e) => changedProperty = e.PropertyName;
+
+		entry.Duration = TimeSpan.FromSeconds(1);
+
+		Assert.That(changedProperty, Is.EqualTo(nameof(LogEntry.Duration)));
+	}
+
+	[Test, Description("Logging and rethrowing an exception preserves its original failure location")]
+	public void ThrowPreservesOriginalStackTrace()
+	{
+		Exception original;
+		try
+		{
+			ThrowOriginalException();
+			throw new AssertionException("Expected an exception");
+		}
+		catch (InvalidOperationException e)
+		{
+			original = e;
+		}
+
+		InvalidOperationException rethrown = Assert.Throws<InvalidOperationException>(() =>
+			new Log().Throw(original))!;
+
+		Assert.That(rethrown.StackTrace, Does.Contain(nameof(ThrowOriginalException)));
+	}
+
+	private static void ThrowOriginalException()
+	{
+		throw new InvalidOperationException("Expected");
+	}
 }

@@ -180,6 +180,28 @@ public class TimeRangePeriodTests : BaseTest
 		Assert.That(total, Is.EqualTo(5.0));
 	}
 
+	[Test, Description("Count series group each period by item count rather than averaging item values")]
+	public void ListSeriesGroupByPeriodCounts()
+	{
+		TimeSpan periodDuration = TimeSpan.FromMinutes(1);
+		TimeWindow timeWindow = new(StartTime, StartTime.Add(periodDuration));
+		List<TimeRangeValue> values =
+		[
+			new(StartTime, StartTime, 10),
+			new(StartTime.AddSeconds(10), StartTime.AddSeconds(10), 20),
+		];
+		var series = new ListSeries(values)
+		{
+			PeriodDuration = periodDuration,
+			SeriesType = SeriesType.Count,
+		};
+
+		List<TimeRangeValue>? grouped = series.GroupByPeriod(timeWindow);
+
+		Assert.That(grouped, Has.Count.EqualTo(1));
+		Assert.That(grouped![0].Value, Is.EqualTo(2));
+	}
+
 	[Test]
 	public void PeriodSumsDifferentlyAlignedTimeWindows()
 	{

@@ -305,6 +305,7 @@ public class ListSeries
 
 		return SeriesType switch
 		{
+			SeriesType.Count => TimeRangePeriod.PeriodCounts(timeRangeValues, timeWindow, PeriodDuration.Value),
 			SeriesType.Sum => TimeRangePeriod.PeriodSums(timeRangeValues, timeWindow, PeriodDuration.Value),
 			SeriesType.Minimum => TimeRangePeriod.PeriodMins(timeRangeValues, timeWindow, PeriodDuration.Value),
 			SeriesType.Maximum => TimeRangePeriod.PeriodMaxes(timeRangeValues, timeWindow, PeriodDuration.Value),

@@ -109,4 +109,17 @@ public class TaskInstanceTests : BaseTest
 		Assert.DoesNotThrow(() => tasks.Add(new TaskInstance()));
 		Assert.That(tasks, Is.Empty);
 	}
+
+	[Test, Description("A synchronous action failure is logged and the task still finishes")]
+	public void SynchronousTaskFailureFinishes()
+	{
+		var creator = new TaskAction("Fail", () => throw new InvalidOperationException("Expected"));
+
+		TaskInstance task = creator.Start(new Call());
+
+		Assert.That(SpinWait.SpinUntil(() => task.Finished, TimeSpan.FromSeconds(1)), Is.True);
+		Assert.That(task.Errored, Is.True);
+		Assert.That(task.Message, Is.EqualTo("Expected"));
+		Assert.That(task.Log.Level, Is.GreaterThanOrEqualTo(SideScroll.Logs.LogLevel.Error));
+	}
 }

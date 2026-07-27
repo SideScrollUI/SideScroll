@@ -235,7 +235,14 @@ public class LogEntry : INotifyPropertyChanged
 	/// </summary>
 	protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
 	{
-		Settings?.Context?.Post(NotifyPropertyChangedContext, propertyName);
+		if (Settings?.Context is { } context)
+		{
+			context.Post(NotifyPropertyChangedContext, propertyName);
+		}
+		else
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
 	}
 
 	private void NotifyPropertyChangedContext(object? state)
