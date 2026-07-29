@@ -59,8 +59,19 @@ public class TimeZoneViewTests : BaseTest
 	[Test]
 	public void Equals_EqualNamesWithDifferentZoneIds_AreNotEqual()
 	{
-		var first = new TimeZoneView("A", "Shared", TimeZoneInfo.Utc);
-		var second = new TimeZoneView("B", "Shared", TimeZoneInfo.Local);
+		// Don't use TimeZoneInfo.Local here, it matches TimeZoneInfo.Utc's Id on machines running in UTC
+		TimeZoneInfo firstZone = TimeZoneInfo.CreateCustomTimeZone(
+			"SideScroll-Shared-First",
+			TimeSpan.FromHours(1),
+			"Shared",
+			"Shared");
+		TimeZoneInfo secondZone = TimeZoneInfo.CreateCustomTimeZone(
+			"SideScroll-Shared-Second",
+			TimeSpan.FromHours(1),
+			"Shared",
+			"Shared");
+		var first = new TimeZoneView("A", "Shared", firstZone);
+		var second = new TimeZoneView("B", "Shared", secondZone);
 
 		Assert.That(first, Is.Not.EqualTo(second));
 		Assert.That(new HashSet<TimeZoneView> { first, second }, Has.Count.EqualTo(2));
