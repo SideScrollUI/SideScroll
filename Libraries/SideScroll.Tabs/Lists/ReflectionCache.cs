@@ -65,6 +65,9 @@ internal static class ReflectionCache
 	/// <summary>Same short-circuit flag for <see cref="FieldInfo"/>.</summary>
 	private static readonly ConcurrentDictionary<FieldInfo, bool> FieldHideChecks = new();
 
+	/// <summary>Same short-circuit flag for <see cref="MethodInfo"/>.</summary>
+	private static readonly ConcurrentDictionary<MethodInfo, bool> MethodHideChecks = new();
+
 	// ── Public accessors ──────────────────────────────────────────────────
 
 	/// <summary>
@@ -144,6 +147,16 @@ internal static class ReflectionCache
 			f.GetCustomAttribute<HideAttribute>() != null ||
 			f.DeclaringType?.GetCustomAttribute<HideAttribute>() != null ||
 			f.GetCustomAttribute<HideRowAttribute>() != null);
+
+	/// <summary>
+	/// Same short-circuit helper for <see cref="MethodInfo"/>. Returning <c>false</c> matters more
+	/// here than for properties and fields: evaluating a method's value invokes it, so the
+	/// <see cref="ListMethod.IsRowVisible"/> call has to be skipped unless a <c>[Hide]</c> is present.
+	/// </summary>
+	public static bool MethodHasValueDependentHide(MethodInfo methodInfo)
+		=> MethodHideChecks.GetOrAdd(methodInfo, m =>
+			m.GetCustomAttribute<HideAttribute>() != null ||
+			m.DeclaringType?.GetCustomAttribute<HideAttribute>() != null);
 
 	// ── Compute helpers (run once per type key) ───────────────────────────
 

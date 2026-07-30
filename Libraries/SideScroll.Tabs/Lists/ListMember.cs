@@ -267,7 +267,13 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 			}
 			else
 			{
-				member = new ListMethod(obj, (MethodInfo)info);
+				var methodInfo = (MethodInfo)info;
+				var listMethod = new ListMethod(obj, methodInfo);
+				// IsRowVisible() is unconditionally true when the method has no [Hide] attribute.
+				// Skipping the call also avoids invoking the method just to evaluate visibility.
+				if (ReflectionCache.MethodHasValueDependentHide(methodInfo) && !listMethod.IsRowVisible())
+					continue;
+				member = listMethod;
 			}
 			listMembers.Add(member);
 		}

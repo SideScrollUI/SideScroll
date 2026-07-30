@@ -66,7 +66,11 @@ public class HttpCall(Call call)
 			}
 			catch (HttpRequestException exception)
 			{
-				getCall.Log.AddError("URI request " + request.RequestUri + " failed: " + exception.Message);
+				getCall.Log.AddError("URI request failed",
+					new Tag("URI", request.RequestUri),
+					new Tag("Status", exception.StatusCode),
+					new Tag("Attempt", attempt),
+					new Tag("Message", exception.Message));
 				lastException = exception;
 
 				// Only rethrow if the error is permanent (e.g. 404), allow transient errors (e.g. 503) to retry
@@ -75,12 +79,18 @@ public class HttpCall(Call call)
 			}
 			catch (IOException exception)
 			{
-				getCall.Log.AddError("URI response " + request.RequestUri + " failed while reading: " + exception.Message);
+				getCall.Log.AddError("URI response failed while reading",
+					new Tag("URI", request.RequestUri),
+					new Tag("Attempt", attempt),
+					new Tag("Message", exception.Message));
 				lastException = exception;
 			}
 			catch (TaskCanceledException exception) when (!cancelToken.IsCancellationRequested) // Timed out
 			{
-				getCall.Log.AddError("URI request " + request.RequestUri + " timed out: " + exception.Message);
+				getCall.Log.AddError("URI request timed out",
+					new Tag("URI", request.RequestUri),
+					new Tag("Attempt", attempt),
+					new Tag("Message", exception.Message));
 				lastException = exception;
 			}
 
