@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SideScroll.Logs;
 using SideScroll.Tasks;
 
 namespace SideScroll.Tests.Tasks;
@@ -35,6 +36,45 @@ public class TaskInstanceTests : BaseTest
 	private class TestTaskCreator : TaskCreator
 	{
 		public override Action CreateAction(Call call) => () => { };
+	}
+
+	/// <summary>
+	/// Waits for a failed task to reach its final state before asserting on it
+	/// </summary>
+	/// <remarks>
+	/// The failure state is written from more than one thread. The failure itself sets Errored and
+	/// Message, the log entry goes through Log.Settings.Context, and Finished is set by a posted
+	/// OnFinished(). With no ambient context TaskCreator falls back to a plain
+	/// SynchronizationContext, whose Post() queues to the thread pool, so Finished can be observed
+	/// before the rest of the state has landed. Waiting on Finished alone made these tests flaky
+	/// </remarks>
+	private static void AssertTaskFailed(TaskInstance task, string message)
+	{
+		bool reachedFinalState = SpinWait.SpinUntil(() =>
+			task.Finished &&
+			task.Errored &&
+			task.Message == message &&
+			task.Log.Level >= LogLevel.Error &&
+			HasLogEntry(task.Log, message),
+			TimeSpan.FromSeconds(10));
+
+		Assert.That(reachedFinalState, Is.True,
+			$"Finished={task.Finished}, Errored={task.Errored}, " +
+			$"Message={task.Message ?? "(null)"}, Level={task.Log.Level}");
+	}
+
+	// Entries are added under a lock this can't take, so enumerating can collide with a posted
+	// add. This only runs inside a spin, so treating a collision as "not yet" just retries
+	private static bool HasLogEntry(Log log, string message)
+	{
+		try
+		{
+			return log.Items.Any(entry => entry.Text == message);
+		}
+		catch (InvalidOperationException)
+		{
+			return false;
+		}
 	}
 
 	[Test, Description("Finishing twice only runs the completion logic once")]
@@ -117,10 +157,7 @@ public class TaskInstanceTests : BaseTest
 
 		TaskInstance task = creator.Start(new Call());
 
-		Assert.That(SpinWait.SpinUntil(() => task.Finished, TimeSpan.FromSeconds(1)), Is.True);
-		Assert.That(task.Errored, Is.True);
-		Assert.That(task.Message, Is.EqualTo("Expected"));
-		Assert.That(task.Log.Level, Is.GreaterThanOrEqualTo(SideScroll.Logs.LogLevel.Error));
+		AssertTaskFailed(task, "Expected");
 	}
 
 	[Test]
@@ -143,11 +180,7 @@ public class TaskInstanceTests : BaseTest
 
 		TaskInstance task = creator.Start(new Call());
 
-		Assert.That(SpinWait.SpinUntil(() => task.Finished, TimeSpan.FromSeconds(1)), Is.True);
-		Assert.That(task.Errored, Is.True);
-		Assert.That(task.Message, Is.EqualTo("Background failure"));
-		Assert.That(task.Log.Level, Is.GreaterThanOrEqualTo(SideScroll.Logs.LogLevel.Error));
-		Assert.That(task.Log.Items.Any(entry => entry.Text == "Background failure"), Is.True);
+		AssertTaskFailed(task, "Background failure");
 	}
 
 	[Test]

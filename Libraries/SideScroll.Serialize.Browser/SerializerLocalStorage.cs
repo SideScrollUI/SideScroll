@@ -198,10 +198,18 @@ public partial class SerializerLocalStorage : SerializerFile
 	}
 
 	/// <summary>
-	/// Converts a localStorage key back to a file path
+	/// Converts a localStorage data key back to a file path
 	/// </summary>
+	/// <exception cref="ArgumentException">The key isn't a data key</exception>
 	public static string ConvertStorageKeyToPath(string storageKey)
 	{
+		// The header prefix also starts with "SideScroll_", so blindly trimming the data prefix
+		// off one would leave part of it in the path instead of failing
+		if (!storageKey.StartsWith(StoragePrefix, StringComparison.Ordinal))
+		{
+			throw new ArgumentException($"Not a {StoragePrefix} key: {storageKey}", nameof(storageKey));
+		}
+
 		string encodedPath = storageKey[StoragePrefix.Length..];
 		return Uri.UnescapeDataString(encodedPath);
 	}
@@ -219,7 +227,7 @@ public partial class SerializerLocalStorage : SerializerFile
 			!relativePath.Equals(DataRepo.PrimaryIndexFileName, StringComparison.Ordinal);
 	}
 
-	/// <summary>Returns whether data exists at either the current or legacy key for a logical path.</summary>
+	/// <summary>Returns whether data exists for a logical path.</summary>
 	public static bool PathExists(string path)
 	{
 		return ExistsInStorage(ConvertPathToStorageKey(path));
