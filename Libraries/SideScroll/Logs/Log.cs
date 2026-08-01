@@ -2,6 +2,7 @@ using SideScroll.Attributes;
 using SideScroll.Collections;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Text;
 
 namespace SideScroll.Logs;
@@ -156,7 +157,7 @@ public class Log : LogEntry
 	public void Throw(Exception e)
 	{
 		Add(e);
-		throw e;
+		ExceptionDispatchInfo.Capture(e).Throw();
 	}
 
 	/// <summary>
@@ -239,9 +240,9 @@ public class Log : LogEntry
 		logEntry.RootLog = RootLog;
 		logEntry.Settings = Settings;
 
-		if (Settings.Context != null)
+		if (Settings.Context is { } context)
 		{
-			Settings.Context.Post(AddEntryCallback, logEntry);
+			context.Post(AddEntryCallback, logEntry);
 		}
 		else
 		{
@@ -261,24 +262,32 @@ public class Log : LogEntry
 	private void AddEntry(LogEntry logEntry)
 	{
 		Items.Add(logEntry);
-		if (Items.Count > Settings!.MaxLogItems)
+
+		// Always update, otherwise Level would stop rising once the log fills up and
+		// later errors wouldn't show up in the Tasks that check it
+		UpdateStats(logEntry);
+
+		// Subscribe before trimming so an entry removed immediately (for example when MaxLogItems
+		// is zero) follows the same unsubscribe path as any previously retained child.
+		if (logEntry is Log addedLog)
 		{
-			// subtract entries or leave them?
-			Items.RemoveAt(0);
-			//UpdateStats();
+			addedLog.OnMessage += ChildLog_OnMessage;
 		}
-		else
+
+		int maxLogItems = Math.Max(0, Settings!.MaxLogItems);
+		while (Items.Count > maxLogItems)
 		{
-			UpdateStats(logEntry);
+			// Entries counts everything added, including trimmed entries
+			LogEntry removedEntry = Items[0];
+			Items.RemoveAt(0);
+
+			if (removedEntry is Log removedLog)
+			{
+				removedLog.OnMessage -= ChildLog_OnMessage;
+			}
 		}
 
 		NotifyLogMessage(logEntry);
-
-		// Update if there can be child entries
-		if (logEntry is Log log)
-		{
-			log.OnMessage += ChildLog_OnMessage;
-		}
 	}
 
 	// Update stats when a new child log entry gets added at any level below
