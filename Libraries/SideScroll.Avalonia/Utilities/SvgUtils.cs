@@ -128,7 +128,7 @@ public static class SvgUtils
 			stream.Position = 0;
 			using var svgStream = new StreamReader(stream, leaveOpen: true);
 			string line = svgStream.ReadLine()!;
-			return line.StartsWith("<?xml");
+			return line.StartsWith("<?xml", StringComparison.Ordinal);
 		}
 		catch (Exception)
 		{

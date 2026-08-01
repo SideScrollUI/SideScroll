@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed CSV exports not quoting or escaping the header row, so a column name containing a comma or a quote shifted every column after it for anything reading the file
+- Fixed binned Charts drawing a line straight through gaps instead of breaking it, since only a leading gap ever added the `NaN` that breaks the line, and treating a bin whose values sum to zero as a gap. Empty bins are now tracked separately from bins summing to zero
+- Fixed binned Charts misaligning bins for negative X values, where the truncating cast rounded toward zero instead of down, and adding an empty bin past the last point
+- Fixed screen capture retaining its bitmaps after a selection was replaced, saved, or the capture was closed
+- Fixed `DataGridExtensions.ColumnToStringTable()` and `SelectedColumnToString()` throwing a `NullReferenceException` when the DataGrid has no data (a null `ItemsSource` or `SelectedItems`)
+- Fixed table formatting hanging indefinitely when the maximum column width is zero
 - Fixed DataGrid Search collecting text from nested lists without any limit, which searched every item of every inner list for every row on each keystroke. Capped by the new `Filter.MaxSearchTextValues` (1,000) and a nesting limit
 - Fixed DataGrid Search uppercasing with the current culture before comparing ordinally, so case insensitive search stopped working for any term containing an `i` in cultures where it doesn't uppercase to `I` (e.g. searching `ibm` didn't match `IBM` in tr-TR)
 - Fixed a DataGrid Search depth prefix with too many digits (e.g. `+99999999999`) throwing an `OverflowException` while typing

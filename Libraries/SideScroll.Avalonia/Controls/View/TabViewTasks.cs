@@ -42,7 +42,7 @@ public class TabViewTasks : Grid, IDisposable
 			.Select(taskInstance => _tabTaskInstances.GetValue(taskInstance, ti => new TabTaskInstance(ti)))
 			.ToList();
 
-	private readonly ConditionalWeakTable<TaskInstance, TabTaskInstance> _tabTaskInstances = new();
+	private readonly ConditionalWeakTable<TaskInstance, TabTaskInstance> _tabTaskInstances = [];
 
 	private readonly TabDataGrid _tabDataGrid;
 

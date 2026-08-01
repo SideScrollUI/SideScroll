@@ -29,10 +29,13 @@ public static class DataGridExtensions
 		ArgumentNullException.ThrowIfNull(column);
 
 		StringBuilder sb = new();
-		foreach (var item in dataGrid.ItemsSource)
+		if (dataGrid.ItemsSource is { } itemsSource)
 		{
-			string? value = GetCellValue(column, item);
-			sb.AppendLine(value);
+			foreach (var item in itemsSource)
+			{
+				string? value = GetCellValue(column, item);
+				sb.AppendLine(value);
+			}
 		}
 		return sb.ToString();
 	}
@@ -46,10 +49,13 @@ public static class DataGridExtensions
 		ArgumentNullException.ThrowIfNull(column);
 
 		StringBuilder sb = new();
-		foreach (var item in dataGrid.SelectedItems)
+		if (dataGrid.SelectedItems is { } selectedItems)
 		{
-			string? value = GetCellValue(column, item);
-			sb.AppendLine(value);
+			foreach (var item in selectedItems)
+			{
+				string? value = GetCellValue(column, item);
+				sb.AppendLine(value);
+			}
 		}
 		return sb.ToString();
 	}
@@ -162,40 +168,6 @@ public static class DataGridExtensions
 			out List<List<string>> contentRows);
 
 		return TableToCsv(columns, contentRows);
-	}
-
-	private static string TableToCsv(List<ColumnInfo> columns, List<List<string>> contentRows)
-	{
-		StringBuilder stringBuilder = new();
-		bool addComma = false;
-		foreach (ColumnInfo columnInfo in columns)
-		{
-			if (addComma)
-				stringBuilder.Append(',');
-			addComma = true;
-			stringBuilder.Append(columnInfo.Name);
-		}
-		stringBuilder.Append('\n');
-
-		foreach (var row in contentRows)
-		{
-			addComma = false;
-			foreach (string value in row)
-			{
-				if (addComma)
-					stringBuilder.Append(',');
-				addComma = true;
-
-				string text = value ?? "";
-				text = text.Replace("\"", "\"\""); // escape double quote
-				stringBuilder.Append('"');
-				stringBuilder.Append(text);
-				stringBuilder.Append('"');
-			}
-			stringBuilder.Append('\n');
-		}
-
-		return stringBuilder.ToString();
 	}
 
 	private static void GetDataGridContents(DataGrid dataGrid, IEnumerable items, out List<ColumnInfo> columns, out List<List<string>> contentRows, int? maxValueLength = null)

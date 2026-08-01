@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\SideScroll.Avalonia\SideScroll.Avalonia.csproj" />
+    <ProjectReference Include="..\..\Libraries\SideScroll.Avalonia.Charts.LiveCharts\SideScroll.Avalonia.Charts.LiveCharts.csproj" />
   </ItemGroup>
 
 </Project>

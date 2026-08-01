@@ -248,19 +248,24 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 		return chartPoints;
 	}
 
-	private static List<LiveChartPoint> BinDataPoints(List<LiveChartPoint> dataPoints, double xBinSize)
+	internal static List<LiveChartPoint> BinDataPoints(List<LiveChartPoint> dataPoints, double xBinSize)
 	{
 		if (dataPoints.Count == 0) return dataPoints;
 
 		double firstX = dataPoints.First().X!.Value;
-		double firstBinX = ((int)(firstX / xBinSize)) * xBinSize; // use start of interval
+		double firstBinX = Math.Floor(firstX / xBinSize) * xBinSize; // use start of interval
 		double lastBinX = dataPoints.Last().X!.Value;
-		int numBins = (int)Math.Ceiling((lastBinX - firstBinX) / xBinSize) + 1;
-		double[] bins = new double[numBins];
+
+		// The last point's bin is the highest one, rounding up would add an empty bin after it
+		int numBins = (int)Math.Floor((lastBinX - firstBinX) / xBinSize) + 1;
+
+		var bins = new double[numBins];
+		var counts = new int[numBins]; // Tracked separately so an empty bin can be told apart from one summing to zero
 		foreach (LiveChartPoint dataPoint in dataPoints)
 		{
-			int bin = (int)((dataPoint.X!.Value - firstBinX) / xBinSize);
+			int bin = (int)Math.Floor((dataPoint.X!.Value - firstBinX) / xBinSize);
 			bins[bin] += dataPoint.Y!.Value;
+			counts[bin]++;
 		}
 
 		bool prevNan = false;
@@ -268,8 +273,9 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 		for (int i = 0; i < numBins; i++)
 		{
 			double value = bins[i];
-			if (value == 0)
+			if (counts[i] == 0)
 			{
+				// Only add one NaN per gap, it just tells the chart to break the line
 				if (prevNan) continue;
 
 				prevNan = true;
@@ -277,7 +283,7 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 			}
 			else
 			{
-				prevNan = true;
+				prevNan = false;
 			}
 			binDataPoints.Add(new LiveChartPoint(null, firstBinX + i * xBinSize, value, null));
 		}
