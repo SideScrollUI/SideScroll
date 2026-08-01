@@ -213,6 +213,11 @@ public class TypeSchema
 		Name = type.ToString(); // better than FullName (don't remember why)
 
 		AssemblyQualifiedName = type.AssemblyQualifiedName!; // todo: strip out unused version?
+
+		// Only set when saving. Loading uses the value stored in the file, since it decides
+		// whether object references include a type index and the type might be sealed since
+		HasSubType = !type.IsSealed; // set for all non derived classes?
+
 		InitializeType();
 
 		if (!IsCollection)
@@ -233,8 +238,7 @@ public class TypeSchema
 	private void InitializeType()
 	{
 		IsCollection = typeof(ICollection).IsAssignableFrom(Type);
-		HasSubType = !Type!.IsSealed; // set for all non derived classes?
-		CanReference = !(Type.IsPrimitive || Type.IsEnum || Type == typeof(string));
+		CanReference = !(Type!.IsPrimitive || Type.IsEnum || Type == typeof(string));
 		NonNullableType = Type.GetNonNullableType();
 		IsPrimitive = NonNullableType.IsPrimitive;
 		HasEmptyConstructor = TypeHasEmptyConstructor(Type);
@@ -309,9 +313,26 @@ public class TypeSchema
 	/// </summary>
 	public static bool TypeHasEmptyConstructor(Type type)
 	{
-		ConstructorInfo? constructorInfo = type.GetConstructor(Type.EmptyTypes); // doesn't find constructor if none declared
-		var constructors = type.GetConstructors();
-		return (constructorInfo != null || constructors.Length == 0);
+		// Objects get created with Activator.CreateInstance(type, true), which can use a non public
+		// constructor. Only checking the public ones treats a type with a single private constructor
+		// that takes parameters as having an empty one, and creating it then throws
+		ConstructorInfo? constructorInfo = type.GetConstructor(
+			BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+			null,
+			Type.EmptyTypes,
+			null);
+
+		if (constructorInfo != null)
+			return true;
+
+		// Structs always have an implicit parameterless constructor, but ones that declare their own
+		// still need the custom constructor path to restore read only members like Color's
+		if (type.IsValueType)
+			return type.GetConstructors().Length == 0;
+
+		// A class with no declared constructors gets an implicit public parameterless one, which would
+		// have been found above. So every constructor here takes parameters, whatever their visibility
+		return false;
 	}
 
 	/// <summary>
@@ -329,15 +350,17 @@ public class TypeSchema
 	{
 		if (HasEmptyConstructor || Type == null) return null;
 
+		// Ordinal so a member matches its constructor parameter regardless of case, without
+		// ToLower() mangling them in cultures where 'I' doesn't lowercase to 'i' (tr-TR turns
+		// "Id" into "ıd" while the parameter "id" stays "id", so they'd never match)
 		var members = ReadOnlyPropertySchemas
 			.Where(p => p.IsReadable)
-			.Select(p => p.Name.ToLower())
-			.ToHashSet();
+			.Select(p => p.Name)
+			.ToHashSet(StringComparer.OrdinalIgnoreCase);
 
 		var fieldMembers = FieldSchemas
 			.Where(f => f.IsReadable)
-			.Select(f => f.Name.ToLower())
-			.ToHashSet();
+			.Select(f => f.Name);
 
 		foreach (var member in fieldMembers)
 		{
@@ -346,12 +369,12 @@ public class TypeSchema
 
 		if (members.Count == 0) return null;
 
-		ConstructorInfo[] constructors = Type!.GetConstructors();
+		ConstructorInfo[] constructors = Type.GetConstructors();
 		foreach (ConstructorInfo constructor in constructors)
 		{
 			ParameterInfo[] parameters = constructor.GetParameters();
 			// Skip optional parameters (with default values) when checking for matching constructor
-			if (parameters.All(p => p.HasDefaultValue || members.Contains(p.Name?.ToLower() ?? "- invalid -")))
+			if (parameters.All(p => p.HasDefaultValue || members.Contains(p.Name ?? "- invalid -")))
 			{
 				return constructor;
 			}
@@ -368,7 +391,9 @@ public class TypeSchema
 
 		foreach (var param in CustomConstructor.GetParameters())
 		{
-			var prop = ReadOnlyPropertySchemas.FirstOrDefault(p => p.Name.Equals(param.Name, StringComparison.CurrentCultureIgnoreCase));
+			// Ordinal, tr-TR treats 'I' and 'i' as different letters so a culture aware compare
+			// wouldn't match a property named "Id" to its "id" parameter
+			var prop = ReadOnlyPropertySchemas.FirstOrDefault(p => p.Name.Equals(param.Name, StringComparison.OrdinalIgnoreCase));
 			if (prop != null)
 			{
 				prop.IsRequired = true;

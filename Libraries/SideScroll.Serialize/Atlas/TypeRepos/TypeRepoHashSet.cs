@@ -23,9 +23,19 @@ public class TypeRepoHashSet : TypeRepoEnumerable, IPreloadRepo
 
 	public static bool CanAssign(Type? type)
 	{
-		return type != null &&
-			type.IsGenericType &&
-			typeof(HashSet<>).IsAssignableFrom(type.GetGenericTypeDefinition());
+		if (type == null) return false;
+		
+		Type? baseType = type;
+		while (baseType != null && baseType != typeof(object))
+		{
+			if (baseType.IsGenericType && baseType.GetGenericTypeDefinition() == typeof(HashSet<>))
+			{
+				return true;
+			}
+			baseType = baseType.BaseType;
+		}
+		
+		return false;
 	}
 
 	// Preload the items first so they get unique hash codes before adding to the HashSet
@@ -33,6 +43,7 @@ public class TypeRepoHashSet : TypeRepoEnumerable, IPreloadRepo
 	public void PreloadObjectData(object? obj)
 	{
 		int count = Reader!.ReadInt32();
+		ValidateBytesAvailable(count);
 
 		for (int j = 0; j < count; j++)
 		{
@@ -43,6 +54,7 @@ public class TypeRepoHashSet : TypeRepoEnumerable, IPreloadRepo
 	public override void LoadObjectData(object obj)
 	{
 		int count = Reader!.ReadInt32();
+		ValidateBytesAvailable(count);
 
 		for (int j = 0; j < count; j++)
 		{

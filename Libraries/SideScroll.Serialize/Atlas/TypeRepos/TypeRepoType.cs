@@ -39,11 +39,20 @@ public class TypeRepoType(Serializer serializer, TypeSchema typeSchema) : TypeRe
 		return obj;
 	}
 
-	// ignore Assembly version to allow loading shared 
-	private static Assembly AssemblyResolver(AssemblyName assemblyName)
+	// ignore Assembly version to allow loading shared
+	private static Assembly? AssemblyResolver(AssemblyName assemblyName)
 	{
 		assemblyName.Version = null;
-		return Assembly.Load(assemblyName);
+		try
+		{
+			return Assembly.Load(assemblyName);
+		}
+		catch (Exception)
+		{
+			// Return null so Type.GetType() reports a missing type instead of throwing.
+			// Throwing here would abort loading the rest of the object's members
+			return null;
+		}
 	}
 
 	public override void Clone(object source, object dest)

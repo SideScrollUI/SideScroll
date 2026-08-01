@@ -38,7 +38,7 @@ public class TypeRepoList : TypeRepo
 		}
 		else
 		{
-			Debug.WriteLine($"Failed to find generic argument for {LoadableType}");
+			_elementType = typeof(object);
 		}
 	}
 

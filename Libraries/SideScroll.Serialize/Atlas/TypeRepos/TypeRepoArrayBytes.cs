@@ -54,7 +54,10 @@ public class TypeRepoArrayBytes(Serializer serializer, TypeSchema typeSchema) : 
 	{
 		//int count = reader.ReadInt32();
 		int count = _sizes![objectIndex];
-		ValidateBytesAvailable(count);
+
+		// The reader is still positioned in whatever type referenced this array,
+		// so only the size can be checked here
+		ValidateDataSize(count);
 
 		var array = new byte[count];
 		ObjectsLoaded[objectIndex] = array;
@@ -66,11 +69,10 @@ public class TypeRepoArrayBytes(Serializer serializer, TypeSchema typeSchema) : 
 	public override void LoadObjectData(object obj)
 	{
 		var array = (byte[])obj;
-		int read = Reader!.Read(array, 0, array.Length);
-		if (read != array.Length)
-		{
-			throw new EndOfStreamException();
-		}
+		ValidateBytesAvailable(array.Length);
+
+		// Read() is allowed to return fewer bytes than requested, ReadExactly() loops until it's filled
+		Reader!.BaseStream.ReadExactly(array, 0, array.Length);
 	}
 
 	public override void Clone(object source, object dest)

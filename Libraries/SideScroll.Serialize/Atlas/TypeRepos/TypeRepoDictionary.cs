@@ -23,8 +23,6 @@ public class TypeRepoDictionary : TypeRepo
 	private readonly Type? _typeKey;
 	private readonly Type? _typeValue;
 
-	private readonly MethodInfo _addMethod;
-
 	private TypeRepo? _list1TypeRepo;
 	private TypeRepo? _list2TypeRepo;
 
@@ -43,11 +41,9 @@ public class TypeRepoDictionary : TypeRepo
 		}
 		else
 		{
-			Debug.WriteLine($"Failed to find generic arguments for {LoadableType}");
+			_typeKey = typeof(object);
+			_typeValue = typeof(object);
 		}
-
-		_addMethod = LoadableType.GetMethods()
-			.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Length == 2)!;
 	}
 
 	public static bool CanAssign(Type? type)
@@ -95,6 +91,7 @@ public class TypeRepoDictionary : TypeRepo
 	{
 		var dictionary = (IDictionary)obj;
 		int count = Reader!.ReadInt32();
+		ValidateBytesAvailable(count);
 
 		for (int j = 0; j < count; j++)
 		{
@@ -103,7 +100,7 @@ public class TypeRepoDictionary : TypeRepo
 
 			if (key != null)
 			{
-				_addMethod.Invoke(dictionary, [key, value]);
+				dictionary.Add(key, value);
 			}
 		}
 	}
@@ -118,7 +115,7 @@ public class TypeRepoDictionary : TypeRepo
 			object? value = Serializer.Clone(item.Value);
 			if (key != null)
 			{
-				_addMethod.Invoke(iDest, [key, value]);
+				iDest.Add(key, value);
 			}
 		}
 	}

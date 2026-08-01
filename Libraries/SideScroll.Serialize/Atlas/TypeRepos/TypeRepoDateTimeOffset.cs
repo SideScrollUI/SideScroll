@@ -21,10 +21,14 @@ public class TypeRepoDateTimeOffset(Serializer serializer, TypeSchema typeSchema
 		return type == typeof(DateTimeOffset);
 	}
 
+	// Offsets are limited to +/- 14 hours, so minutes always fit in a short
+	private const int OffsetSize = sizeof(long) + sizeof(short);
+
 	public override void SaveObject(BinaryWriter writer, object obj)
 	{
-		DateTime dateTime = ((DateTimeOffset)obj).UtcDateTime;
-		writer.Write(dateTime.Ticks);
+		var dateTimeOffset = (DateTimeOffset)obj;
+		writer.Write(dateTimeOffset.UtcTicks);
+		writer.Write((short)dateTimeOffset.Offset.TotalMinutes);
 	}
 
 	protected override object? CreateObject(int objectIndex)
@@ -38,8 +42,14 @@ public class TypeRepoDateTimeOffset(Serializer serializer, TypeSchema typeSchema
 			if (CanAssign(LoadableType!))
 			{
 				long ticks = Reader.ReadInt64();
+
+				// Earlier versions only stored the UTC ticks and lost the offset
+				short offsetMinutes = ObjectSizes![objectIndex] >= OffsetSize
+					? Reader.ReadInt16()
+					: (short)0;
+
 				var dateTime = new DateTime(ticks, DateTimeKind.Utc);
-				obj = new DateTimeOffset(dateTime);
+				obj = new DateTimeOffset(dateTime).ToOffset(TimeSpan.FromMinutes(offsetMinutes));
 			}
 			else
 			{

@@ -18,6 +18,12 @@ public class SerializeValidationTests : SerializeBaseTest
 	{
 	}
 
+	[Test, Description("Validate null base64 data")]
+	public void ValidateNullBase64()
+	{
+		Assert.That(() => SerializerMemory.ValidateBase64(Call, null!), Throws.Exception.TypeOf<ArgumentNullException>());
+	}
+
 	[Test, Description("Validate invalid base64 data")]
 	public void ValidateInvalidBase64()
 	{
@@ -63,6 +69,18 @@ public class SerializeValidationTests : SerializeBaseTest
 
 		Assert.That(first, Is.EqualTo("input"));
 		Assert.That(second, Is.EqualTo("input"));
+	}
+
+	[Test, Description("TryLoad should catch exceptions from invalid data and return false")]
+	public void TryLoadCatchesExceptions()
+	{
+		SerializerMemoryAtlas serializer = new();
+		serializer.Stream.Write([0, 1, 2, 3]); // Invalid atlas data
+
+		bool success = serializer.TryLoad(out string? result, Call);
+
+		Assert.That(success, Is.False);
+		Assert.That(result, Is.Null);
 	}
 
 	[Test, Description("Validate leaves the stream open so the data can still be loaded")]

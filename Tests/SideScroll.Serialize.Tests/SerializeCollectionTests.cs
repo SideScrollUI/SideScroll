@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using SideScroll.Serialize.Atlas;
 using System.Collections;
+using System.Collections.Concurrent;
 
 namespace SideScroll.Serialize.Tests;
 
@@ -96,6 +97,90 @@ public class SerializeCollectionTests : SerializeBaseTest
 
 		Assert.That(output[0], Is.EqualTo(input[0]));
 		Assert.That(output[1], Is.EqualTo(input[1]));
+	}
+
+	[Test, Description("Serialize ConcurrentDictionary")]
+	public void SerializeConcurrentDictionary()
+	{
+		var input = new ConcurrentDictionary<string, string>();
+		input.TryAdd("abc", "123");
+
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<ConcurrentDictionary<string, string>>(Call);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output["abc"], Is.EqualTo("123"));
+	}
+
+	[Test, Description("Serialize ArrayList")]
+	public void SerializeArrayList()
+	{
+		var input = new ArrayList();
+		input.Add("123");
+
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<ArrayList>(Call);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output[0], Is.EqualTo("123"));
+	}
+
+	public class StringHashSet : HashSet<string> { }
+
+	[Test, Description("Clone ByteArray")]
+	public void CloneByteArray()
+	{
+		byte[] input = new byte[] { 1, 2, 3 };
+		var serializer = new Serializer();
+		var output = serializer.Clone(input);
+		Assert.That(output, Is.Not.Null);
+	}
+
+	
+	[Test, Description("Serialize Custom HashSet")]
+	public void SerializeCustomHashSet()
+	{
+		var input = new StringHashSet();
+		input.Add("abc");
+
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<StringHashSet>(Call);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output.Contains("abc"), Is.True);
+	}
+
+	// The class's own type argument isn't the element type, only IEnumerable<T> names that
+	public class KeyedStringHashSet<TKey> : HashSet<string> { }
+
+	[Test, Description("Serialize a generic HashSet subclass whose type argument isn't the element type")]
+	public void SerializeCustomGenericHashSet()
+	{
+		var input = new KeyedStringHashSet<int>
+		{
+			"abc",
+			"123",
+		};
+
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<KeyedStringHashSet<int>>(Call);
+
+		Assert.That(output, Has.Exactly(2).Items);
+		Assert.That(output, Does.Contain("abc"));
+		Assert.That(output, Does.Contain("123"));
+	}
+
+	[Test, Description("Serialize Hashtable")]
+	public void SerializeHashtable()
+	{
+		var input = new Hashtable();
+		input.Add("abc", "123");
+
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<Hashtable>(Call);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output["abc"], Is.EqualTo("123"));
 	}
 
 	[Test, Description("Serialize IList Type")]
