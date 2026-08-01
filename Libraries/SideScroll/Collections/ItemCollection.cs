@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace SideScroll.Collections;
 
@@ -122,6 +123,12 @@ public class ItemCollection<T> : ObservableCollection<T>, IItemCollection, IComp
 		{
 			Items.Add(item);
 		}
+
+		// Adding to Items directly skips the notifications InsertItem() would have raised, and
+		// ObservableCollection always pairs these two with the collection change. Without them a
+		// binding to Count never updates
+		OnPropertyChanged(new PropertyChangedEventArgs(nameof(Count)));
+		OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
 
 		// DataGrid takes too long to load these using Add
 		OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));

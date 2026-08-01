@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed `ItemCollection.AddRange()` raising only the collection change, so a binding to `Count` never updated. It now raises the `Count` and `Item[]` property changes that `ObservableCollection` pairs with every change
+- Fixed DataGrid exports throwing an `InvalidCastException` for a column whose `Header` isn't a string, since the property is typed `object`
+- Fixed a negative `ListByte.MaxBytes` throwing while allocating the read buffer in `Load()`, and returning nothing from `Create()`
+- Fixed `ProcessUtils.OpenFolder()` throwing when the path is removed between its existence check and reading its attributes, which happened outside the `try` that swallows every other failure there
 - Fixed `BookmarkNavigator` throwing from `RemoveRange()` on the next navigation when `MaxHistorySize` was zero or negative, since it asked to remove more entries than the history held
 - Fixed a `Filter.MaxSearchTextValues` below one making every search report no matches, by returning before collecting even the row's own label
 - Fixed bookmark addresses ending in `" / "` for a selected row with no child selection, the separator was written whether or not the child had an address

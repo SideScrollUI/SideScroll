@@ -188,7 +188,8 @@ public static class DataGridExtensions
 
 		foreach (DataGridColumn dataColumn in visibleColumns.Values)
 		{
-			var columnInfo = new ColumnInfo((string)dataColumn.Header);
+			// Header is typed object, a control or null one used to fail the whole export
+			var columnInfo = new ColumnInfo(dataColumn.Header?.ToString() ?? "");
 			if (dataColumn is DataGridPropertyTextColumn propertyColumn)
 			{
 				columnInfo.RightAlign = GetTextAlignment(propertyColumn.PropertyInfo.PropertyType);

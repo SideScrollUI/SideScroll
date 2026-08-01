@@ -111,6 +111,18 @@ public class TabDataBookmarkTests : BaseTest
 		Assert.That(dataBookmark.GetAddress(), Is.EqualTo("parent / child"));
 	}
 
+	[Test, Description(
+		"Contract test, not a regression test. The list indexer already threw the same exception " +
+		"type with the same parameter name, so the explicit guard only improves the message")]
+	public void GetData_NegativeIndex_IsRejected()
+	{
+		TabBookmark bookmark = new();
+
+		Assert.Throws<ArgumentOutOfRangeException>(() => bookmark.GetData(-1));
+		Assert.DoesNotThrow(() => bookmark.GetData(0));
+		Assert.DoesNotThrow(() => bookmark.GetData(3), "Still grows to reach the index.");
+	}
+
 	[Test, Description("Multiple leaf rows are bracketed and comma separated, with no trailing separators")]
 	public void GetAddress_MultipleLeafRows_HasNoTrailingSeparators()
 	{

@@ -109,6 +109,10 @@ public class TabBookmark
 	/// </summary>
 	public TabDataBookmark GetData(int index) // Change to string id?
 	{
+		// The grow loop below is skipped for a negative index, which then indexed the list
+		// directly and threw from there instead of naming the parameter
+		ArgumentOutOfRangeException.ThrowIfNegative(index);
+
 		// Creates new Settings if necessary
 		while (TabDatas.Count <= index)
 		{

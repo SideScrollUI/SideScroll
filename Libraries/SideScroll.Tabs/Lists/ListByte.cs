@@ -10,7 +10,14 @@ public class ListByte(int index, byte b)
 	/// <summary>
 	/// Gets or sets the maximum number of bytes to display (default: 100,000)
 	/// </summary>
-	public static int MaxBytes { get; set; } = 100_000;
+	public static int MaxBytes
+	{
+		get => _maxBytes;
+		// A negative limit throws while allocating the read buffer in Load(), and makes Create()
+		// return nothing at all
+		set => _maxBytes = Math.Max(0, value);
+	}
+	private static int _maxBytes = 100_000;
 
 	/// <summary>
 	/// Gets the zero-based index of the byte

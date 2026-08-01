@@ -105,18 +105,20 @@ public static class ProcessUtils
 		if (!File.Exists(folder) && !Directory.Exists(folder))
 			return;
 
-		// Select file instead if in folder path
-		// Trying to open a file will use the default app to open it
-		if (Path.GetDirectoryName(folder) is { } directoryName &&
-			Path.GetFileName(folder) is { } fileName &&
-			!File.GetAttributes(folder).HasFlag(FileAttributes.Directory))
-		{
-			folder = directoryName;
-			selection = fileName;
-		}
-
 		try
 		{
+			// Select file instead if in folder path
+			// Trying to open a file will use the default app to open it
+			// GetAttributes() throws when the path is removed after the checks above, so it belongs
+			// inside the same catch as every other failure here
+			if (Path.GetDirectoryName(folder) is { } directoryName &&
+				Path.GetFileName(folder) is { } fileName &&
+				!File.GetAttributes(folder).HasFlag(FileAttributes.Directory))
+			{
+				folder = directoryName;
+				selection = fileName;
+			}
+
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 			{
 				folder = folder.Replace('/', '\\');
