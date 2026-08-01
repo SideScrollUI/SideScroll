@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed `ItemCollection.AddRange()` mutating the collection while enumerating its input, so adding a collection to itself or passing a deferred enumerable could leave it partially changed without the reset notification
+- Fixed `ItemQueueCollection.MaxCount` not applying to items added through a base class reference or `AddRange()`, and negative values not being treated as zero
 - Fixed `ListSeries` inferring element types only from the list's generic argument, so a non-generic list now falls back to the type of its first non-null item, and points whose Y value is null are skipped instead of dereferenced
 - Fixed `ListSeries.CalculateTotal()` flooring totals above 50, which reported a whole number for a fractional sum. Totals are now exact at every magnitude
 - Added `SeriesType.Count` support to time period grouping, so a count series groups each period by item count rather than by average value
