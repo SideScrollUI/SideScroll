@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed `LinkUri.TryParse()` throwing instead of returning false for a malformed version like `v1..2`, `v1.2.3.4.5`, or one too large for an `int`. The pattern only checks for digits and dots, so those still reach the parser
+- Fixed `LinkUri.ToUri()` adding a trailing `?` for parsed uris that had no query, and normalizing the prefix and type with the current culture
+- Fixed `ReflectorUtils.FollowPropertyPath()` throwing instead of returning `null` for a path segment that doesn't exist, a malformed index (`foo[`, `foo[]`, `[0]bar`), an index that's out of range or missing from a dictionary, or an index applied to something that isn't a list or dictionary
+- Fixed `TypeExtensions.GetElementTypeForAll()` resolving the element type from the first generic argument, which returned `TKey` for a `Dictionary<TKey, TValue>` instead of `KeyValuePair<TKey, TValue>`, and the wrong argument for collections whose type parameter isn't the element type (e.g. `class Cache<TKey> : HashSet<string>`). It now reads `IEnumerable<T>` first
+- Fixed `TypeExtensions.GetAssemblyQualifiedShortName()` leaving fully qualified assembly names for the generic arguments inside an array (e.g. `List<int>[]`)
+- Fixed visible-property discovery including properties with a non-public getter
 - Fixed `FileUtils.DirectoryCopy()` recursing into its own destination when copying into a subdirectory of the source. The destination was created before the source subdirectories were listed, so it copied itself into itself until the path length limit stopped it, leaving behind a directory tree too deep for `rmdir` to remove. Copying into the source is now rejected
 - Fixed a default `FilePath` exposing a null path instead of an empty one, since it's a struct and its default has no path
 - Fixed `TaskInstance.SetFinished()` completing twice when called again before its posted `OnFinished()` ran, since `Finished` isn't set until that runs and couldn't guard the second call

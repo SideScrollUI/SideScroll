@@ -87,7 +87,7 @@ public class LinkUri
 
 		uri += Path;
 
-		if (Query != null)
+		if (!string.IsNullOrEmpty(Query))
 		{
 			uri += '?' + Query;
 		}
@@ -119,21 +119,27 @@ public class LinkUri
 		Match match = _regex.Match(url);
 		if (!match.Success) return false;
 
+		if (!TryParseVersion(match.Groups["version"].Value, out Version? version)) return false;
+
 		linkUri = new LinkUri
 		{
 			Url = url,
-			Prefix = match.Groups["prefix"].Value.ToLower(),
-			Type = match.Groups["type"].Value.ToLower(),
-			Version = ParseVersion(match.Groups["version"].Value),
+			Prefix = match.Groups["prefix"].Value.ToLowerInvariant(),
+			Type = match.Groups["type"].Value.ToLowerInvariant(),
+			Version = version,
 			Path = match.Groups["path"].Value,
-			Query = match.Groups["query"].Value,
+			// A missing group's Value is "", which ToUri() would turn into a trailing '?'
+			Query = match.Groups["query"].Success ? match.Groups["query"].Value : null,
 		};
 		return true;
 	}
 
-	private static Version? ParseVersion(string? version)
+	// The regex only checks that the version is digits and dots, so text like "1..2", "1.2.3.4.5",
+	// or a number too large for an int still reaches here and has to be rejected rather than thrown on
+	private static bool TryParseVersion(string? version, out Version? parsed)
 	{
-		if (version.IsNullOrEmpty()) return null;
+		parsed = null;
+		if (version.IsNullOrEmpty()) return true; // The version is optional
 
 		List<string> parts = version.Split('.').ToList();
 		while (parts.Count < 2)
@@ -141,6 +147,6 @@ public class LinkUri
 			parts.Add("0");
 		}
 
-		return new Version(string.Join('.', parts));
+		return Version.TryParse(string.Join('.', parts), out parsed);
 	}
 }
