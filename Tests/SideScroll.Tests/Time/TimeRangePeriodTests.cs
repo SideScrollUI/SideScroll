@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using SideScroll.Collections;
 using SideScroll.Time;
+using System.Collections;
 
 namespace SideScroll.Tests.Time;
 
@@ -9,10 +10,54 @@ public class TimeRangePeriodTests : BaseTest
 {
 	private static readonly DateTime StartTime = new(2000, 1, 1);
 
+	private sealed class NullablePoint
+	{
+		public DateTime Time { get; init; }
+		public double? Value { get; init; }
+	}
+
 	[OneTimeSetUp]
 	public void BaseSetup()
 	{
 		Initialize("Core");
+	}
+
+	[Test]
+	public void TimeRangeValues_SkipsNullYValues()
+	{
+		var points = new List<NullablePoint>
+		{
+			new() { Time = StartTime, Value = null },
+			new() { Time = StartTime.AddMinutes(1), Value = 2 },
+		};
+		var series = new ListSeries(
+			"Values",
+			points,
+			nameof(NullablePoint.Time),
+			nameof(NullablePoint.Value));
+
+		List<TimeRangeValue>? values = series.TimeRangeValues;
+
+		Assert.That(values, Has.Count.EqualTo(1));
+		Assert.That(values![0].Value, Is.EqualTo(2));
+	}
+
+	[Test]
+	public void ListSeries_NonGenericListInfersRuntimeElementType()
+	{
+		var points = new ArrayList
+		{
+			new NullablePoint { Time = StartTime, Value = 3 },
+		};
+
+		var series = new ListSeries(
+			"Values",
+			points,
+			nameof(NullablePoint.Time),
+			nameof(NullablePoint.Value));
+
+		Assert.That(series.TimeRangeValues, Has.Count.EqualTo(1));
+		Assert.That(series.TimeRangeValues![0].Value, Is.EqualTo(3));
 	}
 
 	[Test]
@@ -180,6 +225,88 @@ public class TimeRangePeriodTests : BaseTest
 		Assert.That(total, Is.EqualTo(5.0));
 	}
 
+	[Test, Description("Count series group each period by item count rather than averaging item values")]
+	public void ListSeriesGroupByPeriodCounts()
+	{
+		TimeSpan periodDuration = TimeSpan.FromMinutes(1);
+		TimeWindow timeWindow = new(StartTime, StartTime.Add(periodDuration));
+		List<TimeRangeValue> values =
+		[
+			new(StartTime, StartTime, 10),
+			new(StartTime.AddSeconds(10), StartTime.AddSeconds(10), 20),
+		];
+		var series = new ListSeries(values)
+		{
+			PeriodDuration = periodDuration,
+			SeriesType = SeriesType.Count,
+		};
+
+		List<TimeRangeValue>? grouped = series.GroupByPeriod(timeWindow);
+
+		Assert.That(grouped, Has.Count.EqualTo(1));
+		Assert.That(grouped![0].Value, Is.EqualTo(2));
+	}
+
+	[Test, Description("CalculateTotal retains fractional values above fifty")]
+	public void ListSeriesCalculateTotalDoesNotFloorLargeValues()
+	{
+		var series = new ListSeries(new List<double> { 50.75 })
+		{
+			SeriesType = SeriesType.Sum,
+		};
+
+		Assert.That(series.CalculateTotal(), Is.EqualTo(50.75));
+		Assert.That(series.Total, Is.EqualTo(50.75));
+	}
+
+	[Test, Description("A point exactly at the inclusive window start participates in min and max totals")]
+	public void TotalMinMaxIncludePointAtWindowStart()
+	{
+		TimeWindow window = new(StartTime, StartTime.AddMinutes(1));
+		List<TimeRangeValue> values =
+		[
+			new(StartTime, StartTime, 7),
+			new(StartTime.AddSeconds(10), StartTime.AddSeconds(10), 10),
+		];
+
+		Assert.That(TimeRangePeriod.TotalMinimum(values, window), Is.EqualTo(7));
+		Assert.That(TimeRangePeriod.TotalMaximum(values, window), Is.EqualTo(10));
+	}
+
+	[Test, Description("Tag values are deduplicated by exact value rather than substring")]
+	public void TagsKeepDistinctSubstringValues()
+	{
+		TimeRangePeriod period = new()
+		{
+			AllTags =
+			[
+				new Tag("Name", "foobar"),
+				new Tag("Name", "foo"),
+				new Tag("Name", "foobar"),
+			],
+		};
+
+		Assert.That(period.Tags, Has.Count.EqualTo(1));
+		Assert.That(period.Tags[0].Value, Is.EqualTo("foobar, foo"));
+	}
+
+	[Test, Description("Duplicate non-string tags retain every distinct value exactly once")]
+	public void TagsKeepDistinctNonStringValues()
+	{
+		TimeRangePeriod period = new()
+		{
+			AllTags =
+			[
+				new Tag("Status", 1),
+				new Tag("Status", 2),
+				new Tag("Status", 1),
+			],
+		};
+
+		Assert.That(period.Tags, Has.Count.EqualTo(1));
+		Assert.That(period.Tags[0].Value, Is.EqualTo("1, 2"));
+	}
+
 	[Test]
 	public void PeriodSumsDifferentlyAlignedTimeWindows()
 	{
@@ -203,7 +330,9 @@ public class TimeRangePeriodTests : BaseTest
 		{
 			DateTime endTime = current1.Add(periodDuration);
 			if (endTime > timeWindow1.EndTime)
+			{
 				endTime = timeWindow1.EndTime;
+			}
 			timeRangeValues1.Add(new TimeRangeValue(current1, endTime, 1));
 			current1 = current1.Add(periodDuration);
 		}
@@ -229,7 +358,9 @@ public class TimeRangePeriodTests : BaseTest
 		{
 			DateTime endTime = current2.Add(periodDuration);
 			if (endTime > timeWindow2.EndTime)
+			{
 				endTime = timeWindow2.EndTime;
+			}
 			timeRangeValues2.Add(new TimeRangeValue(current2, endTime, 1));
 			current2 = current2.Add(periodDuration);
 		}
@@ -273,7 +404,9 @@ public class TimeRangePeriodTests : BaseTest
 		{
 			DateTime endTime = current.Add(periodDuration);
 			if (endTime > baseEnd)
+			{
 				endTime = baseEnd;
+			}
 			timeRangeValues.Add(new TimeRangeValue(current, endTime, 1));
 			current = current.Add(periodDuration);
 		}
@@ -312,7 +445,7 @@ public class TimeRangePeriodTests : BaseTest
 		Assert.That(total1, Is.Not.Null, "First time window total should not be null");
 		Assert.That(total2, Is.Not.Null, "Second time window total should not be null");
 
-		// Check the raw sum before flooring
+		// CalculateTotal and GetTotal both preserve the exact aggregate
 		double? rawTotal2 = listSeries2.GetTotal(timeWindow2);
 		double expectedWindow2Raw = 55.0 + (11.0 * 60 + 59) / (12.0 * 60); // 55 + 719/720 = 55.99861...
 
@@ -320,9 +453,10 @@ public class TimeRangePeriodTests : BaseTest
 		Assert.That(rawTotal2, Is.EqualTo(expectedWindow2Raw).Within(0.01),
 			$"Window2 raw sum should be proportionally less. Expected: {expectedWindow2Raw}, Actual: {rawTotal2}");
 
-		// After flooring (CalculateTotal floors values > 50), both should be 55 and 56
+		// The aligned window receives the full sum; the offset window keeps its fractional sum
 		Assert.That(total1, Is.EqualTo(56), "Window1 should equal 56");
-		Assert.That(total2, Is.EqualTo(55), "Window2 should equal 55 after flooring");
+		Assert.That(total2, Is.EqualTo(expectedWindow2Raw).Within(0.01),
+			"Window2 should retain its proportional fractional sum");
 		Assert.That(total1, Is.GreaterThan(total2!),
 			"Window1 (aligned) should have a higher sum than Window2 (offset)");
 

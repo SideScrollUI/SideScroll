@@ -172,7 +172,9 @@ public class ListSeries
 		List = list;
 		SeriesType = seriesType;
 
-		Type elementType = list.GetType().GetElementTypeForAll()!;
+		Type? elementType = GetListElementType(list);
+		if (elementType == null)
+			return;
 		if (xPropertyName != null)
 		{
 			XPropertyInfo = elementType.GetProperty(xPropertyName);
@@ -200,9 +202,17 @@ public class ListSeries
 		if (list == null)
 			return;
 
-		Type elementType = list.GetType().GetElementTypeForAll()!;
+		Type? elementType = GetListElementType(list);
+		if (elementType == null)
+			return;
 		XPropertyInfo = elementType.GetPropertyWithAttribute<XAxisAttribute>();
 		YPropertyInfo = elementType.GetPropertyWithAttribute<YAxisAttribute>();
+	}
+
+	private static Type? GetListElementType(IList list)
+	{
+		return list.GetType().GetElementTypeForAll()
+			?? list.Cast<object?>().FirstOrDefault(item => item != null)?.GetType();
 	}
 
 	private static double GetObjectValue(object obj)
@@ -221,10 +231,6 @@ public class ListSeries
 	{
 		timeWindow = timeWindow?.Selection ?? timeWindow;
 		Total = GetTotal(timeWindow);
-		if (Total is > 50)
-		{
-			Total = Math.Floor(Total.Value);
-		}
 		return Total;
 	}
 
@@ -305,6 +311,7 @@ public class ListSeries
 
 		return SeriesType switch
 		{
+			SeriesType.Count => TimeRangePeriod.PeriodCounts(timeRangeValues, timeWindow, PeriodDuration.Value),
 			SeriesType.Sum => TimeRangePeriod.PeriodSums(timeRangeValues, timeWindow, PeriodDuration.Value),
 			SeriesType.Minimum => TimeRangePeriod.PeriodMins(timeRangeValues, timeWindow, PeriodDuration.Value),
 			SeriesType.Maximum => TimeRangePeriod.PeriodMaxes(timeRangeValues, timeWindow, PeriodDuration.Value),
@@ -335,7 +342,9 @@ public class ListSeries
 				double value = 1;
 				if (YPropertyInfo != null)
 				{
-					object yObj = YPropertyInfo.GetValue(obj)!;
+					object? yObj = YPropertyInfo.GetValue(obj);
+					if (yObj == null)
+						continue;
 					value = Convert.ToDouble(yObj);
 				}
 				DateTime startTime = timestamp;

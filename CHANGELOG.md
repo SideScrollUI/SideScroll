@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed `ListSeries` inferring element types only from the list's generic argument, so a non-generic list now falls back to the type of its first non-null item, and points whose Y value is null are skipped instead of dereferenced
+- Fixed `ListSeries.CalculateTotal()` flooring totals above 50, which reported a whole number for a fractional sum. Totals are now exact at every magnitude
+- Added `SeriesType.Count` support to time period grouping, so a count series groups each period by item count rather than by average value
 - Fixed `LinkUri.TryParse()` throwing instead of returning false for a malformed version like `v1..2`, `v1.2.3.4.5`, or one too large for an `int`. The pattern only checks for digits and dots, so those still reach the parser
 - Fixed `LinkUri.ToUri()` adding a trailing `?` for parsed uris that had no query, and normalizing the prefix and type with the current culture
 - Fixed `ReflectorUtils.FollowPropertyPath()` throwing instead of returning `null` for a path segment that doesn't exist, a malformed index (`foo[`, `foo[]`, `[0]bar`), an index that's out of range or missing from a dictionary, or an index applied to something that isn't a list or dictionary
