@@ -2,6 +2,7 @@
 *.diff
 *.dll
 *.exe
+*.log
 *.nupkg
 *.pdb
 *.psess

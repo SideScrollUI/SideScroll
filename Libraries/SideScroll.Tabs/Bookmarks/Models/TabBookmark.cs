@@ -330,13 +330,15 @@ public class TabBookmark
 
 	/// <summary>
 	/// Tries to get a child bookmark by full <see cref="SelectedRow"/> identity.
-	/// Uses <see cref="SelectedRow.Equals(SelectedRow)"/>, so rows are matched on their label,
+	/// Uses <see cref="SelectedRow.Matches(SelectedRow)"/>, so rows are matched on their label,
 	/// data key, data value, and row index — correctly disambiguating rows that share a label
 	/// (or that are identified only by index when no label/data key is present).
+	/// A bookmarked row without a row index still matches, this scans in order so the wildcard
+	/// takes the first match
 	/// </summary>
 	public bool TryGetValue(SelectedRow selectedRow, [NotNullWhen(true)] out TabBookmark? childBookmarkNode)
 	{
-		if (SelectedRowViews.FirstOrDefault(t => t.SelectedRow.Equals(selectedRow)) is { } selectedRowView)
+		if (SelectedRowViews.FirstOrDefault(t => t.SelectedRow.Matches(selectedRow)) is { } selectedRowView)
 		{
 			childBookmarkNode = selectedRowView.TabBookmark;
 			return true;

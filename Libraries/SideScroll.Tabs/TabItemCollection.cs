@@ -89,8 +89,10 @@ public class TabItemCollection
 		if (selectedRow.RowIndex is { } rowIndex and >= 0 && rowIndex < Items.Count)
 		{
 			object rowObject = Items[rowIndex]!;
+
+			// The row built here has no RowIndex, so this relies on Matches() wildcarding it
 			var currentSelectedRow = new SelectedRow(rowObject);
-			if (currentSelectedRow.Equals(selectedRow))
+			if (currentSelectedRow.Matches(selectedRow))
 				return rowObject;
 		}
 

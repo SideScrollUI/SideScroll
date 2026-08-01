@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed `SelectedRow.Equals()` treating a missing `RowIndex` as a wildcard, which made it intransitive. A `HashSet<SelectedRow>` dropped a selected row depending on the order rows were added, and `DeepClone()` aliased two distinct rows into one instance and lost their `RowIndex` (bookmarks are deep cloned every time a link is opened). Lookups that need the wildcard now call the new `SelectedRow.Matches()`
+- Fixed `SelectedRow.Equals()` comparing `DataValue` by reference while `GetHashCode()` used its value, so equal rows could disagree and a deserialized row never matched a live one
+- Fixed exception logs created within the same second overwriting each other, and moved the `Debug.Fail()` out of `LogUtils.Save()` to its caller. Asserting inside the logging utility made it unusable from Debug builds that call it directly, including tests, where the test host translates the assert into a thrown exception
+- Fixed `LogWriterText` writing the root log's creation time on every line instead of each entry's timestamp, and failing for a filename with no directory component
+- Fixed visible-property discovery including properties with a non-public getter
+- Fixed synchronous `TaskCreator.Run()` calls dereferencing a missing background task
 - Fixed browser localStorage keys being built by replacing every `/`, `\`, and `:` in the path, which wasn't reversible: two different paths could collide on one key, and converting a key back to a path turned any underscore in it into a directory separator. Keys are percent encoded now. This changes every stored key, so data saved by an earlier build is not found (browser storage is experimental and this only affects `SideScroll.Serialize.Browser`)
 - Fixed browser repositories not recording an item's saved name, so bulk loads had to reconstruct keys from the data instead of reading them back
 - Fixed browser paging and index rebuilding going through the filesystem serializers instead of localStorage, so neither worked in the browser
@@ -29,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `DateTimeOffset` losing its offset when serialized, only the UTC instant was stored. Existing data without an offset still loads as UTC
 - Fixed multi dimensional arrays (`int[,]`) deserializing as null, their dimensions are now stored and restored. Single dimension arrays are unchanged. Saving one is not backwards compatible for the same reason as the enums above
 - Fixed `TypeSchema` recomputing `HasSubType` from the current type when loading instead of using the saved value. Sealing a class could misparse object references in files saved before it
-- Fixed `TypeRepoEnumerable` and `TypeExtensions.GetElementTypeForAll()` resolving the element type from the first generic ancestor's first type argument, which deserialized nothing for collections whose type argument isn't the element type (e.g. `class Cache<TKey> : HashSet<string>`). It now reads `IEnumerable<T>` first
+- Fixed `TypeRepoEnumerable` resolving the element type from the first generic ancestor's first type argument, which deserialized nothing for collections whose type argument isn't the element type (e.g. `class Cache<TKey> : HashSet<string>`). It now reads `IEnumerable<T>` first
 - Fixed `TypeRepoDictionary` throwing a `NullReferenceException` when deserializing or cloning explicitly-implemented dictionaries (like `ConcurrentDictionary`) by replacing reflection with a direct interface cast
 - Fixed `TypeRepoType` aborting the rest of an object's members when a `Type`'s assembly is missing, instead of just that member
 - Fixed `TypeRepoArray` and `TypeRepoArrayBytes` validating the available bytes before the reader was positioned in their data, which could reject valid arrays, and updated `TypeRepoArrayBytes` to use `ReadExactly()` since a short `Read()` is allowed and isn't an error

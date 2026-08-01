@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace SideScroll.Utilities;
 
 /// <summary>
@@ -12,7 +10,9 @@ public static class LogUtils
 	/// </summary>
 	public static void Save(string directory, string filePrefix, Exception e)
 	{
-		string filename = filePrefix + ".Exception." + FileUtils.TimestampString + ".log";
+		// Exceptions often cascade within the same second. Keep the readable timestamp, but add a
+		// unique suffix so a later failure never overwrites the first stack trace.
+		string filename = filePrefix + ".Exception." + FileUtils.TimestampString + "." + Guid.NewGuid().ToString("N") + ".log";
 		string filePath = Paths.Combine(directory, filename);
 		string message = e.ToString();
 
@@ -23,7 +23,5 @@ public static class LogUtils
 		Console.WriteLine(filePath);
 		Console.WriteLine();
 		Console.WriteLine(message);
-
-		Debug.Fail(message);
 	}
 }

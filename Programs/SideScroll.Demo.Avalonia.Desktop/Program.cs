@@ -3,6 +3,7 @@ using SideScroll.Avalonia.Controls.ScreenCapture;
 using SideScroll.Avalonia.Controls.Viewer;
 using SideScroll.Avalonia.Samples;
 using SideScroll.Utilities;
+using System.Diagnostics;
 
 namespace SideScroll.Demo.Avalonia.Desktop;
 
@@ -23,6 +24,7 @@ internal static class Program
 		{
 			var settings = SampleProjectSettings.Default;
 			LogUtils.Save(settings.ExceptionsPath, settings.Name!, e);
+			Debug.Fail(e.ToString());
 			return 1;
 		}
 	}
