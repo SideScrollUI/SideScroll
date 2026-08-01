@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed zero-retention logs staying subscribed to child logs they removed immediately, so the child kept the parent alive
 - Fixed `Log.Throw()` resetting the original exception's stack trace at the rethrow
 - Fixed `LogSettings.Clone()` not copying the `Context`, so Logs added entries on the calling thread instead of the UI thread after calling `Call.DebugLogAll()` or `Log.SetLogLevel()`, and `LogEntry` now raises property changes directly when no context is configured
+- Fixed `TimeZoneView.GetHashCode()` returning a reference-based hash while `Equals()` compared display names, breaking the equality contract. Both now use the time zone ID, so equal instances agree
+- Fixed `TimeZoneView` sorting its values in reverse order, which reversed the order time zones are listed in
+- Fixed `TimeZoneView.ConvertTimeToUtc()` interpreting times from custom time zones as if they came from the machine's local time zone, and unconfigured instances breaking date conversion and formatting
 - Fixed `ListSeries` inferring element types only from the list's generic argument, so a non-generic list now falls back to the type of its first non-null item, and points whose Y value is null are skipped instead of dereferenced
 - Fixed `ListSeries.CalculateTotal()` flooring totals above 50, which reported a whole number for a fractional sum. Totals are now exact at every magnitude
 - Added `SeriesType.Count` support to time period grouping, so a count series groups each period by item count rather than by average value

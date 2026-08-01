@@ -74,22 +74,24 @@ public class TimeZoneView : IComparable
 	/// </summary>
 	public DateTime Convert(DateTime dateTime)
 	{
-		if (Equals(Utc)) return ConvertTimeToUtc(dateTime);
+		if (TimeZoneInfo == null)
+			return dateTime;
+
+		if (IsUtc) return ConvertTimeToUtc(dateTime);
 
 		if (dateTime.Kind == DateTimeKind.Utc)
 		{
 			return TimeZoneInfo.ConvertTimeFromUtc(dateTime, TimeZoneInfo!);
 		}
 
-		if (Equals(Local))
+		if (IsLocal)
 		{
 			return DateTime.SpecifyKind(dateTime, DateTimeKind.Local);
 		}
 		else if (dateTime.Kind != DateTimeKind.Unspecified)
 		{
-			TimeSpan utcOffset = TimeZoneInfo!.GetUtcOffset(dateTime);
-			DateTime utcDateTime = ConvertTimeToUtc(dateTime).Add(utcOffset);
-			return DateTime.SpecifyKind(utcDateTime, DateTimeKind.Unspecified);
+			DateTime utcDateTime = dateTime.ToUniversalTime();
+			return TimeZoneInfo.ConvertTimeFromUtc(utcDateTime, TimeZoneInfo!);
 		}
 
 		return dateTime;
@@ -100,23 +102,39 @@ public class TimeZoneView : IComparable
 	/// </summary>
 	public DateTime ConvertTimeToUtc(DateTime dateTime)
 	{
-		if (Equals(Utc))
+		if (TimeZoneInfo == null)
+		{
+			return dateTime.Kind switch
+			{
+				DateTimeKind.Utc => dateTime,
+				DateTimeKind.Local => dateTime.ToUniversalTime(),
+				_ => DateTime.SpecifyKind(dateTime, DateTimeKind.Utc),
+			};
+		}
+
+		if (IsUtc)
 		{
 			if (dateTime.Kind == DateTimeKind.Utc)
 			{
 				return dateTime;
 			}
-		}
-		else if (Equals(Local))
-		{
-			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Local);
-		}
-		else
-		{
-			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
+
+			if (dateTime.Kind == DateTimeKind.Local)
+			{
+				return dateTime.ToUniversalTime();
+			}
+
+			return DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
 		}
 
-		return TimeZoneInfo.ConvertTimeToUtc(dateTime);
+		if (IsLocal)
+		{
+			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Local);
+			return dateTime.ToUniversalTime();
+		}
+
+		dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
+		return System.TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo!);
 	}
 
 	/// <summary>
@@ -124,27 +142,35 @@ public class TimeZoneView : IComparable
 	/// </summary>
 	public int CompareTo(object? obj)
 	{
-		return obj?.ToString()?.CompareTo(ToString()) ?? 1;
+		return string.Compare(ToString(), obj?.ToString(), StringComparison.CurrentCulture);
 	}
 
 	/// <summary>
-	/// Determines whether the specified object is a TimeZoneView with the same name
+	/// Determines whether the specified object represents the same time zone
 	/// </summary>
 	public override bool Equals(object? obj)
 	{
-		if (obj is TimeZoneView timeZoneView)
-		{
-			return timeZoneView.Name == Name;
-		}
+		if (obj is not TimeZoneView timeZoneView)
+			return false;
 
-		return false;
+		if (TimeZoneInfo != null && timeZoneView.TimeZoneInfo != null)
+			return StringComparer.Ordinal.Equals(TimeZoneInfo.Id, timeZoneView.TimeZoneInfo.Id);
+
+		return TimeZoneInfo == null
+			&& timeZoneView.TimeZoneInfo == null
+			&& StringComparer.Ordinal.Equals(Name, timeZoneView.Name);
 	}
 
-	// Override to make compiler happy
 	public override int GetHashCode()
 	{
-		return base.GetHashCode();
+		return StringComparer.Ordinal.GetHashCode(TimeZoneInfo?.Id ?? Name ?? string.Empty);
 	}
+
+	private bool IsUtc => TimeZoneInfo != null
+		&& StringComparer.Ordinal.Equals(TimeZoneInfo.Id, System.TimeZoneInfo.Utc.Id);
+
+	private bool IsLocal => TimeZoneInfo != null
+		&& StringComparer.Ordinal.Equals(TimeZoneInfo.Id, System.TimeZoneInfo.Local.Id);
 
 	/// <summary>
 	/// UTC time zone
