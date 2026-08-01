@@ -32,7 +32,10 @@ public static class TimeSpanExtensions
 	public static string FormattedDecimal(this TimeSpan timeSpan)
 	{
 		string format = "#,0.#";
-		var absTimeSpan = new TimeSpan(Math.Abs(timeSpan.Ticks));
+
+		// MinValue has no positive counterpart, both Duration() and Math.Abs() overflow on it
+		TimeSpan absTimeSpan = timeSpan == TimeSpan.MinValue ? TimeSpan.MaxValue : timeSpan.Duration();
+
 		foreach (TimeUnit timeUnit in TimeUnits)
 		{
 			if (absTimeSpan < timeUnit.TimeSpan)
@@ -41,6 +44,8 @@ public static class TimeSpanExtensions
 			double units = timeSpan / timeUnit.TimeSpan;
 			string value = units.ToString(format) + " " + timeUnit.Name;
 
+			// Anything longer than a single unit is plural, even when the format rounds it back
+			// down to "1" (7 days 5 hours is 1.03 weeks, so it reads "1 Weeks")
 			if (absTimeSpan > timeUnit.TimeSpan)
 			{
 				value += "s";
@@ -63,13 +68,24 @@ public static class TimeSpanExtensions
 	{
 		StringBuilder sb = new();
 
-		if ((int)timeSpan.TotalDays > 0)
+		if (timeSpan.Ticks < 0)
 		{
-			sb.Append((int)timeSpan.TotalDays);
+			sb.Append('-');
+
+			// MinValue has no positive counterpart, so Duration() overflows on it. MaxValue is one
+			// tick away and renders identically at millisecond resolution
+			timeSpan = timeSpan == TimeSpan.MinValue ? TimeSpan.MaxValue : timeSpan.Duration();
+		}
+
+		// Compare the totals directly, casting to int wraps for durations past ~4,000 years and
+		// silently dropped the unit (TimeSpan.MaxValue lost its minutes)
+		if (timeSpan.TotalDays >= 1)
+		{
+			sb.Append(timeSpan.Days);
 			sb.Append(':');
 		}
 
-		if ((int)timeSpan.TotalHours > 0)
+		if (timeSpan.TotalHours >= 1)
 		{
 			sb.Append(timeSpan.Hours);
 			sb.Append(':');
@@ -79,7 +95,7 @@ public static class TimeSpanExtensions
 			}
 		}
 
-		if ((int)timeSpan.TotalMinutes > 0)
+		if (timeSpan.TotalMinutes >= 1)
 		{
 			sb.Append(timeSpan.Minutes);
 			sb.Append(':');
@@ -136,6 +152,8 @@ public static class TimeSpanExtensions
 	/// </summary>
 	public static TimeSpan PeriodDuration(this TimeSpan timeSpan, int numPeriods = 100)
 	{
+		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(numPeriods);
+
 		TimeSpan maxPeriodDuration = timeSpan.Multiply(2.0 / numPeriods);
 		foreach (TimeSpan periodMin in CommonTimeSpans.Reverse<TimeSpan>())
 		{
@@ -150,6 +168,7 @@ public static class TimeSpanExtensions
 	/// </summary>
 	public static TimeSpan Trim(this TimeSpan timeSpan, long ticks = TimeSpan.TicksPerSecond)
 	{
+		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(ticks);
 		return new TimeSpan(timeSpan.Ticks - (timeSpan.Ticks % ticks));
 	}
 
@@ -166,7 +185,13 @@ public static class TimeSpanExtensions
 	/// </summary>
 	public static TimeSpan Ceil(this TimeSpan timeSpan, long ticks = TimeSpan.TicksPerSecond)
 	{
-		return new TimeSpan(ticks * ((timeSpan.Ticks + ticks - 1) / ticks));
+		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(ticks);
+		long remainder = timeSpan.Ticks % ticks;
+		if (remainder == 0) return timeSpan;
+
+		// Integer division truncates toward zero, so a negative value is already rounded up.
+		// Adding the interval first (Ticks + ticks - 1) would round it toward zero instead
+		return new TimeSpan(timeSpan.Ticks - remainder + (timeSpan.Ticks > 0 ? ticks : 0));
 	}
 
 	/// <summary>

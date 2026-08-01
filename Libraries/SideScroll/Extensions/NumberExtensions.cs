@@ -71,6 +71,8 @@ public static class NumberExtensions
 	/// </summary>
 	public static double RoundToSignificantFigures(this double num, int significantFigures)
 	{
+		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(significantFigures);
+
 		// Handle special cases that can't be rounded
 		if (double.IsNaN(num) || double.IsInfinity(num))
 			return num;
@@ -94,13 +96,14 @@ public static class NumberExtensions
 	/// </summary>
 	public static decimal RoundToSignificantFigures(this decimal num, int significantFigures)
 	{
+		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(significantFigures);
+
 		if (num == 0) return 0;
 
 		int d = (int)Math.Floor(Math.Log10((double)Math.Abs(num)));
 		int power = significantFigures - d - 1;
 
 		decimal magnitude = (decimal)Math.Pow(10, power);
-
 		decimal shifted = Math.Round(num * magnitude, 0, MidpointRounding.AwayFromZero);
 		decimal ret = shifted / magnitude;
 

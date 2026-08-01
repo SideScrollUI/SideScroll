@@ -8,6 +8,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Fixed
+- Fixed `DateTime.Ceil()` rounding to seconds instead of the passed tick interval, and throwing an `ArgumentOutOfRangeException` for values in the last interval before `DateTime.MaxValue`, which has nothing above it to round up to. It saturates at `MaxValue` now
+- Fixed `DateTime.Max()` and `Min()` comparing `Ticks`, which are wall clock readings that aren't comparable across `DateTimeKind`s, and labeling the result with the first value's `Kind` regardless of which one won. Charts combining a UTC series with a Local one got a time window shifted by the UTC offset
+- Fixed `ByteFormatter.Format()` recursing until the process died with a `StackOverflowException` for `long.MinValue`, which negates back onto itself, and ignoring the passed `decimalPlaces` for negative values
+- Fixed `ObjectUtils.AreEqual()` throwing for values that can't be converted to each other's type (an Enum against a string, two different Enums, a `Guid` against a string). It's used to evaluate `[Hide]`, `[HideRow]`, and `[HideColumn]`, so an unconvertible pair broke rendering instead of comparing unequal
+- Fixed `TimeSpan.FormattedShort()` throwing an `OverflowException` for `TimeSpan.MinValue`, dropping the larger units for negative durations (-90 seconds showed as `-30`), and dropping a unit for durations past ~4,000 years
+- Fixed `DateTimeOffset.Trim()` discarding the offset and returning the value as UTC, unlike `DateTime.Trim()` which keeps its `Kind`
+- Fixed `string.CamelCased()` and `DateTime.FormatId()` using the current culture, so Turkish locales turned a leading `i` into `İ` and non-Gregorian calendars produced a different identifier for the same instant
+- Fixed `StringExtensions.Reverse()` corrupting surrogate pairs and combining characters, and `Range()` throwing for a negative start index or an `int.MaxValue` end index
+- Removed `SerializerFile.TestWrite()`, whose purported writability test truncated existing serialized data
+
+### Changed
+- Date and time rounding helpers now reject zero and negative intervals, and significant-figure rounding rejects zero and negative precision
+
+## [0.22] - 2026-07-26
+
+### Added
 - Added DataGrid Search support for excluding terms with a leading `-` or `!` (e.g. `-foo`, `!(foo | bar)`)
 - Added Atlas Serializer support for renaming types via `TypeSchema.RegisterDeprecatedType()`
 - Added Toolbar Radio Button theming for the pressed circle fill and border, and the selected pressed circle border

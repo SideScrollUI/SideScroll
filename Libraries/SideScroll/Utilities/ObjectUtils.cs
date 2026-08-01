@@ -98,8 +98,19 @@ public static class ObjectUtils
 		}
 
 		Type type = obj1.GetType();
-		object convertedObject = Convert.ChangeType(obj2, type);
-		return obj1.Equals(convertedObject);
+		if (type == obj2.GetType()) return obj1.Equals(obj2);
+
+		// Values that can't be converted to a common type aren't equal. This runs while evaluating
+		// [Hide] attributes, so an unconvertible pair can't be allowed to break rendering
+		try
+		{
+			object convertedObject = Convert.ChangeType(obj2, type);
+			return obj1.Equals(convertedObject);
+		}
+		catch (Exception e) when (e is InvalidCastException or FormatException or OverflowException)
+		{
+			return false;
+		}
 	}
 
 	private static bool AreListsEqual(IList list1, IList list2, int maxDepth)

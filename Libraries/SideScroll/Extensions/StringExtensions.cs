@@ -23,9 +23,17 @@ public static class StringExtensions
 	/// </summary>
 	public static string Reverse(this string input)
 	{
-		char[] chars = input.ToCharArray();
-		Array.Reverse(chars);
-		return new string(chars);
+		if (string.IsNullOrEmpty(input))
+			return input;
+
+		var enumerator = System.Globalization.StringInfo.GetTextElementEnumerator(input);
+		var elements = new List<string>();
+		while (enumerator.MoveNext())
+		{
+			elements.Add(enumerator.GetTextElement());
+		}
+		elements.Reverse();
+		return string.Concat(elements);
 	}
 
 	/// <summary>
@@ -62,12 +70,15 @@ public static class StringExtensions
 	/// </summary>
 	public static string Range(this string input, int start, int end)
 	{
-		end++;
-		end = Math.Min(end, input.Length);
+		start = Math.Max(0, start);
+		if (start >= input.Length)
+			return "";
+
+		end = Math.Min(end, input.Length - 1);
 		if (end < start)
 			return "";
 
-		return input[start..end];
+		return input[start..(end + 1)];
 	}
 
 	/// <summary>
@@ -75,6 +86,7 @@ public static class StringExtensions
 	/// </summary>
 	public static string Range(this string input, int start)
 	{
+		start = Math.Max(0, start);
 		if (input.Length < start)
 			return "";
 
@@ -94,8 +106,12 @@ public static class StringExtensions
 	/// </summary>
 	public static string CamelCased(this string text)
 	{
-		string lowerCased = text.ToLower();
-		string camelCased = char.ToUpper(lowerCased[0]) + lowerCased[1..];
+		if (text.Length == 0)
+			return text;
+
+		// Invariant, tr-TR would uppercase a leading 'i' to 'İ' and lowercase 'I' to 'ı'
+		string lowerCased = text.ToLowerInvariant();
+		string camelCased = char.ToUpperInvariant(lowerCased[0]) + lowerCased[1..];
 		return camelCased;
 	}
 
