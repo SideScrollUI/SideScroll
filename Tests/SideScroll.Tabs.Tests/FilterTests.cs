@@ -726,4 +726,33 @@ public class FilterTests : BaseTest
 	}
 
 	#endregion
+
+	#region Search Value Limits
+
+	[TestCase(0)]
+	[TestCase(-1)]
+	[Description(
+		"A cap below one returned before collecting even the row's own label, so every search " +
+		"reported no matches at all")]
+	public void NonPositiveMaxSearchTextValuesStillMatches(int maxSearchTextValues)
+	{
+		int original = Filter.MaxSearchTextValues;
+		try
+		{
+			Filter.MaxSearchTextValues = maxSearchTextValues;
+			Assert.That(Filter.MaxSearchTextValues, Is.GreaterThanOrEqualTo(1), "Clamped to a usable value.");
+
+			var filter = new Filter("Apple");
+			var item = new TestItem { Name = "Apple", Id = 1, Description = "A fruit" };
+			var properties = typeof(TestItem).GetProperties().ToList();
+
+			Assert.That(filter.Matches(item, properties), Is.True);
+		}
+		finally
+		{
+			Filter.MaxSearchTextValues = original;
+		}
+	}
+
+	#endregion
 }

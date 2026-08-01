@@ -59,7 +59,9 @@ public static class SvgUtils
 	{
 		stream.Position = 0;
 
-		using var reader = new StreamReader(stream);
+		// The stream belongs to the caller, disposing the reader used to close it out from under
+		// them. IsSvg() below reads the same way
+		using var reader = new StreamReader(stream, leaveOpen: true);
 		string text = reader.ReadToEnd();
 		Color newColor = color ?? SideScrollTheme.IconForeground.Color;
 		string newColorText = $"rgba({newColor.R},{newColor.G},{newColor.B},{newColor.A})";

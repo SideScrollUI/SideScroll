@@ -119,7 +119,9 @@ public class BookmarkNavigator : INotifyPropertyChanged
 		// We are about to add 1 item, so trim down to MaxHistorySize - 1
 		if (History.Count < MaxHistorySize) return;
 
-		int removeCount = History.Count - MaxHistorySize + 1;
+		// A MaxHistorySize of zero or less asks to remove more than the history holds, which used
+		// to throw from RemoveRange() on the next append instead of just clearing it
+		int removeCount = Math.Min(History.Count - MaxHistorySize + 1, History.Count);
 		History.RemoveRange(0, removeCount);
 
 		if (CurrentIndex < removeCount)

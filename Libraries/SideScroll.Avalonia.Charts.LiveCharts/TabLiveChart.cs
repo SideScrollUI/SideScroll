@@ -623,10 +623,13 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 			double difference = YAxis.MaxLimit.Value - YAxis.MinLimit.Value;
 			if (difference > 0)
 			{
-				double separators = MaxSeparators;
+				// Math.Clamp() throws when the maximum is below the minimum, and MaxSeparators is
+				// publicly settable, so a zero or negative value used to break every Y axis update
+				double maxSeparators = Math.Max(1, MaxSeparators);
+				double separators = maxSeparators;
 				if (Chart.Bounds.Height is double height and > 0)
 				{
-					separators = Math.Clamp(height / MinSeparatorDistance, 1, MaxSeparators);
+					separators = Math.Clamp(height / MinSeparatorDistance, 1, maxSeparators);
 				}
 
 				YAxis.UnitWidth = (difference / separators).RoundToSignificantFigures(1);

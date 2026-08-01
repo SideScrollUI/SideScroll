@@ -42,7 +42,15 @@ public record ResourceView(Assembly Assembly, string BasePath, string GroupPath,
 	/// <summary>
 	/// Reads the resource content as text
 	/// </summary>
-	public string ReadText() => new StreamReader(Stream).ReadToEnd();
+	/// <remarks>
+	/// <see cref="Stream"/> opens a new manifest resource stream on every access, so the reader
+	/// owns this one. Neither used to be disposed
+	/// </remarks>
+	public string ReadText()
+	{
+		using var reader = new StreamReader(Stream);
+		return reader.ReadToEnd();
+	}
 }
 
 /// <summary>

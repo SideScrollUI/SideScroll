@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed `BookmarkNavigator` throwing from `RemoveRange()` on the next navigation when `MaxHistorySize` was zero or negative, since it asked to remove more entries than the history held
+- Fixed a `Filter.MaxSearchTextValues` below one making every search report no matches, by returning before collecting even the row's own label
+- Fixed bookmark addresses ending in `" / "` for a selected row with no child selection, the separator was written whether or not the child had an address
+- Fixed `ResourceView.ReadText()` leaving its `StreamReader` and the manifest resource stream undisposed
+- Fixed `SvgUtils.GetSvgColorImage()` closing the caller's stream, so reusing it afterwards threw an `ObjectDisposedException`. `IsSvg()` in the same class already left it open
+- Fixed `TabLiveChart.MaxSeparators` throwing from `Math.Clamp()` during every Y axis update when set to zero or less
 - Fixed "Copy Cell Contents" and "Copy Cell Value" throwing a `NullReferenceException` for a null cell value. Both run from `async void` handlers, so it terminated the process instead of copying an empty value
 - Fixed `ListField.IsEditable` always returning true, so forms and grids offered an editor for `readonly` and `const` fields that reflection then refused to assign
 - Fixed `TimeSpan.Ceil()` wrapping into a large negative duration for values in the final rounding interval before `TimeSpan.MaxValue`. It saturates at `MaxValue` now, matching `DateTime.Ceil()`

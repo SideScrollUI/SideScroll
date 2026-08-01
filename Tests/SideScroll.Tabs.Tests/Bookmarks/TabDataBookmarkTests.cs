@@ -84,4 +84,40 @@ public class TabDataBookmarkTests : BaseTest
 		Assert.That(dataSettings.SelectionType, Is.EqualTo(SelectionType.User));
 		Assert.That(dataSettings.SelectedRows.Single().Label, Is.EqualTo("row"));
 	}
+
+	// ─── Addresses ───────────────────────────────────────────────────────
+
+	[Test, Description("A leaf child has an empty address, so the separator would have nothing after it")]
+	public void GetAddress_LeafRow_HasNoTrailingSeparator()
+	{
+		var dataBookmark = new TabDataBookmark();
+		dataBookmark.SelectedRows.Add(new SelectedRowView("row"));
+
+		Assert.That(dataBookmark.GetAddress(), Is.EqualTo("row"));
+	}
+
+	[Test, Description("The separator is still written when the child has an address of its own")]
+	public void GetAddress_NestedRow_IsSeparated()
+	{
+		var childBookmark = new TabDataBookmark();
+		childBookmark.SelectedRows.Add(new SelectedRowView("child"));
+
+		var selectedRowView = new SelectedRowView("parent");
+		selectedRowView.TabBookmark.TabDatas.Add(childBookmark);
+
+		var dataBookmark = new TabDataBookmark();
+		dataBookmark.SelectedRows.Add(selectedRowView);
+
+		Assert.That(dataBookmark.GetAddress(), Is.EqualTo("parent / child"));
+	}
+
+	[Test, Description("Multiple leaf rows are bracketed and comma separated, with no trailing separators")]
+	public void GetAddress_MultipleLeafRows_HasNoTrailingSeparators()
+	{
+		var dataBookmark = new TabDataBookmark();
+		dataBookmark.SelectedRows.Add(new SelectedRowView("a"));
+		dataBookmark.SelectedRows.Add(new SelectedRowView("b"));
+
+		Assert.That(dataBookmark.GetAddress(), Is.EqualTo("[a, b]"));
+	}
 }

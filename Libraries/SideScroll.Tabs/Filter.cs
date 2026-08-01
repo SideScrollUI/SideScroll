@@ -468,7 +468,14 @@ public class Filter
 	/// Inner lists are nested and enumerated in full, and this runs for every row on every
 	/// keystroke, so the total is capped instead of the items per list
 	/// </summary>
-	public static int MaxSearchTextValues { get; set; } = 1_000;
+	public static int MaxSearchTextValues
+	{
+		get => _maxSearchTextValues;
+		// A cap below one collects nothing, not even the row's own label, so every search would
+		// report no matches at all
+		set => _maxSearchTextValues = Math.Max(1, value);
+	}
+	private static int _maxSearchTextValues = 1_000;
 
 	private static void GetItemSearchText(object obj, List<PropertyInfo> columnProperties, List<string> uppercaseValues, int depth = MaxSearchTextDepth)
 	{

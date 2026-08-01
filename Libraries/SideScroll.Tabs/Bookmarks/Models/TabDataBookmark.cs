@@ -87,7 +87,16 @@ public class TabDataBookmark
 		foreach (SelectedRowView selectedRowView in SelectedRows)
 		{
 			address += comma;
-			address += selectedRowView + " / " + selectedRowView.TabBookmark.GetAddress(maxDepth - 1, visited);
+			address += selectedRowView;
+
+			// A leaf child has an empty address, so writing the separator unconditionally left
+			// every ordinary path ending in " / "
+			string childAddress = selectedRowView.TabBookmark.GetAddress(maxDepth - 1, visited);
+			if (childAddress.Length > 0)
+			{
+				address += " / " + childAddress;
+			}
+
 			comma = ", ";
 		}
 		if (SelectedRows.Count > 1)
