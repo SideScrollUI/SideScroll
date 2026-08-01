@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed browser localStorage keys being built by replacing every `/`, `\`, and `:` in the path, which wasn't reversible: two different paths could collide on one key, and converting a key back to a path turned any underscore in it into a directory separator. Keys are percent encoded now. This changes every stored key, so data saved by an earlier build is not found (browser storage is experimental and this only affects `SideScroll.Serialize.Browser`)
+- Fixed browser repositories not recording an item's saved name, so bulk loads had to reconstruct keys from the data instead of reading them back
+- Fixed browser paging and index rebuilding going through the filesystem serializers instead of localStorage, so neither worked in the browser
+- Fixed `DataRepoIndexLocalStorage.Load()` not validating the index, so entries whose data the browser had evicted still counted against `MaxItems` and a bad `NextIndex` could repeat an index
+- Fixed `DataRepoIndexLocalStorage.Save()` ignoring failed localStorage writes, which silently stopped recording items once the quota was reached
 - Fixed `TabAvaloniaEdit`, `TabColorPicker`, `TabFormattedComboBox`, and `TabForm` keeping themselves alive after being cleared. Each subscribes to change notifications on the object it's bound to, and the bound object outlives the control, so the subscription held the control and its whole visual subtree. They're `IDisposable` now, which the existing `TabSplitGrid` and `TabControlToolbar` cleanup already calls. Reloading a `TabForm` also releases the controls it replaces
 - Fixed `ToolbarToggleButton` never releasing the `ListProperty` it binds to, which leaked the tab. The bound object holds the `ListProperty`, which held the button and its `TabInstance`, and toolbars bind to objects owned by the parent tab (like the file viewer's Favorite star), so a tab was retained for every time it was opened
 - Fixed a memory leak where `ListProperty` never unsubscribed from `INotifyPropertyChanged.PropertyChanged`, preventing source objects and tab collections from being garbage-collected when tabs closed

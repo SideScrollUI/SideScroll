@@ -1,6 +1,8 @@
 using System.Runtime.InteropServices.JavaScript;
 using System.Runtime.Versioning;
 using System.Text.Json;
+using SideScroll.Serialize.Atlas;
+using SideScroll.Serialize.DataRepos;
 using SideScroll.Serialize.Json;
 using SideScroll.Tasks;
 
@@ -14,6 +16,13 @@ namespace SideScroll.Serialize.Browser;
 public partial class SerializerLocalStorage : SerializerFile
 {
 	private const string StoragePrefix = "SideScroll_Data_";
+	private const string HeaderStoragePrefix = "SideScroll_Header_";
+
+	private sealed class StorageHeader
+	{
+		public int Version { get; set; } = 1;
+		public string? Name { get; set; }
+	}
 
 	/// <summary>
 	/// Gets the localStorage key for this serializer instance
@@ -68,6 +77,12 @@ public partial class SerializerLocalStorage : SerializerFile
 
 			if (success)
 			{
+				string headerJson = JsonSerializer.Serialize(new StorageHeader { Name = name });
+				success = SetLocalStorageItem(ConvertPathToHeaderStorageKey(BasePath), headerJson);
+			}
+
+			if (success)
+			{
 				call.Log.AddDebug("Saved to localStorage",
 					new Tag("Name", name),
 					new Tag("Key", StorageKey),
@@ -114,20 +129,33 @@ public partial class SerializerLocalStorage : SerializerFile
 
 			taskInstance?.SetFinished();
 
-			// Use expectedType if provided
-			if (expectedType != null)
-			{
-				return JsonSerializer.Deserialize(json, expectedType, options);
-			}
-
-			// Fallback to Dictionary
-			return JsonSerializer.Deserialize<Dictionary<string, object?>>(json, options);
+			// Use expectedType if provided, otherwise fallback to Dictionary
+			return expectedType != null
+				? JsonSerializer.Deserialize(json, expectedType, options)
+				: JsonSerializer.Deserialize<Dictionary<string, object?>>(json, options);
 		}
 		catch (Exception e)
 		{
 			call.Log.Add(e, new Tag("Key", StorageKey));
 			return null;
 		}
+	}
+
+	/// <inheritdoc/>
+	public override SerializerHeader LoadHeader(Call call)
+	{
+		string? json = GetLocalStorageItem(ConvertPathToHeaderStorageKey(BasePath));
+		if (string.IsNullOrEmpty(json))
+		{
+			return new SerializerHeader { Name = Name };
+		}
+
+		StorageHeader? header = JsonSerializer.Deserialize<StorageHeader>(json);
+		return new SerializerHeader
+		{
+			Version = header?.Version is { } version ? checked((ushort)version) : null,
+			Name = header?.Name,
+		};
 	}
 
 	/// <summary>
@@ -153,20 +181,50 @@ public partial class SerializerLocalStorage : SerializerFile
 	/// </summary>
 	public static string ConvertPathToStorageKey(string path)
 	{
-		string pathKey = path
-			.Replace('\\', '_')
-			.Replace('/', '_')
-			.Replace(":", "");
-		return StoragePrefix + pathKey;
+		string normalizedPath = path.Replace('\\', '/');
+		return StoragePrefix + Uri.EscapeDataString(normalizedPath);
+	}
+
+	private static string ConvertPathToHeaderStorageKey(string path)
+	{
+		string normalizedPath = path.Replace('\\', '/');
+		return HeaderStoragePrefix + Uri.EscapeDataString(normalizedPath);
 	}
 
 	/// <summary>
-	/// Converts a localStorage key back to a file path
+	/// Converts a localStorage data key back to a file path
 	/// </summary>
+	/// <exception cref="ArgumentException">The key isn't a data key</exception>
 	public static string ConvertStorageKeyToPath(string storageKey)
 	{
-		return storageKey[StoragePrefix.Length..]
-			.Replace('_', '/');
+		// The header prefix also starts with "SideScroll_", so blindly trimming the data prefix
+		// off one would leave part of it in the path instead of failing
+		if (!storageKey.StartsWith(StoragePrefix, StringComparison.Ordinal))
+		{
+			throw new ArgumentException($"Not a {StoragePrefix} key: {storageKey}", nameof(storageKey));
+		}
+
+		string encodedPath = storageKey[StoragePrefix.Length..];
+		return Uri.UnescapeDataString(encodedPath);
+	}
+
+	/// <summary>Returns whether a storage key represents item data directly within the given logical group path.</summary>
+	public static bool IsDataKeyInGroup(string storageKey, string groupPath)
+	{
+		string normalizedGroup = groupPath.Replace('\\', '/').TrimEnd('/');
+		string path = ConvertStorageKeyToPath(storageKey).Replace('\\', '/');
+		if (!path.StartsWith(normalizedGroup + '/', StringComparison.Ordinal))
+			return false;
+
+		string relativePath = path[(normalizedGroup.Length + 1)..];
+		return !relativePath.Contains('/') &&
+			!relativePath.Equals(DataRepo.PrimaryIndexFileName, StringComparison.Ordinal);
+	}
+
+	/// <summary>Returns whether data exists for a logical path.</summary>
+	public static bool PathExists(string path)
+	{
+		return ExistsInStorage(ConvertPathToStorageKey(path));
 	}
 
 	/// <summary>
@@ -180,9 +238,22 @@ public partial class SerializerLocalStorage : SerializerFile
 	/// <summary>
 	/// Sets an item in localStorage (public static helper for index)
 	/// </summary>
-	public static void SetItem(string key, string value)
+	/// <returns>False if it couldn't be stored, localStorage has a limited quota</returns>
+	public static bool SetItem(string key, string value)
 	{
-		SetLocalStorageItem(key, value);
+		return SetLocalStorageItem(key, value);
+	}
+
+	/// <summary>
+	/// Returns whether an item exists in localStorage (public static helper for index)
+	/// </summary>
+	/// <remarks>
+	/// Throws if localStorage can't be reached, so callers removing entries based on this
+	/// don't treat a failure as everything being missing
+	/// </remarks>
+	public static bool ItemExists(string key)
+	{
+		return ExistsInStorage(key);
 	}
 
 	/// <summary>
@@ -191,6 +262,14 @@ public partial class SerializerLocalStorage : SerializerFile
 	public static void RemoveItem(string key)
 	{
 		RemoveLocalStorageItem(key);
+	}
+
+	/// <summary>Removes data and metadata stored for a logical path.</summary>
+	public static void RemovePath(string path)
+	{
+		string key = ConvertPathToStorageKey(path);
+		RemoveLocalStorageItem(key);
+		RemoveLocalStorageItem(ConvertPathToHeaderStorageKey(path));
 	}
 
 	// JavaScript interop methods - using globalThis.BrowserStorage
