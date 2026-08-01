@@ -61,7 +61,7 @@ public class ListToString
 	/// Creates a collection of ListToString items from an enumerable, limited to the specified maximum
 	/// </summary>
 	/// <param name="enumerable">The enumerable to convert</param>
-	/// <param name="limit">Maximum number of items to create (uses MaxItems if not specified)</param>
+	/// <param name="limit">Maximum number of items to create, zero or less creates none (uses MaxItems if not specified)</param>
 	public static ItemCollection<ListToString> Create(IEnumerable enumerable, int? limit = null)
 	{
 		limit ??= MaxItems;
@@ -71,11 +71,13 @@ public class ListToString
 		{
 			(list as IItemCollection).LoadSettings(sourceCollection);
 		}
+		// Check before adding so a limit of 0 (or a negative one) doesn't still add the first item
 		foreach (object obj in enumerable)
 		{
-			list.Add(new ListToString(obj));
-			if (list.Count > limit)
+			if (list.Count >= limit)
 				break;
+
+			list.Add(new ListToString(obj));
 		}
 		return list;
 	}

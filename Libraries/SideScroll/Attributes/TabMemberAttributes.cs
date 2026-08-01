@@ -206,10 +206,14 @@ public class HiddenRowAttribute : Attribute;
 /// <param name="value">Primary value to match for hiding.</param>
 /// <param name="additionalValues">Additional values that trigger hiding.</param>
 /// <remarks>
-/// <b>Apply to:</b> Fields, properties, classes, or structs.
+/// <b>Apply to:</b> Fields, properties, <c>[Item]</c> methods, classes, or structs.
 /// <para>
 /// When applied to types, affects all members of that type (individual members can override).
 /// Useful for hiding empty, default, or unwanted values from display.
+/// </para>
+/// <para>
+/// On a method, the value compared is the method's return value, so the method is invoked to
+/// evaluate visibility. Only <c>[Item]</c> methods are shown as rows in the first place.
 /// </para>
 /// </remarks>
 /// <example>
@@ -218,10 +222,14 @@ public class HiddenRowAttribute : Attribute;
 /// {
 ///     [Hide(null, "", "Unknown")]
 ///     public string Description { get; set; } = "";
+///
+///     // Only shown when the method returns something
+///     [Item, Hide(null)]
+///     public string? GetDetails() => null;
 /// }
 /// </code>
 /// </example>
-[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct)]
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Struct)]
 public class HideAttribute(object? value, params object?[] additionalValues) : Attribute
 {
 	/// <summary>

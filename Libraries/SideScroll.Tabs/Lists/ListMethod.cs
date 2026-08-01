@@ -1,5 +1,6 @@
 using SideScroll.Attributes;
 using SideScroll.Collections;
+using SideScroll.Utilities;
 using System.Reflection;
 
 namespace SideScroll.Tabs.Lists;
@@ -55,6 +56,12 @@ public class ListMethod : ListMember
 		}
 	}
 
+	/// <summary>
+	/// Gets whether the method should be visible in row displays
+	/// </summary>
+	[Hidden]
+	public bool IsMethodVisible => IsVisible(MethodInfo);
+
 	/// <summary>Returns the method's <see cref="ListMember.Name"/>.</summary>
 	public override string? ToString() => Name;
 
@@ -94,9 +101,24 @@ public class ListMethod : ListMember
 
 		var result = Task.Run(() => MethodInfo.Invoke(Object, parameters)).GetAwaiter().GetResult();
 
-		if (result is Task)
+		if (result is Task task)
 		{
-			return ((dynamic)result).Result;
+			task.GetAwaiter().GetResult();
+
+			Type type = task.GetType();
+			if (type.IsGenericType)
+			{
+				PropertyInfo? resultProperty = type.GetProperty("Result");
+				if (resultProperty != null)
+				{
+					object? taskResult = resultProperty.GetValue(task);
+					if (taskResult?.GetType().FullName != "System.Threading.Tasks.VoidTaskResult")
+					{
+						return taskResult;
+					}
+				}
+			}
+			return null;
 		}
 
 		return result;
@@ -118,6 +140,10 @@ public class ListMethod : ListMember
 		foreach (MethodInfo methodInfo in methodInfos)
 		{
 			var listMethod = new ListMethod(obj, methodInfo);
+			// IsRowVisible() is unconditionally true when the method has no [Hide] attribute.
+			// Skipping the call also avoids invoking the method just to evaluate visibility.
+			if (ReflectionCache.MethodHasValueDependentHide(methodInfo) && !listMethod.IsRowVisible())
+				continue;
 
 			if (methodToIndex.TryGetValue(methodInfo.Name, out int index))
 			{
@@ -132,6 +158,24 @@ public class ListMethod : ListMember
 			}
 		}
 		return listMethods;
+	}
+
+	/// <summary>
+	/// Determines whether the method should be visible as a row based on Hide attributes.
+	/// Evaluating <see cref="Value"/> invokes the method, so this only pays off for methods that
+	/// actually carry a <c>[Hide]</c> (or whose declaring type does).
+	/// </summary>
+	public bool IsRowVisible()
+	{
+		var hideAttribute = MethodInfo.GetCustomAttribute<HideAttribute>();
+		if (hideAttribute?.Values.Any(v => ObjectUtils.AreEqual(Value, v)) == true)
+			return false;
+
+		var classHideAttribute = MethodInfo.DeclaringType?.GetCustomAttribute<HideAttribute>();
+		if (classHideAttribute?.Values.Any(v => ObjectUtils.AreEqual(Value, v)) == true)
+			return false;
+
+		return true;
 	}
 
 	/// <summary>

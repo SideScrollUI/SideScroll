@@ -46,8 +46,8 @@ public class ListEnumValue(string name, bool isSelected, object value, string he
 			bool isSelected = isFlagsEnum ? enumValue.HasFlag(flag) : enumValue.Equals(flag);
 
 			string name = flag.ToString();
-			long value = Convert.ToInt64(flag);
-			string hex = $"{value:X}";
+			object value = Convert.ChangeType(flag, Enum.GetUnderlyingType(enumType));
+			string hex = Enum.Format(enumType, flag, "X");
 
 			flags.Add(new ListEnumValue(name, isSelected, value, hex));
 		}
@@ -66,8 +66,8 @@ public class ListEnumValue(string name, bool isSelected, object value, string he
 		foreach (T flag in Enum.GetValues(enumType))
 		{
 			string name = flag.ToString();
-			long value = Convert.ToInt64(flag);
-			string hex = $"{value:X}";
+			object value = Convert.ChangeType(flag, Enum.GetUnderlyingType(enumType));
+			string hex = Enum.Format(enumType, flag, "X");
 
 			// No selection for static enum display
 			flags.Add(new ListEnumValue(name, false, value, hex));

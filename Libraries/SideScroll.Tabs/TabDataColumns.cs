@@ -83,8 +83,14 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 					propertyNames.Remove(columnName);
 				}
 			}
-			// todo: Fix random order since Dictionary Reorders
-			orderedPropertyInfos.AddRange(propertyNames.Values);
+			// Add remaining properties in their original order
+			foreach (var propertyInfo in visibleProperties)
+			{
+				if (propertyNames.ContainsKey(propertyInfo.Name))
+				{
+					orderedPropertyInfos.Add(propertyInfo);
+				}
+			}
 			return orderedPropertyInfos;
 		}
 		return visibleProperties;

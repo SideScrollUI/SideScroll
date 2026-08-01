@@ -8,9 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added `[Hide]` support on `[Item]` methods, so a method row can be hidden based on its return value (e.g. `[Item, Hide(null)]`). A class-level `[Hide]` now applies to its `[Item]` methods as well. Methods without a `[Hide]` are never invoked to evaluate visibility
 - Added `SerializerFileAtlas.CreateForFile()` for serializing to a specific file path instead of a directory base path
 
 ### Fixed
+- Fixed `ListMethod` throwing a `RuntimeBinderException` when invoking methods returning non-generic or internal Task types (like `async Task`) due to unsafe `dynamic` binding, by awaiting the inner task and using reflection for the result
+- Fixed `ListField.Value` setter throwing an `InvalidCastException` for nullable types and null assignments, by adopting the same type conversion logic `ListProperty` uses
+- Fixed `ListEnumValue.Create()` throwing an `OverflowException` for `ulong` enums with high bits set, by using `Enum.Format()` instead of `Convert.ToInt64()`
+- Fixed `TabDataColumns.GetPropertyColumns()` scrambling the natural order of the remaining properties after applying `ColumnNameOrder`, due to unordered `Dictionary.Values` iteration
+- Fixed `ListToString.Create()` returning `limit + 1` items, and still creating one item when passed a limit of zero or less
+- Fixed `[Inline]` members expanding without a depth limit, which could overflow the stack for self referencing values
+- Fixed `TabUtils.ObjectHasLinks()` throwing a `NullReferenceException` when evaluating an `IListItem` with a null value
+- Fixed `CustomComparer` returning inconsistent results for mixed-type comparisons, which could make sorting a DataGrid column with mixed value types throw. Different types are now grouped together by type name
+- Fixed `[DebugOnly]` field markers only being applied when both the field and its type had the attribute, rather than either of them
 - Fixed `TabDirectory` Delete building its path by combining the directory with the selected row's display label, which could resolve outside the directory being viewed (`..` or an absolute path) and recursively delete it. It now uses the row's `[DataKey]` path and skips anything that isn't inside. One failed delete no longer skips the rest
 - Fixed `TabFileSerialized` loading `Data.atlas` instead of the `.atlas` file that was opened in the File Viewer
 - Fixed `TabUserSettings.Reset()` mutating the global `DefaultUserSettings` template by assigning a reference instead of a deep clone, so a reset permanently altered the defaults for every later reset
