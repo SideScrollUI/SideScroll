@@ -13,13 +13,15 @@ namespace SideScroll.Avalonia.Controls;
 /// <summary>
 /// A color picker that binds to a <see cref="ListProperty"/>, persisting the last-used color model and tab selection across instances.
 /// </summary>
-public class TabColorPicker : ColorPicker
+public class TabColorPicker : ColorPicker, IDisposable
 {
 	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(ColorPicker);
 
 	/// <summary>Gets the list property this color picker is bound to, or <c>null</c> if unbound.</summary>
 	public ListProperty? Property { get; }
+
+	private INotifyPropertyChanged? _boundNotifier;
 
 	private static int? _prevSelectedIndex = 2;
 	private static ColorModel? _prevColorModel = ColorModel.Hsva;
@@ -63,8 +65,30 @@ public class TabColorPicker : ColorPicker
 
 		if (property.Object is INotifyPropertyChanged notifyPropertyChanged)
 		{
+			_boundNotifier = notifyPropertyChanged;
 			notifyPropertyChanged.PropertyChanged += OnPropertyChanged;
 		}
+	}
+
+	/// <summary>
+	/// Releases the subscription to the bound object's property changes
+	/// </summary>
+	/// <remarks>
+	/// The bound object outlives this control, so the event would otherwise keep the picker and
+	/// everything it references alive. TabSplitGrid disposes controls when clearing them
+	/// </remarks>
+	public void Dispose()
+	{
+		if (_boundNotifier != null)
+		{
+			_boundNotifier.PropertyChanged -= OnPropertyChanged;
+			_boundNotifier = null;
+		}
+
+		ColorChanged -= TabColorPicker_ColorChanged;
+		PropertyChanged -= TabColorPicker_PropertyChanged;
+
+		GC.SuppressFinalize(this);
 	}
 
 	private void TabColorPicker_ColorChanged(object? sender, ColorChangedEventArgs e)

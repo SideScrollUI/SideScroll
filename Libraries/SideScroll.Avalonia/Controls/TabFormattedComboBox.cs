@@ -17,7 +17,7 @@ namespace SideScroll.Avalonia.Controls;
 /// A combo box that wraps its items in <see cref="FormattedItem"/> wrappers to display human-readable labels
 /// while preserving the underlying value for two-way binding via a <see cref="ListProperty"/>.
 /// </summary>
-public class TabFormattedComboBox : ComboBox
+public class TabFormattedComboBox : ComboBox, IDisposable
 {
 	/// <inheritdoc/>
 	protected override Type StyleKeyOverride => typeof(ComboBox);
@@ -27,6 +27,9 @@ public class TabFormattedComboBox : ComboBox
 
 	private List<FormattedItem>? _items;
 
+	private INotifyPropertyChanged? _boundNotifier;
+	private INotifyCollectionChanged? _boundCollection;
+
 	/// <summary>Returns the string representation of the currently selected item.</summary>
 	public override string? ToString() => SelectedItem?.ToString();
 
@@ -34,6 +37,7 @@ public class TabFormattedComboBox : ComboBox
 	public TabFormattedComboBox(ListProperty property, IList list)
 	{
 		Property = property;
+		IsEnabled = property.IsEditable;
 		Items = list;
 
 		InitializeComponent();
@@ -65,6 +69,7 @@ public class TabFormattedComboBox : ComboBox
 			Items = collection;
 			if (collection is INotifyCollectionChanged notifyCollectionChanged)
 			{
+				_boundCollection = notifyCollectionChanged;
 				notifyCollectionChanged.CollectionChanged += CollectionChanged_CollectionChanged;
 			}
 		}
@@ -96,8 +101,33 @@ public class TabFormattedComboBox : ComboBox
 
 		if (Property.Object is INotifyPropertyChanged notifyPropertyChanged)
 		{
+			_boundNotifier = notifyPropertyChanged;
 			notifyPropertyChanged.PropertyChanged += OnPropertyChanged;
 		}
+	}
+
+	/// <summary>
+	/// Releases the subscriptions to the bound object and to the item source collection
+	/// </summary>
+	/// <remarks>
+	/// Both outlive this control, so the events would otherwise keep the combo box and everything
+	/// it references alive. TabControlToolbar and TabSplitGrid dispose controls when clearing them
+	/// </remarks>
+	public void Dispose()
+	{
+		if (_boundNotifier != null)
+		{
+			_boundNotifier.PropertyChanged -= OnPropertyChanged;
+			_boundNotifier = null;
+		}
+
+		if (_boundCollection != null)
+		{
+			_boundCollection.CollectionChanged -= CollectionChanged_CollectionChanged;
+			_boundCollection = null;
+		}
+
+		GC.SuppressFinalize(this);
 	}
 
 	private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)

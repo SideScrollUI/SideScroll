@@ -37,7 +37,7 @@ public class TabSeparator : Border;
 /// A property editor that uses reflection to generate input controls (text boxes, combo boxes, check boxes, etc.)
 /// for each public, visible property of a bound object, supporting validation, grouping, and data binding.
 /// </summary>
-public class TabForm : Border, IValidationControl
+public class TabForm : Border, IValidationControl, IDisposable
 {
 	/// <summary>Gets or sets the maximum width in pixels applied to form input controls.</summary>
 	public static int ControlMaxWidth { get; set; } = 2000;
@@ -109,9 +109,35 @@ public class TabForm : Border, IValidationControl
 
 	private void ClearControls()
 	{
+		DisposeControls();
+
 		ContainerGrid.Children.Clear();
 		ContainerGrid.RowDefinitions.Clear();
 		_propertyControls.Clear();
+	}
+
+	private void DisposeControls()
+	{
+		// Controls that bind to the object subscribe to its change notifications, so they'd stay
+		// alive with it. Reloading a form replaces every one of them
+		foreach (Control control in _propertyControls.Values)
+		{
+			if (control is IDisposable disposable)
+			{
+				disposable.Dispose();
+			}
+		}
+	}
+
+	/// <summary>
+	/// Disposes the generated property controls, releasing their bindings to the bound object
+	/// </summary>
+	public void Dispose()
+	{
+		DisposeControls();
+		_propertyControls.Clear();
+
+		GC.SuppressFinalize(this);
 	}
 
 	/// <summary>Clears the existing form controls and regenerates rows for all visible properties of <paramref name="obj"/>.</summary>

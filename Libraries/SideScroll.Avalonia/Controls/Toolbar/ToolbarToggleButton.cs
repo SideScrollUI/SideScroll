@@ -66,6 +66,23 @@ public class ToolbarToggleButton : ToolbarButton
 		}
 	}
 
+	/// <inheritdoc/>
+	protected override void Dispose(bool disposing)
+	{
+		if (disposing && ListProperty != null)
+		{
+			// The bound object holds the ListProperty, which holds this button and its TabInstance.
+			// Toolbars bind to objects owned by the parent tab, so those outlive this control
+			ListProperty.PropertyChanged -= ListProperty_PropertyChanged;
+
+			// LoadToolbar() creates one control per ToolToggleButton, and both are rebuilt on every
+			// load, so this button owns the binding and has to release it from the bound object
+			ListProperty.Dispose();
+		}
+
+		base.Dispose(disposing);
+	}
+
 	/// <summary>Toggles the check state, updates the bound property value, and invokes the base action.</summary>
 	public override async Task InvokeAsync(bool canDelay = true)
 	{

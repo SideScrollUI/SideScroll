@@ -480,11 +480,19 @@ public class TabModel
 			Debug.WriteLine($"Failed to add Dictionary: {e}");
 		}
 
-		if (Object is IComparable)
+		if (sortedList.Count > 0 && sortedList[0].Key is IComparable)
 		{
-			sortedList = sortedList
-				.OrderBy(x => x.Key)
-				.ToList();
+			try
+			{
+				sortedList = sortedList
+					.OrderBy(x => x.Key)
+					.ToList();
+			}
+			catch (Exception e)
+			{
+				// Mixed key types can fail to compare
+				Debug.WriteLine($"Failed to sort Dictionary keys: {e}");
+			}
 		}
 
 		ItemLists.Add(new ItemCollection<DictionaryEntry>(sortedList));
@@ -586,11 +594,39 @@ public class TabModel
 	/// </summary>
 	public void Clear()
 	{
+		DisposeItems();
+
 		Objects.Clear();
 		ItemLists.Clear();
 #pragma warning disable CS0618 // Type or member is obsolete
 		Actions = null;
 #pragma warning restore CS0618 // Type or member is obsolete
+	}
+
+	/// <summary>
+	/// Disposes the rows created for this model so they unsubscribe from their source objects.
+	/// Only <see cref="ListMember"/> rows are owned here, the item lists can also hold the caller's
+	/// own objects (see <see cref="AddList"/>) which stay alive after the tab closes
+	/// </summary>
+	private void DisposeItems()
+	{
+		foreach (IList list in ItemLists)
+		{
+			try
+			{
+				foreach (object? item in list)
+				{
+					if (item is ListMember listMember)
+					{
+						listMember.Dispose();
+					}
+				}
+			}
+			catch (Exception)
+			{
+				// Clearing still has to finish, a custom list can throw while enumerating
+			}
+		}
 	}
 
 	// todo: split Actions out of ListMethod since those return values?
