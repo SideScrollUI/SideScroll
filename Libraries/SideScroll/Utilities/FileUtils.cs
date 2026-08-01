@@ -10,10 +10,10 @@ public readonly struct FilePath(string path)
 	/// <summary>
 	/// Gets the file path string
 	/// </summary>
-	public string Path => path;
+	public string Path => path ?? string.Empty;
 
 	/// <summary>Returns the file path string.</summary>
-	public override string ToString() => path;
+	public override string ToString() => path ?? string.Empty;
 }
 
 /// <summary>
@@ -21,6 +21,11 @@ public readonly struct FilePath(string path)
 /// </summary>
 public static class FileUtils
 {
+	/// <summary>
+	/// Number of characters to read when checking if a file or stream is text
+	/// </summary>
+	public const int TextCheckBufferSize = 1024;
+
 	/// <summary>
 	/// Unix permission bit: User read permission
 	/// </summary>
@@ -125,6 +130,16 @@ public static class FileUtils
 					+ sourceDirPath);
 			}
 
+			// The destination is created below before the source subdirectories are enumerated, so a
+			// destination inside the source would be found by GetDirectories() and copied into
+			// itself, nesting until the path length limit stops it
+			if (copySubDirs && IsSameOrInside(sourceDirPath, destDirPath))
+			{
+				throw new ArgumentException(
+					$"Destination directory can't be inside the source directory: {destDirPath}",
+					nameof(destDirPath));
+			}
+
 			// Create destination directory
 			if (!Directory.Exists(destDirPath))
 			{
@@ -151,6 +166,19 @@ public static class FileUtils
 				}
 			}
 		}
+	}
+
+	/// <summary>
+	/// Returns whether <paramref name="path"/> is <paramref name="basePath"/> itself or sits inside it
+	/// </summary>
+	private static bool IsSameOrInside(string basePath, string path)
+	{
+		string relative = Path.GetRelativePath(Path.GetFullPath(basePath), Path.GetFullPath(path));
+
+		// GetRelativePath() returns a rooted path when there's no shared root (a different drive)
+		return !Path.IsPathRooted(relative) &&
+			relative != ".." &&
+			!relative.StartsWith(".." + Path.DirectorySeparatorChar, StringComparison.Ordinal);
 	}
 
 	/// <summary>
@@ -188,7 +216,7 @@ public static class FileUtils
 	public static bool IsTextFile(string path)
 	{
 		string extension = Path.GetExtension(path);
-		if (TextExtensions.Contains(extension))
+		if (TextExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase))
 			return true;
 
 		try
@@ -210,8 +238,21 @@ public static class FileUtils
 	{
 		try
 		{
-			using var streamReader = new StreamReader(stream);
-			return IsTextStream(streamReader);
+			long originalPosition = 0;
+			if (stream.CanSeek)
+			{
+				originalPosition = stream.Position;
+			}
+
+			using var streamReader = new StreamReader(stream, System.Text.Encoding.UTF8, true, TextCheckBufferSize, leaveOpen: true);
+			bool result = IsTextStream(streamReader);
+
+			if (stream.CanSeek)
+			{
+				stream.Position = originalPosition;
+			}
+
+			return result;
 		}
 		catch (Exception)
 		{
@@ -225,16 +266,26 @@ public static class FileUtils
 	/// <returns>True if the stream contains text; otherwise, false</returns>
 	public static bool IsTextStream(StreamReader streamReader)
 	{
+		Stream stream = streamReader.BaseStream;
+		if (!stream.CanSeek)
+			return false;
+
+		long originalPosition = stream.Position;
 		try
 		{
-			var buffer = new char[1000]; // 100 won't detect pdf's as binary
-			int bytesRead = streamReader.Read(buffer, 0, buffer.Length);
-			Array.Resize(ref buffer, bytesRead);
+			var buffer = new char[TextCheckBufferSize]; // 100 won't detect pdf's as binary
+			int charsRead = streamReader.Read(buffer, 0, buffer.Length);
+			Array.Resize(ref buffer, charsRead);
 			return !buffer.Any(ch => char.IsControl(ch) && ch != '\r' && ch != '\n' && ch != '\t');
 		}
 		catch (Exception)
 		{
 			return false;
+		}
+		finally
+		{
+			streamReader.DiscardBufferedData();
+			stream.Position = originalPosition;
 		}
 	}
 

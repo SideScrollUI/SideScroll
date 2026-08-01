@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed `FileUtils.DirectoryCopy()` recursing into its own destination when copying into a subdirectory of the source. The destination was created before the source subdirectories were listed, so it copied itself into itself until the path length limit stopped it, leaving behind a directory tree too deep for `rmdir` to remove. Copying into the source is now rejected
+- Fixed a default `FilePath` exposing a null path instead of an empty one, since it's a struct and its default has no path
 - Fixed `TaskInstance.SetFinished()` completing twice when called again before its posted `OnFinished()` ran, since `Finished` isn't set until that runs and couldn't guard the second call
 - Fixed background task failures never being observed, so an exception thrown inside the task was dropped instead of being recorded in its log, and synchronous task failures skipping `SetFinished()` entirely and leaving the task permanently unfinished
 - Fixed the first dynamically added `TaskInstance` sub-task having a progress maximum of zero, which prevented it from reporting progress to its parent, and sub-task calls referencing the parent task instead of the child, which attributed nested progress to the wrong task
