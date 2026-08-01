@@ -162,7 +162,8 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	{
 		if (UsePost)
 		{
-			Context!.Post(AddRangeCallback, collection);
+			// The callback can run after the caller mutates or disposes the source enumerable.
+			Context!.Post(AddRangeCallback, collection.ToList());
 		}
 		else
 		{
@@ -193,7 +194,7 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	{
 		if (UsePost)
 		{
-			Context!.Post(ReplaceCallback, collection);
+			Context!.Post(ReplaceCallback, collection.ToList());
 		}
 		else
 		{
@@ -293,24 +294,24 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	{
 		if (UsePost)
 		{
-			Context!.Post(RemoveItemCallback, index);
+			Context!.Post(RemoveItemCallback, Items[index]);
 		}
 		else
 		{
-			RemoveItemCallback(index);
+			RemoveItemCallback(Items[index]);
 		}
 	}
 
 	// Thread safe callback, only works if the context is the same
 	private void RemoveItemCallback(object? state)
 	{
-		int index = (int)state!;
-
 		lock (_lock)
 		{
-			if (index < 0 || index >= Count)
+			T item = (T)state!;
+			int index = Items.IndexOf(item);
+			if (index < 0)
 			{
-				Debug.WriteLine($"RemoveItemCallback: index {index} out of range (Count={Count}), skipping.");
+				Debug.WriteLine("RemoveItemCallback: item is no longer in the collection, skipping.");
 				return;
 			}
 

@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed posted `ItemCollectionUI` removals using the index captured when the removal was requested, which pointed at a different item, or past the end, by the time the callback ran on the UI thread. The item itself is passed now and its current index is looked up
+- Fixed posted `ItemCollectionUI` bulk operations passing the caller's enumerable through to the callback, which ran after the caller could have mutated or disposed it. The input is snapshotted first
 - Fixed `ItemCollection.AddRange()` mutating the collection while enumerating its input, so adding a collection to itself or passing a deferred enumerable could leave it partially changed without the reset notification
 - Fixed `ItemQueueCollection.MaxCount` not applying to items added through a base class reference or `AddRange()`, and negative values not being treated as zero
 - Fixed `Log.Level` and `Entries` no longer updating once a Log reached `MaxLogItems`, which hid later errors from the Tasks that check the Log Level
