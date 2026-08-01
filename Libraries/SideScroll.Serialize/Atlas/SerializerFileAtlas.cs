@@ -25,10 +25,25 @@ public class SerializerFileAtlas : SerializerFile
 	/// <summary>
 	/// Initializes a new instance of the SerializerFileAtlas class
 	/// </summary>
-	public SerializerFileAtlas(string basePath, string name = "") : base(basePath, name)
+	public SerializerFileAtlas(string basePath, string? name = null) : base(basePath, name)
 	{
 		HeaderPath = Paths.Combine(basePath, DataFileName);
 		DataPath = Paths.Combine(basePath, DataFileName);
+	}
+
+	/// <summary>
+	/// Creates a serializer instance for a specific file path rather than a directory base path.
+	/// </summary>
+	public static SerializerFileAtlas CreateForFile(string filePath, string? name = null)
+	{
+		// GetDirectoryName() returns "" for a bare filename, which makes EnsureStorageExists() throw
+		string? directory = System.IO.Path.GetDirectoryName(filePath);
+
+		return new SerializerFileAtlas(string.IsNullOrEmpty(directory) ? "." : directory, name)
+		{
+			HeaderPath = filePath,
+			DataPath = filePath,
+		};
 	}
 
 	/// <inheritdoc/>

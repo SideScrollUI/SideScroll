@@ -8,8 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added `SerializerFileAtlas.CreateForFile()` for serializing to a specific file path instead of a directory base path
 
 ### Fixed
+- Fixed `TabDirectory` Delete building its path by combining the directory with the selected row's display label, which could resolve outside the directory being viewed (`..` or an absolute path) and recursively delete it. It now uses the row's `[DataKey]` path and skips anything that isn't inside. One failed delete no longer skips the rest
+- Fixed `TabFileSerialized` loading `Data.atlas` instead of the `.atlas` file that was opened in the File Viewer
+- Fixed `TabUserSettings.Reset()` mutating the global `DefaultUserSettings` template by assigning a reference instead of a deep clone, so a reset permanently altered the defaults for every later reset
+- Fixed `TabZipFile` showing an empty tab instead of an error for a corrupt or unreadable archive
+- Fixed file type detection lowercasing extensions with the current culture, so an extension containing an `I` (like `.ZIP`) became `.zıp` and matched nothing in cultures where `I` doesn't lowercase to `i`. `TabFile.ExtensionTypes` now ignores case, and the directory file extension filter compares ordinally
+- Fixed `.atlas` files only opening in the serialized viewer when the extension was lowercase, the file system is case insensitive on Windows and macOS
 - Fixed `DateTime.Ceil()` rounding to seconds instead of the passed tick interval, and throwing an `ArgumentOutOfRangeException` for values in the last interval before `DateTime.MaxValue`, which has nothing above it to round up to. It saturates at `MaxValue` now
 - Fixed `DateTime.Max()` and `Min()` comparing `Ticks`, which are wall clock readings that aren't comparable across `DateTimeKind`s, and labeling the result with the first value's `Kind` regardless of which one won. Charts combining a UTC series with a Local one got a time window shifted by the UTC offset
 - Fixed `ByteFormatter.Format()` recursing until the process died with a `StackOverflowException` for `long.MinValue`, which negates back onto itself, and ignoring the passed `decimalPlaces` for negative values

@@ -20,7 +20,7 @@ public class TabFileSerialized(string path) : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
-			_serializerFile = new SerializerFileAtlas(System.IO.Path.GetDirectoryName(tab.Path)!);
+			_serializerFile = SerializerFileAtlas.CreateForFile(tab.Path);
 
 			model.Items = _items = [];
 			try
