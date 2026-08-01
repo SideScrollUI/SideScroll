@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed `TimeRangePeriod.Periods()` casting its period count to an `int`. A wide window with small periods wrapped, either going negative and silently returning no periods, or staying positive and allocating hundreds of millions of them. Counts past the new `MaxPeriods` (1,000,000) return null like the other invalid parameters
+- Fixed `ProcessUtils.OpenBrowser()` passing the url into `cmd /c start` on Windows, where only `&` was escaped, so a url containing `|`, `>`, or `^` ran whatever followed it. It uses `UseShellExecute` now, which opens the default browser directly and needs no escaping
 - Fixed posted `ItemCollectionUI` removals using the index captured when the removal was requested, which pointed at a different item, or past the end, by the time the callback ran on the UI thread. The item itself is passed now and its current index is looked up
 - Fixed posted `ItemCollectionUI` bulk operations passing the caller's enumerable through to the callback, which ran after the caller could have mutated or disposed it. The input is snapshotted first
 - Fixed `ItemCollection.AddRange()` mutating the collection while enumerating its input, so adding a collection to itself or passing a deferred enumerable could leave it partially changed without the reset notification

@@ -11,6 +11,12 @@ namespace SideScroll.Time;
 public class TimeRangePeriod : ITags
 {
 	/// <summary>
+	/// Gets or sets the maximum number of periods <see cref="Periods"/> will allocate before
+	/// treating the request as invalid and returning null
+	/// </summary>
+	public static int MaxPeriods { get; set; } = 1_000_000;
+
+	/// <summary>
 	/// Gets or sets the start time of this period
 	/// </summary>
 	public DateTime StartTime { get; set; }
@@ -126,12 +132,17 @@ public class TimeRangePeriod : ITags
 		if (windowTicks < 1 || periodTicks < 1)
 			return null;
 
-		int numPeriods = (int)(windowTicks / periodTicks);
+		// Divide as a long. Casting to int wrapped for a wide window with small periods, which
+		// either went negative and silently returned no periods, or stayed positive and tried to
+		// allocate hundreds of millions of them
+		long numPeriods = windowTicks / periodTicks;
+		if (numPeriods > MaxPeriods)
+			return null;
 
 		DateTime minStartTime = periodTimeWindow.StartTime;//.Trim(periodDuration);
 		DateTime maxEndTime = periodTimeWindow.EndTime;
 
-		List<TimeRangePeriod> timeRangePeriods = [];
+		List<TimeRangePeriod> timeRangePeriods = new((int)numPeriods + 1);
 
 		for (int i = 0; i <= numPeriods; i++)
 		{

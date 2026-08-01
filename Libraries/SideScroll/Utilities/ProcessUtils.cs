@@ -77,10 +77,10 @@ public static class ProcessUtils
 
 		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 		{
-			// Workaround because of this: https://github.com/dotnet/corefx/issues/10361
-			// Can fix after updating to .Net Standard 2.1? Unclear
-			url = url.Replace("&", "^&");
-			Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+			// UseShellExecute opens the default browser directly. It used to go through
+			// "cmd /c start {url}", which pasted the url into a shell command line where only '&'
+			// was escaped, so a url containing '|', '>', or '^' ran whatever followed it
+			Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
 		}
 		else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 		{

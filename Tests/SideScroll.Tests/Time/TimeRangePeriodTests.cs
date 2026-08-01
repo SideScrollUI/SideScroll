@@ -465,4 +465,54 @@ public class TimeRangePeriodTests : BaseTest
 		Assert.That(total1, Is.EqualTo(expectedCount),
 			$"Total should equal the number of time range values: {expectedCount}");
 	}
+
+	// ─── Period counts that don't fit an int ─────────────────────────────
+
+	[TestCase(10, TestName = "Period count wraps negative")]
+	[TestCase(1, TestName = "Period count wraps positive")]
+	[Description(
+		"The period count used to be cast to int. A wide window with tiny periods wrapped, either " +
+		"going negative and silently returning no periods, or staying positive and trying to " +
+		"allocate hundreds of millions of them")]
+	public void PeriodsRejectsCountsTooLargeForAnInt(int windowDays)
+	{
+		var timeWindow = new TimeWindow(StartTime, StartTime.AddDays(windowDays));
+
+		List<TimeRangePeriod>? periods = TimeRangePeriod.Periods([], timeWindow, TimeSpan.FromTicks(1));
+
+		Assert.That(periods, Is.Null, "A count past MaxPeriods is not a usable request.");
+	}
+
+	[Test, Description("A count within the limit still returns every period")]
+	public void PeriodsAllowsCountsWithinTheLimit()
+	{
+		var timeWindow = new TimeWindow(StartTime, StartTime.AddHours(1));
+
+		List<TimeRangePeriod>? periods = TimeRangePeriod.Periods([], timeWindow, TimeSpan.FromSeconds(1));
+
+		// The window is extended by one period, and the loop is inclusive of the last boundary
+		Assert.That(periods, Is.Not.Null);
+		Assert.That(periods, Has.Count.EqualTo(3602));
+	}
+
+	[Test, Description("The limit is configurable, and the boundary itself is still allowed")]
+	public void PeriodsHonorsMaxPeriods()
+	{
+		int original = TimeRangePeriod.MaxPeriods;
+		try
+		{
+			TimeRangePeriod.MaxPeriods = 10;
+			var timeWindow = new TimeWindow(StartTime, StartTime.AddSeconds(9));
+
+			// 9 seconds + 1 added period = 10 periods, right at the limit
+			Assert.That(TimeRangePeriod.Periods([], timeWindow, TimeSpan.FromSeconds(1)), Is.Not.Null);
+
+			TimeRangePeriod.MaxPeriods = 9;
+			Assert.That(TimeRangePeriod.Periods([], timeWindow, TimeSpan.FromSeconds(1)), Is.Null);
+		}
+		finally
+		{
+			TimeRangePeriod.MaxPeriods = original;
+		}
+	}
 }
