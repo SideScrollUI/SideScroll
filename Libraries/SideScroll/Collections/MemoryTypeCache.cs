@@ -10,7 +10,7 @@ namespace SideScroll.Collections;
 /// </summary>
 /// <typeparam name="T">The type of objects to cache</typeparam>
 [Unserialized]
-public class MemoryTypeCache<T>
+public class MemoryTypeCache<T> : IDisposable
 {
 	/// <summary>
 	/// Gets or sets the default maximum number of items for new cache instances
@@ -37,7 +37,14 @@ public class MemoryTypeCache<T>
 	/// </summary>
 	public MemoryTypeCache(int? maxItems = null, TimeSpan? cacheDuration = null)
 	{
+		if (cacheDuration <= TimeSpan.Zero)
+			throw new ArgumentOutOfRangeException(nameof(cacheDuration), "Cache duration must be positive.");
+
 		MaxItems = maxItems ?? DefaultMaxItems;
+
+		// A SizeLimit of 0 isn't rejected by MemoryCache, it just makes every Set() exceed the limit
+		// so nothing is ever cached and every lookup silently misses
+		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(MaxItems, nameof(maxItems));
 		CacheDuration = cacheDuration;
 
 		MemoryCacheOptions options = new()
@@ -114,5 +121,12 @@ public class MemoryTypeCache<T>
 		}
 		value = default;
 		return false;
+	}
+
+	/// <summary>Releases the underlying memory cache.</summary>
+	public void Dispose()
+	{
+		MemoryCache.Dispose();
+		GC.SuppressFinalize(this);
 	}
 }

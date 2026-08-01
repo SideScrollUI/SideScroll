@@ -52,6 +52,7 @@ public static class ObjectExtensions
 		}
 
 		int maxFormatLength = maxLength ?? DefaultMaxFormattedLength;
+		ArgumentOutOfRangeException.ThrowIfNegative(maxFormatLength);
 
 		if (!type.IsPrimitive)
 		{
@@ -131,7 +132,7 @@ public static class ObjectExtensions
 
 		if (obj is DictionaryEntry dictionaryEntry)
 		{
-			return dictionaryEntry.Key.ToString();
+			return dictionaryEntry.Key?.ToString();
 		}
 
 		string? valueString = obj.ToString();
@@ -156,7 +157,7 @@ public static class ObjectExtensions
 		List<string?> strings = [];
 		foreach (var item in enumerable)
 		{
-			strings.Add(item.ToString());
+			strings.Add(item?.ToString());
 		}
 
 		return string.Join(", ", strings);
@@ -189,6 +190,11 @@ public static class ObjectExtensions
 	/// </summary>
 	public static string? ToUniqueString(this object? obj)
 	{
+		return ToUniqueString(obj, null);
+	}
+
+	private static string? ToUniqueString(object? obj, HashSet<object>? visited)
+	{
 		if (obj == null)
 			return null;
 
@@ -196,6 +202,23 @@ public static class ObjectExtensions
 
 		if (obj is string text)
 			return text;
+
+		if (obj is DictionaryEntry dictionaryEntry)
+			return dictionaryEntry.Key?.ToString();
+
+		if (type.IsNumeric())
+		{
+			// Identifiers must preserve the complete value and stay stable across cultures.
+			// The default "N" format rounds floating-point values to two decimal places.
+			return obj switch
+			{
+				float value => value.ToString("R", CultureInfo.InvariantCulture),
+				double value => value.ToString("R", CultureInfo.InvariantCulture),
+				decimal value => value.ToString("G29", CultureInfo.InvariantCulture),
+				IFormattable value => value.ToString(null, CultureInfo.InvariantCulture),
+				_ => obj.ToString(),
+			};
+		}
 
 		if (!type.IsPrimitive)
 		{
@@ -212,15 +235,6 @@ public static class ObjectExtensions
 			}
 		}
 
-		if (type.IsNumeric())
-		{
-			string format = type.IsDecimal() ? "N" : "N0";
-			return ((IFormattable)obj).ToString(format, CultureInfo.CurrentCulture);
-		}
-
-		if (obj is DictionaryEntry dictionaryEntry)
-			return dictionaryEntry.Key.ToString();
-
 		string? valueString = obj.ToString();
 		if (valueString != type.ToString())
 			return valueString;
@@ -228,14 +242,22 @@ public static class ObjectExtensions
 		// it's using the base to string
 		// No unique identifier found yet, start looking in the properties and fields
 
+		// Prevent infinite recursion on circular references
+		visited ??= new HashSet<object>(ReferenceEqualityComparer.Instance);
+		if (!visited.Add(obj))
+			return null;
+
 		// Return first non-null property value
 		PropertyInfo[] properties = type.GetProperties();
 		foreach (PropertyInfo propertyInfo in properties)
 		{
-			object? propertyValue = propertyInfo.GetValue(obj);
-			string? toString = propertyValue?.ToUniqueString();
-			if (toString != null)
-				return toString;
+			if (propertyInfo.CanRead && propertyInfo.GetIndexParameters().Length == 0)
+			{
+				object? propertyValue = propertyInfo.GetValue(obj);
+				string? toString = ToUniqueString(propertyValue, visited);
+				if (toString != null)
+					return toString;
+			}
 		}
 
 		// Return first non-null field value
@@ -243,7 +265,7 @@ public static class ObjectExtensions
 		foreach (FieldInfo fieldInfo in fields)
 		{
 			object? fieldValue = fieldInfo.GetValue(obj);
-			string? toString = fieldValue?.ToUniqueString();
+			string? toString = ToUniqueString(fieldValue, visited);
 			if (toString != null)
 				return toString;
 		}

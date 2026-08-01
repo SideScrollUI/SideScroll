@@ -118,6 +118,16 @@ public class NumberExtensionsTests : BaseTest
 		Assert.That(0.000000987654m.RoundToSignificantFigures(2), Is.EqualTo(0.00000099m));
 	}
 
+	[TestCase(0)]
+	[TestCase(-1)]
+	public void RoundToSignificantFigures_RejectsNonPositivePrecision(int significantFigures)
+	{
+		Assert.Throws<ArgumentOutOfRangeException>(() =>
+			1.23.RoundToSignificantFigures(significantFigures));
+		Assert.Throws<ArgumentOutOfRangeException>(() =>
+			1.23m.RoundToSignificantFigures(significantFigures));
+	}
+
 	#endregion
 
 	#region Other Number Extension Tests

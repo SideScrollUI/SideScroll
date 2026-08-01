@@ -10,8 +10,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added `[Hide]` support on `[Item]` methods, so a method row can be hidden based on its return value (e.g. `[Item, Hide(null)]`). A class-level `[Hide]` now applies to its `[Item]` methods as well. Methods without a `[Hide]` are never invoked to evaluate visibility
 - Added `SerializerFileAtlas.CreateForFile()` for serializing to a specific file path instead of a directory base path
+- Added `SideScrollExtensions.MaxInnerValueDepth` (16) to limit how far `[InnerValue]` members are unwrapped
 
 ### Fixed
+- Fixed `Paths.Combine()` allowing a Windows-style leading backslash in a later segment to discard the accumulated base path
+- Fixed `ProcessUtils.OpenFolder()` opening a file explorer at a default location when the path doesn't exist, selecting an unrelated file when passed a rooted selection, which `Path.Combine()` uses in place of the folder, and silently failing on Linux, which now uses `xdg-open`
+- Fixed `ProcessUtils.GetDotnetRuntimes()` failing to parse runtime lists containing preview version suffixes, returning paths wrapped in display brackets, and not disposing the `dotnet --list-runtimes` process
+- Fixed `DateTimeUtils.FormatTimeRange()` durations being offset when the range crosses a Daylight Saving Time transition or mixes time zones, by measuring the duration before converting for display
+- Fixed Unix timestamp parsing rejecting signed values and dates beyond the `uint` seconds range
+- Fixed `CompressionUtils.Compress()` logging the compressed size before the `GZipStream` finished writing, and renamed the `Decompress()` size tags, the decompressed size was labeled as the compressed size
+- Fixed `GetInnerValue()` overflowing the stack when `[InnerValue]` members form a cycle. It now stops after `MaxInnerValueDepth` levels and returns the value reached
+- Fixed `Extensions.Merge()` throwing a `TargetException` when merging from an object of a different type or `null`, and when the target has write-only or indexed properties
+- Fixed `TimeRangeValue.FillAndMerge()` breaking a chart line inside time that was already covered, extending the `EndTime` of the values passed in so charting the same series twice kept widening its ranges, and converting inserted gaps to UTC while leaving the surrounding values unconverted
+- Fixed time-range tags being consolidated by substring match, which dropped distinct non-string values and merged unrelated ones
+- Fixed disposing a `LogTimer` more than once logging multiple `Finished` entries
+- Fixed `MemoryTypeCache` silently caching nothing for a zero or negative `maxItems`, since a `SizeLimit` of 0 makes every entry exceed the limit. It now rejects non-positive sizes and durations, and can be disposed
 - Fixed `ListMethod` throwing a `RuntimeBinderException` when invoking methods returning non-generic or internal Task types (like `async Task`) due to unsafe `dynamic` binding, by awaiting the inner task and using reflection for the result
 - Fixed `ListField.Value` setter throwing an `InvalidCastException` for nullable types and null assignments, by adopting the same type conversion logic `ListProperty` uses
 - Fixed `ListEnumValue.Create()` throwing an `OverflowException` for `ulong` enums with high bits set, by using `Enum.Format()` instead of `Convert.ToInt64()`

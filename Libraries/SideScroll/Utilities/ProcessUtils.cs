@@ -101,6 +101,10 @@ public static class ProcessUtils
 	/// </summary>
 	public static void OpenFolder(string folder, string? selection = null)
 	{
+		// There's nothing to show, and explorer.exe opens a default folder instead of doing nothing
+		if (!File.Exists(folder) && !Directory.Exists(folder))
+			return;
+
 		// Select file instead if in folder path
 		// Trying to open a file will use the default app to open it
 		if (Path.GetDirectoryName(folder) is { } directoryName &&
@@ -118,9 +122,10 @@ public static class ProcessUtils
 				folder = folder.Replace('/', '\\');
 
 				string argument = '"' + folder + '"';
-				if (selection != null)
+				if (selection != null && !Path.IsPathRooted(selection))
 				{
-					// Ignore bad selections
+					// Ignore bad selections. Path.Combine() discards the folder when the selection is
+					// rooted, which would select a file somewhere else entirely
 					string fullPath = Path.Combine(folder, selection);
 					if (File.Exists(fullPath))
 					{
@@ -133,6 +138,10 @@ public static class ProcessUtils
 			else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 			{
 				Process.Start("open", folder);
+			}
+			else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+			{
+				Process.Start("xdg-open", folder);
 			}
 		}
 		catch (Exception e)
@@ -202,15 +211,33 @@ public static class ProcessUtils
 		};
 
 		List<DotnetRuntimeInfo> runtimes = [];
-		Process process = Process.Start(processStartInfo)!;
+		using Process process = Process.Start(processStartInfo)!;
 		while (!process.StandardOutput.EndOfStream)
 		{
 			string? line = process.StandardOutput.ReadLine();
 			if (line == null) continue;
 
 			string[] parts = line.Split(' ', 3);
-			var runtime = new DotnetRuntimeInfo(parts[0], Version.Parse(parts[1]), parts[2]);
-			runtimes.Add(runtime);
+			if (parts.Length < 3) continue;
+
+			string versionStr = parts[1];
+			int dashIndex = versionStr.IndexOf('-');
+			if (dashIndex > 0)
+			{
+				versionStr = versionStr.Substring(0, dashIndex);
+			}
+
+			if (Version.TryParse(versionStr, out Version? parsedVersion))
+			{
+				string path = parts[2];
+				if (path.Length >= 2 && path[0] == '[' && path[^1] == ']')
+				{
+					path = path[1..^1];
+				}
+
+				var runtime = new DotnetRuntimeInfo(parts[0], parsedVersion, path);
+				runtimes.Add(runtime);
+			}
 		}
 		return runtimes;
 	}

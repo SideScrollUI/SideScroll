@@ -81,16 +81,29 @@ public static class DateTimeUtils
 
 		// Convert epoch 1569998557298
 		string numString = text.Replace(",", "");
-		if (numString.Length == 10 && uint.TryParse(numString, out uint epochValue))
+		string digits = numString.StartsWith('-') || numString.StartsWith('+')
+			? numString[1..]
+			: numString;
+		if (long.TryParse(numString, NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out long epochValue))
 		{
-			dateTime = EpochTime.AddSeconds(epochValue);
-			return true;
-		}
+			try
+			{
+				if (digits.Length == 10 || (epochValue < 0 && digits.Length <= 10))
+				{
+					dateTime = EpochTime.AddSeconds(epochValue);
+					return true;
+				}
 
-		if (numString.Length == 13 && long.TryParse(numString, out long epochValueMilliseconds))
-		{
-			dateTime = EpochTime.AddMilliseconds(epochValueMilliseconds);
-			return true;
+				if (digits.Length == 13)
+				{
+					dateTime = EpochTime.AddMilliseconds(epochValue);
+					return true;
+				}
+			}
+			catch (ArgumentOutOfRangeException)
+			{
+				// A syntactically valid epoch value can still exceed DateTime's range.
+			}
 		}
 
 		if (DateTime.TryParse(text, out dateTime)
@@ -130,6 +143,8 @@ public static class DateTimeUtils
 	/// </remarks>
 	public static string FormatTimeRange(DateTime startTime, DateTime endTime, bool withDuration = true)
 	{
+		TimeSpan duration = endTime.ToUniversalTime().Subtract(startTime.ToUniversalTime());
+
 		startTime = TimeZoneView.Current.Convert(startTime);
 		endTime = TimeZoneView.Current.Convert(endTime);
 
@@ -164,7 +179,6 @@ public static class DateTimeUtils
 
 		if (withDuration)
 		{
-			TimeSpan duration = endTime.Subtract(startTime);
 			text += " - " + duration.FormattedDecimal();
 		}
 		return text;

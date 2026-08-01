@@ -21,7 +21,7 @@ public static class Paths
 		foreach (string? part in paths)
 		{
 			string name = part ?? "(null)";
-			path = Path.Combine(path, name.TrimStart('/'));
+			path = Path.Combine(path, name.TrimStart('/', '\\'));
 		}
 		return path.Replace('\\', '/');
 	}

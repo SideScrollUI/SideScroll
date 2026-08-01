@@ -9,6 +9,7 @@ public class LogTimer : Log, IDisposable
 {
 	private readonly Stopwatch _stopwatch = new();
 	private readonly System.Timers.Timer _timer = new();
+	private int _disposed;
 
 	/// <summary>
 	/// Creates a new log timer with default settings
@@ -68,6 +69,9 @@ public class LogTimer : Log, IDisposable
 	/// </summary>
 	public void Dispose()
 	{
+		if (Interlocked.Exchange(ref _disposed, 1) != 0)
+			return;
+
 		_timer.Elapsed -= Timer_Elapsed;
 		_timer.Stop();
 		_timer.Dispose();

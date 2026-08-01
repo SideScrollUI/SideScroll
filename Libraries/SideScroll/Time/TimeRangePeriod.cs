@@ -83,21 +83,23 @@ public class TimeRangePeriod : ITags
 		{
 			// Concatenate tag values with the same tag name
 			Dictionary<string, Tag> lookup = [];
+			Dictionary<string, List<object?>> valuesByName = [];
 			foreach (Tag tag in AllTags)
 			{
 				if (lookup.TryGetValue(tag.Name!, out Tag? tagBin))
 				{
-					if (tagBin.Value is string text && tag.Value is string tagText)
+					List<object?> values = valuesByName[tag.Name!];
+					if (!values.Any(value => Equals(value, tag.Value)))
 					{
-						if (!text.Contains(tagText))
-						{
-							tagBin.Value += ", " + tagText;
-						}
+						values.Add(tag.Value);
+						tagBin.Value = string.Join(", ",
+							values.Select(value => value.Formatted(Tag.MaxValueLength)));
 					}
 				}
 				else
 				{
 					lookup.Add(tag.Name!, new Tag(tag));
+					valuesByName[tag.Name!] = [tag.Value];
 				}
 			}
 			return lookup.Values.ToList();
@@ -268,7 +270,7 @@ public class TimeRangePeriod : ITags
 	{
 		double min = timeRangeValues
 			.Where(period => !double.IsNaN(period.Value))
-			.Where(period => period.EndTime > timeWindow.StartTime && period.StartTime < timeWindow.EndTime)
+			.Where(period => IsInsideWindow(period, timeWindow))
 			.DefaultIfEmpty(new TimeRangeValue())
 			.Min(period => period.Value);
 		return min;
@@ -281,10 +283,20 @@ public class TimeRangePeriod : ITags
 	{
 		double max = timeRangeValues
 			.Where(period => !double.IsNaN(period.Value))
-			.Where(period => period.EndTime > timeWindow.StartTime && period.StartTime < timeWindow.EndTime)
+			.Where(period => IsInsideWindow(period, timeWindow))
 			.DefaultIfEmpty(new TimeRangeValue())
 			.Max(period => period.Value);
 		return max;
+	}
+
+	private static bool IsInsideWindow(TimeRangeValue value, TimeWindow timeWindow)
+	{
+		if (value.EndTime == value.StartTime)
+		{
+			return value.StartTime >= timeWindow.StartTime && value.StartTime < timeWindow.EndTime;
+		}
+
+		return value.EndTime > timeWindow.StartTime && value.StartTime < timeWindow.EndTime;
 	}
 
 	/// <summary>
