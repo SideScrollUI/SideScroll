@@ -83,6 +83,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Date and time rounding helpers now reject zero and negative intervals, and significant-figure rounding rejects zero and negative precision
+- `HttpClientManager` keys its pooled `HttpClient` instances on the `HttpClientConfig` record instead of formatting it to a string, and constructs them with `disposeHandler: false` so disposing any one client can't dispose the handler shared by all of them
 
 ## [0.22] - 2026-07-26
 
