@@ -11,7 +11,16 @@ public class TaskInstanceCollection : ItemCollection<TaskInstance>
 	/// <summary>
 	/// Gets or sets the maximum number of tasks to keep in the collection (default: 10)
 	/// </summary>
-	public int MaxTasks { get; set; } = 10;
+	public int MaxTasks
+	{
+		get => _maxTasks;
+		set
+		{
+			_maxTasks = Math.Max(0, value);
+			TrimToMaxTasks();
+		}
+	}
+	private int _maxTasks = 10;
 
 	/// <summary>
 	/// Initializes a new empty task instance collection
@@ -24,16 +33,37 @@ public class TaskInstanceCollection : ItemCollection<TaskInstance>
 	public TaskInstanceCollection(IEnumerable<TaskInstance> enumerable) :
 		base(enumerable)
 	{
+		TrimToMaxTasks();
 	}
 
 	/// <summary>
-	/// Adds a task instance and automatically removes the oldest entry if the collection exceeds MaxTasks
+	/// Inserts a task instance, removing the oldest entries if the collection exceeds MaxTasks
 	/// </summary>
-	public new void Add(TaskInstance taskInstance)
+	/// <remarks>
+	/// Overriding this instead of hiding Add() so the limit still applies to tasks
+	/// added through a base class reference
+	/// </remarks>
+	protected override void InsertItem(int index, TaskInstance taskInstance)
 	{
-		base.Add(taskInstance);
+		base.InsertItem(index, taskInstance);
 
-		if (Count > MaxTasks)
+		TrimToMaxTasks();
+	}
+
+	/// <summary>
+	/// Adds multiple task instances, removing the oldest entries if the collection exceeds MaxTasks
+	/// </summary>
+	public override void AddRange(IEnumerable<TaskInstance> collection)
+	{
+		// Adds to Items directly, so it never reaches InsertItem()
+		base.AddRange(collection);
+
+		TrimToMaxTasks();
+	}
+
+	private void TrimToMaxTasks()
+	{
+		while (Count > MaxTasks)
 		{
 			RemoveAt(0);
 		}

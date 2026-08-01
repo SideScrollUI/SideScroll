@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed `TaskInstance.SetFinished()` completing twice when called again before its posted `OnFinished()` ran, since `Finished` isn't set until that runs and couldn't guard the second call
+- Fixed background task failures never being observed, so an exception thrown inside the task was dropped instead of being recorded in its log, and synchronous task failures skipping `SetFinished()` entirely and leaving the task permanently unfinished
+- Fixed the first dynamically added `TaskInstance` sub-task having a progress maximum of zero, which prevented it from reporting progress to its parent, and sub-task calls referencing the parent task instead of the child, which attributed nested progress to the wrong task
+- Fixed completed zero-item tasks reporting no progress instead of 100%
+- Fixed root tasks not disposing the cancellation source they own, and sub-tasks disposing the source shared with their parent. A completed task's context can now create later timers without hitting a disposed cancellation source
+- Fixed `TaskInstanceCollection.MaxTasks` not applying to items added through a base class reference or `AddRange()`, and negative values not being treated as zero
 - Fixed `SelectedRow.Equals()` treating a missing `RowIndex` as a wildcard, which made it intransitive. A `HashSet<SelectedRow>` dropped a selected row depending on the order rows were added, and `DeepClone()` aliased two distinct rows into one instance and lost their `RowIndex` (bookmarks are deep cloned every time a link is opened). Lookups that need the wildcard now call the new `SelectedRow.Matches()`
 - Fixed `SelectedRow.Equals()` comparing `DataValue` by reference while `GetHashCode()` used its value, so equal rows could disagree and a deserialized row never matched a live one
 - Fixed exception logs created within the same second overwriting each other, and moved the `Debug.Fail()` out of `LogUtils.Save()` to its caller. Asserting inside the logging utility made it unusable from Debug builds that call it directly, including tests, where the test host translates the assert into a thrown exception
