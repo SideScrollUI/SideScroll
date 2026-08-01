@@ -18,10 +18,10 @@ public class ListField : ListMember, IPropertyIsEditable
 	public FieldInfo FieldInfo { get; }
 
 	/// <summary>
-	/// Gets whether this field can be edited (fields are always editable)
+	/// Gets whether this field can be edited, false for readonly and const fields
 	/// </summary>
 	[HiddenColumn]
-	public override bool IsEditable => true;
+	public override bool IsEditable => !FieldInfo.IsInitOnly && !FieldInfo.IsLiteral;
 
 	/// <summary>
 	/// Gets whether the field should be formatted using the Formatted() extension

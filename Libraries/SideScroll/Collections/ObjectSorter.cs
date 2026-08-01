@@ -43,17 +43,9 @@ public class CustomComparer : IComparer
 			return 1;
 		}
 
+		// Covers every primitive and enum, so they never reach the fallback below
 		if (x is IComparable xComparable)
 			return xComparable.CompareTo(y);
-
-		if (xType.IsPrimitive || xType.IsEnum)
-		{
-			if ((dynamic)x == (dynamic)y)
-				return 0;
-			if ((dynamic)x < (dynamic)y)
-				return -1;
-			return 1;
-		}
 
 		return string.CompareOrdinal(x.ToString(), y.ToString());
 	}

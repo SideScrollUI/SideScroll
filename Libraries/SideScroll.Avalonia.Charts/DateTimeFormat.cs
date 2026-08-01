@@ -35,13 +35,20 @@ public class DateTimeFormat(string? dateFormat, string? timeFormat, string? time
 			label += dateTime.ToString(DateFormat);
 		}
 
-		if (dateTime.Kind == DateTimeKind.Utc && TimeFormatUtc != null)
+		string? timeFormat = dateTime.Kind == DateTimeKind.Utc && TimeFormatUtc != null
+			? TimeFormatUtc
+			: TimeFormat;
+
+		if (timeFormat != null)
 		{
-			label += ' ' + dateTime.ToString(TimeFormatUtc);
-		}
-		else if (TimeFormat != null)
-		{
-			label += ' ' + dateTime.ToString(TimeFormat);
+			// Only separate the parts when a date was written. The sub-day formats have no
+			// DateFormat, so every one of their labels used to start with the separator
+			if (label.Length > 0)
+			{
+				label += ' ';
+			}
+
+			label += dateTime.ToString(timeFormat);
 		}
 
 		return label;

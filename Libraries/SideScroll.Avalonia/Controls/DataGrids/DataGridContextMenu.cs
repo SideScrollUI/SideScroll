@@ -111,16 +111,22 @@ public class DataGridContextMenu : ContextMenu, IDisposable
 
 		if (content is TextBlock textBlock)
 		{
-			object propertyValue = Column.PropertyInfo.GetValue(textBlock.DataContext)!;
-			string value;
-			Type valueType = propertyValue.GetType();
-			if (formatted || (valueType != typeof(string) && !valueType.IsPrimitive))
+			// A null cell value is ordinary. These run from async void handlers, so dereferencing
+			// one used to take the process down instead of copying an empty value
+			object? propertyValue = Column.PropertyInfo.GetValue(textBlock.DataContext);
+
+			string value = "";
+			if (propertyValue != null)
 			{
-				value = Column.FormatConverter.ObjectToString(propertyValue, MaxCellValueLength)!;
-			}
-			else
-			{
-				value = propertyValue.ToString() ?? "";
+				Type valueType = propertyValue.GetType();
+				if (formatted || (valueType != typeof(string) && !valueType.IsPrimitive))
+				{
+					value = Column.FormatConverter.ObjectToString(propertyValue, MaxCellValueLength) ?? "";
+				}
+				else
+				{
+					value = propertyValue.ToString() ?? "";
+				}
 			}
 
 			await ClipboardUtils.SetTextAsync(DataGrid, value);

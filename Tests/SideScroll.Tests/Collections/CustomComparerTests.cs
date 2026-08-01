@@ -66,4 +66,42 @@ public class CustomComparerTests : BaseTest
 		Assert.That(items.OfType<long>(), Is.Ordered);
 		Assert.That(items.OfType<string>(), Is.Ordered);
 	}
+
+	// ─── Primitives and enums ────────────────────────────────────────────
+
+	private enum Priority { Low = 0, High = 2 }
+
+	private enum ByteBacked : byte { First = 1, Second = 2 }
+
+	private static IEnumerable<TestCaseData> OrderedPairs()
+	{
+		yield return new TestCaseData(false, true).SetName("Bool");
+		yield return new TestCaseData('a', 'b').SetName("Char");
+		yield return new TestCaseData((byte)1, (byte)2).SetName("Byte");
+		yield return new TestCaseData((sbyte)-1, (sbyte)1).SetName("SByte");
+		yield return new TestCaseData((short)1, (short)2).SetName("Short");
+		yield return new TestCaseData(1u, 2u).SetName("UInt");
+		yield return new TestCaseData(1.5f, 2.5f).SetName("Float");
+		yield return new TestCaseData(new IntPtr(1), new IntPtr(2)).SetName("IntPtr");
+		yield return new TestCaseData(Priority.Low, Priority.High).SetName("Enum");
+		yield return new TestCaseData(ByteBacked.First, ByteBacked.Second).SetName("Byte backed enum");
+	}
+
+	[TestCaseSource(nameof(OrderedPairs))]
+	[Description(
+		"Every primitive and enum implements IComparable, so they're all handled before the " +
+		"ToString() fallback. A dead branch below that used dynamic to compare them")]
+	public void Compare_PrimitivesAndEnums_OrderByValue(object lower, object higher)
+	{
+		Assert.That(_comparer.Compare(lower, higher), Is.LessThan(0));
+		Assert.That(_comparer.Compare(higher, lower), Is.GreaterThan(0));
+		Assert.That(_comparer.Compare(lower, lower), Is.EqualTo(0));
+	}
+
+	[Test, Description("Enums order by value, not by the name ToString() would produce")]
+	public void Compare_Enum_UsesValueNotName()
+	{
+		// "High" sorts before "Low" as text, so a ToString() fallback would reverse these
+		Assert.That(_comparer.Compare(Priority.Low, Priority.High), Is.LessThan(0));
+	}
 }

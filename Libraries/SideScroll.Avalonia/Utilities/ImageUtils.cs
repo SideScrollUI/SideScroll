@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 
@@ -30,8 +31,17 @@ public static class ImageUtils
 	{
 		byte[] bytes = File.ReadAllBytes(path);
 		Bitmap bitmap = LoadBitmap(bytes);
-		if (bitmap.Size.Width > MaxImageSize) throw new Exception($"Image width {bitmap.Size.Width} is above maximum {MaxImageSize}");
-		if (bitmap.Size.Height > MaxImageSize) throw new Exception($"Image height {bitmap.Size.Height} is above maximum {MaxImageSize}");
+
+		// Bitmap holds native memory, and an oversized image is exactly the one worth releasing
+		if (bitmap.Size.Width > MaxImageSize || bitmap.Size.Height > MaxImageSize)
+		{
+			Size size = bitmap.Size;
+			bitmap.Dispose();
+
+			throw new Exception(size.Width > MaxImageSize
+				? $"Image width {size.Width} is above maximum {MaxImageSize}"
+				: $"Image height {size.Height} is above maximum {MaxImageSize}");
+		}
 
 		image.Source = bitmap;
 		return bitmap;

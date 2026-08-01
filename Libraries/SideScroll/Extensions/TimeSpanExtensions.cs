@@ -191,7 +191,20 @@ public static class TimeSpanExtensions
 
 		// Integer division truncates toward zero, so a negative value is already rounded up.
 		// Adding the interval first (Ticks + ticks - 1) would round it toward zero instead
-		return new TimeSpan(timeSpan.Ticks - remainder + (timeSpan.Ticks > 0 ? ticks : 0));
+		if (timeSpan.Ticks < 0)
+		{
+			return new TimeSpan(timeSpan.Ticks - remainder);
+		}
+
+		// Saturate, the last interval before MaxValue has nothing above it to round up to.
+		// Comparing what's left rather than the rounded value avoids overflowing to find the overflow
+		long remaining = TimeSpan.MaxValue.Ticks - timeSpan.Ticks;
+		if (remaining < ticks - remainder)
+		{
+			return TimeSpan.MaxValue;
+		}
+
+		return new TimeSpan(timeSpan.Ticks - remainder + ticks);
 	}
 
 	/// <summary>

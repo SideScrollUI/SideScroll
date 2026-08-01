@@ -45,6 +45,10 @@ public class HttpMemoryCache
 		MaxItems = maxItems ?? DefaultMaxItems;
 		CacheDuration = cacheDuration;
 
+		// A SizeLimit of zero rejects every size one entry, so nothing would ever be cached
+		// and every lookup would silently refetch
+		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(MaxItems, nameof(maxItems));
+
 		MemoryCacheOptions options = new()
 		{
 			SizeLimit = MaxItems,
