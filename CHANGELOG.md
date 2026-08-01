@@ -11,8 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `[Hide]` support on `[Item]` methods, so a method row can be hidden based on its return value (e.g. `[Item, Hide(null)]`). A class-level `[Hide]` now applies to its `[Item]` methods as well. Methods without a `[Hide]` are never invoked to evaluate visibility
 - Added `SerializerFileAtlas.CreateForFile()` for serializing to a specific file path instead of a directory base path
 - Added `SideScrollExtensions.MaxInnerValueDepth` (16) to limit how far `[InnerValue]` members are unwrapped
+- Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed public JSON serialization allowing generic collections whose concrete element types were not approved for public export, so a private type could be written into a public export through an allowed collection
+- Fixed `DataRepo.CleanupCache()` deleting every item in JSON repositories regardless of age, since it always checked the Atlas data filename and a missing file reports a year 1601 timestamp. Directories missing a data file are now left alone
+- Fixed `DataRepo.LoadAll()` and `LoadHeaders()` looking for Atlas files when the repository uses JSON, and losing item keys during bulk and paged loading
+- Fixed `DataItemCollection(IEnumerable)` leaving its key lookup empty, since the base constructor bypassed the `Add()` that populates it
+- Fixed `DataRepoIndex.Load()` not repairing `NextIndex` when it equals an existing item's index, which could assign a duplicate index on the next save
+- Fixed `DataRepoIndex.Load()` keeping entries whose data no longer exists (e.g. removed by `CleanupCache()`), so they no longer count against `MaxItems` or accumulate in the index file
+- Fixed `DataRepoIndex.MaxItems` accepting negative retention limits, which crashed pruning
+- Fixed `DataRepoInstance` and `DataRepoView` using a null key when an item has no `[DataKey]`, which failed later with an unrelated error. They now report the missing key
 - Fixed `Paths.Combine()` allowing a Windows-style leading backslash in a later segment to discard the accumulated base path
 - Fixed `ProcessUtils.OpenFolder()` opening a file explorer at a default location when the path doesn't exist, selecting an unrelated file when passed a rooted selection, which `Path.Combine()` uses in place of the folder, and silently failing on Linux, which now uses `xdg-open`
 - Fixed `ProcessUtils.GetDotnetRuntimes()` failing to parse runtime lists containing preview version suffixes, returning paths wrapped in display brackets, and not disposing the `dotnet --list-runtimes` process

@@ -36,8 +36,12 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 	// Don't implement List<T>, it isn't sortable
 	/// <summary>Initializes the collection with the given items.</summary>
 	/// <param name="enumerable">The items to add to the collection.</param>
-	public DataItemCollection(IEnumerable<DataItem<T>> enumerable) : base(enumerable)
+	public DataItemCollection(IEnumerable<DataItem<T>> enumerable)
 	{
+		foreach (DataItem<T> dataItem in enumerable)
+		{
+			Add(dataItem);
+		}
 	}
 
 	/// <summary>

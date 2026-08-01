@@ -320,13 +320,17 @@ public class ObjectJsonConverter : JsonConverter<object>
 		if (type.IsDefined(typeof(ProtectedDataAttribute), inherit: true))
 			return true;
 
-		// Allow generic collections of allowed types
+		// Allow generic collections only when each concrete type argument is also allowed.
+		// object and interface arguments are filtered by this converter using their runtime types.
 		if (type.IsGenericType)
 		{
 			Type genericTypeDef = type.GetGenericTypeDefinition();
 			if (PublicGenericTypes.Contains(genericTypeDef))
 			{
-				return true;
+				return type.GetGenericArguments().All(
+					argumentType => argumentType == typeof(object) ||
+						argumentType.IsInterface ||
+						IsAllowedType(argumentType));
 			}
 		}
 

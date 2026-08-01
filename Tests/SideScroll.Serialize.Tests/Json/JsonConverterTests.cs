@@ -1377,6 +1377,26 @@ public class JsonConverterTests : SerializeBaseTest
 		public int Score { get; set; }
 	}
 
+	[Test, Description("Test generic object members block unregistered concrete element types")]
+	public void SerializeGenericObjectBlocksUnregisteredElementType()
+	{
+		var input = new ObjectContainerGenericTypes
+		{
+			ListObject = new List<UnregisteredUserData>
+			{
+				new() { Username = "blocked", Score = 999 }
+			}
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<ObjectContainerGenericTypes>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.ListObject, Is.Null);
+		Assert.That(ObjectJsonConverter.IsAllowedType(typeof(List<UnregisteredUserData>)), Is.False);
+		Assert.That(ObjectJsonConverter.IsAllowedType(typeof(List<List<UnregisteredUserData>>)), Is.False);
+	}
+
 	[Test, Description("Test Dictionary<string, object?> blocks unregistered types without [PublicData]")]
 	public void SerializeDictionaryBlocksUnregisteredTypes()
 	{

@@ -15,6 +15,17 @@ public class SerializerFileJson : SerializerFile
 	public const string DataFileName = "Data.json";
 
 	/// <summary>
+	/// The filename used to preserve the serialized object's name
+	/// </summary>
+	public const string HeaderFileName = "Header.json";
+
+	private sealed class JsonHeader
+	{
+		public int Version { get; set; } = 1;
+		public string? Name { get; set; }
+	}
+
+	/// <summary>
 	/// Gets or sets the maximum number of save attempts when file is locked
 	/// </summary>
 	public static int SaveAttemptsMax { get; set; } = 10;
@@ -27,8 +38,9 @@ public class SerializerFileJson : SerializerFile
 	/// <summary>
 	/// Initializes a new instance of the SerializerFileJson class
 	/// </summary>
-	public SerializerFileJson(string basePath, string name = "") : base(basePath, name)
+	public SerializerFileJson(string basePath, string? name = null) : base(basePath, name)
 	{
+		HeaderPath = Paths.Combine(basePath, HeaderFileName);
 		DataPath = Paths.Combine(basePath, DataFileName);
 	}
 
@@ -38,7 +50,18 @@ public class SerializerFileJson : SerializerFile
 	/// </summary>
 	public override SerializerHeader LoadHeader(Call call)
 	{
-		return new SerializerHeader { Name = Name };
+		if (!File.Exists(HeaderPath))
+		{
+			return new SerializerHeader { Name = Name };
+		}
+
+		string json = File.ReadAllText(HeaderPath);
+		JsonHeader? jsonHeader = JsonSerializer.Deserialize<JsonHeader>(json);
+		return new SerializerHeader
+		{
+			Version = jsonHeader?.Version is { } version ? checked((ushort)version) : null,
+			Name = jsonHeader?.Name,
+		};
 	}
 
 	protected override void SaveInternal(Call call, object obj, string? name = null, bool publicOnly = false)
@@ -57,8 +80,12 @@ public class SerializerFileJson : SerializerFile
 			try
 			{
 				// FileShare.None avoids simultaneous writes
-				using var stream = new FileStream(DataPath!, FileMode.Create, FileAccess.Write, FileShare.None);
-				JsonSerializer.Serialize(stream, obj, obj.GetType(), options);
+				using (var stream = new FileStream(DataPath!, FileMode.Create, FileAccess.Write, FileShare.None))
+				{
+					JsonSerializer.Serialize(stream, obj, obj.GetType(), options);
+				}
+				string headerJson = JsonSerializer.Serialize(new JsonHeader { Name = name });
+				File.WriteAllText(HeaderPath!, headerJson);
 				break;
 			}
 			catch (Exception e)
@@ -83,13 +110,9 @@ public class SerializerFileJson : SerializerFile
 
 		taskInstance?.SetFinished();
 
-		// Use expectedType if provided
-		if (expectedType != null)
-		{
-			return JsonSerializer.Deserialize(jsonBytes, expectedType, options);
-		}
-
-		// Fallback to Dictionary
-		return JsonSerializer.Deserialize<Dictionary<string, object?>>(jsonBytes, options);
+		// Use expectedType if provided, otherwise fallback to Dictionary
+		return expectedType != null
+			? JsonSerializer.Deserialize(jsonBytes, expectedType, options)
+			: JsonSerializer.Deserialize<Dictionary<string, object?>>(jsonBytes, options);
 	}
 }

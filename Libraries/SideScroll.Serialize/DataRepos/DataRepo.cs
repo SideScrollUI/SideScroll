@@ -1,6 +1,8 @@
 using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Serialize.Atlas;
+using SideScroll.Serialize.Json;
+using SideScroll.Utilities;
 using System.Diagnostics;
 
 namespace SideScroll.Serialize.DataRepos;
@@ -280,7 +282,7 @@ public class DataRepo
 	/// <summary>
 	/// Loads a data item from the specified file path
 	/// </summary>
-	public static DataItem<T>? LoadPath<T>(Call? call, string path, bool lazy = false, bool useJson = false)
+	public static DataItem<T>? LoadPath<T>(Call? call, string path, bool lazy = false, bool useJson = false, string? key = null)
 	{
 		call ??= new();
 
@@ -290,10 +292,10 @@ public class DataRepo
 			T? obj = serializerFile.Load<T>(call, lazy);
 			if (obj != null)
 			{
-				// Get name from header (Atlas) or use path directory name (JSON)
-				string name = useJson
-					? obj.ToString() ?? ""
-					: serializerFile.LoadHeader(call).Name ?? "";
+				string? savedName = key ?? serializerFile.LoadHeader(call).Name;
+				string name = !string.IsNullOrEmpty(savedName)
+					? savedName
+					: ObjectUtils.GetObjectId(obj) ?? obj.ToString() ?? "";
 				return new DataItem<T>(name, obj);
 			}
 		}
@@ -315,13 +317,17 @@ public class DataRepo
 		{
 			foreach (string filePath in Directory.EnumerateDirectories(groupPath))
 			{
-				var serializerFile = SerializerFile.Create(filePath);
+				var serializerFile = SerializerFile.Create(filePath, useJson: UseJson);
 				if (!serializerFile.Exists) continue;
 
 				T? obj = serializerFile.Load<T>(call, lazy);
 				if (obj != null)
 				{
-					entries.Add(serializerFile.LoadHeader(call).Name ?? "", obj);
+					string? savedName = serializerFile.LoadHeader(call).Name;
+					string key = !string.IsNullOrEmpty(savedName)
+						? savedName
+						: ObjectUtils.GetObjectId(obj) ?? obj.ToString() ?? "";
+					entries.Add(key, obj);
 				}
 			}
 		}
@@ -343,10 +349,15 @@ public class DataRepo
 		{
 			foreach (string filePath in Directory.EnumerateDirectories(groupPath))
 			{
-				var serializerFile = SerializerFile.Create(filePath);
+				var serializerFile = SerializerFile.Create(filePath, useJson: UseJson);
 				if (!serializerFile.Exists) continue;
 
 				SerializerHeader header = serializerFile.LoadHeader(call);
+				if (UseJson && string.IsNullOrEmpty(header.Name))
+				{
+					object? obj = serializerFile.Load(call, expectedType: type);
+					header.Name = ObjectUtils.GetObjectId(obj) ?? obj?.ToString();
+				}
 				headers.Add(header);
 			}
 		}
@@ -438,16 +449,21 @@ public class DataRepo
 			return;
 
 		DateTime threshold = DateTime.UtcNow - maxAge;
+		string dataFileName = UseJson ? SerializerFileJson.DataFileName : SerializerFileAtlas.DataFileName;
+		DateTime missingFileTime = DateTime.FromFileTimeUtc(0); // Returned for missing files instead of throwing
 
 		foreach (string groupDirectory in Directory.EnumerateDirectories(RepoPath))
 		{
 			foreach (string dataDirectory in Directory.EnumerateDirectories(groupDirectory))
 			{
-				string filePath = Path.Combine(dataDirectory, SerializerFileAtlas.DataFileName);
+				string filePath = Path.Combine(dataDirectory, dataFileName);
 
 				try
 				{
 					DateTime time = File.GetLastWriteTimeUtc(filePath); // or LastAccessTimeUtc
+					if (time == missingFileTime)
+						continue; // Don't delete directories missing a data file, they might use a different format
+
 					if (time < threshold)
 					{
 						Directory.Delete(dataDirectory, true);

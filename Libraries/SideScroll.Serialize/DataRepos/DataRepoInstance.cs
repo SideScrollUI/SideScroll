@@ -159,9 +159,15 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	/// <summary>
 	/// Loads all serializer headers for the items in this group
 	/// </summary>
-	public List<SerializerHeader> LoadHeaders(Call? call = null)
+	public virtual List<SerializerHeader> LoadHeaders(Call? call = null)
 	{
 		return DataRepo.LoadHeaders(typeof(T), GroupId, call);
+	}
+
+	/// <summary>Loads one repository item from its storage path.</summary>
+	public virtual DataItem<T>? LoadDataItem(Call call, string path, string? key = null)
+	{
+		return DataRepo.LoadPath<T>(call, path, useJson: DataRepo.UseJson, key: key);
 	}
 
 	/// <summary>
@@ -169,8 +175,18 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	/// </summary>
 	public virtual void Delete(Call? call, T item)
 	{
-		string key = ObjectUtils.GetObjectId(item)!;
-		Delete(call, key);
+		Delete(call, GetItemKey(item));
+	}
+
+	/// <summary>
+	/// Returns the key to store an item under, from its [DataKey] or its unique string
+	/// </summary>
+	/// <exception cref="ArgumentException">The item has no usable key</exception>
+	protected static string GetItemKey(T item)
+	{
+		// A null key would fail later with an unrelated error, like hashing a null path
+		return ObjectUtils.GetObjectId(item)
+			?? throw new ArgumentException($"No key found for {typeof(T)}, add a [DataKey] to one of its members", nameof(item));
 	}
 
 	/// <summary>
@@ -233,11 +249,27 @@ public class DataRepoInstance<T> : IDataRepoInstance
 	/// </summary>
 	public virtual IEnumerable<DataItem<T>> LoadAllDataItems(Call call, bool ascending = true)
 	{
+		if (Index != null)
+		{
+			IEnumerable<DataRepoIndex<T>.Item> indexItems = Index.Load(call).Items;
+			if (!ascending)
+			{
+				indexItems = indexItems.Reverse();
+			}
+
+			return indexItems
+				.Select(item => LoadDataItem(
+					call,
+					DataRepo.GetDataPath(DataType, GroupId, item.Key),
+					item.Key))
+				.OfType<DataItem<T>>();
+		}
+
 		var pathIterator = GetPathEnumerable(call, ascending);
 		if (pathIterator == null) return [];
 
 		return pathIterator
-			.Select(path => DataRepo.LoadPath<T>(call, path, useJson: DataRepo.UseJson))
+			.Select(path => LoadDataItem(call, path))
 			.OfType<DataItem<T>>()
 			.Select(dataItem => new DataItem<T>(dataItem.Key, dataItem.Value));
 	}
