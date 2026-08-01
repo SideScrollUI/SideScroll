@@ -95,7 +95,7 @@ public class TabCreatorAsync(ITabCreatorAsync creatorAsync) : TabInstance, ITabA
 	/// </summary>
 	public override void LoadUI(Call call, TabModel model)
 	{
-		_innerChildInstance!.LoadUI(call, model);
+		_innerChildInstance?.LoadUI(call, model);
 	}
 }
 
@@ -1312,10 +1312,8 @@ public class TabInstance : IDisposable
 
 					var tabKey = propertyInfo.GetValue(iTab);
 					// todo: support multiple [Key]s?
-					if (objKey == tabKey)
-						return true;
-
-					if (objKey is string && propertyInfo.PropertyType == type && Equals(objKey, tabKey))
+					// Equals() so boxed values and strings compare by value, not reference
+					if (Equals(objKey, tabKey))
 						return true;
 				}
 			}

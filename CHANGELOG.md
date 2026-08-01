@@ -14,6 +14,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed DataGrid Search collecting text from nested lists without any limit, which searched every item of every inner list for every row on each keystroke. Capped by the new `Filter.MaxSearchTextValues` (1,000) and a nesting limit
+- Fixed DataGrid Search uppercasing with the current culture before comparing ordinally, so case insensitive search stopped working for any term containing an `i` in cultures where it doesn't uppercase to `I` (e.g. searching `ibm` didn't match `IBM` in tr-TR)
+- Fixed a DataGrid Search depth prefix with too many digits (e.g. `+99999999999`) throwing an `OverflowException` while typing
+- Fixed `SearchFilter` silently dropping search terms immediately preceding an open parenthesis (e.g. `Method(Param)`)
+- Fixed `Filter.Matches(IList)` passing the list itself to the single item overload instead of iterating it, so it matched against the list's type name rather than its contents, and threw for arrays and non-generic list subclasses
+- Fixed `SearchFilter.IsMatch()` and `FindMatches()` throwing a `NullReferenceException` for values with nothing to show in a tab (`DateTime`, `int`, `string`). Scalars now match on their own text
+- Fixed `TabDataBookmark.ToDataSettings()` sharing its `ColumnNameOrder` list with the settings it returns, so dragging a column rewrote the column order stored in the bookmark it was opened from, including the ones held in the navigation history
+- Fixed `Linker.AddLinkAsync()` only measuring the encoded bookmark against `MaxLength`, which allowed creating links that were too large for `GetLinkAsync()` to open
+- Fixed an off-by-one error in `BookmarkNavigator.TrimHistory()` that allowed the bookmark history to exceed `MaxHistorySize` by one
+- Fixed `TabInstance.IsOwnerObject()` comparing `[DataKey]` values by reference instead of by value, so parent/child loop detection now works for equal string and boxed value keys
+- Fixed `TabCreatorAsync.LoadUI()` throwing a `NullReferenceException` when its underlying async creator returns null
+- Fixed `LazyJsonNode.Create()` throwing an `InvalidOperationException` when wrapping a `JsonValue` that isn't backed by a `JsonElement` (e.g. a dynamically created node)
+- Fixed `HeadlessTabView` treating scalar rows that aren't `IsPrimitive` (`DateTime`, `TimeSpan`, `decimal`) as navigable, so they spent the child exploration budget on tabs that always loaded empty. It now uses `TabUtils.ObjectHasLinks()`, the same rule `TabModel.AddItems()` gates on
+- Fixed `HeadlessTabView` resolving item list element types without `GetElementTypeForAll()`, so arrays and non-generic list subclasses fell back to `object` and missed their element type's `[Explorable]` attribute
+- Fixed `HeadlessTabOptions.TabFilter` not being applied to `ILoadAsync` rows, so a `[PrivateData]` loader was resolved and added to the public schema
+- Fixed `HeadlessTabView` not flagging a list as truncated when rows were dropped by `TabFilter` or left unlisted by cancellation, which made the exported schema claim the list was complete
 - Fixed public JSON serialization allowing generic collections whose concrete element types were not approved for public export, so a private type could be written into a public export through an allowed collection
 - Fixed `DataRepo.CleanupCache()` deleting every item in JSON repositories regardless of age, since it always checked the Atlas data filename and a missing file reports a year 1601 timestamp. Directories missing a data file are now left alone
 - Fixed `DataRepo.LoadAll()` and `LoadHeaders()` looking for Atlas files when the repository uses JSON, and losing item keys during bulk and paged loading

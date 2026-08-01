@@ -145,7 +145,8 @@ public class TabDataBookmark
 	{
 		return new TabDataSettings
 		{
-			ColumnNameOrder = ColumnNameOrder,
+			// Copy, the grid reorders the settings list in place when columns are dragged
+			ColumnNameOrder = [.. ColumnNameOrder],
 			Filter = Filter,
 			SelectedRows = [.. SelectedRows.Select(s => s.SelectedRow)],
 			SelectionType = SelectionType,

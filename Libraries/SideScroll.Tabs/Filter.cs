@@ -123,9 +123,11 @@ public class SearchFilter
 	/// </summary>
 	public TabBookmark FindMatches(IList list)
 	{
-		TabModel tabModel = TabModel.Create("", list)!;
-		TabBookmark tabBookmark = tabModel.FindMatches(Filter!, Filter!.Depth);
-		return tabBookmark;
+		// Create() returns null when there's nothing to show for the list
+		if (Filter == null || TabModel.Create("", list) is not { } tabModel)
+			return new TabBookmark();
+
+		return tabModel.FindMatches(Filter, Filter.Depth);
 	}
 
 	/// <summary>
@@ -136,8 +138,11 @@ public class SearchFilter
 		if (Filter == null || Filter.FilterText.IsNullOrEmpty())
 			return true;
 
-		TabModel tabModel = TabModel.Create("Search", obj)!;
-		TabBookmark tabBookmark = tabModel.FindMatches(Filter!, Filter.Depth);
+		// Scalars (DateTime, decimal, Guid) don't produce a model, match on their own text instead
+		if (TabModel.Create("Search", obj) is not { } tabModel)
+			return Filter.Matches(obj, []);
+
+		TabBookmark tabBookmark = tabModel.FindMatches(Filter, Filter.Depth);
 		return tabBookmark.SelectedRows.Count > 0;
 	}
 }
@@ -184,10 +189,11 @@ public class Filter
 		if (!match.Success)
 			return;
 
+		// TryParse, the digits are unbounded and this runs for every keystroke in the search box
 		string depthText = match.Groups["Depth"].Value;
-		if (depthText.Length > 0)
+		if (depthText.Length > 0 && int.TryParse(depthText[1..], out int parsedDepth))
 		{
-			Depth = int.Parse(depthText[1..]);
+			Depth = parsedDepth;
 		}
 
 		string filters = match.Groups["Filters"].Value;
@@ -217,7 +223,14 @@ public class Filter
 			else if (!insideQuotes && c == '(')
 			{
 				// A pending - or ! token negates the subexpression: -(foo | bar)
-				bool negate = input[tokenStart..i].Trim() is "-" or "!";
+				string prefix = input[tokenStart..i].Trim();
+				bool negate = prefix is "-" or "!";
+
+				if (!negate && prefix.Length > 0)
+				{
+					AddToken(input, tokenStart, i, nodes);
+					operators.Add(FilterOperator.And);
+				}
 
 				// Parse subexpression
 				var subNode = ParseExpression(input, i + 1, out int closeParen);
@@ -318,7 +331,9 @@ public class Filter
 
 		if (!string.IsNullOrWhiteSpace(token))
 		{
-			FilterNode node = new FilterLeafNode { TextUppercase = token.ToUpper() };
+			// Invariant, the values are uppercased the same way and compared ordinally. Culture
+			// casing would make 'i' uppercase to 'İ' in tr-TR and stop matching 'I'
+			FilterNode node = new FilterLeafNode { TextUppercase = token.ToUpperInvariant() };
 			if (negate)
 			{
 				node = new FilterNotNode { Child = node };
@@ -395,10 +410,21 @@ public class Filter
 	/// </summary>
 	public bool Matches(IList list)
 	{
-		Type listType = list.GetType();
-		Type elementType = listType.GetGenericArguments()[0]; // dictionaries?
-		List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleProperties(elementType);
-		return Matches(list, visibleProperties);
+		// Resolves arrays and non-generic list subclasses, unlike GetGenericArguments()
+		Type? elementType = list.GetType().GetElementTypeForAll();
+		List<PropertyInfo> visibleProperties = elementType != null
+			? TabDataColumns.GetVisibleProperties(elementType)
+			: []; // Untyped list, the items still match on their own text
+
+		foreach (object? item in list)
+		{
+			if (item == null) continue;
+
+			if (Matches(item, visibleProperties))
+				return true;
+		}
+
+		return false;
 	}
 
 	/// <summary>
@@ -417,7 +443,7 @@ public class Filter
 				if (valueText.IsNullOrEmpty())
 					continue;
 
-				uppercaseValues.Add(valueText.ToUpper());
+				uppercaseValues.Add(valueText.ToUpperInvariant());
 			}
 		}
 		else
@@ -434,9 +460,22 @@ public class Filter
 		return true;
 	}
 
-	private static void GetItemSearchText(object obj, List<PropertyInfo> columnProperties, List<string> uppercaseValues)
+	// Inner values can reference each other, limit the nesting instead of overflowing the stack
+	private const int MaxSearchTextDepth = 4;
+
+	/// <summary>
+	/// Maximum number of text values collected from a single item when searching (default: 1,000).
+	/// Inner lists are nested and enumerated in full, and this runs for every row on every
+	/// keystroke, so the total is capped instead of the items per list
+	/// </summary>
+	public static int MaxSearchTextValues { get; set; } = 1_000;
+
+	private static void GetItemSearchText(object obj, List<PropertyInfo> columnProperties, List<string> uppercaseValues, int depth = MaxSearchTextDepth)
 	{
-		if (obj.ToString()?.ToUpper() is { } objText)
+		if (uppercaseValues.Count >= MaxSearchTextValues)
+			return;
+
+		if (obj.ToString()?.ToUpperInvariant() is { } objText)
 		{
 			uppercaseValues.Add(objText);
 		}
@@ -451,7 +490,7 @@ public class Filter
 				if (valueText.IsNullOrEmpty())
 					continue;
 
-				uppercaseValues.Add(valueText.ToUpper());
+				uppercaseValues.Add(valueText.ToUpperInvariant());
 			}
 			catch (Exception e)
 			{
@@ -464,17 +503,25 @@ public class Filter
 		{
 			if (innerValue is IList list)
 			{
+				if (depth <= 0) return;
+
 				List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleElementProperties(list);
 				foreach (var item in list)
 				{
-					GetItemSearchText(item, visibleProperties, uppercaseValues);
+					if (item == null) continue;
+
+					// Stop instead of walking the rest of a large list for nothing
+					if (uppercaseValues.Count >= MaxSearchTextValues)
+						break;
+
+					GetItemSearchText(item, visibleProperties, uppercaseValues, depth - 1);
 				}
 			}
 			else
 			{
 				// Only add the inner value's own ToString() — recursing into its sub-properties
 				// would expose grandchild text at the wrong search depth level.
-				if (innerValue.ToString()?.ToUpper() is { } innerText)
+				if (innerValue.ToString()?.ToUpperInvariant() is { } innerText)
 				{
 					uppercaseValues.Add(innerText);
 				}
