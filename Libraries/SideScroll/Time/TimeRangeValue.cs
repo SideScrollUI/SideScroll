@@ -191,27 +191,6 @@ public class TimeRangeValue : ITags
 		return output;
 	}
 
-	private static List<TimeRangeValue> MergeIdenticalValues(IEnumerable<TimeRangeValue> input)
-	{
-		var sorted = input.OrderBy(p => p.StartTime);
-
-		// Merge continuous points with the same value together to improve storage speeds
-		List<TimeRangeValue> merged = [];
-		TimeRangeValue? prevPoint = null;
-		foreach (TimeRangeValue timeRangeValue in sorted)
-		{
-			if (prevPoint != null && prevPoint.EndTime == timeRangeValue.StartTime && prevPoint.Value == timeRangeValue.Value)
-			{
-				prevPoint.EndTime = timeRangeValue.EndTime;
-				continue;
-			}
-			merged.Add(timeRangeValue);
-			prevPoint = timeRangeValue;
-		}
-
-		return merged;
-	}
-
 	// Merge all continuous identical values, increasing the size of the first and leaving the last
 	// This works better for line graphs since the end point will still be represented
 	private static List<TimeRangeValue> MergeIdenticalMiddleValues(IEnumerable<TimeRangeValue> input)

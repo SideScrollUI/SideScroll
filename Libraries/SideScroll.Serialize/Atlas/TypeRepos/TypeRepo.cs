@@ -543,34 +543,6 @@ public abstract class TypeRepo : IDisposable
 	}
 
 	/// <summary>
-	/// Loads an object reference from a byte array
-	/// </summary>
-	public object? LoadObjectRef(byte[] bytes, ref int byteOffset)
-	{
-		bool isNull = Convert.ToBoolean(bytes[byteOffset++]);
-		if (isNull)
-			return null;
-
-		if (LoadableType!.IsPrimitive)
-			return LoadObject();
-
-		int objectIndex = BitConverter.ToInt32(bytes, byteOffset);
-		byteOffset += sizeof(int);
-
-		if (!TypeSchema.HasSubType)
-			return LoadObject(objectIndex);
-
-		//int typeIndex = reader.ReadInt16(); // not saved for sealed classes
-		int typeIndex = BitConverter.ToInt16(bytes, byteOffset);
-		byteOffset += sizeof(short);
-		TypeRepo typeRepo = Serializer.TypeRepos[typeIndex];
-		//if (type == null) // type might have disappeared or been renamed
-		//	return null;
-
-		return typeRepo.LoadObject(objectIndex);
-	}
-
-	/// <summary>
 	/// Loads an object without an index (for primitive types)
 	/// </summary>
 	public virtual object? LoadObject()
