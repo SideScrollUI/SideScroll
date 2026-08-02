@@ -16,21 +16,27 @@ public class HttpCacheManager
 	// should we be returning disposable references?
 	public HttpCache OpenCache(string path)
 	{
-		if (_httpCaches.TryGetValue(path, out HttpCache? httpCache))
-			return httpCache;
+		lock (_httpCaches)
+		{
+			if (_httpCaches.TryGetValue(path, out HttpCache? httpCache))
+				return httpCache;
 
-		httpCache = new HttpCache(path, true);
-		_httpCaches[path] = httpCache;
-		return httpCache;
+			httpCache = new HttpCache(path, true);
+			_httpCaches[path] = httpCache;
+			return httpCache;
+		}
 	}
 
 	/// <summary>Disposes and removes the cached <see cref="HttpCache"/> for <paramref name="path"/> and deletes its directory from disk.</summary>
 	public void DeleteHttpCache(string path)
 	{
-		if (_httpCaches.TryGetValue(path, out HttpCache? httpCache))
+		lock (_httpCaches)
 		{
-			httpCache.Dispose();
-			_httpCaches.Remove(path);
+			if (_httpCaches.TryGetValue(path, out HttpCache? httpCache))
+			{
+				httpCache.Dispose();
+				_httpCaches.Remove(path);
+			}
 		}
 
 		if (Directory.Exists(path))

@@ -8,8 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added `HttpUtils.DecodeString()` and `DefaultEncoding` (UTF-8) for decoding response bodies as text
 
 ### Fixed
+- Fixed `HttpCache` failing to open after an interrupted write. It now keeps every complete entry and drops the partial one, truncating the orphaned bytes left in the data file
+- Fixed `HttpCache` failing to open, or truncating live data, when a corrupt index entry parsed with a garbage offset. Truncation now uses the furthest entry and ignores offsets outside the data file
+- Fixed `HttpCache.Entries`, `LoadableEntries`, `ContainsKey()`, and `Size` reading the index and data stream without the lock that `AddEntry()` writes under, which could throw while entries were being added. `HttpCacheManager` is now locked too
+- Fixed `HttpCache` throwing when opening a cache that doesn't exist read only, since it tried to write the header
+- Fixed `HttpCache.GetString()` decoding cached bytes as ASCII, which replaced every byte over 0x7F with a `?`. It now uses the new `HttpUtils.DefaultEncoding` (UTF-8) and skips a leading byte order mark, and returns `null` instead of throwing when the entry's bytes can't be retrieved
 - Fixed `Call.RunAsync()` not observing cancellation while waiting for a rate limiter slot. The cancel token wasn't passed into the wait, so work that never finished held every slot and the cancellation was never noticed
 - Fixed `Call.RunAsync()` returning empty placeholder results for items that never ran after cancelling, which callers couldn't tell apart from real results
 - Fixed `ConcurrentRateLimiter` discarding fractional refill tokens each cycle, which made the effective rate drift below the configured requests per second, and allowing bursts above that rate after an idle period

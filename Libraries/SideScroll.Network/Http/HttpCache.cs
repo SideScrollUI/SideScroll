@@ -56,7 +56,17 @@ public class HttpCache : IDisposable
 	public string BasePath { get; }
 
 	/// <summary>Gets the current total size in bytes of the data file.</summary>
-	public long Size => _dataStream.Length;
+	public long Size
+	{
+		get
+		{
+			// FileStream isn't thread safe, AddEntry() could be writing to it
+			lock (_entryLock)
+			{
+				return _dataStream.Length;
+			}
+		}
+	}
 
 	private readonly Dictionary<string, Entry> _cache = [];
 
@@ -67,6 +77,7 @@ public class HttpCache : IDisposable
 	private readonly Stream _dataStream;
 
 	private readonly object _entryLock = new();
+	private readonly bool _writeable;
 	private bool _disposed;
 
 	/// <summary>Returns the cache's <see cref="BasePath"/>.</summary>
@@ -76,6 +87,7 @@ public class HttpCache : IDisposable
 	public HttpCache(string basePath, bool writeable)
 	{
 		BasePath = basePath;
+		_writeable = writeable;
 		Directory.CreateDirectory(basePath);
 
 		_indexPath = Paths.Combine(basePath, "http.index");
@@ -85,7 +97,8 @@ public class HttpCache : IDisposable
 		_indexStream = new FileStream(_indexPath, FileMode.OpenOrCreate, fileAccess, FileShare.Read);
 		_dataStream = new FileStream(_dataPath, FileMode.OpenOrCreate, fileAccess, FileShare.Read);
 
-		if (_indexStream.Length == 0)
+		// A read only cache can't write the header, it stays empty until something opens it writeable
+		if (writeable && _indexStream.Length == 0)
 		{
 			SaveHeader();
 		}
@@ -101,12 +114,15 @@ public class HttpCache : IDisposable
 
 		if (disposing)
 		{
-			// Dispose managed resources
-			_indexStream.Dispose();
-			_dataStream.Dispose();
+			lock (_entryLock)
+			{
+				// Dispose managed resources
+				_indexStream.Dispose();
+				_dataStream.Dispose();
 
-			// Clear collections
-			_cache.Clear();
+				// Clear collections
+				_cache.Clear();
+			}
 		}
 
 		_disposed = true;
@@ -133,38 +149,112 @@ public class HttpCache : IDisposable
 
 	private void LoadIndex()
 	{
+		// Nothing has been written yet, a read only cache never writes the header
+		if (_indexStream.Length == 0) return;
+
 		_indexStream.Seek(0, SeekOrigin.Begin);
 		using var indexReader = new BinaryReader(_indexStream, Encoding.Default, true);
 
 		LoadHeader(indexReader);
-		while (indexReader.PeekChar() >= 0)
+
+		// Writes aren't atomic, so the last entry can be incomplete if the process was interrupted.
+		// Keep everything up to the last complete entry instead of failing to open the cache at all
+		long lastCompletePosition = _indexStream.Position;
+		long lastDataPosition = 0;
+		try
 		{
-			var entry = new Entry
+			// PeekChar() decodes the next bytes as a character, which isn't what a length prefix is
+			while (_indexStream.Position < _indexStream.Length)
 			{
-				Uri = indexReader.ReadString(),
-				Offset = indexReader.ReadInt64(),
-				Size = indexReader.ReadInt32()
-			};
-			long ticks = indexReader.ReadInt64();
-			entry.Downloaded = new DateTime(ticks);
-			_cache[entry.Uri] = entry;
+				long entryStartPosition = _indexStream.Position;
+				var entry = new Entry
+				{
+					Uri = indexReader.ReadString(),
+					Offset = indexReader.ReadInt64(),
+					Size = indexReader.ReadInt32()
+				};
+				long ticks = indexReader.ReadInt64();
+				entry.Downloaded = new DateTime(ticks);
+
+				bool validRange =
+					entry.Offset >= 0 &&
+					entry.Size >= 0 &&
+					entry.Offset == lastDataPosition &&
+					entry.Offset <= _dataStream.Length &&
+					entry.Size <= _dataStream.Length - entry.Offset;
+				if (!validRange)
+				{
+					// Treat a complete entry with invalid metadata like a partial final write.
+					// Appending after it would leave the bad entry in front of future valid ones.
+					lastCompletePosition = entryStartPosition;
+					break;
+				}
+
+				_cache[entry.Uri!] = entry;
+				lastCompletePosition = _indexStream.Position;
+
+				long entryEnd = entry.Offset + entry.Size;
+				if (entryEnd > lastDataPosition)
+				{
+					lastDataPosition = entryEnd;
+				}
+			}
+		}
+		catch (Exception)
+		{
+			// Truncated or corrupt, keep the entries that already loaded
+		}
+
+		if (_writeable)
+		{
+			if (lastCompletePosition < _indexStream.Length)
+			{
+				// Drop the partial entry, appending after it would orphan everything written later
+				_indexStream.SetLength(lastCompletePosition);
+			}
+
+			// Only trust a position inside the file, a negative offset would make SetLength() throw
+			// here, outside the try/catch that keeps a corrupt cache openable
+			if (lastDataPosition >= 0 && lastDataPosition < _dataStream.Length)
+			{
+				// Drop any orphaned data that doesn't have a complete index entry
+				_dataStream.SetLength(lastDataPosition);
+			}
 		}
 	}
 
 	/// <summary>Gets a snapshot list of all cached entries.</summary>
-	public List<Entry> Entries => _cache.Values.ToList();
+	public List<Entry> Entries
+	{
+		get
+		{
+			// Adding an entry while this enumerates would throw
+			lock (_entryLock)
+			{
+				return _cache.Values.ToList();
+			}
+		}
+	}
 
 	/// <summary>Gets a snapshot list of all entries as <see cref="LoadableEntry"/> instances with a reference back to this cache.</summary>
-	public List<LoadableEntry> LoadableEntries =>
-		_cache.Values.Select(entry => new LoadableEntry
+	public List<LoadableEntry> LoadableEntries
+	{
+		get
 		{
-			Uri = entry.Uri,
-			Size = entry.Size,
-			Offset = entry.Offset,
-			Downloaded = entry.Downloaded,
-			Cache = this
-		})
-			.ToList();
+			lock (_entryLock)
+			{
+				return _cache.Values.Select(entry => new LoadableEntry
+				{
+					Uri = entry.Uri,
+					Size = entry.Size,
+					Offset = entry.Offset,
+					Downloaded = entry.Downloaded,
+					Cache = this
+				})
+					.ToList();
+			}
+		}
+	}
 
 	/// <summary>Appends the response bytes for <paramref name="uri"/> to the cache, ignoring the call if the URI is already cached.</summary>
 	public void AddEntry(string uri, byte[] bytes)
@@ -182,7 +272,7 @@ public class HttpCache : IDisposable
 				Downloaded = DateTime.Now,
 			};
 
-			// todo: seek to last entry instead since the last entry might be incomplete
+			// Seek to end; the file was truncated in LoadIndex if the last entry was incomplete
 			using (var dataWriter = new BinaryWriter(_dataStream, Encoding.Default, true))
 			{
 				dataWriter.Seek(0, SeekOrigin.End);
@@ -205,7 +295,10 @@ public class HttpCache : IDisposable
 	/// <summary>Returns <c>true</c> if a response for <paramref name="uri"/> exists in the cache.</summary>
 	public bool ContainsKey(string uri)
 	{
-		return _cache.ContainsKey(uri);
+		lock (_entryLock)
+		{
+			return _cache.ContainsKey(uri);
+		}
 	}
 
 	/// <summary>Reads and returns the raw bytes for the cached response for <paramref name="uri"/>, or <c>null</c> if not found.</summary>
@@ -224,11 +317,13 @@ public class HttpCache : IDisposable
 		}
 	}
 
-	/// <summary>Returns the cached response for <paramref name="uri"/> decoded as an ASCII string.</summary>
-	public string GetString(string uri)
+	/// <summary>Returns the cached response for <paramref name="uri"/> decoded as text.</summary>
+	public string? GetString(string uri)
 	{
-		byte[] bytes = GetBytes(uri)!;
-		string text = Encoding.ASCII.GetString(bytes);
+		byte[]? bytes = GetBytes(uri);
+		if (bytes == null) return null;
+
+		string text = HttpUtils.DecodeString(bytes);
 		return text;
 	}
 }
