@@ -28,7 +28,19 @@ public class SerializerFileJson : SerializerFile
 	/// <summary>
 	/// Gets or sets the maximum number of save attempts when file is locked
 	/// </summary>
-	public static int SaveAttemptsMax { get; set; } = 10;
+	/// <remarks>
+	/// A value below one skips the save loop entirely, which would report success without writing
+	/// </remarks>
+	public static int SaveAttemptsMax
+	{
+		get => _saveAttemptsMax;
+		set
+		{
+			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(SaveAttemptsMax));
+			_saveAttemptsMax = value;
+		}
+	}
+	private static int _saveAttemptsMax = 10;
 
 	/// <summary>
 	/// Gets or sets the backoff time between save attempts (multiplied by attempt number)
@@ -70,28 +82,62 @@ public class SerializerFileJson : SerializerFile
 			? JsonConverters.PublicSerializerOptions
 			: JsonConverters.PrivateSerializerOptions;
 
-		for (int attempt = 0; attempt < SaveAttemptsMax; attempt++)
+		for (int attempt = 1; attempt <= SaveAttemptsMax; attempt++)
 		{
-			if (attempt > 0)
+			if (attempt > 1)
 			{
-				Thread.Sleep(attempt * SaveAttemptsBackoff);
+				Thread.Sleep((attempt - 1) * SaveAttemptsBackoff);
 			}
 
+			// Serialize to a temp file and move it into place once it succeeds. Writing the
+			// destination directly truncated the previous save before serializing anything, so a
+			// failure destroyed it and left nothing to fall back on
+			string tempPath = DataPath + "." + System.IO.Path.GetRandomFileName();
+			bool moved = false;
 			try
 			{
 				// FileShare.None avoids simultaneous writes
-				using (var stream = new FileStream(DataPath!, FileMode.Create, FileAccess.Write, FileShare.None))
+				using (var stream = new FileStream(tempPath, FileMode.Create, FileAccess.Write, FileShare.None))
 				{
 					JsonSerializer.Serialize(stream, obj, obj.GetType(), options);
 				}
+
+				File.Move(tempPath, DataPath!, true);
+				moved = true;
+
 				string headerJson = JsonSerializer.Serialize(new JsonHeader { Name = name });
 				File.WriteAllText(HeaderPath!, headerJson);
-				break;
+				return;
 			}
-			catch (Exception e)
+			// The last attempt isn't caught, so the failure reaches the caller instead of
+			// returning as though the save had succeeded
+			catch (Exception e) when (attempt < SaveAttemptsMax)
 			{
-				call.Log.Add(e.Message);
+				call.Log.AddWarning("Save failed, retrying",
+					new Tag("Path", DataPath),
+					new Tag("Attempt", attempt),
+					new Tag("Message", e.Message));
 			}
+			finally
+			{
+				// The move consumed it on success, only a failure leaves one behind
+				if (!moved)
+				{
+					DeleteTempFile(tempPath);
+				}
+			}
+		}
+	}
+
+	// A failed save shouldn't leave its temp file behind, and the delete can't hide the original error
+	private static void DeleteTempFile(string tempPath)
+	{
+		try
+		{
+			File.Delete(tempPath);
+		}
+		catch (Exception)
+		{
 		}
 	}
 
