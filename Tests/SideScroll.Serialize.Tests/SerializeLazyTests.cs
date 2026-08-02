@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using SideScroll.Serialize.Atlas;
+using System.Reflection;
 
 namespace SideScroll.Serialize.Tests;
 
@@ -62,6 +63,83 @@ public class SerializeLazyTests : SerializeBaseTest
 		Assert.That(output.StringTest, Is.EqualTo("abc"));
 	}
 
+	[Test, Description("Loading twice reuses the generated type instead of emitting a new assembly")]
+	public void SerializeLazyReusesGeneratedType()
+	{
+		var input = new Parent
+		{
+			Child = new Child(),
+		};
+		_serializerFile!.Save(Call, input);
+
+		Parent first = _serializerFile.Load<Parent>(Call, true)!;
+		Parent second = _serializerFile.Load<Parent>(Call, true)!;
+
+		Assert.That(first.GetType(), Is.SameAs(second.GetType()));
+		Assert.That(first.GetType().Assembly, Is.SameAs(second.GetType().Assembly));
+
+		// Both still lazy load correctly
+		Assert.That(first.Child!.UintTest, Is.EqualTo(input.Child!.UintTest));
+		Assert.That(second.Child!.UintTest, Is.EqualTo(input.Child!.UintTest));
+	}
+
+	[Test, Description("Reading a lazy property whose TypeRef was never set returns the current value instead of throwing")]
+	public void SerializeLazyMissingTypeRef()
+	{
+		var input = new Parent
+		{
+			Child = new Child(),
+		};
+		_serializerFile!.Save(Call, input);
+
+		Parent output = _serializerFile.Load<Parent>(Call, true)!;
+
+		// LoadObjectData() swallows exceptions, so a partial load can leave a lazy property
+		// with neither the Loaded flag nor a TypeRef set
+		Type lazyType = output.GetType();
+		FieldInfo loadedField = lazyType.GetField("_ChildLoaded", BindingFlags.NonPublic | BindingFlags.Instance)!;
+		FieldInfo typeRefField = lazyType.GetField("_ChildTypeRef", BindingFlags.NonPublic | BindingFlags.Instance)!;
+		Assert.That(loadedField, Is.Not.Null);
+		Assert.That(typeRefField, Is.Not.Null);
+
+		loadedField.SetValue(output, false);
+		typeRefField.SetValue(output, null);
+
+		Assert.That(output.Child, Is.Null);
+	}
+
+	[Test, Description("Value type properties get unboxed instead of passing the boxed reference to the setter")]
+	public void SerializeLazyValueTypes()
+	{
+		var input = new ValueTypes
+		{
+			TimeTest = new DateTime(2024, 1, 2, 3, 4, 5, DateTimeKind.Utc),
+			GuidTest = Guid.NewGuid(),
+			SpanTest = TimeSpan.FromMinutes(90),
+			NullableSpanTest = TimeSpan.FromSeconds(30),
+		};
+
+		_serializerFile!.Save(Call, input);
+		ValueTypes output = _serializerFile.Load<ValueTypes>(Call, true)!;
+
+		Assert.That(output.TimeTest, Is.EqualTo(input.TimeTest));
+		Assert.That(output.GuidTest, Is.EqualTo(input.GuidTest));
+		Assert.That(output.SpanTest, Is.EqualTo(input.SpanTest));
+		Assert.That(output.NullableSpanTest, Is.EqualTo(input.NullableSpanTest));
+	}
+
+	[Test, Description("Null value type properties keep their default")]
+	public void SerializeLazyNullValueTypes()
+	{
+		var input = new ValueTypes();
+
+		_serializerFile!.Save(Call, input);
+		ValueTypes output = _serializerFile.Load<ValueTypes>(Call, true)!;
+
+		Assert.That(output.TimeTest, Is.EqualTo(default(DateTime)));
+		Assert.That(output.NullableSpanTest, Is.Null);
+	}
+
 	[Test, Description("Serialize Lazy Constructor")]
 	[Ignore("Not Working")]
 	public void SerializeLazyConstructor()
@@ -100,5 +178,13 @@ public class SerializeLazyTests : SerializeBaseTest
 	public class WriteRead
 	{
 		public virtual string StringTest { get; set; } = "mystring";
+	}
+
+	public class ValueTypes
+	{
+		public virtual DateTime TimeTest { get; set; }
+		public virtual Guid GuidTest { get; set; }
+		public virtual TimeSpan SpanTest { get; set; }
+		public virtual TimeSpan? NullableSpanTest { get; set; }
 	}
 }
