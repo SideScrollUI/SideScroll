@@ -25,6 +25,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `ConcurrentRateLimiter` discarding fractional refill tokens each cycle, which made the effective rate drift below the configured requests per second, and allowing bursts above that rate after an idle period
 - Fixed `ConcurrentRateLimiter` stranding a concurrency slot when cancelled while waiting for a rate token, and disposing while waiters are in flight breaking active lease cleanup. `WaitAsync()` now throws `ObjectDisposedException` once the limiter is disposed
 - Fixed `CallTimer.Stop()` logging the duration and finishing the task again when called before `Dispose()`, which also calls it
+- Fixed non-ASCII HTTP response text being decoded as ASCII by `HttpUtils`, `HttpCall`, `HttpCachedCall`, and `ViewHttpResponse`, replacing every byte above `0x7F` with `?`
+- Fixed HTTP retry request messages not being disposed after each attempt
+- Fixed non-positive HTTP attempt counts silently disabling requests, negative retry delays failing during a retry, and non-positive streaming buffer sizes truncating downloads or throwing during allocation
+- Fixed `HttpCall`'s retry delay wrapping negative for a large `SleepMilliseconds`, where `Task.Delay(-1)` waits forever. The delay is calculated as a `long` and clamped now
+- Fixed `HttpUtils.GetBytesAsync()` abandoning the `HttpResponseMessage` when reading its content failed, so every retry after a successful request leaked one
+- Fixed the first HTTP retry waiting four times the configured `BaseRetryDelay` instead of the delay itself, so the backoff now starts at the base delay and doubles from there as documented
 
 ### Changed
 
