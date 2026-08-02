@@ -258,7 +258,7 @@ public class TypeRepoObject : TypeRepo
 
 		if (Serializer.Lazy && HasVirtualProperty)
 		{
-			LazyClass = new LazyClass(LoadableType!, lazyPropertyRepos);
+			LazyClass = Atlas.LazyClass.GetOrCreate(LoadableType!, lazyPropertyRepos);
 			LoadableType = LazyClass.LazyType;
 		}
 	}

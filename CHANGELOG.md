@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed lazy loading value type properties (`DateTime`, `Guid`, `TimeSpan`, and numbers) throwing an `InvalidProgramException` when read, which terminated the process. The generated getter passed the boxed value straight to the setter instead of unboxing it
+- Fixed a `LazyClass` race where a property could return an uninitialized default (`null` or `0`) to a concurrent reader, since the generated getter and setter marked the property loaded before assigning its value
+- Fixed lazy loading emitting a new dynamic assembly for every load, which can never be unloaded. Generated types are now cached and reused per type and property set
+- Fixed lazy loaded properties throwing a `NullReferenceException` when read after a partial load left them without a `TypeRef`. They now return their current value instead
 - Fixed `HttpCache` failing to open after an interrupted write. It now keeps every complete entry and drops the partial one, truncating the orphaned bytes left in the data file
 - Fixed `HttpCache` failing to open, or truncating live data, when a corrupt index entry parsed with a garbage offset. Truncation now uses the furthest entry and ignores offsets outside the data file
 - Fixed `HttpCache.Entries`, `LoadableEntries`, `ContainsKey()`, and `Size` reading the index and data stream without the lock that `AddEntry()` writes under, which could throw while entries were being added. `HttpCacheManager` is now locked too
