@@ -43,12 +43,15 @@ public class DateTimeFormatTests : BaseTest
 	[Test, Description("A Utc value uses TimeFormatUtc, and falls back to TimeFormat when it isn't set")]
 	public void FormatUsesTheUtcTimeFormatForUtcValues()
 	{
-		DateTimeFormat withUtc = new(null, "t", "H:mm", TimeSpan.FromMinutes(1), TimeSpan.FromDays(1));
-		Assert.That(withUtc.Format(UtcTime), Is.EqualTo("14:30"));
-		Assert.That(withUtc.Format(LocalTime), Is.EqualTo("2:30 PM"));
+		// Quoted markers rather than a real time format. Which format string gets picked is the
+		// point here, and "t" renders its AM/PM designator after a narrow no-break space (U+202F)
+		// on newer ICU versions and a plain space on others
+		DateTimeFormat withUtc = new(null, "'local' H:mm", "'utc' H:mm", TimeSpan.FromMinutes(1), TimeSpan.FromDays(1));
+		Assert.That(withUtc.Format(UtcTime), Is.EqualTo("utc 14:30"));
+		Assert.That(withUtc.Format(LocalTime), Is.EqualTo("local 14:30"));
 
-		DateTimeFormat withoutUtc = new(null, "t", null, TimeSpan.FromMinutes(1), TimeSpan.FromDays(1));
-		Assert.That(withoutUtc.Format(UtcTime), Is.EqualTo("2:30 PM"), "Falls back to TimeFormat.");
+		DateTimeFormat withoutUtc = new(null, "'local' H:mm", null, TimeSpan.FromMinutes(1), TimeSpan.FromDays(1));
+		Assert.That(withoutUtc.Format(UtcTime), Is.EqualTo("local 14:30"), "Falls back to TimeFormat.");
 	}
 
 	[Test, Description("None of the built in sub day formats start with a space, they're used as axis labels")]
@@ -56,8 +59,13 @@ public class DateTimeFormatTests : BaseTest
 	{
 		foreach (DateTimeFormat format in DateTimeFormat.Formats)
 		{
-			Assert.That(format.Format(LocalTime), Does.Not.StartWith(" "), format.ToString());
-			Assert.That(format.Format(UtcTime), Does.Not.StartWith(" "), format.ToString());
+			// TrimStart() covers every Unicode space, not just U+0020. Date and time formats can
+			// produce a narrow no-break space (U+202F) depending on the ICU version
+			foreach (DateTime dateTime in new[] { LocalTime, UtcTime })
+			{
+				string formatted = format.Format(dateTime);
+				Assert.That(formatted, Is.EqualTo(formatted.TrimStart()), format.ToString());
+			}
 		}
 	}
 }
