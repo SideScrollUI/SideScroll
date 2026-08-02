@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed `Call.RunAsync()` not observing cancellation while waiting for a rate limiter slot. The cancel token wasn't passed into the wait, so work that never finished held every slot and the cancellation was never noticed
+- Fixed `Call.RunAsync()` returning empty placeholder results for items that never ran after cancelling, which callers couldn't tell apart from real results
+- Fixed `ConcurrentRateLimiter` discarding fractional refill tokens each cycle, which made the effective rate drift below the configured requests per second, and allowing bursts above that rate after an idle period
+- Fixed `ConcurrentRateLimiter` stranding a concurrency slot when cancelled while waiting for a rate token, and disposing while waiters are in flight breaking active lease cleanup. `WaitAsync()` now throws `ObjectDisposedException` once the limiter is disposed
+- Fixed `CallTimer.Stop()` logging the duration and finishing the task again when called before `Dispose()`, which also calls it
 - Fixed tab preloading evaluating one row past `MaxPreloadItems`, since the count was tested after the property getters ran. A maximum of zero also preloaded a row instead of disabling preloading
 - Fixed `ItemCollection.AddRange()` raising only the collection change, so a binding to `Count` never updated. It now raises the `Count` and `Item[]` property changes that `ObservableCollection` pairs with every change
 - Fixed DataGrid exports throwing an `InvalidCastException` for a column whose `Header` isn't a string, since the property is typed `object`
