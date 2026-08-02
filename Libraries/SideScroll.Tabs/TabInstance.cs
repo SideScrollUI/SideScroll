@@ -774,6 +774,11 @@ public class TabInstance : IDisposable
 			int itemCount = 0;
 			foreach (object obj in itemList)
 			{
+				// Checked before the getters run. Counting first evaluated one item past the
+				// maximum, and left a maximum of zero still preloading a row
+				if (itemCount >= MaxPreloadItems)
+					break;
+
 				if (obj != null)
 				{
 					foreach (var propertyColumn in propertyColumns)
@@ -785,8 +790,6 @@ public class TabInstance : IDisposable
 					}
 				}
 				itemCount++;
-				if (itemCount > MaxPreloadItems)
-					break;
 			}
 
 			if (itemList is ItemCollection<ListProperty> propertyList)

@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed tab preloading evaluating one row past `MaxPreloadItems`, since the count was tested after the property getters ran. A maximum of zero also preloaded a row instead of disabling preloading
 - Fixed `ItemCollection.AddRange()` raising only the collection change, so a binding to `Count` never updated. It now raises the `Count` and `Item[]` property changes that `ObservableCollection` pairs with every change
 - Fixed DataGrid exports throwing an `InvalidCastException` for a column whose `Header` isn't a string, since the property is typed `object`
 - Fixed a negative `ListByte.MaxBytes` throwing while allocating the read buffer in `Load()`, and returning nothing from `Create()`
