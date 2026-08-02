@@ -88,6 +88,51 @@ public class DataRepoTests : SerializeBaseTest
 		Assert.That(page2, Has.Exactly(pageSize).Items);
 	}
 
+	[TestCase(0)]
+	[TestCase(-1)]
+	[NonParallelizable]
+	public void DataPageViewRejectsNonPositivePageSizes(int pageSize)
+	{
+		DataRepoInstance<int> instance = OpenRepo();
+
+		Assert.Multiple(() =>
+		{
+			ArgumentOutOfRangeException constructorException = Assert.Throws<ArgumentOutOfRangeException>(
+				() => new DataPageView<int>(instance, ascending: true, pageSize))!;
+			Assert.That(constructorException.ParamName, Is.EqualTo("pageSize"));
+
+			ArgumentOutOfRangeException propertyException = Assert.Throws<ArgumentOutOfRangeException>(
+				() => instance.LoadPageView(Call).PageSize = pageSize)!;
+			Assert.That(propertyException.ParamName, Is.EqualTo(nameof(DataPageView<int>.PageSize)));
+
+			ArgumentOutOfRangeException defaultException = Assert.Throws<ArgumentOutOfRangeException>(
+				() => DataPageView<int>.DefaultPageSize = pageSize)!;
+			Assert.That(defaultException.ParamName, Is.EqualTo(nameof(DataPageView<int>.DefaultPageSize)));
+		});
+	}
+
+	[Test, Description("A larger page size clamps a page index past the last page")]
+	public void DataPageViewClampsPageIndexToLastPage()
+	{
+		DataRepoInstance<int> instance = OpenRepo();
+		for (int i = 0; i < 5; i++)
+		{
+			instance.Save(Call, i.ToString(), i);
+		}
+
+		DataPageView<int> pageView = instance.LoadPageView(Call);
+		pageView.PageSize = 1;
+		pageView.GetPage(0, Call);
+		pageView.PageIndex = 4;
+
+		pageView.PageSize = 2;
+
+		Assert.That(pageView.PageCount, Is.EqualTo(3));
+		Assert.That(pageView.PageIndex, Is.EqualTo(2));
+		Assert.That(pageView.HasNext, Is.False);
+		Assert.That(pageView.GetPage(pageView.PageIndex, Call), Has.Exactly(1).Items);
+	}
+
 	[Test, Description("DataInstance Index Paging")]
 	public void DataInstancePagingIndex()
 	{
@@ -175,6 +220,44 @@ public class DataRepoTests : SerializeBaseTest
 		string headerJson = File.ReadAllText(Path.Combine(itemPath, SerializerFileJson.HeaderFileName));
 		Assert.That(headerJson, Does.Contain("\"Version\":1"));
 		Assert.That(headerJson, Does.Contain("\"Name\":\"saved-key\""));
+	}
+
+	[Test]
+	public void LoadHeadersSkipsCorruptJsonHeader()
+	{
+		const string groupId = "CorruptJsonHeader";
+		var jsonRepo = new DataRepo(Path.Combine(TestPath, groupId), "Test", useJson: true);
+		jsonRepo.DeleteRepo();
+		jsonRepo.Save(groupId, "valid", 1, Call);
+		jsonRepo.Save(groupId, "corrupt", 2, Call);
+
+		string corruptPath = jsonRepo.GetDataPath(typeof(int), groupId, "corrupt");
+		File.WriteAllText(Path.Combine(corruptPath, SerializerFileJson.HeaderFileName), "{ invalid json");
+
+		List<SerializerHeader> headers = jsonRepo.LoadHeaders(typeof(int), groupId, Call);
+
+		Assert.That(headers.Select(header => header.Name), Is.EqualTo(new[] { "valid" }));
+		Assert.That(Call.Log.EntriesText(), Does.Contain("Exception loading repository header"));
+		Assert.That(Call.Log.EntriesText(), Does.Contain(Path.GetFileName(corruptPath)));
+	}
+
+	[Test]
+	public void LoadAllSkipsCorruptJsonItem()
+	{
+		const string groupId = "CorruptJsonItem";
+		var jsonRepo = new DataRepo(Path.Combine(TestPath, groupId), "Test", useJson: true);
+		jsonRepo.DeleteRepo();
+		jsonRepo.Save(groupId, "valid", 1, Call);
+		jsonRepo.Save(groupId, "corrupt", 2, Call);
+
+		string corruptPath = jsonRepo.GetDataPath(typeof(int), groupId, "corrupt");
+		File.WriteAllText(Path.Combine(corruptPath, SerializerFileJson.HeaderFileName), "{ invalid json");
+
+		DataItemCollection<int> items = jsonRepo.LoadAll<int>(Call, groupId);
+
+		Assert.That(items.Select(item => item.Key), Is.EqualTo(new[] { "valid" }));
+		Assert.That(Call.Log.EntriesText(), Does.Contain("Exception loading repository item"));
+		Assert.That(Call.Log.EntriesText(), Does.Contain(Path.GetFileName(corruptPath)));
 	}
 
 	[Test, Description("Indexed JSON bulk and page loading use the persisted index keys")]

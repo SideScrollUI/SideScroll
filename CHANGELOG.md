@@ -176,6 +176,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `HttpCall`'s retry delay wrapping negative for a large `SleepMilliseconds`, where `Task.Delay(-1)` waits forever. The delay is calculated as a `long` and clamped now
 - Fixed `HttpUtils.GetBytesAsync()` abandoning the `HttpResponseMessage` when reading its content failed, so every retry after a successful request leaked one
 - Fixed the first HTTP retry waiting four times the configured `BaseRetryDelay` instead of the delay itself, so the backoff now starts at the base delay and doubles from there as documented
+- Fixed `DataPageView` accepting zero and negative page sizes, which caused division-by-zero errors or broken pagination
+- Fixed `DataPageView.PageSize` changes not raising `PropertyChanged`, so bound views kept showing the old page size, page count, and next page state
+- Fixed `DataPageView.PageSize` increases leaving `PageIndex` past the last page, which showed an empty page with no next page to advance to. The index is clamped to the last page now
+- Fixed `ChartView.AddDimensions()` turning a missing dimension property into a delayed `NullReferenceException`; it now reports the missing property immediately
+- Fixed one corrupt repository item or header aborting the entire `DataRepo` scan and preventing the remaining valid ones from loading
 
 ### Changed
 - Date and time rounding helpers now reject zero and negative intervals, and significant-figure rounding rejects zero and negative precision

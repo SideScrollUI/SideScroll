@@ -208,15 +208,20 @@ public class ChartView
 	/// <param name="dimensionPropertyNames">Property names to group by, creating separate series for each unique combination</param>
 	public void AddDimensions(IList sourceList, string xPropertyName, string yPropertyName, params string[] dimensionPropertyNames)
 	{
+		Type elementType = sourceList.GetType().GetElementTypeForAll()
+			?? throw new ArgumentException("The source list element type could not be determined.", nameof(sourceList));
+
+		List<PropertyInfo> dimensionPropertyInfos = dimensionPropertyNames
+			.Select(name => elementType.GetProperty(name)
+				?? throw new ArgumentException(
+					$"Dimension property '{name}' was not found on type '{elementType.FullName}'.",
+					nameof(dimensionPropertyNames)))
+			.ToList();
+
 		SourceList = sourceList;
 		_xPropertyName = xPropertyName;
 		_yPropertyName = yPropertyName;
-
-		Type elementType = sourceList.GetType().GetElementTypeForAll()!;
-
-		_dimensionPropertyInfos = dimensionPropertyNames
-			.Select(name => elementType.GetProperty(name)!)
-			.ToList();
+		_dimensionPropertyInfos = dimensionPropertyInfos;
 
 		_dimensions = [];
 		foreach (var obj in sourceList)
