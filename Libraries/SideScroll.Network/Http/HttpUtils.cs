@@ -23,6 +23,23 @@ public static class HttpUtils
 	/// <summary>Gets or sets the shared <see cref="HttpClient"/> used for HEAD requests.</summary>
 	public static HttpClient Client { get; set; } = new();
 
+	/// <summary>Gets or sets the encoding used to decode response bodies.</summary>
+	public static Encoding DefaultEncoding { get; set; } = Encoding.UTF8;
+
+	private const char ByteOrderMark = (char)0xFEFF;
+
+	/// <summary>Decodes response bytes as text using <see cref="DefaultEncoding"/>.</summary>
+	/// <remarks>
+	/// Responses are usually UTF-8, decoding them as ASCII replaces every byte over 0x7F with a '?'
+	/// </remarks>
+	public static string DecodeString(byte[] bytes)
+	{
+		string text = DefaultEncoding.GetString(bytes);
+
+		// A byte order mark decodes to a zero width character that breaks parsers like JsonSerializer
+		return text.TrimStart(ByteOrderMark);
+	}
+
 	/// <summary>Tracks download progress for a streaming HTTP GET request.</summary>
 	public class HttpGetProgress
 	{
