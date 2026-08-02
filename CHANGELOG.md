@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Fixed
+- Fixed `Call.RunAsync()` not observing cancellation while waiting for a rate limiter slot. The cancel token wasn't passed into the wait, so work that never finished held every slot and the cancellation was never noticed
+- Fixed `Call.RunAsync()` returning empty placeholder results for items that never ran after cancelling, which callers couldn't tell apart from real results
+- Fixed `ConcurrentRateLimiter` discarding fractional refill tokens each cycle, which made the effective rate drift below the configured requests per second, and allowing bursts above that rate after an idle period
+- Fixed `ConcurrentRateLimiter` stranding a concurrency slot when cancelled while waiting for a rate token, and disposing while waiters are in flight breaking active lease cleanup. `WaitAsync()` now throws `ObjectDisposedException` once the limiter is disposed
+- Fixed `CallTimer.Stop()` logging the duration and finishing the task again when called before `Dispose()`, which also calls it
 
 ### Changed
 
