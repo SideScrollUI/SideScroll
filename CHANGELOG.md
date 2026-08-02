@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed a failed save destroying the previous file and reporting success. `SerializerFileAtlas` and `SerializerFileJson` opened the destination with `FileMode.Create` before serializing, so any failure truncated the existing data, and exhausting every retry returned normally with the error only logged at `Info`. They serialize to a temp file and move it into place now, retries log a warning, and the final failure reaches the caller
+- Fixed `SerializerFileAtlas.SaveAttemptsMax` and `SerializerFileJson.SaveAttemptsMax` accepting zero or negative values, which skipped the save loop entirely and reported success without writing anything
 - Fixed lazy loading value type properties (`DateTime`, `Guid`, `TimeSpan`, and numbers) throwing an `InvalidProgramException` when read, which terminated the process. The generated getter passed the boxed value straight to the setter instead of unboxing it
 - Fixed a `LazyClass` race where a property could return an uninitialized default (`null` or `0`) to a concurrent reader, since the generated getter and setter marked the property loaded before assigning its value
 - Fixed lazy loading emitting a new dynamic assembly for every load, which can never be unloaded. Generated types are now cached and reused per type and property set
