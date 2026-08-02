@@ -1,7 +1,4 @@
 using NUnit.Framework;
-using SideScroll.Tabs;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SideScroll.Tabs.Tests;
 

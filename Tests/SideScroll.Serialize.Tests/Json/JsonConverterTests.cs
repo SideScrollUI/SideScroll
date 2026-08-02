@@ -1945,4 +1945,74 @@ public class JsonConverterTests : SerializeBaseTest
 	}
 
 	#endregion
+
+	#region Enums and Arrays in object members
+
+	public enum AllowedStatus { None, Active }
+
+	[PublicData]
+	public class ObjectContainerValue
+	{
+		public object? Value;
+	}
+
+	[Test, Description(
+		"Enums stored in an object member used to serialize as null. An enum has no constructor, " +
+		"so naming one in $type can't make Read() run any code")]
+	public void EnumsInObjectMembersRoundTrip()
+	{
+		Assert.That(ObjectJsonConverter.IsAllowedType(typeof(AllowedStatus)), Is.True);
+
+		var input = new ObjectContainerValue { Value = AllowedStatus.Active };
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<ObjectContainerValue>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output!.Value, Is.EqualTo(AllowedStatus.Active));
+	}
+
+	[Test, Description("Arrays of allowed element types used to serialize as null")]
+	public void AllowedArraysInObjectMembersRoundTrip()
+	{
+		var input = new ObjectContainerValue { Value = new byte[] { 1, 2, 3 } };
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<ObjectContainerValue>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output!.Value, Is.EqualTo(new byte[] { 1, 2, 3 }));
+	}
+
+	[Test, Description(
+		"IsAllowedType() also gates deserialization, where $type comes from untrusted JSON. An " +
+		"array is only allowed when its element type is, the same rule the generic collections use")]
+	public void ArraysAreAllowedOnlyForAllowedElementTypes()
+	{
+		Assert.That(ObjectJsonConverter.IsAllowedType(typeof(byte[])), Is.True);
+		Assert.That(ObjectJsonConverter.IsAllowedType(typeof(string[])), Is.True);
+		Assert.That(ObjectJsonConverter.IsAllowedType(typeof(AllowedStatus[])), Is.True);
+		Assert.That(ObjectJsonConverter.IsAllowedType(typeof(int[][])), Is.True, "Jagged, element is int[].");
+		Assert.That(ObjectJsonConverter.IsAllowedType(typeof(object[])), Is.True,
+			"Elements are filtered by their runtime type.");
+
+		Assert.That(ObjectJsonConverter.IsAllowedType(typeof(UnregisteredUserData[])), Is.False);
+		Assert.That(ObjectJsonConverter.IsAllowedType(typeof(UnregisteredUserData[][])), Is.False);
+		Assert.That(ObjectJsonConverter.IsAllowedType(typeof(List<UnregisteredUserData>[])), Is.False);
+	}
+
+	[Test, Description("A blocked element type is still written as null rather than leaking into the json")]
+	public void ArraysOfBlockedTypesAreStillBlocked()
+	{
+		var input = new ObjectContainerValue
+		{
+			Value = new UnregisteredUserData[] { new() { Username = "blocked", Score = 999 } },
+		};
+
+		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
+		var output = JsonSerializer.Deserialize<ObjectContainerValue>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output!.Value, Is.Null);
+		Assert.That(json, Does.Not.Contain("blocked"));
+	}
+
+	#endregion
 }

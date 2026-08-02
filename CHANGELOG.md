@@ -170,6 +170,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `string.CamelCased()` and `DateTime.FormatId()` using the current culture, so Turkish locales turned a leading `i` into `İ` and non-Gregorian calendars produced a different identifier for the same instant
 - Fixed `StringExtensions.Reverse()` corrupting surrogate pairs and combining characters, and `Range()` throwing for a negative start index or an `int.MaxValue` end index
 - Removed `SerializerFile.TestWrite()`, whose purported writability test truncated existing serialized data
+- Fixed non-ASCII HTTP response text being decoded as ASCII by `HttpUtils`, `HttpCall`, `HttpCachedCall`, and `ViewHttpResponse`, replacing every byte above `0x7F` with `?`
+- Fixed HTTP retry request messages not being disposed after each attempt
+- Fixed non-positive HTTP attempt counts silently disabling requests, negative retry delays failing during a retry, and non-positive streaming buffer sizes truncating downloads or throwing during allocation
+- Fixed `HttpCall`'s retry delay wrapping negative for a large `SleepMilliseconds`, where `Task.Delay(-1)` waits forever. The delay is calculated as a `long` and clamped now
+- Fixed `HttpUtils.GetBytesAsync()` abandoning the `HttpResponseMessage` when reading its content failed, so every retry after a successful request leaked one
+- Fixed the first HTTP retry waiting four times the configured `BaseRetryDelay` instead of the delay itself, so the backoff now starts at the base delay and doubles from there as documented
 
 ### Changed
 - Date and time rounding helpers now reject zero and negative intervals, and significant-figure rounding rejects zero and negative precision

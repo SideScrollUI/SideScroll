@@ -12,13 +12,42 @@ namespace SideScroll.Network.Http;
 public static class HttpUtils
 {
 	/// <summary>Gets or sets the read buffer size in bytes used when streaming content with progress reporting.</summary>
-	public static int ReadBufferSize { get; set; } = 100_000;
+	public static int ReadBufferSize
+	{
+		get => _readBufferSize;
+		set
+		{
+			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(ReadBufferSize));
+			_readBufferSize = value;
+		}
+	}
+	private static int _readBufferSize = 100_000;
 
 	/// <summary>Gets or sets the maximum number of retry attempts for a request before returning <c>null</c>.</summary>
-	public static int MaxAttempts { get; set; } = 5;
+	public static int MaxAttempts
+	{
+		get => _maxAttempts;
+		set
+		{
+			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(MaxAttempts));
+			_maxAttempts = value;
+		}
+	}
+	private static int _maxAttempts = 5;
 
 	/// <summary>Gets or sets the base delay between retry attempts; doubled on each subsequent attempt.</summary>
-	public static TimeSpan BaseRetryDelay { get; set; } = TimeSpan.FromMilliseconds(500); // < ^ MaxAttempts
+	public static TimeSpan BaseRetryDelay
+	{
+		get => _baseRetryDelay;
+		set
+		{
+			if (value < TimeSpan.Zero)
+				throw new ArgumentOutOfRangeException(nameof(BaseRetryDelay), value, "Retry delay cannot be negative.");
+
+			_baseRetryDelay = value;
+		}
+	}
+	private static TimeSpan _baseRetryDelay = TimeSpan.FromMilliseconds(500); // < ^ MaxAttempts
 
 	/// <summary>Gets or sets the shared <see cref="HttpClient"/> used for HEAD requests.</summary>
 	public static HttpClient Client { get; set; } = new();
@@ -53,13 +82,13 @@ public static class HttpUtils
 		public double Percent => 100.0 * Downloaded / TotalLength;
 	}
 
-	/// <summary>Synchronously fetches <paramref name="uri"/> and returns the response body as an ASCII string, or <c>null</c> on failure.</summary>
+	/// <summary>Synchronously fetches <paramref name="uri"/> and returns the decoded response body, or <c>null</c> on failure.</summary>
 	public static string? GetString(Call call, string uri)
 	{
 		return Task.Run(() => GetStringAsync(call, uri)).GetAwaiter().GetResult();
 	}
 
-	/// <summary>Asynchronously fetches <paramref name="uri"/> and returns the response body as an ASCII string, or <c>null</c> on failure.</summary>
+	/// <summary>Asynchronously fetches <paramref name="uri"/> and returns the decoded response body, or <c>null</c> on failure.</summary>
 	public static async Task<string?> GetStringAsync(Call call, string uri)
 	{
 		var response = await GetBytesAsync(call, uri);
@@ -67,7 +96,7 @@ public static class HttpUtils
 		byte[]? bytes = response?.Bytes;
 		if (bytes == null) return null;
 
-		return Encoding.ASCII.GetString(bytes);
+		return DecodeString(bytes);
 	}
 
 	/// <summary>Synchronously fetches <paramref name="uri"/> and returns a <see cref="ViewHttpResponse"/>, or <c>null</c> on failure.</summary>
@@ -91,13 +120,16 @@ public static class HttpUtils
 		{
 			if (attempt > 1)
 			{
-				await Task.Delay(BaseRetryDelay * Math.Pow(2, attempt));
+				await Task.Delay(BaseRetryDelay * Math.Pow(2, attempt - 2));
 			}
 
+			// Owned here until it's handed to the returned ViewHttpResponse. Reading the content can
+			// fail after the request succeeded, and the retry below would otherwise abandon it
+			HttpResponseMessage? response = null;
 			try
 			{
 				Stopwatch stopwatch = Stopwatch.StartNew();
-				HttpResponseMessage response = await client.GetAsync(uri);
+				response = await client.GetAsync(uri);
 
 				byte[] bytes = await ReadContentAsync(response.Content, progress);
 
@@ -117,20 +149,16 @@ public static class HttpUtils
 					new Tag("Uri", response.RequestMessage.RequestUri),
 					new Tag("Size", bytes.Length));
 
+				response = null; // Ownership transfers to the returned ViewHttpResponse
 				return viewResponse;
 			}
-			catch (WebException exception)
+			catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException)
 			{
 				getCall.Log.Add(exception);
-
-				if (exception.Response != null)
-				{
-					string response = await new StreamReader(exception.Response.GetResponseStream()).ReadToEndAsync();
-					getCall.Log.AddError("Exception: " + response);
-				}
-
-				if (exception.Status == WebExceptionStatus.ProtocolError)
-					break;
+			}
+			finally
+			{
+				response?.Dispose();
 			}
 		}
 		return null;
@@ -177,10 +205,10 @@ public static class HttpUtils
 		{
 			if (attempt > 1)
 			{
-				await Task.Delay(BaseRetryDelay * Math.Pow(2, attempt));
+				await Task.Delay(BaseRetryDelay * Math.Pow(2, attempt - 2));
 			}
 
-			HttpRequestMessage request = new(HttpMethod.Head, uri);
+			using HttpRequestMessage request = new(HttpMethod.Head, uri);
 
 			try
 			{
@@ -193,18 +221,9 @@ public static class HttpUtils
 
 				return response;
 			}
-			catch (WebException exception)
+			catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException)
 			{
 				headCall.Log.Add(exception);
-
-				if (exception.Response != null)
-				{
-					string response = await new StreamReader(exception.Response.GetResponseStream()).ReadToEndAsync();
-					headCall.Log.AddError("Exception: " + response);
-				}
-
-				if (exception.Status == WebExceptionStatus.ProtocolError)
-					break;
 			}
 		}
 		return null;
@@ -221,9 +240,9 @@ public class ViewHttpResponse
 	/// <summary>Gets or sets the filename extracted from the last URI path segment.</summary>
 	public string? Filename { get; set; }
 
-	/// <summary>Gets the response body decoded as an ASCII string.</summary>
+	/// <summary>Gets the decoded response body.</summary>
 	[HiddenColumn]
-	public string Body => Encoding.ASCII.GetString(Bytes!);
+	public string Body => HttpUtils.DecodeString(Bytes!);
 
 	/// <summary>Gets the HTTP status code of the response.</summary>
 	public HttpStatusCode? Status => Response?.StatusCode;
