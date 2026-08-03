@@ -317,4 +317,49 @@ public class DataRepoTests : SerializeBaseTest
 		Assert.That(allItems[0].Value, Is.EqualTo(1));
 		Assert.That(allItems[1].Value, Is.EqualTo(2));
 	}
+
+	// ─── Index writes ────────────────────────────────────────────────────
+
+	/// <summary>Exposes the protected Save() so a failing write can be forced.</summary>
+	private class TestIndex(DataRepoInstance<int> instance) : DataRepoIndex<int>(instance)
+	{
+		public void SaveIndices(Indices indices) => Save(indices);
+	}
+
+	[Test, Description(
+		"The index was opened with FileMode.Create before anything was written, so a failure part " +
+		"way through truncated the last valid one instead of leaving it alone")]
+	public void FailedIndexSaveKeepsThePreviousIndex()
+	{
+		string groupId = "IndexSaveFailure";
+		var repo = new DataRepo(Path.Combine(TestPath, "IndexSaveFailure"), "Test");
+		repo.DeleteRepo();
+
+		DataRepoInstance<int> instance = repo.Open<int>(groupId, indexed: true);
+		instance.Save(Call, "first", 1);
+		instance.Save(Call, "second", 2);
+
+		var index = new TestIndex(instance);
+		long originalLength = new FileInfo(index.PrimaryIndexPath).Length;
+		Assert.That(originalLength, Is.GreaterThan(0), "The index has to exist to prove it survives.");
+
+		// BinaryWriter.Write(string) throws for a null, standing in for a full disk
+		DataRepoIndex<int>.Indices broken = new()
+		{
+			NextIndex = 3,
+			Items = [new(0, null!)],
+		};
+
+		Assert.Catch(() => index.SaveIndices(broken), "A failed index write has to reach the caller.");
+
+		Assert.That(new FileInfo(index.PrimaryIndexPath).Length, Is.EqualTo(originalLength),
+			"The previous index is untouched.");
+
+		Assert.That(Directory.GetFiles(instance.GroupPath, "*.sidx*"), Has.Length.EqualTo(1),
+			"No temp index files left behind.");
+
+		// Still loadable, with both keys in their original order
+		DataRepoIndex<int>.Indices reloaded = new TestIndex(instance).Load(Call);
+		Assert.That(reloaded.Items.Select(item => item.Key), Is.EqualTo(new[] { "first", "second" }));
+	}
 }

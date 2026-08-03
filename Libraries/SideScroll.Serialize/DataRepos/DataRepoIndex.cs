@@ -248,18 +248,51 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 		{
 			Directory.CreateDirectory(GroupPath);
 		}
-		// Don't allow reading until finished since we seek backwards at the end to set the file size
-		// FileShare.None also avoids simultaneous writes
-		using var stream = new FileStream(PrimaryIndexPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
-		using var writer = new BinaryWriter(stream);
 
-		writer.Write(indices.Items.Count);
-		writer.Write(indices.NextIndex);
-
-		foreach (Item item in indices.Items)
+		// Write to a temp file and move it into place once it succeeds. Writing the index directly
+		// truncated the last valid one before anything was written, so a failure part way through
+		// left a partial index to rebuild from headers, losing the original insertion order
+		string tempPath = PrimaryIndexPath + "." + Path.GetRandomFileName();
+		bool moved = false;
+		try
 		{
-			writer.Write(item.Index);
-			writer.Write(item.Key);
+			// Don't allow reading until finished since we seek backwards at the end to set the file size
+			// FileShare.None also avoids simultaneous writes
+			using (var stream = new FileStream(tempPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
+			using (var writer = new BinaryWriter(stream))
+			{
+				writer.Write(indices.Items.Count);
+				writer.Write(indices.NextIndex);
+
+				foreach (Item item in indices.Items)
+				{
+					writer.Write(item.Index);
+					writer.Write(item.Key);
+				}
+			}
+
+			File.Move(tempPath, PrimaryIndexPath, true);
+			moved = true;
+		}
+		finally
+		{
+			// The move consumed it on success, only a failure leaves one behind
+			if (!moved)
+			{
+				DeleteTempFile(tempPath);
+			}
+		}
+	}
+
+	// A failed save shouldn't leave its temp file behind, and the delete can't hide the original error
+	private static void DeleteTempFile(string tempPath)
+	{
+		try
+		{
+			File.Delete(tempPath);
+		}
+		catch (Exception)
+		{
 		}
 	}
 
