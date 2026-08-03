@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `HttpUtils.DecodeString()` and `DefaultEncoding` (UTF-8) for decoding response bodies as text
 
 ### Fixed
+- Fixed a `+N` search prefix accepting any depth, so a large one recursing through a searchable object graph that references itself ran until the stack overflowed, which can't be caught. `FindMatches()` has no cycle detection and relies on the depth to terminate, so it's capped at the new `Filter.MaxDepth` (32)
 - Fixed `TabModel.AddItems()` copying a generic enumerable with no bound, so displaying an infinite sequence never returned and a large generated one could exhaust memory before the tab appeared. It stops at the new `TabModel.MaxItems` (200,000), matching the cap the string list branch already applied
 - Fixed a failed save destroying the previous file and reporting success. `SerializerFileAtlas` and `SerializerFileJson` opened the destination with `FileMode.Create` before serializing, so any failure truncated the existing data, and exhausting every retry returned normally with the error only logged at `Info`. They serialize to a temp file and move it into place now, retries log a warning, and the final failure reaches the caller
 - Fixed `SerializerFileAtlas.SaveAttemptsMax` and `SerializerFileJson.SaveAttemptsMax` accepting zero or negative values, which skipped the save loop entirely and reported success without writing anything

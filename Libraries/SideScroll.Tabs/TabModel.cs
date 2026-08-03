@@ -671,6 +671,7 @@ public class TabModel
 	{
 		TabBookmark tabBookmark = new();
 
+		// Every level decrements this, so it's what bounds the recursion for a cyclic object graph
 		depth--;
 		foreach (IList itemList in ItemLists)
 		{
