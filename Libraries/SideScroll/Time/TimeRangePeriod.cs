@@ -142,6 +142,12 @@ public class TimeRangePeriod : ITags
 		DateTime minStartTime = periodTimeWindow.StartTime;//.Trim(periodDuration);
 		DateTime maxEndTime = periodTimeWindow.EndTime;
 
+		// The window is extended by a period above so the trailing boundary still gets one, but
+		// values are only aggregated up to the end that was actually asked for. Filtering against
+		// the extended end pulled in a period's worth of data past the window, which TotalMinimum()
+		// and TotalMaximum() already excluded
+		DateTime windowEndTime = timeWindow.EndTime;
+
 		List<TimeRangePeriod> timeRangePeriods = new((int)numPeriods + 1);
 
 		for (int i = 0; i <= numPeriods; i++)
@@ -159,13 +165,14 @@ public class TimeRangePeriod : ITags
 			if (double.IsNaN(timeRangeValue.Value))
 				continue;
 
-			if (timeRangeValue.EndTime < minStartTime || timeRangeValue.StartTime > maxEndTime)
+			// End exclusive, so a value starting exactly at the window end belongs to the next one
+			if (timeRangeValue.EndTime < minStartTime || timeRangeValue.StartTime >= windowEndTime)
 				continue;
 
 			bool hasDuration = timeRangeValue.EndTime > timeRangeValue.StartTime;
 
 			DateTime valueStartTime = timeRangeValue.StartTime.Max(minStartTime);
-			DateTime valueEndTime = timeRangeValue.EndTime.Min(maxEndTime);
+			DateTime valueEndTime = timeRangeValue.EndTime.Min(windowEndTime);
 
 			for (DateTime valueBinStartTime = valueStartTime; valueBinStartTime < valueEndTime || !hasDuration;)
 			{

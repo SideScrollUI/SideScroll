@@ -466,6 +466,81 @@ public class TimeRangePeriodTests : BaseTest
 			$"Total should equal the number of time range values: {expectedCount}");
 	}
 
+	// ─── Window boundary ─────────────────────────────────────────────────
+
+	[Test, Description(
+		"The window is extended by a period so the trailing boundary still gets one, but values " +
+		"were filtered against that extended end too, so a period of data past the window counted")]
+	public void PeriodCountsAfterTimeWindow()
+	{
+		TimeWindow timeWindow = new()
+		{
+			StartTime = StartTime,
+			EndTime = StartTime.AddMinutes(1),
+		};
+		TimeSpan periodDuration = TimeSpan.FromSeconds(10);
+
+		// Inside the window, exactly at the end, and past it
+		List<TimeRangeValue> timeRangeValues =
+		[
+			new(StartTime.AddSeconds(55), StartTime.AddSeconds(55), 1),
+			new(timeWindow.EndTime, timeWindow.EndTime, 1),
+			new(StartTime.AddSeconds(65), StartTime.AddSeconds(65), 1),
+		];
+
+		List<TimeRangeValue> periodCounts = timeWindow.PeriodCounts(timeRangeValues, periodDuration)!;
+
+		Assert.That(periodCounts.Sum(p => p.Value), Is.EqualTo(1.0),
+			"Only the value inside the window counts, the end is exclusive.");
+	}
+
+	[Test, Description("A value spanning the end contributes only the part inside the window")]
+	public void PeriodCountsClipValuesAtTheWindowEnd()
+	{
+		TimeWindow timeWindow = new()
+		{
+			StartTime = StartTime,
+			EndTime = StartTime.AddMinutes(1),
+		};
+		TimeSpan periodDuration = TimeSpan.FromSeconds(10);
+
+		// Starts in the last period and runs a minute past the window
+		List<TimeRangeValue> timeRangeValues =
+		[
+			new(StartTime.AddSeconds(55), StartTime.AddMinutes(2), 1),
+		];
+
+		List<TimeRangePeriod> periods = TimeRangePeriod.Periods(timeRangeValues, timeWindow, periodDuration)!;
+
+		DateTime? maxEndTime = periods
+			.Where(p => p.MaxEndTime != null)
+			.Max(p => p.MaxEndTime);
+
+		Assert.That(maxEndTime, Is.EqualTo(timeWindow.EndTime), "Clipped at the window end.");
+	}
+
+	[Test, Description("Values inside the window are unaffected")]
+	public void PeriodCountsInsideTimeWindow()
+	{
+		TimeWindow timeWindow = new()
+		{
+			StartTime = StartTime,
+			EndTime = StartTime.AddMinutes(1),
+		};
+		TimeSpan periodDuration = TimeSpan.FromSeconds(10);
+
+		List<TimeRangeValue> timeRangeValues =
+		[
+			new(StartTime.AddSeconds(5), StartTime.AddSeconds(5), 1),
+			new(StartTime.AddSeconds(25), StartTime.AddSeconds(25), 1),
+			new(StartTime.AddSeconds(59), StartTime.AddSeconds(59), 1),
+		];
+
+		List<TimeRangeValue> periodCounts = timeWindow.PeriodCounts(timeRangeValues, periodDuration)!;
+
+		Assert.That(periodCounts.Sum(p => p.Value), Is.EqualTo(3.0));
+	}
+
 	// ─── Period counts that don't fit an int ─────────────────────────────
 
 	[TestCase(10, TestName = "Period count wraps negative")]
