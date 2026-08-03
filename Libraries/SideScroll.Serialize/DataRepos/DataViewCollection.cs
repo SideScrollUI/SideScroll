@@ -34,8 +34,9 @@ public interface IDataView : IDataViewItem
 
 /// <summary>
 /// UI collection that wraps data items in view objects for display.
+/// Dispose it to stop mirroring the repository view, which outlives it when cached.
 /// </summary>
-public class DataViewCollection<TDataType, TViewType> where TViewType : IDataViewItem, new()
+public class DataViewCollection<TDataType, TViewType> : IDisposable where TViewType : IDataViewItem, new()
 {
 	/// <summary>
 	/// Gets the UI collection of view items.
@@ -73,7 +74,8 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 	}
 
 	/// <summary>
-	/// Raised on the collection after an item has been successfully deleted.
+	/// Raised on the collection once for each item removed from it, whether the delete started here
+	/// or in the repository. An item this collection isn't displaying doesn't raise it.
 	/// </summary>
 	public event EventHandler<EventArgs>? OnDelete;
 
@@ -92,6 +94,16 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 		DataRepoView.Items.CollectionChanged += Items_CollectionChanged;
 
 		Reload();
+	}
+
+	/// <summary>
+	/// Stops mirroring <see cref="DataRepoView"/>. A repository view is often cached and outlives
+	/// the collections built from it, which retains every undisposed one.
+	/// </summary>
+	public void Dispose()
+	{
+		DataRepoView.Items.CollectionChanged -= Items_CollectionChanged;
+		GC.SuppressFinalize(this);
 	}
 
 	/// <summary>
@@ -175,16 +187,27 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 	public void Remove(IDataItem dataItem)
 	{
 		Call call = new();
+
+		// Deleting from a loaded repository removes the item from its collection, and the change
+		// notification removes the view item. Calling RemoveView() here as well would delete it twice
 		DataRepoView.Delete(call, dataItem.Key);
 		DataRepoSecondary?.Delete(call, dataItem.Key);
 
-		if (_valueLookup.Remove(dataItem, out TViewType? existing))
-		{
-			_dataItemLookup.Remove(existing);
-			Items.Remove(existing);
-		}
+		// Only removes anything when the repository didn't notify, i.e. it isn't loaded or was already missing the key
+		RemoveView(dataItem);
+	}
+
+	// Removes the view item and its lookup entries, raising OnDelete only when one was removed,
+	// so a delete reports once whether the repository notification or the caller reached it first
+	private bool RemoveView(IDataItem dataItem)
+	{
+		if (!_valueLookup.Remove(dataItem, out TViewType? existing)) return false;
+
+		_dataItemLookup.Remove(existing);
+		Items.Remove(existing);
 
 		OnDelete?.Invoke(this, EventArgs.Empty);
+		return true;
 	}
 
 	/// <summary>
@@ -233,7 +256,8 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 			{
 				foreach (IDataItem item in e.OldItems)
 				{
-					Remove(item);
+					// The repository already removed the item, only the view is left to update
+					RemoveView(item);
 				}
 			}
 		}
@@ -258,15 +282,18 @@ public class DataViewCollection<TDataType, TViewType> where TViewType : IDataVie
 		}
 		else if (e.Action == NotifyCollectionChangedAction.Reset)
 		{
-			Items.Clear();
+			// Rebuild from the repository's current contents, clearing Items alone would leave the
+			// lookups holding view items that are no longer displayed
+			Reload();
 		}
 	}
 }
 
 /// <summary>
 /// Provides a UI thread-safe collection wrapper around a data repository view.
+/// Dispose it to stop mirroring the repository view, which outlives it when cached.
 /// </summary>
-public class DataViewCollection<T>
+public class DataViewCollection<T> : IDisposable
 {
 	/// <summary>
 	/// Gets the UI collection of items.
@@ -294,7 +321,8 @@ public class DataViewCollection<T>
 	}
 
 	/// <summary>
-	/// Raised on the collection after an item has been successfully deleted.
+	/// Raised on the collection once for each item removed from it, whether the delete started here
+	/// or in the repository. An item this collection isn't displaying doesn't raise it.
 	/// </summary>
 	public event EventHandler<EventArgs>? OnDelete;
 
@@ -312,6 +340,16 @@ public class DataViewCollection<T>
 		DataRepoView.Items.CollectionChanged += Items_CollectionChanged;
 
 		Reload();
+	}
+
+	/// <summary>
+	/// Stops mirroring <see cref="DataRepoView"/>. A repository view is often cached and outlives
+	/// the collections built from it, which retains every undisposed one.
+	/// </summary>
+	public void Dispose()
+	{
+		DataRepoView.Items.CollectionChanged -= Items_CollectionChanged;
+		GC.SuppressFinalize(this);
 	}
 
 	/// <summary>
@@ -368,23 +406,39 @@ public class DataViewCollection<T>
 	public void Remove(IDataItem dataItem)
 	{
 		Call call = new();
+
+		// Deleting from a loaded repository removes the item from its collection, and the change
+		// notification removes the value. Calling RemoveValue() here as well would delete it twice
 		DataRepoView.Delete(call, dataItem.Key);
 
+		// Only removes anything when the repository didn't notify, i.e. it isn't loaded or was already missing the key
+		RemoveValue(dataItem);
+	}
+
+	// Removes the value, raising OnDelete only when one was removed, so a delete reports once
+	// whether the repository notification or the caller reached it first
+	private bool RemoveValue(IDataItem dataItem)
+	{
+		bool removed;
 		if (_valueLookup.Remove(dataItem, out T? existing))
 		{
-			Items.Remove(existing);
+			removed = Items.Remove(existing);
 
 			if (dataItem.Object is T obj && !Equals(existing, obj))
 			{
-				Items.Remove(obj);
+				removed |= Items.Remove(obj);
 			}
 		}
 		else
 		{
-			Items.Remove((T)dataItem.Object);
+			removed = dataItem.Object is T obj && Items.Remove(obj);
 		}
 
-		OnDelete?.Invoke(this, EventArgs.Empty);
+		if (removed)
+		{
+			OnDelete?.Invoke(this, EventArgs.Empty);
+		}
+		return removed;
 	}
 
 	private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -405,7 +459,8 @@ public class DataViewCollection<T>
 			{
 				foreach (IDataItem item in e.OldItems)
 				{
-					Remove(item);
+					// The repository already removed the item, only the view is left to update
+					RemoveValue(item);
 				}
 			}
 		}
@@ -441,7 +496,9 @@ public class DataViewCollection<T>
 		}
 		else if (e.Action == NotifyCollectionChangedAction.Reset)
 		{
-			Items.Clear();
+			// Rebuild from the repository's current contents, clearing Items alone would leave the
+			// lookup holding values that are no longer displayed
+			Reload();
 		}
 	}
 }

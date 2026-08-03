@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Added `HttpUtils.DecodeString()` and `DefaultEncoding` (UTF-8) for decoding response bodies as text
+- Added `IDisposable` to both `DataViewCollection` classes, so a discarded collection can stop mirroring a repository view that outlives it
 
 ### Fixed
 - Fixed a DataGrid's copy and CSV exports keeping the original column order after a column was moved. `DataGrid.Columns` stays in its insertion order and `DisplayIndex` is the only record of what's on screen, and the export grouped columns into a plain `Dictionary` keyed by `DisplayIndex`, which enumerates by insertion instead
@@ -46,6 +47,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `DataPageView.PageSize` increases leaving `PageIndex` past the last page, which showed an empty page with no next page to advance to. The index is clamped to the last page now
 - Fixed `ChartView.AddDimensions()` turning a missing dimension property into a delayed `NullReferenceException`; it now reports the missing property immediately
 - Fixed one corrupt repository item or header aborting the entire `DataRepo` scan and preventing the remaining valid ones from loading
+- Fixed deleting through a `DataViewCollection` deleting the repository item twice and raising `OnDelete` twice. Removing the item from the repository raises a change notification, and handling it called back into the same delete that was being reported
+- Fixed `DataRepoView` loads and sorts replacing the public `Items` collection instance, which left every subscriber attached to the abandoned one. A `DataViewCollection` built from a view stopped showing saves and deletes after any reload
+- Fixed a repository reset leaving a `DataViewCollection`'s lookups holding view items it no longer displays, so a later delete could resolve one of them. It rebuilds from the repository's current contents now
 
 ### Changed
 
