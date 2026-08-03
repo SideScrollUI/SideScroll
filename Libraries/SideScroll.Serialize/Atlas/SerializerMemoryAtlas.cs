@@ -22,11 +22,18 @@ public class SerializerMemoryAtlas : SerializerMemory
 	}
 
 	/// <summary>
-	/// Saves an object to the memory stream using Atlas serialization
+	/// Saves an object to the memory stream using Atlas serialization, replacing anything already there
 	/// </summary>
+	/// <remarks>
+	/// The stream holds a single object. Every reader rewinds to the start, so writing at the
+	/// current position appended a payload that could never be read back, and the instance kept
+	/// returning the first one
+	/// </remarks>
 	public override void Save(Call call, object obj)
 	{
 		using CallTimer callTimer = call.Timer();
+
+		Reset();
 
 		using var writer = new BinaryWriter(Stream, Encoding.Default, true);
 
