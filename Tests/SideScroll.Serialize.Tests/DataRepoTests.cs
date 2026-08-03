@@ -44,6 +44,48 @@ public class DataRepoTests : SerializeBaseTest
 		Assert.That(items.SortedValues, Is.EqualTo(new[] { 1, 2 }));
 	}
 
+	private class OrderByItem
+	{
+		public int Value { get; set; }
+		public int Field;
+	}
+
+	private static DataItemCollection<OrderByItem> OrderByItems() =>
+	[
+		new("b", new OrderByItem { Value = 2 }),
+		new("a", new OrderByItem { Value = 1 }),
+	];
+
+	[Test, Description(
+		"A missing property used to be null forgiven into the ordering lambda, so it surfaced as a " +
+		"NullReferenceException thrown later from inside OrderBy() naming neither the type nor the member")]
+	public void OrderByReportsAnUnknownMemberName()
+	{
+		DataItemCollection<OrderByItem> items = OrderByItems();
+
+		var ascending = Assert.Throws<ArgumentException>(() => items.OrderBy("Missing").ToList());
+		Assert.That(ascending!.Message, Does.Contain("OrderByItem").And.Contains("Missing"));
+
+		Assert.Throws<ArgumentException>(() => items.OrderByDescending("Missing").ToList());
+	}
+
+	[Test, Description("GetProperty() only finds properties, so a field name fails the same way")]
+	public void OrderByReportsAFieldName()
+	{
+		DataItemCollection<OrderByItem> items = OrderByItems();
+
+		Assert.Throws<ArgumentException>(() => items.OrderBy(nameof(OrderByItem.Field)).ToList());
+	}
+
+	[Test, Description("Control: a real property still orders both ways")]
+	public void OrderByUsesAKnownProperty()
+	{
+		DataItemCollection<OrderByItem> items = OrderByItems();
+
+		Assert.That(items.OrderBy(nameof(OrderByItem.Value)).Select(i => i.Key), Is.EqualTo(new[] { "a", "b" }));
+		Assert.That(items.OrderByDescending(nameof(OrderByItem.Value)).Select(i => i.Key), Is.EqualTo(new[] { "b", "a" }));
+	}
+
 	[Test, Description("DataRepo int Save Load")]
 	public void DataRepoSaveLoadInt()
 	{
