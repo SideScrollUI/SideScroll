@@ -160,6 +160,16 @@ public class Filter
 	public string FilterText { get; set; }
 
 	/// <summary>
+	/// Maximum search depth a `+N` prefix can request (default: 32)
+	/// </summary>
+	/// <remarks>
+	/// This is what bounds the recursion in <see cref="TabModel.FindMatches"/>, which has no cycle
+	/// detection of its own. A searchable object graph that references itself would otherwise
+	/// recurse until the stack overflowed, which can't be caught
+	/// </remarks>
+	public static int MaxDepth { get; set; } = 32;
+
+	/// <summary>
 	/// Gets or sets the search depth for nested objects (0 = current level only)
 	/// </summary>
 	public int Depth { get; set; }
@@ -193,7 +203,7 @@ public class Filter
 		string depthText = match.Groups["Depth"].Value;
 		if (depthText.Length > 0 && int.TryParse(depthText[1..], out int parsedDepth))
 		{
-			Depth = parsedDepth;
+			Depth = Math.Min(parsedDepth, MaxDepth);
 		}
 
 		string filters = match.Groups["Filters"].Value;

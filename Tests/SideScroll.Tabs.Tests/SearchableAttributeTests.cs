@@ -593,4 +593,69 @@ public class SearchableAttributeTests : BaseTest
 	}
 
 	#endregion
+
+	#region Cycles and depth limits
+
+	/// <summary>Searchable node that can reference any other node, including itself.</summary>
+	[Searchable]
+	public record CyclicItem(string Text)
+	{
+		public CyclicItem? Child { get; set; }
+
+		public override string ToString() => Text;
+	}
+
+	[Test, Description(
+		"Searched objects are arbitrary user data and can reference each other. Without cycle " +
+		"detection the recursion ran until the stack overflowed, which can't be caught")]
+	public void SelfReferencingItemDoesNotRecurseForever()
+	{
+		CyclicItem item = new("alpha");
+		item.Child = item;
+
+		TabModel model = CreateModel(new List<CyclicItem> { item }, maxSearchDepth: Filter.MaxDepth);
+
+		Assert.DoesNotThrow(() => CountMatches(model, "nomatch", Filter.MaxDepth));
+	}
+
+	[Test, Description("A cycle between two items terminates the same way")]
+	public void MutuallyReferencingItemsDoNotRecurseForever()
+	{
+		CyclicItem first = new("alpha");
+		CyclicItem second = new("beta");
+		first.Child = second;
+		second.Child = first;
+
+		TabModel model = CreateModel(new List<CyclicItem> { first }, maxSearchDepth: Filter.MaxDepth);
+
+		Assert.DoesNotThrow(() => CountMatches(model, "nomatch", Filter.MaxDepth));
+		Assert.That(CountMatches(model, "beta", Filter.MaxDepth), Is.EqualTo(1), "The cycle is still searched once.");
+	}
+
+	[Test, Description(
+		"Only the current path is tracked, so an object reached from two siblings isn't treated " +
+		"as a cycle. Tracking every object ever seen would hide the second branch")]
+	public void SharedChildIsStillSearchedFromBothSiblings()
+	{
+		CyclicItem shared = new("target");
+		CyclicItem first = new("alpha") { Child = shared };
+		CyclicItem second = new("beta") { Child = shared };
+
+		TabModel model = CreateModel(new List<CyclicItem> { first, second }, maxSearchDepth: 2);
+
+		Assert.That(CountMatches(model, "target", 2), Is.EqualTo(2), "Both siblings match through the shared child.");
+	}
+
+	[TestCase(0)]
+	[TestCase(3)]
+	[TestCase(int.MaxValue)]
+	[Description("A +N prefix is capped, each level loads and searches every nested object")]
+	public void FilterDepthIsCappedAtMaxDepth(int requested)
+	{
+		var filter = new Filter($"+{requested} text");
+
+		Assert.That(filter.Depth, Is.EqualTo(Math.Min(requested, Filter.MaxDepth)));
+	}
+
+	#endregion
 }
