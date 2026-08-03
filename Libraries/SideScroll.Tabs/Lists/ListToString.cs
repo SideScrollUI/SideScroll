@@ -14,6 +14,9 @@ public class ListToString
 	/// <summary>
 	/// Gets or sets the maximum number of items to create from an enumerable (default: 200,000)
 	/// </summary>
+	/// <remarks>
+	/// Kept in sync with <see cref="TabModel.MaxItems"/>, which caps the other branch
+	/// </remarks>
 	public static int MaxItems { get; set; } = 200_000;
 
 	/// <summary>
