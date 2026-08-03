@@ -86,8 +86,7 @@ public static class FileTypeDetector
 	{
 		lock (_probes)
 		{
-			_probes.Add((probe, probe.Priority));
-			_probes.Sort((a, b) => b.priority.CompareTo(a.priority));
+			InsertByPriority(_probes, probe, probe.Priority);
 		}
 	}
 
@@ -101,8 +100,22 @@ public static class FileTypeDetector
 	{
 		lock (_delegateProbes)
 		{
-			_delegateProbes.Add((probe, priority));
-			_delegateProbes.Sort((a, b) => b.priority.CompareTo(a.priority));
+			InsertByPriority(_delegateProbes, probe, priority);
+		}
+	}
+
+	// Insert rather than re-sort. List.Sort() is unstable, so re-sorting the whole list on every
+	// registration could permute probes sharing a priority and change which one claims a file
+	private static void InsertByPriority<TProbe>(List<(TProbe probe, int priority)> probes, TProbe probe, int priority)
+	{
+		int index = probes.FindIndex(p => p.priority < priority);
+		if (index < 0)
+		{
+			probes.Add((probe, priority));
+		}
+		else
+		{
+			probes.Insert(index, (probe, priority));
 		}
 	}
 

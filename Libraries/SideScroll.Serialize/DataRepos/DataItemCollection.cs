@@ -47,9 +47,10 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 	/// <summary>
 	/// Orders items by the specified property name in ascending order
 	/// </summary>
+	/// <exception cref="ArgumentException"><paramref name="propertyName"/> isn't a public property of <typeparamref name="T"/></exception>
 	public IEnumerable<DataItem<T>> OrderBy(string propertyName)
 	{
-		PropertyInfo propertyInfo = typeof(T).GetProperty(propertyName)!;
+		PropertyInfo propertyInfo = GetOrderByProperty(propertyName);
 
 		return ToList().OrderBy(i => propertyInfo.GetValue(i.Value));
 	}
@@ -57,11 +58,23 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 	/// <summary>
 	/// Orders items by the specified property name in descending order
 	/// </summary>
+	/// <exception cref="ArgumentException"><paramref name="propertyName"/> isn't a public property of <typeparamref name="T"/></exception>
 	public IEnumerable<DataItem<T>> OrderByDescending(string propertyName)
 	{
-		PropertyInfo propertyInfo = typeof(T).GetProperty(propertyName)!;
+		PropertyInfo propertyInfo = GetOrderByProperty(propertyName);
 
 		return ToList().OrderByDescending(i => propertyInfo.GetValue(i.Value));
+	}
+
+	// A missing property used to be null forgiven into the ordering lambda, so the failure was a
+	// NullReferenceException thrown later from inside OrderBy(), naming neither the type nor the member.
+	// Note this only finds properties, a field name fails here the same way a misspelling does
+	private static PropertyInfo GetOrderByProperty(string propertyName)
+	{
+		ArgumentNullException.ThrowIfNull(propertyName);
+
+		return typeof(T).GetProperty(propertyName)
+			?? throw new ArgumentException($"{typeof(T).Name} has no public property named '{propertyName}' to order by", nameof(propertyName));
 	}
 
 	/// <summary>
