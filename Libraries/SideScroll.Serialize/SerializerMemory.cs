@@ -21,9 +21,22 @@ public abstract class SerializerMemory
 	public bool PublicOnly { get; set; }
 
 	/// <summary>
-	/// Saves an object to the memory stream
+	/// Saves an object to the memory stream, replacing anything already there
 	/// </summary>
+	/// <remarks>
+	/// The stream holds one object. There's no api for reading a second one back, every reader
+	/// rewinds to the start, so a save replaces rather than appends
+	/// </remarks>
 	public abstract void Save(Call call, object obj);
+
+	/// <summary>
+	/// Empties the stream so the next write starts from the beginning
+	/// </summary>
+	protected void Reset()
+	{
+		Stream.SetLength(0);
+		Stream.Seek(0, SeekOrigin.Begin);
+	}
 
 	/// <summary>
 	/// Attempts to load an object from the memory stream
@@ -168,6 +181,9 @@ public abstract class SerializerMemory
 	/// </summary>
 	public void LoadBase64String(string base64)
 	{
+		// Replaces any earlier payload, the same as Save()
+		Reset();
+
 		ConvertEncodedToStream(base64, Stream);
 	}
 

@@ -363,4 +363,42 @@ public class SerializeClassTests : SerializeBaseTest
 
 		Assert.That(output, Is.Not.Null);
 	}
+
+	// ─── Reusing an instance ─────────────────────────────────────────────
+
+	[Test, Description(
+		"The stream holds one object and every reader rewinds to the start, so a second save has " +
+		"to replace the first. Writing at the current position appended a payload nothing could read")]
+	public void SavingTwiceReplacesTheFirstObject()
+	{
+		_serializer.Save(Call, "first");
+		_serializer.Save(Call, "second");
+
+		Assert.That(_serializer.Load<string>(Call), Is.EqualTo("second"));
+	}
+
+	[Test, Description("Loading a second base64 payload replaces the first the same way")]
+	public void LoadingASecondBase64StringReplacesTheFirst()
+	{
+		string first = SerializerMemory.ToBase64String(Call, "first");
+		string second = SerializerMemory.ToBase64String(Call, "second");
+
+		_serializer.LoadBase64String(first);
+		_serializer.LoadBase64String(second);
+
+		Assert.That(_serializer.Load<string>(Call), Is.EqualTo("second"));
+	}
+
+	[Test, Description("A saved object still round trips to base64 without the earlier payload")]
+	public void SavingTwiceReplacesTheBase64Payload()
+	{
+		_serializer.Save(Call, "first");
+		_serializer.Save(Call, "second");
+
+		string base64 = _serializer.ToBase64String(Call);
+
+		var reader = new SerializerMemoryAtlas();
+		reader.LoadBase64String(base64);
+		Assert.That(reader.Load<string>(Call), Is.EqualTo("second"));
+	}
 }

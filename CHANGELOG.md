@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed reusing a `SerializerMemory` instance still returning the object saved first. `Save()` wrote at the stream's current position while every reader rewinds to the start, so a second save appended a payload nothing could read. `Save()` and `LoadBase64String()` reset the stream now, so each one replaces what came before
 - Fixed `DataRepoIndex.Save()` opening the primary index with `FileMode.Create` before writing anything, so a failure part way through truncated the last valid index and left a partial one to rebuild from headers, losing the original insertion order. It writes to a temp file and moves it into place now, matching the serializers
 - Fixed a `+N` search prefix accepting any depth, so a large one recursing through a searchable object graph that references itself ran until the stack overflowed, which can't be caught. `FindMatches()` has no cycle detection and relies on the depth to terminate, so it's capped at the new `Filter.MaxDepth` (32)
 - Fixed `TabModel.AddItems()` copying a generic enumerable with no bound, so displaying an infinite sequence never returned and a large generated one could exhaust memory before the tab appeared. It stops at the new `TabModel.MaxItems` (200,000), matching the cap the string list branch already applied
