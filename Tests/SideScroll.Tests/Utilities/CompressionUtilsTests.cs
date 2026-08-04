@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using SideScroll.Logs;
 using SideScroll.Utilities;
+using System.IO.Compression;
 
 namespace SideScroll.Tests.Utilities;
 
@@ -89,5 +90,86 @@ public class CompressionUtilsTests : BaseTest
 		Assert.That(File.ReadAllText(filePath), Is.EqualTo(new string('a', 10_000)));
 		Assert.That(GetTagValue(call.Log, "Finished Decompressing", "Compressed Size"), Is.EqualTo(compressedSize));
 		Assert.That(GetTagValue(call.Log, "Finished Decompressing", "Decompressed Size"), Is.EqualTo(10_000L));
+	}
+
+	private string CreateZip(string name, string entryName, string contents)
+	{
+		string zipPath = Path.Combine(_testPath, name);
+
+		using var stream = new FileStream(zipPath, FileMode.Create);
+		using var archive = new ZipArchive(stream, ZipArchiveMode.Create);
+		using var writer = new StreamWriter(archive.CreateEntry(entryName).Open());
+		writer.Write(contents);
+
+		return zipPath;
+	}
+
+	[Test, Description("A corrupt zip leaves the previously extracted directory alone")]
+	public void ExtractZip_CorruptArchiveKeepsExistingDirectory()
+	{
+		string targetPath = Path.Combine(_testPath, "corruptzip");
+		Directory.CreateDirectory(targetPath);
+		File.WriteAllText(Path.Combine(targetPath, "keep.txt"), "original");
+
+		string zipPath = targetPath + ".zip";
+		File.WriteAllText(zipPath, "not a zip file");
+
+		Assert.Throws<InvalidDataException>(() => CompressionUtils.Decompress(new Call(), new FileInfo(zipPath)));
+
+		Assert.That(File.ReadAllText(Path.Combine(targetPath, "keep.txt")), Is.EqualTo("original"));
+	}
+
+	[Test, Description("Extracting a valid zip replaces the previous directory")]
+	public void ExtractZip_ReplacesExistingDirectory()
+	{
+		string targetPath = Path.Combine(_testPath, "replacezip");
+		Directory.CreateDirectory(targetPath);
+		File.WriteAllText(Path.Combine(targetPath, "stale.txt"), "stale");
+
+		string zipPath = CreateZip("replacezip.zip", "current.txt", "current");
+
+		CompressionUtils.Decompress(new Call(), new FileInfo(zipPath));
+
+		Assert.Multiple(() =>
+		{
+			Assert.That(File.ReadAllText(Path.Combine(targetPath, "current.txt")), Is.EqualTo("current"));
+			Assert.That(File.Exists(Path.Combine(targetPath, "stale.txt")), Is.False);
+			Assert.That(Directory.GetDirectories(_testPath), Has.Exactly(1).Items);
+		});
+	}
+
+	[Test, Description("A corrupt gzip leaves the previously decompressed file alone")]
+	public void ExtractGzip_CorruptArchiveKeepsExistingFile()
+	{
+		string filePath = Path.Combine(_testPath, "corruptgzip.txt");
+		File.WriteAllText(filePath, "original");
+
+		string compressedPath = filePath + ".gz";
+		File.WriteAllText(compressedPath, "not a gzip file");
+
+		Assert.Throws<InvalidDataException>(() => CompressionUtils.Decompress(new Call(), new FileInfo(compressedPath)));
+
+		Assert.Multiple(() =>
+		{
+			Assert.That(File.ReadAllText(filePath), Is.EqualTo("original"));
+			Assert.That(Directory.GetFiles(_testPath), Has.Exactly(2).Items);
+		});
+	}
+
+	[Test, Description("Compressing replaces an existing archive without leaving a temp file")]
+	public void Compress_ReplacesExistingArchive()
+	{
+		string filePath = CreateTextFile("replace.txt", 10_000);
+		File.WriteAllText(filePath + ".gz", "stale");
+
+		CompressionUtils.Compress(new Call(), new FileInfo(filePath));
+		File.Delete(filePath);
+		CompressionUtils.Decompress(new Call(), new FileInfo(filePath + ".gz"));
+
+		Assert.Multiple(() =>
+		{
+			Assert.That(File.ReadAllText(filePath), Is.EqualTo(new string('a', 10_000)));
+			Assert.That(Directory.GetFiles(_testPath), Has.Exactly(2).Items);
+		});
 	}
 }

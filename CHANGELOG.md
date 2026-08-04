@@ -50,6 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed deleting through a `DataViewCollection` deleting the repository item twice and raising `OnDelete` twice. Removing the item from the repository raises a change notification, and handling it called back into the same delete that was being reported
 - Fixed `DataRepoView` loads and sorts replacing the public `Items` collection instance, which left every subscriber attached to the abandoned one. A `DataViewCollection` built from a view stopped showing saves and deletes after any reload
 - Fixed a repository reset leaving a `DataViewCollection`'s lookups holding view items it no longer displays, so a later delete could resolve one of them. It rebuilds from the repository's current contents now
+- Fixed a corrupt archive destroying the data it was meant to replace. `CompressionUtils.Decompress()` deleted the existing directory before extracting a zip, and truncated the existing file before decompressing a gzip, so a read that failed part way through left nothing behind. Both extract to a temp copy that's swapped in only once it succeeds now, and `Compress()` writes its archive the same way
 
 ### Changed
 
