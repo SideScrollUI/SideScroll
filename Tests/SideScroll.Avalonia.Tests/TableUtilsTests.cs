@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using SideScroll.Avalonia.Utilities;
 using static SideScroll.Avalonia.Utilities.TableUtils;
 
 namespace SideScroll.Avalonia.Tests;

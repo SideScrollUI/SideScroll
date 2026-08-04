@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using SideScroll.Attributes;
 using SideScroll.Serialize;
 using SideScroll.Tabs.Bookmarks.Models;
 

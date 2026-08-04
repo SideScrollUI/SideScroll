@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Fixed
+
+### Changed
+
+## [0.23] - 2026-08-03
+
+### Added
 - Added `[Hide]` support on `[Item]` methods, so a method row can be hidden based on its return value (e.g. `[Item, Hide(null)]`). A class-level `[Hide]` now applies to its `[Item]` methods as well. Methods without a `[Hide]` are never invoked to evaluate visibility
 - Added `SerializerFileAtlas.CreateForFile()` for serializing to a specific file path instead of a directory base path
 - Added `SideScrollExtensions.MaxInnerValueDepth` (16) to limit how far `[InnerValue]` members are unwrapped
