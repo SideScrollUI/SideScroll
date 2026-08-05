@@ -33,7 +33,7 @@ public interface ITabViewerPlugin
 /// The root viewer grid that hosts a scrollable <see cref="TabView"/> tree, a navigation toolbar, and registered plugins.
 /// It manages bookmark navigation, keyboard scroll, and switching between tab content and overlay controls.
 /// </summary>
-public class TabViewer : Grid
+public class TabViewer : Grid, IDisposable
 {
 	/// <summary>Gets or sets the maximum pixel width used when calculating default scroll increments.</summary>
 	public int MaxScrollWidth { get; set; } = 1000;
@@ -482,22 +482,21 @@ public class TabViewer : Grid
 
 		// Unsubscribe stale TabViews from any previous load so their late fires
 		// (e.g. a delayed async load) can't corrupt the new load's pending state
-		foreach (TabView trackedTabView in _trackedTabViews)
-		{
-			trackedTabView.OnChildrenLoaded -= TabView_OnChildrenLoaded;
-		}
+		UntrackAllTabViews();
 
 		if (TabView != null)
 		{
 			ContentGrid.Children.Remove(TabView);
+
+			// Nothing else disposes the previous root, and it owns the whole TabInstance tree,
+			// its running tasks, and every subscription the child controls made
+			TabView.Dispose();
 		}
 
 		TabView = new TabView(tabInstance);
 
 		_childrenLoadedTcs = new TaskCompletionSource();
 		_pendingChildrenCount = 0;
-		_trackedTabViews.Clear();
-		_loadedTabViews.Clear();
 		SubscribeChildrenLoaded(TabView);
 
 		TabView.Load();
@@ -521,6 +520,7 @@ public class TabViewer : Grid
 
 		_pendingChildrenCount++;
 		tabView.OnChildrenLoaded += TabView_OnChildrenLoaded;
+		tabView.OnDisposed += TabView_OnDisposed;
 
 		// The TabView may have finished loading before we subscribed (e.g. created synchronously
 		// inside a parent's load pass), so process it directly instead of waiting for the event
@@ -528,6 +528,45 @@ public class TabViewer : Grid
 		{
 			TabView_OnChildrenLoaded(tabView, EventArgs.Empty);
 		}
+	}
+
+	private void TabView_OnDisposed(object? sender, EventArgs e)
+	{
+		if (sender is TabView tabView)
+		{
+			UntrackTabView(tabView);
+		}
+	}
+
+	/// <summary>
+	/// Drops a TabView the viewer is no longer waiting on. Child views are created and disposed as
+	/// the user navigates, and without this they'd stay subscribed and referenced here for the life
+	/// of the load, keeping every tab column ever opened alive.
+	/// </summary>
+	private void UntrackTabView(TabView tabView)
+	{
+		tabView.OnChildrenLoaded -= TabView_OnChildrenLoaded;
+		tabView.OnDisposed -= TabView_OnDisposed;
+
+		if (!_trackedTabViews.Remove(tabView))
+			return;
+
+		// A view disposed before it finished loading will never fire, so stop waiting on it
+		if (!_loadedTabViews.Remove(tabView))
+		{
+			DecrementPending();
+		}
+	}
+
+	private void UntrackAllTabViews()
+	{
+		foreach (TabView trackedTabView in _trackedTabViews)
+		{
+			trackedTabView.OnChildrenLoaded -= TabView_OnChildrenLoaded;
+			trackedTabView.OnDisposed -= TabView_OnDisposed;
+		}
+		_trackedTabViews.Clear();
+		_loadedTabViews.Clear();
 	}
 
 	private void TabView_OnChildrenLoaded(object? sender, EventArgs e)
@@ -652,5 +691,31 @@ public class TabViewer : Grid
 	internal void TabLoaded(object obj, Control control)
 	{
 		OnTabLoaded?.Invoke(control, new TabLoadedEventArgs(obj));
+	}
+
+	/// <summary>
+	/// Disposes the tab tree and releases the static <see cref="Instance"/> reference
+	/// </summary>
+	/// <remarks>
+	/// <see cref="Instance"/> is only cleared when it still points here, so closing one window
+	/// doesn't clear a viewer another window replaced it with
+	/// </remarks>
+	public void Dispose()
+	{
+		UntrackAllTabViews();
+
+		if (TabView != null)
+		{
+			ContentGrid.Children.Remove(TabView);
+			TabView.Dispose();
+			TabView = null;
+		}
+
+		if (Instance == this)
+		{
+			Instance = null;
+		}
+
+		GC.SuppressFinalize(this);
 	}
 }

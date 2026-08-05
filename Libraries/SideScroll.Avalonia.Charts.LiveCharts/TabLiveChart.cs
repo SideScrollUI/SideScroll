@@ -970,6 +970,13 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 	{
 		Legend?.Unload();
 
+		// The source lists outlive this chart, so each series has to drop its collection
+		// subscription or it would keep this chart alive and refreshing after it's replaced
+		foreach (LiveChartSeries series in LiveChartSeries)
+		{
+			series.Dispose();
+		}
+
 		ChartSeries.Clear();
 		LiveChartSeries.Clear();
 		IdxNameToChartSeries.Clear();
