@@ -203,6 +203,8 @@ public class TabViewerToolbar : TabControlToolbar
 
 	private Rect? _normalBounds;
 
+	private IDisposable? _windowStateSubscription;
+
 	private void Maximize(Call call)
 	{
 		if (VisualRoot is Window window)
@@ -238,17 +240,52 @@ public class TabViewerToolbar : TabControlToolbar
 		}
 	}
 
-	private async void SubscribeToWindowState()
+	/// <summary>
+	/// Tracks the host window's state so the maximize button can show the right icon
+	/// </summary>
+	/// <remarks>
+	/// The toolbar isn't in the visual tree yet when the window controls are added, so this waits
+	/// for the attach rather than polling <see cref="Visual.VisualRoot"/>. A poll had no timeout,
+	/// and a toolbar that never attached would spin for the life of the process holding itself
+	/// </remarks>
+	private void SubscribeToWindowState()
 	{
-		Window? hostWindow = VisualRoot as Window;
-
-		while (hostWindow == null)
+		if (VisualRoot is Window hostWindow)
 		{
-			await Task.Delay(50);
-			hostWindow = VisualRoot as Window;
+			SubscribeToWindowState(hostWindow);
+			return;
 		}
 
-		hostWindow.GetObservable(Window.WindowStateProperty).Subscribe(new AnonymousObserver<WindowState>(OnWindowStateChanged));
+		AttachedToVisualTree += TabViewerToolbar_AttachedToVisualTree;
+	}
+
+	private void TabViewerToolbar_AttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+	{
+		AttachedToVisualTree -= TabViewerToolbar_AttachedToVisualTree;
+
+		if (VisualRoot is Window hostWindow)
+		{
+			SubscribeToWindowState(hostWindow);
+		}
+	}
+
+	private void SubscribeToWindowState(Window hostWindow)
+	{
+		_windowStateSubscription?.Dispose();
+		_windowStateSubscription = hostWindow
+			.GetObservable(Window.WindowStateProperty)
+			.Subscribe(new AnonymousObserver<WindowState>(OnWindowStateChanged));
+	}
+
+	/// <summary>Releases the window state subscription along with the toolbar's controls.</summary>
+	public override void Dispose()
+	{
+		AttachedToVisualTree -= TabViewerToolbar_AttachedToVisualTree;
+
+		_windowStateSubscription?.Dispose();
+		_windowStateSubscription = null;
+
+		base.Dispose();
 	}
 
 	private void OnWindowStateChanged(WindowState state)

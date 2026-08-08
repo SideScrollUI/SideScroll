@@ -11,6 +11,27 @@ public class LinkManager(Project project)
 	public static LinkManager? Instance { get; set; }
 
 	/// <summary>
+	/// Gets the project whose links this manager holds
+	/// </summary>
+	public Project Project => project;
+
+	/// <summary>
+	/// Clears <see cref="Instance"/> when it still belongs to <paramref name="project"/>, so a
+	/// closed project isn't kept alive by the static reference
+	/// </summary>
+	/// <remarks>
+	/// Only released when it matches, so tearing down one project doesn't clear a manager that a
+	/// later project replaced it with
+	/// </remarks>
+	public static void Release(Project project)
+	{
+		if (Instance?.Project == project)
+		{
+			Instance = null;
+		}
+	}
+
+	/// <summary>
 	/// Gets the collection of links created by the user
 	/// </summary>
 	public LinkCollection Created { get; } = new(project, "Created");

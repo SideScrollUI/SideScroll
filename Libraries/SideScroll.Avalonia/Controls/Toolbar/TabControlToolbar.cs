@@ -248,7 +248,7 @@ public class TabControlToolbar : Grid, IDisposable
 			.Select(c => (ToolbarButton)c);
 	}
 
-	public void Dispose()
+	public virtual void Dispose()
 	{
 		foreach (Control control in Children)
 		{

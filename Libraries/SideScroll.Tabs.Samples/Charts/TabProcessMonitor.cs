@@ -40,6 +40,8 @@ public class TabProcessMonitor : ITab
 
 		public override void Load(Call call, TabModel model)
 		{
+			// Each call returns a new handle, and Load() runs again on every reload
+			_process?.Dispose();
 			_process = Process.GetCurrentProcess();
 
 			_cpuUsage = [];
@@ -87,6 +89,27 @@ public class TabProcessMonitor : ITab
 		{
 			_timer?.Dispose();
 			_timer = null;
+		}
+
+		/// <summary>
+		/// Stops sampling and releases the process handle when the tab goes away
+		/// </summary>
+		/// <remarks>
+		/// A running Timer is rooted by the runtime and its callback holds this instance, so
+		/// navigating away would otherwise leave it sampling into a tab nothing displays
+		/// </remarks>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				_timer?.Dispose();
+				_timer = null;
+
+				_process?.Dispose();
+				_process = null;
+			}
+
+			base.Dispose(disposing);
 		}
 
 		private void Reset(Call call)

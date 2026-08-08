@@ -7,6 +7,7 @@ using Avalonia.Layout;
 using Avalonia.Threading;
 using SideScroll.Avalonia.Controls.Toolbar;
 using SideScroll.Avalonia.Controls.View;
+using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Bookmarks;
@@ -379,13 +380,25 @@ public class TabViewer : Grid, IDisposable
 		Children.Add(control);
 	}
 
-	/// <summary>Restores the normal bottom grid after a <see cref="SetContent"/> call.</summary>
+	/// <summary>Restores the normal bottom grid after a <see cref="SetContent"/> call, disposing the overlay it replaces.</summary>
+	/// <remarks>
+	/// The toolbar stays visible over an overlay, so <see cref="SetContent"/> can replace one that
+	/// was never closed. An overlay like ScreenCapture holds viewport sized bitmaps, and dropping it
+	/// without disposing leaves that native memory to the finalizer
+	/// </remarks>
 	public void ClearContent()
 	{
 		if (ContentControl == null)
 			return;
 
 		Children.Remove(ContentControl);
+
+		if (ContentControl is IDisposable disposable)
+		{
+			disposable.Dispose();
+		}
+		ContentControl = null;
+
 		if (BottomGrid.Parent == null)
 		{
 			Children.Add(BottomGrid);
@@ -694,15 +707,18 @@ public class TabViewer : Grid, IDisposable
 	}
 
 	/// <summary>
-	/// Disposes the tab tree and releases the static <see cref="Instance"/> reference
+	/// Disposes the tab tree and any overlay, and releases the statics holding this viewer and its project
 	/// </summary>
 	/// <remarks>
-	/// <see cref="Instance"/> is only cleared when it still points here, so closing one window
-	/// doesn't clear a viewer another window replaced it with
+	/// Each static is only cleared when it still belongs here, so closing one window doesn't clear
+	/// what a later one replaced it with. Clearing <see cref="Instance"/> alone wouldn't release the
+	/// project, which <see cref="ThemeManager"/> and <see cref="LinkManager"/> also hold
 	/// </remarks>
 	public void Dispose()
 	{
 		UntrackAllTabViews();
+
+		ClearContent();
 
 		if (TabView != null)
 		{
@@ -711,10 +727,21 @@ public class TabViewer : Grid, IDisposable
 			TabView = null;
 		}
 
+		foreach (Control child in Children)
+		{
+			if (child is TabControlToolbar toolbar)
+			{
+				toolbar.Dispose();
+			}
+		}
+
 		if (Instance == this)
 		{
 			Instance = null;
 		}
+
+		ThemeManager.Release(Project);
+		LinkManager.Release(Project);
 
 		GC.SuppressFinalize(this);
 	}

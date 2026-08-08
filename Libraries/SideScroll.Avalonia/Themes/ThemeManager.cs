@@ -164,6 +164,24 @@ public class ThemeManager
 	}
 
 	/// <summary>Creates the singleton <see cref="ThemeManager"/>, ensures Light, Dark, and Hybrid themes exist, and applies the current user theme.</summary>
+	/// <summary>
+	/// Clears <see cref="Instance"/>, <see cref="CurrentTheme"/>, and <see cref="UserSettings.Themes"/>
+	/// when the manager still belongs to <paramref name="project"/>
+	/// </summary>
+	/// <remarks>
+	/// The manager holds the project and both theme repo views, so leaving these set keeps a closed
+	/// project alive. Only released when it matches, so tearing down one project doesn't clear a
+	/// manager that a later project replaced it with
+	/// </remarks>
+	public static void Release(Project project)
+	{
+		if (Instance?.Project != project) return;
+
+		Instance = null;
+		CurrentTheme = null;
+		UserSettings.Themes = null;
+	}
+
 	public static void Initialize(Project project)
 	{
 		Instance = new ThemeManager(project);
