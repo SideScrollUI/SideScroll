@@ -8,8 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added `HttpUtils.IsTransient()` for identifying status codes worth retrying (408, 429, 500, 502, 503, 504)
 
 ### Fixed
+- Fixed `HttpCall` returning error responses as content, which let `HttpCachedCall` cache a 404 or 500 permanently. A non success status throws now, and `HttpUtils.GetStringAsync()` returns null instead, matching what it already documented and did for every other failure
+- Fixed HTTP retries treating every failure alike. A permanent error such as a 404 fails immediately while a transient one such as a 503 keeps retrying, in `GetBytesAsync()` and `GetHeadAsync()` alike, and the status code is kept on the exception thrown after the last attempt so callers can tell a retried 503 apart from a network failure
 
 ### Changed
 

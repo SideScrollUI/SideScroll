@@ -66,6 +66,9 @@ public class HttpCall(Call call)
 			{
 				using HttpResponseMessage response = await client.SendAsync(request, cancelToken);
 
+				// Don't return error responses, HttpCachedCall would cache them permanently
+				response.EnsureSuccessStatusCode();
+
 				Stream dataStream = await response.Content.ReadAsStreamAsync(cancelToken);
 
 				MemoryStream memoryStream = new();
@@ -83,10 +86,15 @@ public class HttpCall(Call call)
 			{
 				getCall.Log.AddError("URI request failed",
 					new Tag("URI", request.RequestUri),
+					new Tag("Status", exception.StatusCode),
 					new Tag("Attempt", attempt),
 					new Tag("Message", exception.Message));
 
 				lastException = exception;
+
+				// Only rethrow if the error is permanent (e.g. 404), allow transient errors (e.g. 503) to retry
+				if (exception.StatusCode != null && !HttpUtils.IsTransient(exception.StatusCode))
+					throw;
 			}
 			catch (IOException exception)
 			{
@@ -117,8 +125,16 @@ public class HttpCall(Call call)
 			await Task.Delay(delayMilliseconds, cancelToken);
 		}
 
-		// Kept as the inner exception, the final failure used to discard every cause it had logged
-		throw new Exception("HTTP request failed " + MaxAttempts + " times: " + uri, lastException);
+		string message = "HTTP request failed " + MaxAttempts + " times: " + uri;
+
+		// The cause is kept as the inner exception either way, the final failure used to discard
+		// every one it had logged. The status code is kept as well, callers check it to tell a
+		// retried 503 apart from a network failure
+		if (lastException is HttpRequestException httpException)
+		{
+			throw new HttpRequestException(message, httpException, httpException.StatusCode);
+		}
+		throw new Exception(message, lastException);
 	}
 
 	/// <summary>Returns the HTTP client used for a request.</summary>

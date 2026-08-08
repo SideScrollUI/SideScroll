@@ -93,8 +93,11 @@ public static class HttpUtils
 	{
 		// Disposed here, GetBytesAsync() transfers ownership of the response message into it
 		using ViewHttpResponse? response = await GetBytesAsync(call, uri);
-		response?.Response?.EnsureSuccessStatusCode();
-		byte[]? bytes = response?.Bytes;
+
+		// Null rather than throwing, which is what this returns for every other failure
+		if (response?.Response?.IsSuccessStatusCode != true) return null;
+
+		byte[]? bytes = response.Bytes;
 		if (bytes == null) return null;
 
 		return DecodeString(bytes);
@@ -133,6 +136,16 @@ public static class HttpUtils
 				Stopwatch stopwatch = Stopwatch.StartNew();
 				response = await client.GetAsync(uri, cancelToken);
 
+				// The finally below disposes it, this doesn't hand ownership on
+				if (IsTransient(response.StatusCode) && attempt < MaxAttempts)
+				{
+					getCall.Log.Add("Transient error, retrying",
+						new Tag("Uri", uri),
+						new Tag("Status", response.StatusCode),
+						new Tag("Attempt", attempt));
+					continue;
+				}
+
 				byte[] bytes = await ReadContentAsync(response.Content, progress, cancelToken);
 
 				stopwatch.Stop();
@@ -157,6 +170,10 @@ public static class HttpUtils
 			catch (HttpRequestException exception)
 			{
 				getCall.Log.Add(exception);
+
+				// Stop on a permanent error (e.g. 404), keep retrying transient ones (e.g. 503)
+				if (exception.StatusCode != null && (!IsTransient(exception.StatusCode) || attempt >= MaxAttempts))
+					break;
 			}
 			catch (IOException exception)
 			{
@@ -234,6 +251,16 @@ public static class HttpUtils
 			{
 				HttpResponseMessage response = await Client.SendAsync(request, cancelToken);
 
+				if (IsTransient(response.StatusCode) && attempt < MaxAttempts)
+				{
+					headCall.Log.Add("Transient error, retrying",
+						new Tag("Uri", uri),
+						new Tag("Status", response.StatusCode),
+						new Tag("Attempt", attempt));
+					response.Dispose();
+					continue;
+				}
+
 				//response.Close();
 				call.Log.Add("Uri Response",
 					new Tag("Uri", request.RequestUri),
@@ -244,6 +271,10 @@ public static class HttpUtils
 			catch (HttpRequestException exception)
 			{
 				headCall.Log.Add(exception);
+
+				// Stop on a permanent error (e.g. 404), keep retrying transient ones (e.g. 503)
+				if (exception.StatusCode != null && (!IsTransient(exception.StatusCode) || attempt >= MaxAttempts))
+					break;
 			}
 			catch (IOException exception)
 			{
@@ -259,6 +290,18 @@ public static class HttpUtils
 			}
 		}
 		return null;
+	}
+
+	/// <summary>Returns whether a status code represents a temporary failure that's worth retrying.</summary>
+	public static bool IsTransient(HttpStatusCode? statusCode)
+	{
+		return statusCode is
+			HttpStatusCode.RequestTimeout or
+			HttpStatusCode.TooManyRequests or
+			HttpStatusCode.InternalServerError or
+			HttpStatusCode.BadGateway or
+			HttpStatusCode.ServiceUnavailable or
+			HttpStatusCode.GatewayTimeout;
 	}
 }
 

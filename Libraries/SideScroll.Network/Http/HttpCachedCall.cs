@@ -10,6 +10,7 @@ public class HttpCachedCall(Call call, HttpCache httpCache) : HttpCall(call)
 	public HttpCache HttpCache => httpCache;
 
 	/// <summary>Returns the cached bytes for <paramref name="uri"/> if available, otherwise fetches from the network and stores the result.</summary>
+	/// <remarks>Error responses throw instead of being cached, the cache has no way to replace an entry</remarks>
 	public override async Task<byte[]> GetBytesAsync(string uri, string? accept = null)
 	{
 		string key = GetCacheKey(uri, accept);
