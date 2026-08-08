@@ -518,6 +518,29 @@ public class Call
 			maxRequestsPerSecond);
 	}
 
+	// Waits for a rate limiter slot, returning null once cancelled so the caller can stop scheduling
+	// and return what it started. The wait itself has to be cancellable, every slot could be held
+	// by work that's stuck, and then nothing would observe the cancellation
+	private async Task<IDisposable?> TryWaitAsync(ConcurrentRateLimiter rateLimiter)
+	{
+		CancellationToken cancelToken = TaskInstance?.CancelToken ?? default;
+		try
+		{
+			IDisposable limitToken = await rateLimiter.WaitAsync(cancelToken);
+
+			// Cancelling between being granted the slot and getting here still counts
+			if (!cancelToken.IsCancellationRequested) return limitToken;
+
+			limitToken.Dispose();
+		}
+		catch (OperationCanceledException)
+		{
+		}
+
+		Log.Add("Cancelled");
+		return null;
+	}
+
 	/// <summary>
 	/// Executes a named async function on a collection of items with concurrency and rate limiting, returning all results including nulls
 	/// </summary>
@@ -534,18 +557,13 @@ public class Call
 
 		var tasks = new List<Task>();
 		var results = new KeyValuePair<TItem, TResult?>[items.Count];
+		int startedCount = 0;
 
 		foreach (var (index, item) in items.WithIndex())
 		{
-			var limitToken = await rateLimiter.WaitAsync();
+			if (await TryWaitAsync(rateLimiter) is not { } limitToken) break;
 
-			if (TaskInstance?.CancelToken.IsCancellationRequested == true)
-			{
-				limitToken.Dispose();
-				Log.Add("Cancelled");
-				break;
-			}
-
+			startedCount = index + 1;
 			tasks.Add(Task.Run(async () =>
 			{
 				try
@@ -566,7 +584,8 @@ public class Call
 		}
 		await Task.WhenAll(tasks);
 
-		return new ItemResultCollection<TItem, TResult>(results);
+		// Cancelling leaves the remaining entries unset, don't return them as empty results
+		return new ItemResultCollection<TItem, TResult>(results.Take(startedCount));
 	}
 
 	/// <summary>
@@ -586,17 +605,12 @@ public class Call
 
 		var tasks = new List<Task>();
 		var results = new KeyValuePair<TItem, TResult?>[items.Count];
+		int startedCount = 0;
 		foreach (var (index, item) in items.WithIndex())
 		{
-			var limitToken = await rateLimiter.WaitAsync();
+			if (await TryWaitAsync(rateLimiter) is not { } limitToken) break;
 
-			if (TaskInstance?.CancelToken.IsCancellationRequested == true)
-			{
-				limitToken.Dispose();
-				Log.Add("Cancelled");
-				break;
-			}
-
+			startedCount = index + 1;
 			tasks.Add(Task.Run(async () =>
 			{
 				try
@@ -617,7 +631,8 @@ public class Call
 		}
 		await Task.WhenAll(tasks);
 
-		return new ItemResultCollection<TItem, TResult>(results);
+		// Cancelling leaves the remaining entries unset, don't return them as empty results
+		return new ItemResultCollection<TItem, TResult>(results.Take(startedCount));
 	}
 
 	/// <summary>
@@ -638,17 +653,12 @@ public class Call
 
 		var tasks = new List<Task>();
 		var results = new KeyValuePair<TItem, TResult?>[items.Count];
+		int startedCount = 0;
 		foreach (var (index, item) in items.WithIndex())
 		{
-			var limitToken = await rateLimiter.WaitAsync();
+			if (await TryWaitAsync(rateLimiter) is not { } limitToken) break;
 
-			if (TaskInstance?.CancelToken.IsCancellationRequested == true)
-			{
-				limitToken.Dispose();
-				Log.Add("Cancelled");
-				break;
-			}
-
+			startedCount = index + 1;
 			tasks.Add(Task.Run(async () =>
 			{
 				try
@@ -669,7 +679,8 @@ public class Call
 		}
 		await Task.WhenAll(tasks);
 
-		return new ItemResultCollection<TItem, TResult>(results);
+		// Cancelling leaves the remaining entries unset, don't return them as empty results
+		return new ItemResultCollection<TItem, TResult>(results.Take(startedCount));
 	}
 }
 

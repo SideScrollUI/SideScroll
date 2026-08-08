@@ -48,7 +48,16 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 	/// <summary>
 	/// Gets or sets the default page size for new instances
 	/// </summary>
-	public static int DefaultPageSize { get; set; } = 100;
+	public static int DefaultPageSize
+	{
+		get => _defaultPageSize;
+		set
+		{
+			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(DefaultPageSize));
+			_defaultPageSize = value;
+		}
+	}
+	private static int _defaultPageSize = 100;
 
 	/// <summary>
 	/// Gets the associated data repository instance
@@ -65,12 +74,43 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 	/// <summary>
 	/// Gets or sets the number of items per page
 	/// </summary>
-	public int PageSize { get; set; } = pageSize ?? DefaultPageSize;
+	public int PageSize
+	{
+		get => _pageSize;
+		set
+		{
+			ValidatePageSize(value, nameof(PageSize));
+			if (_pageSize == value) return;
+
+			_pageSize = value;
+			NotifyPropertyChanged();
+			NotifyPropertyChanged(nameof(PageCount));
+
+			// Resizing the pages can leave the current index past the last one
+			int lastPageIndex = PageCount - 1;
+			if (lastPageIndex >= 0 && _pageIndex > lastPageIndex)
+			{
+				PageIndex = lastPageIndex;
+			}
+			else
+			{
+				NotifyPropertyChanged(nameof(HasNext));
+			}
+		}
+	}
+	private int _pageSize = ValidatePageSize(pageSize ?? DefaultPageSize, nameof(pageSize));
 
 	/// <summary>
 	/// Gets the total number of pages
 	/// </summary>
-	public int PageCount => ((_allPaths?.Count + PageSize - 1) ?? 0) / PageSize;
+	public int PageCount
+	{
+		get
+		{
+			int count = _allPaths?.Count ?? 0;
+			return count / PageSize + (count % PageSize > 0 ? 1 : 0);
+		}
+	}
 
 	/// <summary>
 	/// Gets or sets the current page index
@@ -87,6 +127,12 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 		}
 	}
 	private int _pageIndex = -1;
+
+	private static int ValidatePageSize(int value, string paramName)
+	{
+		ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, paramName);
+		return value;
+	}
 
 	/// <summary>
 	/// Gets whether there is a previous page available

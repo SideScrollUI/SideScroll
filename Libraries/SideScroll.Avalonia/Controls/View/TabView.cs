@@ -107,6 +107,13 @@ public class TabView : Grid, IDisposable
 	/// </summary>
 	public event EventHandler? OnChildrenLoaded;
 
+	/// <summary>
+	/// Raised when this view is disposed, so owners tracking it can drop their references and
+	/// subscriptions. Child views are disposed as the user navigates, and nothing else tells an
+	/// owner that a view it subscribed to is gone.
+	/// </summary>
+	public event EventHandler? OnDisposed;
+
 	/// <summary>Whether this tab has finished creating its child controls at least once.</summary>
 	public bool ChildControlsFinishedLoading => _childControlsFinishedLoading;
 
@@ -1218,6 +1225,12 @@ public class TabView : Grid, IDisposable
 				contextMenu.Dispose();
 				ContextMenu = null;
 			}
+
+			// Let owners drop their references before the handlers are released
+			OnDisposed?.Invoke(this, EventArgs.Empty);
+
+			OnChildrenLoaded = null;
+			OnDisposed = null;
 
 			_disposedValue = true;
 		}

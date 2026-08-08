@@ -308,6 +308,11 @@ public class ObjectJsonConverter : JsonConverter<object>
 		if (type.IsPrimitive)
 			return true;
 
+		// An enum is a named integer with no constructor, field initializers, or finalizer, so
+		// Read() can't be made to run any code by naming one in $type
+		if (type.IsEnum)
+			return true;
+
 		// Allow registered public types
 		if (PublicTypes.Contains(type))
 			return true;
@@ -319,6 +324,16 @@ public class ObjectJsonConverter : JsonConverter<object>
 		// Allow types marked with ProtectedData
 		if (type.IsDefined(typeof(ProtectedDataAttribute), inherit: true))
 			return true;
+
+		// Allow arrays only when their element type is allowed, the same rule the generic
+		// collections below use. Allowing every array would let untrusted JSON name any element
+		// type in $type for Read() to construct, and would start writing blocked types into links
+		if (type.IsArray && type.GetElementType() is { } elementType)
+		{
+			return elementType == typeof(object) ||
+				elementType.IsInterface ||
+				IsAllowedType(elementType);
+		}
 
 		// Allow generic collections only when each concrete type argument is also allowed.
 		// object and interface arguments are filtered by this converter using their runtime types.

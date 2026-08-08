@@ -130,10 +130,20 @@ public class TabForm : Border, IValidationControl, IDisposable
 	}
 
 	/// <summary>
-	/// Disposes the generated property controls, releasing their bindings to the bound object
+	/// Disposes the generated property controls and releases the subscriptions to the form object
 	/// </summary>
+	/// <remarks>
+	/// The TabFormObject lives in the TabModel and outlives this control, so the events would
+	/// otherwise keep the form alive and reload it after it's been replaced
+	/// </remarks>
 	public void Dispose()
 	{
+		if (FormObject != null)
+		{
+			FormObject.ObjectChanged -= FormObject_ObjectChanged;
+			FormObject.OnFocus -= FormObject_OnFocus;
+		}
+
 		DisposeControls();
 		_propertyControls.Clear();
 

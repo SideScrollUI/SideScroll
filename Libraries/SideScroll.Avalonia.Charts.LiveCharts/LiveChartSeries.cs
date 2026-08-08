@@ -21,7 +21,7 @@ namespace SideScroll.Avalonia.Charts.LiveCharts;
 /// Wraps a <see cref="SideScroll.Collections.ListSeries"/> for use with LiveCharts, converting source data objects into
 /// <see cref="LiveChartPoint"/> instances and subscribing to collection changes for live updates.
 /// </summary>
-public class LiveChartSeries //: ChartSeries<ISeries>
+public class LiveChartSeries : IDisposable //: ChartSeries<ISeries>
 {
 	/// <summary>Gets or sets the maximum number of characters shown in a tooltip series title before truncation.</summary>
 	public static int MaxTitleLength { get; set; } = 200;
@@ -42,6 +42,8 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 
 	/// <summary>Gets the SkiaSharp color used for painting this series.</summary>
 	public SKColor SkColor { get; protected set; }
+
+	private INotifyCollectionChanged? _boundCollection;
 
 	/// <summary>Returns the underlying <see cref="ListSeries"/>'s string representation.</summary>
 	public override string ToString() => ListSeries.ToString();
@@ -75,12 +77,33 @@ public class LiveChartSeries //: ChartSeries<ISeries>
 
 		if (listSeries.List is INotifyCollectionChanged notifyCollectionChanged)
 		{
-			notifyCollectionChanged.CollectionChanged += delegate (object? _, NotifyCollectionChangedEventArgs e)
-			{
-				// Can we remove this later when disposing?
-				SeriesChanged(listSeries, e);
-			};
+			_boundCollection = notifyCollectionChanged;
+			notifyCollectionChanged.CollectionChanged += List_CollectionChanged;
 		}
+	}
+
+	/// <summary>
+	/// Releases the subscription to the source list's collection changes
+	/// </summary>
+	/// <remarks>
+	/// The source list outlives this series, so the event would otherwise keep the series and the
+	/// chart it references alive, and dead charts would keep refreshing on every update.
+	/// TabLiveChart disposes its series whenever it clears them
+	/// </remarks>
+	public void Dispose()
+	{
+		if (_boundCollection != null)
+		{
+			_boundCollection.CollectionChanged -= List_CollectionChanged;
+			_boundCollection = null;
+		}
+
+		GC.SuppressFinalize(this);
+	}
+
+	private void List_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+	{
+		SeriesChanged(ListSeries, e);
 	}
 
 	private void UpdateMarkers()

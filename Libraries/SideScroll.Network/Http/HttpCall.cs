@@ -1,6 +1,3 @@
-using System.Net;
-using System.Text;
-
 namespace SideScroll.Network.Http;
 
 /// <summary>
@@ -10,19 +7,37 @@ namespace SideScroll.Network.Http;
 public class HttpCall(Call call)
 {
 	/// <summary>Gets or sets the maximum number of download attempts before throwing.</summary>
-	public static int MaxAttempts { get; set; } = 4;
+	public static int MaxAttempts
+	{
+		get => _maxAttempts;
+		set
+		{
+			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(MaxAttempts));
+			_maxAttempts = value;
+		}
+	}
+	private static int _maxAttempts = 4;
 
 	/// <summary>Gets or sets the base sleep duration in milliseconds between retry attempts.</summary>
-	public static int SleepMilliseconds { get; set; } = 500; // < ^ MaxAttempts
+	public static int SleepMilliseconds
+	{
+		get => _sleepMilliseconds;
+		set
+		{
+			ArgumentOutOfRangeException.ThrowIfNegative(value, nameof(SleepMilliseconds));
+			_sleepMilliseconds = value;
+		}
+	}
+	private static int _sleepMilliseconds = 500; // < ^ MaxAttempts
 
 	/// <summary>Gets the logging call context used for timing and diagnostics.</summary>
 	public Call Call => call;
 
-	/// <summary>Fetches <paramref name="uri"/> and returns the response body as an ASCII string.</summary>
+	/// <summary>Fetches <paramref name="uri"/> and returns the decoded response body.</summary>
 	public virtual async Task<string?> GetStringAsync(string uri, string? accept = null)
 	{
 		byte[] bytes = await GetResponseAsync(uri, accept);
-		return Encoding.ASCII.GetString(bytes);
+		return HttpUtils.DecodeString(bytes);
 	}
 
 	/// <summary>Fetches <paramref name="uri"/> and returns the raw response bytes.</summary>
@@ -43,7 +58,7 @@ public class HttpCall(Call call)
 
 		for (int attempt = 1; ; attempt++)
 		{
-			var request = new HttpRequestMessage(HttpMethod.Get, uri);
+			using var request = new HttpRequestMessage(HttpMethod.Get, uri);
 
 			try
 			{
@@ -62,21 +77,22 @@ public class HttpCall(Call call)
 
 				return data;
 			}
-			catch (WebException exception)
+			catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException)
 			{
-				getCall.Log.AddError("URI request " + request.RequestUri + " failed: " + exception.Message);
-
-				if (exception.Response != null)
-				{
-					string response = await new StreamReader(exception.Response.GetResponseStream()).ReadToEndAsync();
-					Call.Log.AddError(response);
-				}
+				getCall.Log.AddError("URI request failed",
+					new Tag("URI", request.RequestUri),
+					new Tag("Attempt", attempt),
+					new Tag("Message", exception.Message));
 			}
 
 			if (attempt >= MaxAttempts)
 				break;
 
-			await Task.Delay(SleepMilliseconds * attempt);
+			// Multiply as a long and clamp. The setter allows any non negative value, so an int
+			// product can wrap negative, where Task.Delay treats -1 as an infinite wait, and
+			// anything past int.MaxValue milliseconds throws
+			int delayMilliseconds = (int)Math.Min((long)SleepMilliseconds * attempt, int.MaxValue);
+			await Task.Delay(delayMilliseconds);
 		}
 		throw new Exception("HTTP request failed " + MaxAttempts + " times: " + uri);
 	}

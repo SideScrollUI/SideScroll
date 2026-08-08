@@ -1242,6 +1242,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		DataGrid.CellPointerPressed -= DataGrid_CellPointerPressed;
 		DataGrid.ColumnReordered -= DataGrid_ColumnReordered;
 		DataGrid.EffectiveViewportChanged -= DataGrid_EffectiveViewportChanged;
+		DataGrid.Sorting -= DataGrid_Sorting;
 
 		DataGrid.ItemsSource = null;
 

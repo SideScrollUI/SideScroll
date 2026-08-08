@@ -9,9 +9,11 @@ namespace SideScroll.Serialize.DataRepos;
 public class DataRepoView<T> : DataRepoInstance<T>
 {
 	/// <summary>
-	/// Gets the in-memory collection of items
+	/// Gets the in-memory collection of items.
+	/// Subscribers such as <see cref="DataViewCollection{TDataType, TViewType}"/> attach to this
+	/// instance, so loading and sorting replace its contents instead of the collection itself
 	/// </summary>
-	public DataItemCollection<T> Items { get; protected set; } = [];
+	public DataItemCollection<T> Items { get; } = [];
 
 	/// <summary>
 	/// Gets all keys in the collection
@@ -40,7 +42,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 	{
 		lock (DataRepo)
 		{
-			Items = base.LoadAll(call, ascending);
+			SetItems(base.LoadAll(call, ascending));
 			IsLoaded = true;
 			return Items;
 		}
@@ -66,7 +68,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 				new Tag("Type", DataType.Name));
 
 			var dataItems = LoadAllDataItems(callTimer, ascending);
-			Items = [.. dataItems];
+			SetItems(dataItems);
 			IsLoaded = true;
 		}
 	}
@@ -80,7 +82,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		{
 			DataItemCollection<T> items = base.LoadAll(call);
 			var ordered = ascending ? items.OrderBy(orderByMemberName) : items.OrderByDescending(orderByMemberName);
-			Items = [.. ordered];
+			SetItems(ordered);
 			IsLoaded = true;
 		}
 	}
@@ -93,7 +95,7 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		lock (DataRepo)
 		{
 			var ordered = Items.OrderBy(memberName);
-			Items = [.. ordered];
+			SetItems(ordered);
 		}
 	}
 
@@ -105,7 +107,20 @@ public class DataRepoView<T> : DataRepoInstance<T>
 		lock (DataRepo)
 		{
 			var ordered = Items.OrderByDescending(memberName);
-			Items = [.. ordered];
+			SetItems(ordered);
+		}
+	}
+
+	// Replaces the contents of Items, keeping the collection instance every subscriber is attached to
+	private void SetItems(IEnumerable<DataItem<T>> dataItems)
+	{
+		// Materialize first, the sort methods enumerate Items itself
+		List<DataItem<T>> dataItemList = [.. dataItems];
+
+		Items.Clear();
+		foreach (DataItem<T> dataItem in dataItemList)
+		{
+			Items.Add(dataItem);
 		}
 	}
 

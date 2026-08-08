@@ -129,4 +129,85 @@ public class TabModelTests : BaseTest
 		Assert.That(model.ItemLists, Is.Empty);
 		Assert.That(model.Objects, Is.Empty);
 	}
+
+	// ─── Enumerable limits ───────────────────────────────────────────────
+
+	/// <summary>
+	/// Yields <paramref name="count"/> items and then throws.
+	/// </summary>
+	/// <remarks>
+	/// Generic so AddItems() takes the eager copy branch instead of the already bounded
+	/// ListToString one, and it throws rather than running forever so a regression fails
+	/// fast instead of hanging the test run
+	/// </remarks>
+	private sealed class ThrowsAfter<T>(int count, Func<int, T> create) : IEnumerable<T>
+	{
+		public IEnumerator<T> GetEnumerator()
+		{
+			for (int i = 0; i < count; i++)
+			{
+				yield return create(i);
+			}
+
+			throw new InvalidOperationException($"Enumerated past {count} items");
+		}
+
+		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+	}
+
+	private static IList AddAndGetList(IEnumerable enumerable)
+	{
+		TabModel model = new();
+		model.AddItems(enumerable);
+
+		Assert.That(model.ItemLists, Has.Count.EqualTo(1));
+		return model.ItemLists[0];
+	}
+
+	[Test, Description(
+		"A generic enumerable was copied with no bound, so an infinite one never finished and a " +
+		"large generated one could exhaust memory before the tab appeared")]
+	public void AddItemsStopsAtMaxItems()
+	{
+		int original = TabModel.MaxItems;
+		try
+		{
+			TabModel.MaxItems = 5;
+
+			// Enumerating past 5 throws, so reaching the end means the cap wasn't applied
+			IList list = AddAndGetList(new ThrowsAfter<int>(10, i => i));
+
+			Assert.That(list, Has.Count.EqualTo(5));
+		}
+		finally
+		{
+			TabModel.MaxItems = original;
+		}
+	}
+
+	[Test, Description("A limit of zero or less adds nothing, matching ListToString.Create()")]
+	public void AddItemsWithANonPositiveMaxItemsAddsNothing()
+	{
+		int original = TabModel.MaxItems;
+		try
+		{
+			TabModel.MaxItems = 0;
+			Assert.That(AddAndGetList(new ThrowsAfter<int>(10, i => i)), Is.Empty);
+
+			TabModel.MaxItems = -1;
+			Assert.That(AddAndGetList(new ThrowsAfter<int>(10, i => i)), Is.Empty);
+		}
+		finally
+		{
+			TabModel.MaxItems = original;
+		}
+	}
+
+	[Test, Description("A list shorter than the limit is still copied in full")]
+	public void AddItemsKeepsEveryItemUnderTheLimit()
+	{
+		IList list = AddAndGetList(new List<int> { 1, 2, 3 });
+
+		Assert.That(list, Has.Count.EqualTo(3));
+	}
 }

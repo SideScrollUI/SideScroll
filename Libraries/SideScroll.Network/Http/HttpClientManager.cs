@@ -15,6 +15,23 @@ public record HttpClientConfig(string? Accept = null, TimeSpan? Timeout = null)
 /// </summary>
 public static class HttpClientManager
 {
+	/// <summary>
+	/// Gets or sets how many configured clients are cached. Both parts of the key come from the
+	/// caller, and <see cref="HttpClientConfig.Timeout"/> in particular has unlimited distinct
+	/// values, so the pool is capped instead of growing for the life of the process.
+	/// Configurations past the cap still get a working client, it just isn't reused
+	/// </summary>
+	public static int MaxClients
+	{
+		get => _maxClients;
+		set
+		{
+			ArgumentOutOfRangeException.ThrowIfNegative(value, nameof(MaxClients));
+			_maxClients = value;
+		}
+	}
+	private static int _maxClients = 32;
+
 	private static readonly HttpClientHandler _handler = new()
 	{
 		AllowAutoRedirect = false,
@@ -33,21 +50,34 @@ public static class HttpClientManager
 		{
 			if (_clients.TryGetValue(config, out HttpClient? client)) return client;
 
-			// Shared handlers shouldn't be disposed by any single client instance
-			client = new HttpClient(_handler, disposeHandler: false);
+			client = CreateClient(config);
 
-			if (config.Accept != null)
+			// Evicting a cached client would hand a second one to callers still using the first,
+			// so stop caching at the cap instead. The uncached client shares the pooled handler,
+			// owns nothing unmanaged, and is collected once the caller is done with it
+			if (_clients.Count < MaxClients)
 			{
-				client.DefaultRequestHeaders.Add("Accept", config.Accept);
+				_clients[config] = client;
 			}
-
-			if (config.Timeout is { } timeout)
-			{
-				client.Timeout = timeout;
-			}
-
-			_clients[config] = client;
 			return client;
 		}
+	}
+
+	private static HttpClient CreateClient(HttpClientConfig config)
+	{
+		// Shared handlers shouldn't be disposed by any single client instance
+		HttpClient client = new(_handler, disposeHandler: false);
+
+		if (config.Accept != null)
+		{
+			client.DefaultRequestHeaders.Add("Accept", config.Accept);
+		}
+
+		if (config.Timeout is { } timeout)
+		{
+			client.Timeout = timeout;
+		}
+
+		return client;
 	}
 }

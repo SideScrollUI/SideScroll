@@ -302,4 +302,23 @@ public class BaseWindow : Window
 	{
 		Project.Data.Cache.CleanupCache(new(), TimeSpan.FromDays(Project.DataSettings.CacheDurationDays));
 	}
+
+	/// <summary>Stops the cleanup timer, disposes the viewer, and releases the window's event subscriptions.</summary>
+	/// <remarks>
+	/// A running DispatcherTimer is rooted by the dispatcher and holds its Tick handler, so leaving
+	/// it started would keep the closed window, its TabViewer, and the whole Project alive
+	/// </remarks>
+	protected override void OnClosed(EventArgs e)
+	{
+		_cleanupDispatcherTimer.Stop();
+		_cleanupDispatcherTimer.Tick -= CleanupDispatcherTimer_Tick;
+
+		Opened -= BaseWindow_Opened;
+		PositionChanged -= BaseWindow_PositionChanged;
+		ActualThemeVariantChanged -= Border_ActualThemeVariantChanged;
+
+		TabViewer.Dispose();
+
+		base.OnClosed(e);
+	}
 }

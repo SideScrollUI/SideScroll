@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace SideScroll.Network.Http;
 
 /// <summary>
@@ -23,10 +21,10 @@ public class HttpCachedCall(Call call, HttpCache httpCache) : HttpCall(call)
 		return bytes;
 	}
 
-	/// <summary>Returns the cached or freshly fetched response for <paramref name="uri"/> decoded as ASCII text.</summary>
+	/// <summary>Returns the cached or freshly fetched response for <paramref name="uri"/> decoded as text.</summary>
 	public override async Task<string?> GetStringAsync(string uri, string? accept = null)
 	{
 		byte[] bytes = await GetBytesAsync(uri);
-		return Encoding.ASCII.GetString(bytes);
+		return HttpUtils.DecodeString(bytes);
 	}
 }

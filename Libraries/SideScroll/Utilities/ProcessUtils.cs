@@ -173,28 +173,60 @@ public static class ProcessUtils
 	}
 
 	/// <summary>
-	/// Starts a new dotnet process with the specified arguments
+	/// Starts a new dotnet process with a pre-built command line
 	/// </summary>
-	/// <returns>The started Process instance</returns>
+	/// <remarks>
+	/// Prefer the <see cref="StartDotnetProcess(IReadOnlyList{string})"/> overload. A hand built
+	/// command line has to quote every value itself, and an unquoted path under a directory like
+	/// "C:\Users\First Last" splits into two arguments before the child process sees it
+	/// </remarks>
+	/// <returns>The started Process instance, which the caller owns and has to dispose</returns>
 	public static Process StartDotnetProcess(string arguments)
+	{
+		ProcessStartInfo processStartInfo = CreateDotnetProcessStartInfo();
+		processStartInfo.Arguments = arguments;
+
+		return Process.Start(processStartInfo)!;
+	}
+
+	/// <summary>
+	/// Starts a new dotnet process, passing each argument separately
+	/// </summary>
+	/// <remarks>
+	/// ArgumentList escapes each element, so values containing spaces or quotes reach the child
+	/// process intact instead of splitting into extra arguments. A string isn't convertible to
+	/// IReadOnlyList&lt;string&gt;, so a single string argument still binds to the other overload
+	/// </remarks>
+	/// <returns>The started Process instance, which the caller owns and has to dispose</returns>
+	public static Process StartDotnetProcess(IReadOnlyList<string> arguments)
+	{
+		ArgumentNullException.ThrowIfNull(arguments);
+
+		ProcessStartInfo processStartInfo = CreateDotnetProcessStartInfo();
+		foreach (string argument in arguments)
+		{
+			processStartInfo.ArgumentList.Add(argument);
+		}
+
+		return Process.Start(processStartInfo)!;
+	}
+
+	private static ProcessStartInfo CreateDotnetProcessStartInfo()
 	{
 		ProcessStartInfo processStartInfo = new()
 		{
 			FileName = GetDotnetFileName(),
-			Arguments = arguments,
 			WorkingDirectory = Directory.GetCurrentDirectory(),
 		};
 
 		// Windows options
-		if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX) &&
-			Environment.OSVersion.Platform != PlatformID.Unix)
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 		{
 			processStartInfo.CreateNoWindow = true;
 			//processStartInfo.UseShellExecute = true, // doesn't work on mac yet, last checked for dotnet 3.1
 		}
 
-		Process process = Process.Start(processStartInfo)!;
-		return process;
+		return processStartInfo;
 	}
 
 	/// <summary>

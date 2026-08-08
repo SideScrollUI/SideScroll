@@ -176,7 +176,9 @@ public static class DataGridExtensions
 		contentRows = [];
 		if (dataGrid == null || items == null) return;
 
-		Dictionary<int, DataGridColumn> visibleColumns = [];
+		// Sorted, DataGrid.Columns keeps its insertion order and DisplayIndex is the only record of
+		// what's on screen, so a plain Dictionary exported the original order after a column moved
+		SortedDictionary<int, DataGridColumn> visibleColumns = [];
 
 		foreach (DataGridColumn dataColumn in dataGrid.Columns)
 		{

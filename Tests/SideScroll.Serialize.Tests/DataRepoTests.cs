@@ -44,6 +44,48 @@ public class DataRepoTests : SerializeBaseTest
 		Assert.That(items.SortedValues, Is.EqualTo(new[] { 1, 2 }));
 	}
 
+	private class OrderByItem
+	{
+		public int Value { get; set; }
+		public int Field;
+	}
+
+	private static DataItemCollection<OrderByItem> OrderByItems() =>
+	[
+		new("b", new OrderByItem { Value = 2 }),
+		new("a", new OrderByItem { Value = 1 }),
+	];
+
+	[Test, Description(
+		"A missing property used to be null forgiven into the ordering lambda, so it surfaced as a " +
+		"NullReferenceException thrown later from inside OrderBy() naming neither the type nor the member")]
+	public void OrderByReportsAnUnknownMemberName()
+	{
+		DataItemCollection<OrderByItem> items = OrderByItems();
+
+		var ascending = Assert.Throws<ArgumentException>(() => items.OrderBy("Missing").ToList());
+		Assert.That(ascending!.Message, Does.Contain("OrderByItem").And.Contains("Missing"));
+
+		Assert.Throws<ArgumentException>(() => items.OrderByDescending("Missing").ToList());
+	}
+
+	[Test, Description("GetProperty() only finds properties, so a field name fails the same way")]
+	public void OrderByReportsAFieldName()
+	{
+		DataItemCollection<OrderByItem> items = OrderByItems();
+
+		Assert.Throws<ArgumentException>(() => items.OrderBy(nameof(OrderByItem.Field)).ToList());
+	}
+
+	[Test, Description("Control: a real property still orders both ways")]
+	public void OrderByUsesAKnownProperty()
+	{
+		DataItemCollection<OrderByItem> items = OrderByItems();
+
+		Assert.That(items.OrderBy(nameof(OrderByItem.Value)).Select(i => i.Key), Is.EqualTo(new[] { "a", "b" }));
+		Assert.That(items.OrderByDescending(nameof(OrderByItem.Value)).Select(i => i.Key), Is.EqualTo(new[] { "b", "a" }));
+	}
+
 	[Test, Description("DataRepo int Save Load")]
 	public void DataRepoSaveLoadInt()
 	{
@@ -86,6 +128,51 @@ public class DataRepoTests : SerializeBaseTest
 
 		var page2 = pageView.Next(Call).ToList();
 		Assert.That(page2, Has.Exactly(pageSize).Items);
+	}
+
+	[TestCase(0)]
+	[TestCase(-1)]
+	[NonParallelizable]
+	public void DataPageViewRejectsNonPositivePageSizes(int pageSize)
+	{
+		DataRepoInstance<int> instance = OpenRepo();
+
+		Assert.Multiple(() =>
+		{
+			ArgumentOutOfRangeException constructorException = Assert.Throws<ArgumentOutOfRangeException>(
+				() => new DataPageView<int>(instance, ascending: true, pageSize))!;
+			Assert.That(constructorException.ParamName, Is.EqualTo("pageSize"));
+
+			ArgumentOutOfRangeException propertyException = Assert.Throws<ArgumentOutOfRangeException>(
+				() => instance.LoadPageView(Call).PageSize = pageSize)!;
+			Assert.That(propertyException.ParamName, Is.EqualTo(nameof(DataPageView<int>.PageSize)));
+
+			ArgumentOutOfRangeException defaultException = Assert.Throws<ArgumentOutOfRangeException>(
+				() => DataPageView<int>.DefaultPageSize = pageSize)!;
+			Assert.That(defaultException.ParamName, Is.EqualTo(nameof(DataPageView<int>.DefaultPageSize)));
+		});
+	}
+
+	[Test, Description("A larger page size clamps a page index past the last page")]
+	public void DataPageViewClampsPageIndexToLastPage()
+	{
+		DataRepoInstance<int> instance = OpenRepo();
+		for (int i = 0; i < 5; i++)
+		{
+			instance.Save(Call, i.ToString(), i);
+		}
+
+		DataPageView<int> pageView = instance.LoadPageView(Call);
+		pageView.PageSize = 1;
+		pageView.GetPage(0, Call);
+		pageView.PageIndex = 4;
+
+		pageView.PageSize = 2;
+
+		Assert.That(pageView.PageCount, Is.EqualTo(3));
+		Assert.That(pageView.PageIndex, Is.EqualTo(2));
+		Assert.That(pageView.HasNext, Is.False);
+		Assert.That(pageView.GetPage(pageView.PageIndex, Call), Has.Exactly(1).Items);
 	}
 
 	[Test, Description("DataInstance Index Paging")]
@@ -177,6 +264,44 @@ public class DataRepoTests : SerializeBaseTest
 		Assert.That(headerJson, Does.Contain("\"Name\":\"saved-key\""));
 	}
 
+	[Test]
+	public void LoadHeadersSkipsCorruptJsonHeader()
+	{
+		const string groupId = "CorruptJsonHeader";
+		var jsonRepo = new DataRepo(Path.Combine(TestPath, groupId), "Test", useJson: true);
+		jsonRepo.DeleteRepo();
+		jsonRepo.Save(groupId, "valid", 1, Call);
+		jsonRepo.Save(groupId, "corrupt", 2, Call);
+
+		string corruptPath = jsonRepo.GetDataPath(typeof(int), groupId, "corrupt");
+		File.WriteAllText(Path.Combine(corruptPath, SerializerFileJson.HeaderFileName), "{ invalid json");
+
+		List<SerializerHeader> headers = jsonRepo.LoadHeaders(typeof(int), groupId, Call);
+
+		Assert.That(headers.Select(header => header.Name), Is.EqualTo(new[] { "valid" }));
+		Assert.That(Call.Log.EntriesText(), Does.Contain("Exception loading repository header"));
+		Assert.That(Call.Log.EntriesText(), Does.Contain(Path.GetFileName(corruptPath)));
+	}
+
+	[Test]
+	public void LoadAllSkipsCorruptJsonItem()
+	{
+		const string groupId = "CorruptJsonItem";
+		var jsonRepo = new DataRepo(Path.Combine(TestPath, groupId), "Test", useJson: true);
+		jsonRepo.DeleteRepo();
+		jsonRepo.Save(groupId, "valid", 1, Call);
+		jsonRepo.Save(groupId, "corrupt", 2, Call);
+
+		string corruptPath = jsonRepo.GetDataPath(typeof(int), groupId, "corrupt");
+		File.WriteAllText(Path.Combine(corruptPath, SerializerFileJson.HeaderFileName), "{ invalid json");
+
+		DataItemCollection<int> items = jsonRepo.LoadAll<int>(Call, groupId);
+
+		Assert.That(items.Select(item => item.Key), Is.EqualTo(new[] { "valid" }));
+		Assert.That(Call.Log.EntriesText(), Does.Contain("Exception loading repository item"));
+		Assert.That(Call.Log.EntriesText(), Does.Contain(Path.GetFileName(corruptPath)));
+	}
+
 	[Test, Description("Indexed JSON bulk and page loading use the persisted index keys")]
 	public void IndexedJsonDataRepoPreservesKeys()
 	{
@@ -233,5 +358,50 @@ public class DataRepoTests : SerializeBaseTest
 		Assert.That(allItems, Has.Exactly(2).Items);
 		Assert.That(allItems[0].Value, Is.EqualTo(1));
 		Assert.That(allItems[1].Value, Is.EqualTo(2));
+	}
+
+	// ─── Index writes ────────────────────────────────────────────────────
+
+	/// <summary>Exposes the protected Save() so a failing write can be forced.</summary>
+	private class TestIndex(DataRepoInstance<int> instance) : DataRepoIndex<int>(instance)
+	{
+		public void SaveIndices(Indices indices) => Save(indices);
+	}
+
+	[Test, Description(
+		"The index was opened with FileMode.Create before anything was written, so a failure part " +
+		"way through truncated the last valid one instead of leaving it alone")]
+	public void FailedIndexSaveKeepsThePreviousIndex()
+	{
+		string groupId = "IndexSaveFailure";
+		var repo = new DataRepo(Path.Combine(TestPath, "IndexSaveFailure"), "Test");
+		repo.DeleteRepo();
+
+		DataRepoInstance<int> instance = repo.Open<int>(groupId, indexed: true);
+		instance.Save(Call, "first", 1);
+		instance.Save(Call, "second", 2);
+
+		var index = new TestIndex(instance);
+		long originalLength = new FileInfo(index.PrimaryIndexPath).Length;
+		Assert.That(originalLength, Is.GreaterThan(0), "The index has to exist to prove it survives.");
+
+		// BinaryWriter.Write(string) throws for a null, standing in for a full disk
+		DataRepoIndex<int>.Indices broken = new()
+		{
+			NextIndex = 3,
+			Items = [new(0, null!)],
+		};
+
+		Assert.Catch(() => index.SaveIndices(broken), "A failed index write has to reach the caller.");
+
+		Assert.That(new FileInfo(index.PrimaryIndexPath).Length, Is.EqualTo(originalLength),
+			"The previous index is untouched.");
+
+		Assert.That(Directory.GetFiles(instance.GroupPath, "*.sidx*"), Has.Length.EqualTo(1),
+			"No temp index files left behind.");
+
+		// Still loadable, with both keys in their original order
+		DataRepoIndex<int>.Indices reloaded = new TestIndex(instance).Load(Call);
+		Assert.That(reloaded.Items.Select(item => item.Key), Is.EqualTo(new[] { "first", "second" }));
 	}
 }

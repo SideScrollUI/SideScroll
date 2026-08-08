@@ -146,6 +146,8 @@ public class ListSeries
 	/// </summary>
 	public ListSeries(IList list, PropertyInfo xPropertyInfo, PropertyInfo yPropertyInfo)
 	{
+		ArgumentNullException.ThrowIfNull(list);
+
 		List = list;
 		XPropertyInfo = xPropertyInfo;
 		YPropertyInfo = yPropertyInfo;
@@ -168,6 +170,8 @@ public class ListSeries
 	/// <param name="seriesType">The aggregation method to use</param>
 	public ListSeries(string? name, IList list, string? xPropertyName, string? yPropertyName = null, SeriesType seriesType = SeriesType.Sum)
 	{
+		ArgumentNullException.ThrowIfNull(list);
+
 		Name = name;
 		List = list;
 		SeriesType = seriesType;
@@ -197,10 +201,11 @@ public class ListSeries
 	[MemberNotNull(nameof(List))]
 	private void LoadList(IList list)
 	{
-		List = list;
+		// List is non-nullable, so returning early on a null one left it null behind a
+		// [MemberNotNull] that suppressed every warning, and readers failed somewhere unrelated
+		ArgumentNullException.ThrowIfNull(list);
 
-		if (list == null)
-			return;
+		List = list;
 
 		Type? elementType = GetListElementType(list);
 		if (elementType == null)

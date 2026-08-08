@@ -28,7 +28,10 @@ public class ConcurrentRateLimiter : IDisposable
 	private readonly ConcurrentQueue<DateTime> _requestTimestamps = new();
 	private readonly CancellationTokenSource _cts = new();
 	private readonly Task? _tokenRefillTask;
-	private bool _disposed;
+	private int _disposeRequested;
+	private int _activeUsers;
+	private int _refillStopped;
+	private int _resourcesDisposed;
 
 	/// <summary>
 	/// Initializes a new instance of the ConcurrentRateLimiter class
@@ -52,15 +55,41 @@ public class ConcurrentRateLimiter : IDisposable
 	/// </summary>
 	public async Task<IDisposable> WaitAsync(CancellationToken cancellationToken = default)
 	{
-		if (_rateSemaphore != null)
+		ObjectDisposedException.ThrowIf(Volatile.Read(ref _disposeRequested) != 0, this);
+		Interlocked.Increment(ref _activeUsers);
+		if (Volatile.Read(ref _disposeRequested) != 0)
 		{
-			await _rateSemaphore.WaitAsync(cancellationToken);
-			_requestTimestamps.Enqueue(DateTime.UtcNow);
+			ReleaseUser();
+			throw new ObjectDisposedException(GetType().FullName);
 		}
 
-		await _concurrencySemaphore.WaitAsync(cancellationToken);
+		using CancellationTokenSource linkedCancellation =
+			CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, _cts.Token);
+		CancellationToken waitToken = linkedCancellation.Token;
 
-		return new ConcurrencyRelease(_concurrencySemaphore);
+		bool concurrencyAcquired = false;
+		try
+		{
+			await _concurrencySemaphore.WaitAsync(waitToken);
+			concurrencyAcquired = true;
+
+			if (_rateSemaphore != null)
+			{
+				await _rateSemaphore.WaitAsync(waitToken);
+				_requestTimestamps.Enqueue(DateTime.UtcNow);
+			}
+
+			return new ConcurrencyRelease(this);
+		}
+		catch
+		{
+			// Cancellation or disposal while waiting for a rate token must not strand
+			// the concurrency slot acquired above
+			if (concurrencyAcquired)
+				_concurrencySemaphore.Release();
+			ReleaseUser();
+			throw;
+		}
 	}
 
 	private async Task RefillTokensAsync(CancellationToken cancellationToken)
@@ -69,10 +98,11 @@ public class ConcurrentRateLimiter : IDisposable
 			return;
 
 		var stopwatch = Stopwatch.StartNew();
+		double earnedTokens = 0; // Carries the fractional remainder between cycles so the rate doesn't drift low
 
 		while (!cancellationToken.IsCancellationRequested)
 		{
-			// Dynamically adjust the delay: 
+			// Dynamically adjust the delay:
 			// - High RPS = shorter delay
 			// - Low RPS = longer delay (up to 100ms)
 			int delayMs = Math.Max(1, 1000 / rps); // Minimum 1ms delay for high RPS
@@ -80,19 +110,30 @@ public class ConcurrentRateLimiter : IDisposable
 
 			await Task.Delay(delayMs, cancellationToken);
 
-			double elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
-			int tokensToRelease = (int)(elapsedSeconds * rps); // Calculate tokens based on elapsed time
+			earnedTokens += stopwatch.Elapsed.TotalSeconds * rps; // Calculate tokens based on elapsed time
+			stopwatch.Restart();
+
+			// Cap earnedTokens at the number of outstanding requests to prevent accumulating excess tokens when idle
+			int queueCount = _requestTimestamps.Count;
+			if (earnedTokens > queueCount)
+			{
+				earnedTokens = queueCount;
+			}
+
+			int tokensToRelease = (int)earnedTokens;
 			if (tokensToRelease <= 0) continue;
 
-			stopwatch.Restart(); // Reset the stopwatch after releasing tokens
-
+			int releasedCount = 0;
 			for (int i = 0; i < tokensToRelease; i++)
 			{
 				if (!_requestTimestamps.TryDequeue(out _))
 					break;
 
 				_rateSemaphore?.Release();
+				releasedCount++;
 			}
+
+			earnedTokens -= releasedCount;
 		}
 	}
 
@@ -101,7 +142,7 @@ public class ConcurrentRateLimiter : IDisposable
 	/// </summary>
 	protected virtual void Dispose(bool disposing)
 	{
-		if (_disposed)
+		if (Interlocked.Exchange(ref _disposeRequested, 1) != 0)
 			return;
 
 		if (disposing)
@@ -116,15 +157,11 @@ public class ConcurrentRateLimiter : IDisposable
 			{
 				// Expected when cancellation occurs
 			}
-			_cts.Dispose();
-			_rateSemaphore?.Dispose();
-			_concurrencySemaphore.Dispose();
-
 			// Clear queue
 			_requestTimestamps.Clear();
+			Volatile.Write(ref _refillStopped, 1);
+			TryDisposeResources();
 		}
-
-		_disposed = true;
 	}
 
 	public void Dispose()
@@ -133,8 +170,38 @@ public class ConcurrentRateLimiter : IDisposable
 		GC.SuppressFinalize(this);
 	}
 
-	private class ConcurrencyRelease(SemaphoreSlim semaphore) : IDisposable
+	private void ReleaseLease()
 	{
-		public void Dispose() => semaphore.Release();
+		_concurrencySemaphore.Release();
+		ReleaseUser();
+	}
+
+	private void ReleaseUser()
+	{
+		if (Interlocked.Decrement(ref _activeUsers) == 0)
+			TryDisposeResources();
+	}
+
+	private void TryDisposeResources()
+	{
+		if (Volatile.Read(ref _disposeRequested) == 0 ||
+			Volatile.Read(ref _refillStopped) == 0 ||
+			Volatile.Read(ref _activeUsers) != 0 ||
+			Interlocked.Exchange(ref _resourcesDisposed, 1) != 0)
+			return;
+
+		_rateSemaphore?.Dispose();
+		_concurrencySemaphore.Dispose();
+		_cts.Dispose();
+	}
+
+	private sealed class ConcurrencyRelease(ConcurrentRateLimiter limiter) : IDisposable
+	{
+		private ConcurrentRateLimiter? _limiter = limiter;
+
+		public void Dispose()
+		{
+			Interlocked.Exchange(ref _limiter, null)?.ReleaseLease();
+		}
 	}
 }

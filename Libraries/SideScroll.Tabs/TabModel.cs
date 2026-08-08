@@ -112,6 +112,15 @@ public class TabModel
 	// public string? Id { get; set; } // todo: Unique key for bookmarks?
 
 	/// <summary>
+	/// Maximum number of items copied from an enumerable when adding it (default: 200,000)
+	/// </summary>
+	/// <remarks>
+	/// The copy is eager, so an unbounded or infinite sequence would never finish without this.
+	/// Kept in sync with <see cref="Lists.ListToString.MaxItems"/>, which caps the other branch
+	/// </remarks>
+	public static int MaxItems { get; set; } = 200_000;
+
+	/// <summary>
 	/// The display name for the tab
 	/// </summary>
 	public string Name { get; set; } = "<TabModel>";
@@ -525,8 +534,14 @@ public class TabModel
 		Type elementType = GetElementType(type);
 		Type genericType = typeof(ItemCollection<>).MakeGenericType(elementType);
 		IList list = (IList)Activator.CreateInstance(genericType)!;
+
+		// This copy is eager, so an unbounded or infinite sequence never finished without a cap.
+		// Check before adding so a limit of zero or less adds nothing, matching ListToString.Create()
 		foreach (var item in enumerable)
 		{
+			if (list.Count >= MaxItems)
+				break;
+
 			list.Add(item);
 		}
 		ItemLists.Add(list);
@@ -656,6 +671,7 @@ public class TabModel
 	{
 		TabBookmark tabBookmark = new();
 
+		// Every level decrements this, so it's what bounds the recursion for a cyclic object graph
 		depth--;
 		foreach (IList itemList in ItemLists)
 		{

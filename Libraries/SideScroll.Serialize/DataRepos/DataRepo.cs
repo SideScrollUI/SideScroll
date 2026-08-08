@@ -317,17 +317,27 @@ public class DataRepo
 		{
 			foreach (string filePath in Directory.EnumerateDirectories(groupPath))
 			{
-				var serializerFile = SerializerFile.Create(filePath, useJson: UseJson);
-				if (!serializerFile.Exists) continue;
-
-				T? obj = serializerFile.Load<T>(call, lazy);
-				if (obj != null)
+				try
 				{
-					string? savedName = serializerFile.LoadHeader(call).Name;
-					string key = !string.IsNullOrEmpty(savedName)
-						? savedName
-						: ObjectUtils.GetObjectId(obj) ?? obj.ToString() ?? "";
-					entries.Add(key, obj);
+					var serializerFile = SerializerFile.Create(filePath, useJson: UseJson);
+					if (!serializerFile.Exists) continue;
+
+					T? obj = serializerFile.Load<T>(call, lazy);
+					if (obj != null)
+					{
+						string? savedName = serializerFile.LoadHeader(call).Name;
+						string key = !string.IsNullOrEmpty(savedName)
+							? savedName
+							: ObjectUtils.GetObjectId(obj) ?? obj.ToString() ?? "";
+						entries.Add(key, obj);
+					}
+				}
+				catch (Exception e)
+				{
+					// Skip corrupt items so the remaining valid ones still load
+					call.Log.AddError("Exception loading repository item",
+						new Tag("Path", filePath),
+						new Tag("Exception", e));
 				}
 			}
 		}
@@ -349,16 +359,26 @@ public class DataRepo
 		{
 			foreach (string filePath in Directory.EnumerateDirectories(groupPath))
 			{
-				var serializerFile = SerializerFile.Create(filePath, useJson: UseJson);
-				if (!serializerFile.Exists) continue;
-
-				SerializerHeader header = serializerFile.LoadHeader(call);
-				if (UseJson && string.IsNullOrEmpty(header.Name))
+				try
 				{
-					object? obj = serializerFile.Load(call, expectedType: type);
-					header.Name = ObjectUtils.GetObjectId(obj) ?? obj?.ToString();
+					var serializerFile = SerializerFile.Create(filePath, useJson: UseJson);
+					if (!serializerFile.Exists) continue;
+
+					SerializerHeader header = serializerFile.LoadHeader(call);
+					if (UseJson && string.IsNullOrEmpty(header.Name))
+					{
+						object? obj = serializerFile.Load(call, expectedType: type);
+						header.Name = ObjectUtils.GetObjectId(obj) ?? obj?.ToString();
+					}
+					headers.Add(header);
 				}
-				headers.Add(header);
+				catch (Exception e)
+				{
+					// Skip corrupt headers so the remaining valid ones still load
+					call.Log.AddError("Exception loading repository header",
+						new Tag("Path", filePath),
+						new Tag("Exception", e));
+				}
 			}
 		}
 		return headers;
