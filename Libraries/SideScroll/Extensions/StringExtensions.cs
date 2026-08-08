@@ -132,7 +132,9 @@ public static class StringExtensions
 	/// </summary>
 	public static List<int> AllIndexesOf(this string str, string value)
 	{
-		ArgumentException.ThrowIfNullOrWhiteSpace(value);
+		// Only an empty value loops forever, IndexOf() returns the same index and the step is zero.
+		// Whitespace steps normally, and rejecting it made a search for " " throw
+		ArgumentException.ThrowIfNullOrEmpty(value);
 
 		var indexes = new List<int>();
 		for (int index = 0; ; index += value.Length)
@@ -150,7 +152,7 @@ public static class StringExtensions
 	/// </summary>
 	public static IEnumerable<int> AllIndexesOfYield(this string str, string value)
 	{
-		ArgumentException.ThrowIfNullOrWhiteSpace(value);
+		ArgumentException.ThrowIfNullOrEmpty(value);
 
 		for (int index = 0; ; index += value.Length)
 		{

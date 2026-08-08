@@ -75,7 +75,8 @@ public class TabFileImage : ITab, IFileTypeView
 
 			try
 			{
-				if (Path.ToLower().EndsWith(".svg"))
+				// Ordinal, matching SvgUtils.TryGetSvgImage() and the other extension comparisons
+				if (Path.EndsWith(".svg", StringComparison.OrdinalIgnoreCase))
 				{
 					if (SvgUtils.TryGetSvgImage(call, Path, out IImage? imageSource))
 					{

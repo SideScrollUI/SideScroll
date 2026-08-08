@@ -84,7 +84,9 @@ public static class SvgUtils
 	{
 		image = null;
 
-		if (!path.ToLower().EndsWith(".svg")) return false;
+		// Ordinal, ToLower() and EndsWith(string) both use the current culture, matching how
+		// FileTypeDetector and TabFile.ExtensionTypes compare extensions
+		if (!path.EndsWith(".svg", StringComparison.OrdinalIgnoreCase)) return false;
 
 		try
 		{

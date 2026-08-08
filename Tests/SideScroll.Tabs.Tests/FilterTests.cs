@@ -427,6 +427,44 @@ public class FilterTests : BaseTest
 		Assert.That(operatorNode.Children[1], Is.InstanceOf<FilterOperatorNode>());
 	}
 
+	private static string Describe(FilterNode? node) => node switch
+	{
+		null => "null",
+		FilterLeafNode leaf => leaf.TextUppercase!,
+		FilterNotNode not => "Not(" + Describe(not.Child) + ")",
+		FilterOperatorNode op => op.Operator + "(" + string.Join(", ", op.Children.Select(Describe)) + ")",
+		_ => node.GetType().Name,
+	};
+
+	[TestCase("a) b", "And(A), B)")]
+	[TestCase("500) failed", "And(500), FAILED)")]
+	[TestCase(")", ")")]
+	// BuildTree() left nests a chain of ANDs, which is what the "a b c" control below shows
+	[TestCase("a ) b ) c", "And(And(And(And(A, )), B), )), C)")]
+	[Description(
+		"A ')' with no '(' open used to end the expression, and the top level call discards the end " +
+		"index, so everything after it was dropped and the filter silently matched more than was asked for")]
+	public void Constructor_UnmatchedCloseParen_KeepsTheRestOfTheFilter(string filterText, string expected)
+	{
+		var filter = new Filter(filterText);
+
+		Assert.That(Describe(filter.RootNode), Is.EqualTo(expected));
+	}
+
+	[TestCase("a b", "And(A, B)")]
+	[TestCase("a b c", "And(And(A, B), C)")]
+	[TestCase("(a | b) c", "And(Or(A, B), C)")]
+	[TestCase("a (b", "And(A, B)")]
+	[TestCase("(foo | bar) & (baz | qux)", "And(Or(FOO, BAR), Or(BAZ, QUX))")]
+	[TestCase("-(foo | bar)", "Not(Or(FOO, BAR))")]
+	[Description("Control: grouping, negation, and an unmatched '(' are unchanged")]
+	public void Constructor_BalancedParens_ParseUnchanged(string filterText, string expected)
+	{
+		var filter = new Filter(filterText);
+
+		Assert.That(Describe(filter.RootNode), Is.EqualTo(expected));
+	}
+
 	#endregion
 
 	#region FilterLeafNode Matching Tests

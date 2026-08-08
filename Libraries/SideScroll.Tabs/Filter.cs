@@ -209,10 +209,15 @@ public class Filter
 		string filters = match.Groups["Filters"].Value;
 
 		// Parse into tree structure
-		RootNode = ParseExpression(filters, 0, out _);
+		RootNode = ParseExpression(filters, 0, out _, inSubExpression: false);
 	}
 
-	private static FilterNode? ParseExpression(string input, int startIndex, out int endIndex)
+	/// <param name="inSubExpression">
+	/// Whether a '(' is open. A ')' only closes a subexpression when one is, otherwise it's an
+	/// ordinary character in the term. Returning at an unmatched ')' silently dropped the rest of
+	/// the filter, so "500) failed" searched for "500" alone and matched more than was asked for
+	/// </param>
+	private static FilterNode? ParseExpression(string input, int startIndex, out int endIndex, bool inSubExpression)
 	{
 		List<FilterNode> nodes = [];
 		List<FilterOperator> operators = [];
@@ -243,7 +248,7 @@ public class Filter
 				}
 
 				// Parse subexpression
-				var subNode = ParseExpression(input, i + 1, out int closeParen);
+				var subNode = ParseExpression(input, i + 1, out int closeParen, inSubExpression: true);
 				if (subNode != null)
 				{
 					nodes.Add(negate ? new FilterNotNode { Child = subNode } : subNode);
@@ -251,7 +256,7 @@ public class Filter
 				i = closeParen + 1;
 				tokenStart = i;
 			}
-			else if (!insideQuotes && c == ')')
+			else if (!insideQuotes && c == ')' && inSubExpression)
 			{
 				// End of subexpression
 				AddToken(input, tokenStart, i, nodes);
