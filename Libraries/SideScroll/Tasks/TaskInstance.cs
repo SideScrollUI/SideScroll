@@ -551,16 +551,39 @@ public class TaskInstance : INotifyPropertyChanged, IDisposable
 		SetFinished();
 	}
 
-	/// <summary>Releases the cancellation source owned by a root task.</summary>
+	/// <summary>Releases the cancellation source owned by a root task, once its work has finished.</summary>
+	/// <remarks>
+	/// A source disposed out from under running work makes <see cref="CancellationTokenSource.Token"/>
+	/// and <see cref="CancellationToken.Register"/> throw, which a rate limited call hits when it
+	/// builds a linked source. An unfinished task releases it on completion instead. Sub-tasks share
+	/// this source, so they're disposed too and their <see cref="Cancel"/> stops touching it
+	/// </remarks>
 	public void Dispose()
 	{
 		if (_disposed)
 			return;
 
-		if (_ownsTokenSource)
-			_tokenSource.Dispose();
-
 		_disposed = true;
 		GC.SuppressFinalize(this);
+
+		lock (SubTasks)
+		{
+			foreach (TaskInstance subTask in SubTasks)
+			{
+				subTask.Dispose();
+			}
+		}
+
+		if (!_ownsTokenSource)
+			return;
+
+		if (Task is { IsCompleted: false } task)
+		{
+			task.ContinueWith(_ => _tokenSource.Dispose(), TaskScheduler.Default);
+		}
+		else
+		{
+			_tokenSource.Dispose();
+		}
 	}
 }

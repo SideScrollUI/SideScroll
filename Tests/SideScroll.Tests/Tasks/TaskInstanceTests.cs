@@ -231,4 +231,70 @@ public class TaskInstanceTests : BaseTest
 
 		Assert.DoesNotThrow(parent.Cancel);
 	}
+
+	// The source is released from a continuation, so it isn't disposed the moment Dispose() returns
+	private static bool SpinUntilSourceDisposed(TaskInstance task)
+	{
+		return SpinWait.SpinUntil(() =>
+		{
+			try
+			{
+				_ = task.TokenSource.Token;
+				return false;
+			}
+			catch (ObjectDisposedException)
+			{
+				return true;
+			}
+		}, TimeSpan.FromSeconds(5));
+	}
+
+	[Test]
+	[Description(
+		"Disposing the source out from under running work makes Token and Register throw for " +
+		"anything still in flight, so an unfinished task has to release it on completion instead")]
+	public void RunningTaskDefersDisposingItsCancellationSource()
+	{
+		using ManualResetEventSlim gate = new();
+		TaskInstance task = new()
+		{
+			Task = Task.Run(() => gate.Wait(TimeSpan.FromSeconds(5))),
+		};
+
+		task.Dispose();
+
+		Assert.DoesNotThrow(() => _ = task.TokenSource.Token,
+			"The source has to stay usable while the task is still running");
+
+		gate.Set();
+		Assert.That(task.Task.Wait(TimeSpan.FromSeconds(5)), Is.True);
+
+		Assert.That(SpinUntilSourceDisposed(task), Is.True,
+			"The source should be released once the task completes");
+	}
+
+	[Test]
+	public void CompletedTaskDisposesItsCancellationSourceImmediately()
+	{
+		TaskInstance task = new()
+		{
+			Task = Task.CompletedTask,
+		};
+
+		task.Dispose();
+
+		Assert.Throws<ObjectDisposedException>(() => _ = task.TokenSource.Token);
+	}
+
+	[Test]
+	[Description("Sub-tasks share the root's source, so cancelling one after the root is disposed would throw")]
+	public void DisposingARootMakesSubTaskCancelSafe()
+	{
+		TaskInstance parent = new();
+		TaskInstance child = parent.AddSubTask(new Call());
+
+		parent.Dispose();
+
+		Assert.DoesNotThrow(child.Cancel);
+	}
 }

@@ -455,12 +455,15 @@ public class TabInstance : IDisposable
 				Model.Clear();
 			}
 
-			// Cancel tasks
+			// Cancel tasks, then release the cancellation source each one owns. TaskInstance waits
+			// for anything still running before disposing it
 			foreach (TaskInstance taskInstance in Model.Tasks)
 			{
 				taskInstance.Cancel();
+				taskInstance.Dispose();
 			}
 			TaskInstance.Cancel();
+			TaskInstance.Dispose();
 		}
 
 		_disposed = true;

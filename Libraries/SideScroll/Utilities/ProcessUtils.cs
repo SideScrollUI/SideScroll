@@ -75,20 +75,22 @@ public static class ProcessUtils
 		if (url == null)
 			return;
 
+		// Each Process returned here holds a handle to the launched process that nothing else
+		// releases, and we only want it started
 		if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 		{
 			// UseShellExecute opens the default browser directly. It used to go through
 			// "cmd /c start {url}", which pasted the url into a shell command line where only '&'
 			// was escaped, so a url containing '|', '>', or '^' ran whatever followed it
-			Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+			Process.Start(new ProcessStartInfo(url) { UseShellExecute = true })?.Dispose();
 		}
 		else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 		{
-			Process.Start("xdg-open", url);
+			Process.Start("xdg-open", url)?.Dispose();
 		}
 		else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 		{
-			Process.Start("open", url);
+			Process.Start("open", url)?.Dispose();
 		}
 		else
 		{
@@ -135,15 +137,16 @@ public static class ProcessUtils
 					}
 				}
 
-				Process.Start("explorer.exe", argument);
+				// Only started, so release the handle the returned Process holds
+				Process.Start("explorer.exe", argument)?.Dispose();
 			}
 			else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 			{
-				Process.Start("open", folder);
+				Process.Start("open", folder)?.Dispose();
 			}
 			else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 			{
-				Process.Start("xdg-open", folder);
+				Process.Start("xdg-open", folder)?.Dispose();
 			}
 		}
 		catch (Exception e)
