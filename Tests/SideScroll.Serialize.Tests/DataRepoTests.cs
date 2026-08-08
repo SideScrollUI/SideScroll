@@ -172,7 +172,116 @@ public class DataRepoTests : SerializeBaseTest
 		Assert.That(pageView.PageCount, Is.EqualTo(3));
 		Assert.That(pageView.PageIndex, Is.EqualTo(2));
 		Assert.That(pageView.HasNext, Is.False);
-		Assert.That(pageView.GetPage(pageView.PageIndex, Call), Has.Exactly(1).Items);
+		Assert.That(pageView.GetPage(Call), Has.Exactly(1).Items);
+	}
+
+	// 3 items at a page size of 2 gives 2 pages, so the last index is 1
+	private DataPageView<int> PageView(bool indexed, int itemCount = 3, int pageSize = 2)
+	{
+		DataRepoInstance<int> instance = OpenRepo(indexed);
+		for (int i = 0; i < itemCount; i++)
+		{
+			instance.Save(Call, i.ToString(), i);
+		}
+
+		DataPageView<int> pageView = instance.LoadPageView(Call);
+		pageView.PageSize = pageSize;
+		return pageView;
+	}
+
+	[TestCase(false)]
+	[TestCase(true)]
+	[Description("Nothing is loaded until a page is asked for, so the index starts as null rather than -1")]
+	public void DataPageViewStartsWithNoPageIndex(bool indexed)
+	{
+		DataPageView<int> pageView = PageView(indexed);
+
+		Assert.That(pageView.PageIndex, Is.Null);
+		Assert.That(pageView.HasPrevious, Is.False);
+	}
+
+	[TestCase(false)]
+	[TestCase(true)]
+	[Description(
+		"PageCount used to count the paths for an indexed instance while GetPage() paged the index, " +
+		"and both only after GetPage() had populated them, so HasNext was false on a loaded repository")]
+	public void DataPageViewCountsItemsBeforeAnyPageIsLoaded(bool indexed)
+	{
+		DataPageView<int> pageView = PageView(indexed);
+
+		Assert.That(pageView.ItemCount, Is.EqualTo(3));
+		Assert.That(pageView.PageCount, Is.EqualTo(2));
+		Assert.That(pageView.HasNext, Is.True);
+	}
+
+	[TestCase(false)]
+	[TestCase(true)]
+	[Description("GetPage() loads the first page, which Next() only did because the index started below zero")]
+	public void DataPageViewGetPageLoadsTheFirstPage(bool indexed)
+	{
+		DataPageView<int> pageView = PageView(indexed);
+
+		Assert.That(pageView.GetPage(Call), Has.Exactly(2).Items);
+		Assert.That(pageView.PageIndex, Is.EqualTo(0));
+
+		// A second call stays put rather than advancing
+		Assert.That(pageView.GetPage(Call), Has.Exactly(2).Items);
+		Assert.That(pageView.PageIndex, Is.EqualTo(0));
+	}
+
+	[TestCase(false)]
+	[TestCase(true)]
+	[Description("Next() and Previous() from an unset index both land on the first page")]
+	public void DataPageViewNavigatesFromNoPageIndex(bool indexed)
+	{
+		Assert.That(PageView(indexed).Next(Call), Has.Exactly(2).Items);
+		Assert.That(PageView(indexed).Previous(Call), Has.Exactly(2).Items);
+	}
+
+	[TestCase(false)]
+	[TestCase(true)]
+	public void DataPageViewRejectsANegativePageIndex(bool indexed)
+	{
+		DataPageView<int> pageView = PageView(indexed);
+
+		ArgumentOutOfRangeException propertyException = Assert.Throws<ArgumentOutOfRangeException>(
+			() => pageView.PageIndex = -1)!;
+		Assert.That(propertyException.ParamName, Is.EqualTo(nameof(DataPageView<int>.PageIndex)));
+
+		ArgumentOutOfRangeException pageException = Assert.Throws<ArgumentOutOfRangeException>(
+			() => pageView.GetPage(-1, Call))!;
+		Assert.That(pageException.ParamName, Is.EqualTo("page"));
+	}
+
+	[TestCase(false)]
+	[TestCase(true)]
+	[Description("HasNext compared PageIndex + 1, which overflows to int.MinValue and reported a page that isn't there")]
+	public void DataPageViewHandlesAnOverflowingPageIndex(bool indexed)
+	{
+		DataPageView<int> pageView = PageView(indexed);
+		pageView.PageIndex = int.MaxValue;
+
+		Assert.That(pageView.HasNext, Is.False);
+		Assert.That(pageView.GetPage(int.MaxValue, Call), Is.Empty);
+
+		// Steps back to the last page rather than incrementing past int.MaxValue
+		Assert.That(pageView.Next(Call), Has.Exactly(1).Items);
+		Assert.That(pageView.PageIndex, Is.EqualTo(1));
+	}
+
+	[TestCase(false)]
+	[TestCase(true)]
+	[Description("Ascending is mutable, and keeping the cached paths left unindexed pages in the old order")]
+	public void DataPageViewReversingDirectionReordersPages(bool indexed)
+	{
+		DataPageView<int> pageView = PageView(indexed, itemCount: 4, pageSize: 2);
+
+		List<int> ascending = [.. pageView.GetPage(Call).Select(i => i.Value)];
+
+		pageView.Ascending = false;
+		List<int> descending = [.. pageView.GetPage(Call).Select(i => i.Value)];
+
+		Assert.That(descending, Is.Not.EqualTo(ascending));
 	}
 
 	[Test, Description("DataInstance Index Paging")]

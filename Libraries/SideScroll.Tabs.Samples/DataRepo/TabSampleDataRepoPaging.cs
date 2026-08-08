@@ -54,7 +54,9 @@ public class TabSampleDataRepoPaging : ITab
 
 			_pageView = _dataRepoItems.LoadPageView(call);
 			_pageView!.PageSize = 10;
-			_sampleItems = [.. _pageView?.Next(call).Select(d => d.Value) ?? []];
+
+			// GetPage() for the first page, Next() only reached it because the index started below zero
+			_sampleItems = [.. _pageView?.GetPage(call).Select(d => d.Value) ?? []];
 		}
 
 		private void LoadPrevious(Call call)

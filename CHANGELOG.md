@@ -75,6 +75,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `ProcessUtils.OpenBrowser()` and `OpenFolder()` discarding the `Process` returned by every `Process.Start()` call, leaving a handle to each launched process for the finalizer to release
 - Fixed `TabAvaloniaEdit.SetFormatted()` assigning `TextType` after `Text`, so the JSON and XML highlighting wasn't applied along with the text and had to wait for the theme change that fires when the editor is attached. A failure while formatting also left the previous type applied to the plain text it fell back to
 - Fixed `TabAvaloniaEdit` keeping the syntax highlighting from its previous contents once the text stopped matching it, since nothing cleared `SyntaxHighlighting` when the type fell back to `Default`
+- Fixed negative and overflowing repository page indexes returning the first or another incorrect page; invalid negative requests are rejected and oversized offsets now return an empty page without overflowing
 
 ### Changed
 
