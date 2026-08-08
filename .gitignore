@@ -13,6 +13,7 @@
 *.zip
 *.DS_Store
 .idea/
+.nuget-packages/
 .vs/
 bin/
 obj/

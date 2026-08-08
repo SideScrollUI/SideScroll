@@ -44,19 +44,29 @@ public enum TextType
 	Json,
 	/// <summary>XML syntax highlighting is applied.</summary>
 	Xml,
+	/// <summary>A registered <see cref="TextHighlighter"/> is applied.</summary>
+	Custom,
 }
 
 /// <summary>
 /// A read-only or editable syntax-highlighted text editor supporting JSON and XML highlighting,
-/// monospace font, line numbers, and optional property data binding.
+/// additional formats registered as <see cref="Highlighters"/>, monospace font, line numbers,
+/// and optional property data binding.
 /// </summary>
 public class TabAvaloniaEdit : Border, IDisposable
 {
 	/// <summary>The maximum file size in bytes that is loaded automatically without truncation.</summary>
 	public const int MaxAutoLoadSize = 1_000_000;
 
+	/// <summary>Gets the additional formats to highlight, matched in order against the file extension and text.</summary>
+	/// <remarks>Add a <see cref="TextHighlighter"/> at startup to highlight a format everywhere it's shown</remarks>
+	public static List<TextHighlighter> Highlighters { get; } = [];
+
 	/// <summary>Gets or sets the file path last loaded into this editor.</summary>
 	public string? Path { get; set; }
+
+	/// <summary>Gets the matched custom highlighter, applied when <see cref="TextType"/> is <see cref="TextType.Custom"/>.</summary>
+	public TextHighlighter? Highlighter { get; private set; }
 
 	/// <summary>Gets or sets the list property this editor is bound to when editing is enabled.</summary>
 	public ListProperty? ListProperty { get; set; }
@@ -141,9 +151,26 @@ public class TabAvaloniaEdit : Border, IDisposable
 		set
 		{
 			TextEditor.Text = value;
+			SelectHighlighter(value);
 			UpdateTheme();
 			// UpdateLineNumbers(); // Enable for all?
 		}
+	}
+
+	/// <summary>
+	/// Matches <see cref="Highlighters"/> against the loaded <see cref="Path"/>'s extension and the text,
+	/// switching <see cref="TextType"/> to <see cref="TextType.Custom"/> on a match
+	/// </summary>
+	/// <remarks>Json and Xml are already handled, so only the default and a previous match are replaced</remarks>
+	private void SelectHighlighter(string text)
+	{
+		if (TextType is not TextType.Default and not TextType.Custom)
+			return;
+
+		string? extension = Path != null ? System.IO.Path.GetExtension(Path) : null;
+
+		Highlighter = Highlighters.Find(highlighter => highlighter.Matches(extension, text));
+		TextType = Highlighter != null ? TextType.Custom : TextType.Default;
 	}
 
 	private void UpdateTheme()
@@ -161,6 +188,16 @@ public class TabAvaloniaEdit : Border, IDisposable
 		{
 			EnableMonospace();
 			EnableXmlSyntaxHighlighting();
+		}
+		else if (TextType == TextType.Custom && Highlighter != null)
+		{
+			EnableMonospace();
+			Highlighter.Apply(this);
+		}
+		else
+		{
+			// Text can stop matching a highlighter, so the previous one has to be cleared
+			TextEditor.SyntaxHighlighting = null;
 		}
 	}
 
@@ -211,19 +248,20 @@ public class TabAvaloniaEdit : Border, IDisposable
 	}
 
 	/// <summary>Attempts to format the text as JSON or XML, falling back to plain text. Sets <see cref="TextType"/> to enable syntax highlighting.</summary>
+	/// <remarks><see cref="TextType"/> has to be assigned first, since setting <see cref="Text"/> applies it</remarks>
 	public void SetFormatted(string text)
 	{
 		try
 		{
 			if (JsonUtils.TryFormatUnescaped(text, out string? json))
 			{
-				Text = json;
 				TextType = TextType.Json;
+				Text = json;
 			}
 			else if (XmlUtils.TryFormat(text, out string? formatted) || text.StartsWith("<?xml", StringComparison.Ordinal))
 			{
-				Text = formatted ?? text;
 				TextType = TextType.Xml;
+				Text = formatted ?? text;
 			}
 			else
 			{
@@ -232,6 +270,7 @@ public class TabAvaloniaEdit : Border, IDisposable
 		}
 		catch (Exception)
 		{
+			TextType = TextType.Default;
 			Text = text;
 		}
 	}
