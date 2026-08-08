@@ -8,8 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added `HttpUtils.IsTransient()` for identifying status codes worth retrying (408, 429, 500, 502, 503, 504)
 
 ### Fixed
+- Fixed `HttpCall` returning error responses as content, which let `HttpCachedCall` cache a 404 or 500 permanently. A non success status throws now, and `HttpUtils.GetStringAsync()` returns null instead, matching what it already documented and did for every other failure
+- Fixed HTTP retries treating every failure alike. A permanent error such as a 404 fails immediately while a transient one such as a 503 keeps retrying, in `GetBytesAsync()` and `GetHeadAsync()` alike, and the status code is kept on the exception thrown after the last attempt so callers can tell a retried 503 apart from a network failure
 
 ### Changed
 - Updated every project from .NET 8 to .NET 10, including the `net10.0-browser` WebAssembly targets, so the packages now require a .NET 10 runtime. `Microsoft.Extensions.Caching.Memory` and `Microsoft.JSInterop` moved to 10.0.11, and `SideScroll.Tabs` no longer references the `System.Text.Json` package, which .NET 10 ships in the shared framework. Building the browser projects from source needs the `wasm-tools` workload rather than `wasm-tools-net8`

@@ -189,4 +189,87 @@ public class HttpCallTests : BaseTest
 		Assert.That(viewResponse.Response, Is.Null);
 		Assert.Throws<ObjectDisposedException>(() => _ = response.Content.ReadAsStringAsync().Result);
 	}
+
+	// ─── Status codes ────────────────────────────────────────────────────
+
+	private static HttpResponseMessage Status(HttpStatusCode statusCode) => new(statusCode)
+	{
+		Content = new StringContent("error body", Encoding.UTF8),
+	};
+
+	[Test, Description(
+		"An error body used to be returned as content, which HttpCachedCall would then cache " +
+		"permanently, with no way to replace the entry")]
+	public void AnErrorStatusThrowsRatherThanReturningItsBody()
+	{
+		StubHandler handler = new(_ => Status(HttpStatusCode.NotFound));
+		using HttpClient client = new(handler);
+		var httpCall = new StubHttpCall(new Call(), client);
+
+		Assert.ThrowsAsync<HttpRequestException>(
+			async () => await httpCall.GetBytesAsync("http://localhost/x"));
+	}
+
+	[Test, Description("A permanent error can't succeed by being asked again, so it stops at the first attempt")]
+	public void APermanentErrorIsNotRetried()
+	{
+		StubHandler handler = new(_ => Status(HttpStatusCode.NotFound));
+		using HttpClient client = new(handler);
+		var httpCall = new StubHttpCall(new Call(), client);
+
+		Assert.ThrowsAsync<HttpRequestException>(
+			async () => await httpCall.GetBytesAsync("http://localhost/x"));
+
+		Assert.That(handler.RequestCount, Is.EqualTo(1));
+	}
+
+	[Test, Description("A transient error keeps retrying, and the status survives the final throw")]
+	public void ATransientErrorIsRetriedAndKeepsItsStatus()
+	{
+		StubHandler handler = new(_ => Status(HttpStatusCode.ServiceUnavailable));
+		using HttpClient client = new(handler);
+		var httpCall = new StubHttpCall(new Call(), client);
+
+		HttpRequestException exception = Assert.ThrowsAsync<HttpRequestException>(
+			async () => await httpCall.GetBytesAsync("http://localhost/x"))!;
+
+		Assert.That(handler.RequestCount, Is.EqualTo(HttpCall.MaxAttempts));
+		Assert.That(exception.StatusCode, Is.EqualTo(HttpStatusCode.ServiceUnavailable),
+			"Callers check the status to tell a retried 503 apart from a network failure");
+	}
+
+	[Test, Description("A transient error that then succeeds returns the body it eventually got")]
+	public async Task ATransientErrorRecoversOnARetry()
+	{
+		int served = 0;
+		StubHandler handler = new(_ => ++served == 1 ? Status(HttpStatusCode.ServiceUnavailable) : Ok("contents"));
+		using HttpClient client = new(handler);
+		var httpCall = new StubHttpCall(new Call(), client);
+
+		byte[] bytes = await httpCall.GetBytesAsync("http://localhost/x");
+
+		Assert.That(Encoding.UTF8.GetString(bytes), Is.EqualTo("contents"));
+		Assert.That(handler.RequestCount, Is.EqualTo(2));
+	}
+
+	[TestCase(HttpStatusCode.RequestTimeout, true)]
+	[TestCase(HttpStatusCode.TooManyRequests, true)]
+	[TestCase(HttpStatusCode.InternalServerError, true)]
+	[TestCase(HttpStatusCode.BadGateway, true)]
+	[TestCase(HttpStatusCode.ServiceUnavailable, true)]
+	[TestCase(HttpStatusCode.GatewayTimeout, true)]
+	[TestCase(HttpStatusCode.NotFound, false)]
+	[TestCase(HttpStatusCode.Unauthorized, false)]
+	[TestCase(HttpStatusCode.BadRequest, false)]
+	[TestCase(HttpStatusCode.OK, false)]
+	public void TransientStatusCodesAreIdentified(HttpStatusCode statusCode, bool expected)
+	{
+		Assert.That(HttpUtils.IsTransient(statusCode), Is.EqualTo(expected));
+	}
+
+	[Test]
+	public void AnUnknownStatusIsNotTransient()
+	{
+		Assert.That(HttpUtils.IsTransient(null), Is.False);
+	}
 }
