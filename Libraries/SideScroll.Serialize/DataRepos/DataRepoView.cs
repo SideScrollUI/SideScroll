@@ -177,22 +177,54 @@ public class DataRepoView<T> : DataRepoInstance<T>
 /// </summary>
 public class DataRepoViewCollection<T>(DataRepo dataRepo, string defaultGroupId, string? orderByMemberName = null)
 {
-	private readonly Dictionary<string, DataRepoView<T>> _dataRepoViews = [];
+	// Each view holds every item loaded for its group, and a caller can pass any groupId, so these
+	// are held weakly. A view can't be evicted while it's in use without a later Load() handing out
+	// a second one for the same group, which would mirror the same repository into its own Items
+	private readonly Dictionary<string, WeakReference<DataRepoView<T>>> _dataRepoViews = [];
 
 	/// <summary>
-	/// Loads a data repository view for the specified group, using a cached instance if available
+	/// Loads a data repository view for the specified group, reusing the existing instance while
+	/// anything still references it
 	/// </summary>
 	public DataRepoView<T> Load(Call call, string? groupId = null)
 	{
 		groupId ??= defaultGroupId;
 		lock (_dataRepoViews)
 		{
-			if (_dataRepoViews.TryGetValue(groupId, out DataRepoView<T>? existingDataRepo)) return existingDataRepo;
+			if (_dataRepoViews.TryGetValue(groupId, out WeakReference<DataRepoView<T>>? existingReference) &&
+				existingReference.TryGetTarget(out DataRepoView<T>? existingDataRepo))
+			{
+				return existingDataRepo;
+			}
 
 			var dataRepoView = dataRepo.LoadView<T>(call, groupId, orderByMemberName);
 
-			_dataRepoViews.Add(groupId, dataRepoView);
+			_dataRepoViews[groupId] = new WeakReference<DataRepoView<T>>(dataRepoView);
+
+			// Groups that have been collected only leave their key behind, drop those too
+			PruneCollected();
+
 			return dataRepoView;
+		}
+	}
+
+	private void PruneCollected()
+	{
+		List<string>? collected = null;
+		foreach ((string groupId, WeakReference<DataRepoView<T>> reference) in _dataRepoViews)
+		{
+			if (!reference.TryGetTarget(out _))
+			{
+				collected ??= [];
+				collected.Add(groupId);
+			}
+		}
+
+		if (collected == null) return;
+
+		foreach (string groupId in collected)
+		{
+			_dataRepoViews.Remove(groupId);
 		}
 	}
 }

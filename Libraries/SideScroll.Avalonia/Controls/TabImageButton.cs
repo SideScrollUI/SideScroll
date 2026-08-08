@@ -118,25 +118,7 @@ public class TabImageButton : Button, IDisposable
 			Background = Brushes.Transparent, // Catch clicks
 		};
 
-		if (ImageResource.ResourceType == "svg")
-		{
-			if (updateIconColors)
-			{
-				_defaultImage = SvgUtils.TryGetSvgColorImage(ImageResource);
-			}
-			else
-			{
-				_defaultImage = SvgUtils.GetSvgImage(ImageResource);
-			}
-		}
-		else
-		{
-			Stream stream = ImageResource.Stream;
-			// For .ico files with multiple resolutions, decode to the target size
-			// This selects the closest matching resolution from the icon
-			int targetSize = (int)IconSize;
-			_defaultImage = Bitmap.DecodeToWidth(stream, targetSize);
-		}
+		_defaultImage = CreateDefaultImage();
 
 		_imageControl = new()
 		{
@@ -177,22 +159,71 @@ public class TabImageButton : Button, IDisposable
 	/// <summary>Replaces the button icon with the given resource and clears any cached recolored image variants.</summary>
 	public void SetImage(IResourceView imageResource)
 	{
+		// Uses the previous resource to decide what this button owns, so it runs before the swap
+		ReleaseImages();
+
 		ImageResource = imageResource;
 
+		UpdateImage();
+	}
+
+	private IImage? CreateDefaultImage()
+	{
+		if (ImageResource.ResourceType == "svg")
+		{
+			return UpdateIconColors
+				? SvgUtils.TryGetSvgColorImage(ImageResource)
+				: SvgUtils.GetSvgImage(ImageResource);
+		}
+
+		// Stream opens a new manifest resource stream on each access, so this one is ours
+		using Stream stream = ImageResource.Stream;
+
+		// For .ico files with multiple resolutions, decode to the target size
+		// This selects the closest matching resolution from the icon
+		return Bitmap.DecodeToWidth(stream, (int)IconSize);
+	}
+
+	/// <summary>
+	/// Whether <see cref="_defaultImage"/> was created for this button alone.
+	/// </summary>
+	/// <remarks>
+	/// <see cref="SvgUtils"/> caches recolored SVGs and hands the same instance to every button
+	/// asking for the same resource and color, so disposing one would break the others. Only the
+	/// uncached images (a decoded bitmap, or an SVG loaded without recoloring) belong to us
+	/// </remarks>
+	private bool OwnsDefaultImage => ImageResource.ResourceType != "svg" || !UpdateIconColors;
+
+	private void ReleaseImages()
+	{
+		if (OwnsDefaultImage)
+		{
+			if (_imageControl.Source == _defaultImage)
+			{
+				_imageControl.Source = null;
+			}
+			(_defaultImage as IDisposable)?.Dispose();
+		}
+
 		_defaultImage = null;
+
+		// Always cached by SvgUtils, or an alias of the default image
 		_highlightImage = null;
 		_disabledImage = null;
-
-		UpdateImage();
 	}
 
 	/// <summary>Refreshes the displayed icon, switching to the disabled variant when <see cref="IsEnabled"/> is <c>false</c>.</summary>
 	protected void UpdateImage()
 	{
-		if (ImageResource.ResourceType != "svg" || !UpdateIconColors) return;
+		_defaultImage ??= CreateDefaultImage();
 
-		_defaultImage ??= SvgUtils.TryGetSvgColorImage(ImageResource);
-		var source = IsEnabled ? _defaultImage : (DisabledImage ?? _defaultImage);
+		// Only recolored SVGs have a disabled variant, everything else keeps its default image
+		IImage? source = _defaultImage;
+		if (!IsEnabled && UpdateIconColors && DisabledImage is { } disabledImage)
+		{
+			source = disabledImage;
+		}
+
 		if (source != _imageControl.Source)
 		{
 			_imageControl.Source = source;
@@ -422,10 +453,8 @@ public class TabImageButton : Button, IDisposable
 			Click -= ToolbarButton_Click;
 			ActualThemeVariantChanged -= ToolbarButton_ActualThemeVariantChanged;
 
-			// Dispose images if they're disposable
-			(_defaultImage as IDisposable)?.Dispose();
-			(_highlightImage as IDisposable)?.Dispose();
-			(_disabledImage as IDisposable)?.Dispose();
+			// Only disposes the images this button owns, the recolored ones are shared
+			ReleaseImages();
 		}
 
 		_disposed = true;
