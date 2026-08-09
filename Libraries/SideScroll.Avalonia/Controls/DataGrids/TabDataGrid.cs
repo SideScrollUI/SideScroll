@@ -907,21 +907,32 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	/// <summary>Returns the item that matches the list's or model's configured <c>DefaultSelectedItem</c>, or <c>null</c> if none is configured or found.</summary>
 	protected object? GetDefaultSelectedItem()
 	{
-		string defaultItemText;
-		if (List is IItemCollection itemCollection && itemCollection.DefaultSelectedItem is { } defaultItem)
-		{
-			defaultItemText = defaultItem.ToUniqueString()!;
-		}
-		else if (TabModel.DefaultSelectedItem is { } defaultModelItem)
-		{
-			defaultItemText = defaultModelItem.ToUniqueString()!;
-		}
-		else
-		{
-			return null;
-		}
+		object? defaultItem = (List is IItemCollection itemCollection ? itemCollection.DefaultSelectedItem : null)
+			?? TabModel.DefaultSelectedItem;
 
-		foreach (object obj in CollectionView!)
+		return FindMatchingItem(defaultItem, CollectionView!);
+	}
+
+	/// <summary>
+	/// Finds the item matching <paramref name="defaultItem"/> by unique string, or null when there
+	/// is no default or it can't be identified
+	/// </summary>
+	/// <remarks>
+	/// Separated from <see cref="GetDefaultSelectedItem"/> so the matching rule can be tested
+	/// without an Avalonia Application, which constructing a <see cref="TabDataGrid"/> requires
+	/// </remarks>
+	internal static object? FindMatchingItem(object? defaultItem, IEnumerable items)
+	{
+		if (defaultItem == null)
+			return null;
+
+		// ToUniqueString() returns null when nothing readable identifies the object. Comparing an
+		// unidentifiable default against the rows matched the first row that was also
+		// unidentifiable, selecting an unrelated one instead of none
+		if (defaultItem.ToUniqueString() is not { } defaultItemText)
+			return null;
+
+		foreach (object obj in items)
 		{
 			if (obj.ToUniqueString() == defaultItemText)
 				return obj;
@@ -1243,6 +1254,10 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		DataGrid.ColumnReordered -= DataGrid_ColumnReordered;
 		DataGrid.EffectiveViewportChanged -= DataGrid_EffectiveViewportChanged;
 		DataGrid.Sorting -= DataGrid_Sorting;
+
+		// Added through AddHandler() rather than +=, which is why it was the one subscription
+		// this method didn't undo. The handler captures this control
+		DataGrid.RemoveHandler(KeyDownEvent, DataGrid_KeyDown);
 
 		DataGrid.ItemsSource = null;
 
