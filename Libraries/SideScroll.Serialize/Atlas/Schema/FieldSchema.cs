@@ -32,6 +32,7 @@ public class FieldSchema : MemberSchema
 
 		Type = FieldInfo.FieldType;
 		NonNullableType = Type.GetNonNullableType();
+		CanAssignNull = IsDeclaredNullable(FieldInfo);
 
 		IsReadable = GetIsReadable();
 		IsPrivate = GetIsPrivate(FieldInfo);

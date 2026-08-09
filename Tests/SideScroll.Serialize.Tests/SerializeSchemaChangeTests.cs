@@ -235,4 +235,60 @@ public class SerializeSchemaChangeTests : SerializeBaseTest
 		Assert.That(output.StringField, Is.EqualTo("field"));
 		Assert.That(output.StringProperty, Is.EqualTo("property"));
 	}
+
+	public class NullableDefaults
+	{
+		public string? StringField = "field default";
+		public string? StringProperty { get; set; } = "property default";
+		public List<int>? ListProperty { get; set; } = [1, 2, 3];
+		public object? ObjectProperty { get; set; } = "object default";
+		public int? NumberProperty { get; set; } = 7;
+	}
+
+	[Test, Description(
+		"Reference type nullability is erased, so string and string? are the same Type and the " +
+		"Nullable<T> check discarded every serialized null, leaving the constructor's default. " +
+		"MemberNullToNonNull above covers the other half, where a non-nullable member keeps its default")]
+	public void NullableMembersRoundTripNull()
+	{
+		NullableDefaults input = new()
+		{
+			StringField = null,
+			StringProperty = null,
+			ListProperty = null,
+			ObjectProperty = null,
+			NumberProperty = null,
+		};
+
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<NullableDefaults>(Call);
+
+		Assert.That(output.StringField, Is.Null);
+		Assert.That(output.StringProperty, Is.Null);
+		Assert.That(output.ListProperty, Is.Null);
+		Assert.That(output.ObjectProperty, Is.Null);
+		Assert.That(output.NumberProperty, Is.Null);
+	}
+
+	[Test, Description("Control: values still round trip, so the null handling isn't clearing everything")]
+	public void NullableMembersRoundTripValues()
+	{
+		NullableDefaults input = new()
+		{
+			StringField = "saved field",
+			StringProperty = "saved property",
+			ListProperty = [4, 5],
+			ObjectProperty = "saved object",
+			NumberProperty = 9,
+		};
+
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<NullableDefaults>(Call);
+
+		Assert.That(output.StringField, Is.EqualTo("saved field"));
+		Assert.That(output.StringProperty, Is.EqualTo("saved property"));
+		Assert.That(output.ListProperty, Is.EqualTo(new[] { 4, 5 }));
+		Assert.That(output.ObjectProperty, Is.EqualTo("saved object"));
+		Assert.That(output.NumberProperty, Is.EqualTo(9));
+	}
 }

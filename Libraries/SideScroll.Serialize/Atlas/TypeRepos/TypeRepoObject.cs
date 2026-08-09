@@ -56,7 +56,7 @@ public class TypeRepoObject : TypeRepo
 			if (FieldSchema.IsReadable)
 			{
 				object? valueObject = TypeRepo!.LoadObjectRef();
-				if (valueObject != null || FieldSchema.IsNullable)
+				if (valueObject != null || FieldSchema.CanAssignNull)
 				{
 					FieldSchema.FieldInfo.SetValue(obj, valueObject);
 				}
@@ -132,7 +132,7 @@ public class TypeRepoObject : TypeRepo
 					if (Equals(valueObject, currentValue))
 						return;
 				}
-				if (valueObject != null || PropertySchema.IsNullable)
+				if (valueObject != null || PropertySchema.CanAssignNull)
 				{
 					PropertySchema.PropertyInfo.SetValue(obj, valueObject);
 				}

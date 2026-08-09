@@ -48,6 +48,7 @@ public class PropertySchema : MemberSchema
 
 		Type = PropertyInfo.PropertyType;
 		NonNullableType = Type.GetNonNullableType();
+		CanAssignNull = IsDeclaredNullable(PropertyInfo);
 		IsReadable = GetIsReadable();
 		IsWriteable = IsReadable && PropertyInfo.CanWrite; // typeIndex >= 0
 		IsPrivate = GetIsPrivate(PropertyInfo);

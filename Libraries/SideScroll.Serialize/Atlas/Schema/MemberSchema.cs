@@ -34,9 +34,32 @@ public class MemberSchema(TypeSchema typeSchema, string name, int typeIndex = -1
 	public Type? NonNullableType { get; protected set; }
 
 	/// <summary>
-	/// Gets whether the member type is nullable
+	/// Gets whether the member type is a <see cref="Nullable{T}"/>
 	/// </summary>
 	public bool IsNullable => Type != NonNullableType;
+
+	/// <summary>
+	/// Gets whether a serialized null is assigned to the member, or discarded to keep its default
+	/// </summary>
+	/// <remarks>
+	/// Declared nullability rather than the runtime type. Reference type nullability is erased, so
+	/// <c>string</c> and <c>string?</c> are the same <see cref="System.Type"/> and
+	/// <see cref="Nullable{T}"/> only covers value types. Loading checked
+	/// <see cref="IsNullable"/> alone, so an explicit null was discarded for every string,
+	/// collection, and object member and it kept whatever the constructor assigned.
+	/// Members that aren't declared nullable still keep their default, which is what lets a file
+	/// written from a nullable schema load into a non-nullable one
+	/// </remarks>
+	public bool CanAssignNull { get; protected set; }
+
+	// NullabilityInfoContext isn't thread safe, so it isn't shared. This runs once per member when
+	// the schema is built. Unknown means the declaring assembly has no nullable annotations, where
+	// keeping the default preserves what loading did before
+	private protected static bool IsDeclaredNullable(FieldInfo fieldInfo) =>
+		new NullabilityInfoContext().Create(fieldInfo).WriteState == NullabilityState.Nullable;
+
+	private protected static bool IsDeclaredNullable(PropertyInfo propertyInfo) =>
+		new NullabilityInfoContext().Create(propertyInfo).WriteState == NullabilityState.Nullable;
 
 	/// <summary>
 	/// Gets or sets whether the member is marked as private data
