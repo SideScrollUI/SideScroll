@@ -41,9 +41,9 @@ public class HttpCall(Call call)
 	}
 
 	/// <summary>Fetches <paramref name="uri"/> and returns the raw response bytes.</summary>
-	public virtual async Task<byte[]> GetBytesAsync(string uri)
+	public virtual async Task<byte[]> GetBytesAsync(string uri, string? accept = null)
 	{
-		return await GetResponseAsync(uri);
+		return await GetResponseAsync(uri, accept);
 	}
 
 	private async Task<byte[]> GetResponseAsync(string uri, string? accept = null)
@@ -54,7 +54,9 @@ public class HttpCall(Call call)
 		{
 			Accept = accept,
 		};
-		HttpClient client = HttpClientManager.GetClient(clientConfig);
+		HttpClient client = GetClient(clientConfig);
+		CancellationToken cancelToken = Call.TaskInstance?.CancelToken ?? default;
+		Exception? lastException = null;
 
 		for (int attempt = 1; ; attempt++)
 		{
@@ -62,12 +64,12 @@ public class HttpCall(Call call)
 
 			try
 			{
-				using HttpResponseMessage response = await client.SendAsync(request);
+				using HttpResponseMessage response = await client.SendAsync(request, cancelToken);
 
-				Stream dataStream = await response.Content.ReadAsStreamAsync();
+				Stream dataStream = await response.Content.ReadAsStreamAsync(cancelToken);
 
 				MemoryStream memoryStream = new();
-				await dataStream.CopyToAsync(memoryStream);
+				await dataStream.CopyToAsync(memoryStream, cancelToken);
 				byte[] data = memoryStream.ToArray();
 				dataStream.Close();
 
@@ -77,12 +79,32 @@ public class HttpCall(Call call)
 
 				return data;
 			}
-			catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException)
+			catch (HttpRequestException exception)
 			{
 				getCall.Log.AddError("URI request failed",
 					new Tag("URI", request.RequestUri),
 					new Tag("Attempt", attempt),
 					new Tag("Message", exception.Message));
+
+				lastException = exception;
+			}
+			catch (IOException exception)
+			{
+				getCall.Log.AddError("URI response failed while reading",
+					new Tag("URI", request.RequestUri),
+					new Tag("Attempt", attempt),
+					new Tag("Message", exception.Message));
+
+				lastException = exception;
+			}
+			catch (TaskCanceledException exception) when (!cancelToken.IsCancellationRequested) // Timed out
+			{
+				getCall.Log.AddError("URI request timed out",
+					new Tag("URI", request.RequestUri),
+					new Tag("Attempt", attempt),
+					new Tag("Message", exception.Message));
+
+				lastException = exception;
 			}
 
 			if (attempt >= MaxAttempts)
@@ -92,8 +114,16 @@ public class HttpCall(Call call)
 			// product can wrap negative, where Task.Delay treats -1 as an infinite wait, and
 			// anything past int.MaxValue milliseconds throws
 			int delayMilliseconds = (int)Math.Min((long)SleepMilliseconds * attempt, int.MaxValue);
-			await Task.Delay(delayMilliseconds);
+			await Task.Delay(delayMilliseconds, cancelToken);
 		}
-		throw new Exception("HTTP request failed " + MaxAttempts + " times: " + uri);
+
+		// Kept as the inner exception, the final failure used to discard every cause it had logged
+		throw new Exception("HTTP request failed " + MaxAttempts + " times: " + uri, lastException);
+	}
+
+	/// <summary>Returns the HTTP client used for a request.</summary>
+	protected virtual HttpClient GetClient(HttpClientConfig clientConfig)
+	{
+		return HttpClientManager.GetClient(clientConfig);
 	}
 }

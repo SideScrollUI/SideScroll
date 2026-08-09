@@ -91,7 +91,8 @@ public static class HttpUtils
 	/// <summary>Asynchronously fetches <paramref name="uri"/> and returns the decoded response body, or <c>null</c> on failure.</summary>
 	public static async Task<string?> GetStringAsync(Call call, string uri)
 	{
-		var response = await GetBytesAsync(call, uri);
+		// Disposed here, GetBytesAsync() transfers ownership of the response message into it
+		using ViewHttpResponse? response = await GetBytesAsync(call, uri);
 		response?.Response?.EnsureSuccessStatusCode();
 		byte[]? bytes = response?.Bytes;
 		if (bytes == null) return null;
@@ -115,12 +116,13 @@ public static class HttpUtils
 			Timeout = timeout,
 		};
 		HttpClient client = HttpClientManager.GetClient(clientConfig);
+		CancellationToken cancelToken = call.TaskInstance?.CancelToken ?? default;
 
 		for (int attempt = 1; attempt <= MaxAttempts; attempt++)
 		{
 			if (attempt > 1)
 			{
-				await Task.Delay(BaseRetryDelay * Math.Pow(2, attempt - 2));
+				await Task.Delay(BaseRetryDelay * Math.Pow(2, attempt - 2), cancelToken);
 			}
 
 			// Owned here until it's handed to the returned ViewHttpResponse. Reading the content can
@@ -129,9 +131,9 @@ public static class HttpUtils
 			try
 			{
 				Stopwatch stopwatch = Stopwatch.StartNew();
-				response = await client.GetAsync(uri);
+				response = await client.GetAsync(uri, cancelToken);
 
-				byte[] bytes = await ReadContentAsync(response.Content, progress);
+				byte[] bytes = await ReadContentAsync(response.Content, progress, cancelToken);
 
 				stopwatch.Stop();
 
@@ -152,9 +154,22 @@ public static class HttpUtils
 				response = null; // Ownership transfers to the returned ViewHttpResponse
 				return viewResponse;
 			}
-			catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException)
+			catch (HttpRequestException exception)
 			{
 				getCall.Log.Add(exception);
+			}
+			catch (IOException exception)
+			{
+				// Reading the content can fail after the request itself succeeded
+				getCall.Log.Add(exception);
+			}
+			catch (TaskCanceledException exception) // Also the timeout
+			{
+				getCall.Log.Add(exception);
+
+				// Retrying a cancelled call would work through every remaining attempt
+				if (cancelToken.IsCancellationRequested)
+					break;
 			}
 			finally
 			{
@@ -164,20 +179,23 @@ public static class HttpUtils
 		return null;
 	}
 
-	private static async Task<byte[]> ReadContentAsync(HttpContent content, IProgress<HttpGetProgress>? progress = null)
+	private static async Task<byte[]> ReadContentAsync(
+		HttpContent content,
+		IProgress<HttpGetProgress>? progress = null,
+		CancellationToken cancelToken = default)
 	{
 		if (content.Headers.ContentLength == null || progress == null)
 		{
-			return await content.ReadAsByteArrayAsync();
+			return await content.ReadAsByteArrayAsync(cancelToken);
 		}
 
-		await using var contentStream = await content.ReadAsStreamAsync();
+		await using var contentStream = await content.ReadAsStreamAsync(cancelToken);
 		using var memoryStream = new MemoryStream();
 
 		var buffer = new byte[ReadBufferSize];
 
 		int bytes;
-		while ((bytes = await contentStream.ReadAsync(buffer)) > 0)
+		while ((bytes = await contentStream.ReadAsync(buffer, cancelToken)) > 0)
 		{
 			memoryStream.Write(buffer, 0, bytes);
 			progress.Report(new HttpGetProgress
@@ -201,18 +219,20 @@ public static class HttpUtils
 	{
 		using CallTimer headCall = call.Timer("Head Uri", new Tag("Uri", uri));
 
+		CancellationToken cancelToken = call.TaskInstance?.CancelToken ?? default;
+
 		for (int attempt = 1; attempt <= MaxAttempts; attempt++)
 		{
 			if (attempt > 1)
 			{
-				await Task.Delay(BaseRetryDelay * Math.Pow(2, attempt - 2));
+				await Task.Delay(BaseRetryDelay * Math.Pow(2, attempt - 2), cancelToken);
 			}
 
 			using HttpRequestMessage request = new(HttpMethod.Head, uri);
 
 			try
 			{
-				HttpResponseMessage response = await Client.SendAsync(request);
+				HttpResponseMessage response = await Client.SendAsync(request, cancelToken);
 
 				//response.Close();
 				call.Log.Add("Uri Response",
@@ -221,9 +241,21 @@ public static class HttpUtils
 
 				return response;
 			}
-			catch (Exception exception) when (exception is HttpRequestException or TaskCanceledException)
+			catch (HttpRequestException exception)
 			{
 				headCall.Log.Add(exception);
+			}
+			catch (IOException exception)
+			{
+				headCall.Log.Add(exception);
+			}
+			catch (TaskCanceledException exception) // Also the timeout
+			{
+				headCall.Log.Add(exception);
+
+				// Retrying a cancelled call would work through every remaining attempt
+				if (cancelToken.IsCancellationRequested)
+					break;
 			}
 		}
 		return null;
@@ -231,7 +263,7 @@ public static class HttpUtils
 }
 
 /// <summary>Captures the result of an HTTP GET request including status, headers, raw bytes, and elapsed time.</summary>
-public class ViewHttpResponse
+public class ViewHttpResponse : IDisposable
 {
 	/// <summary>Gets or sets the request URI.</summary>
 	[HiddenColumn]
@@ -273,5 +305,17 @@ public class ViewHttpResponse
 	{
 		Response = response;
 		Bytes = bytes;
+	}
+
+	/// <summary>Releases the owned HTTP response.</summary>
+	/// <remarks>
+	/// GetBytesAsync() hands ownership of the response message here rather than disposing it, so its
+	/// headers stay readable. Nothing released it before
+	/// </remarks>
+	public void Dispose()
+	{
+		Response?.Dispose();
+		Response = null;
+		GC.SuppressFinalize(this);
 	}
 }
