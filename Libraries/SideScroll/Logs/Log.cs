@@ -112,14 +112,9 @@ public class Log : LogEntry
 			LogEntry? logEntry = null;
 			foreach (Exception ex in ae.InnerExceptions)
 			{
-				if (ex is TaskCanceledException)
-				{
-					logEntry = Add(ex.Message, [.. allTags]);
-				}
-				else
-				{
-					logEntry = AddError(ex.Message, [.. allTags]);
-				}
+				// Re-enter through Add() so each entry receives the corresponding inner
+				// exception, its tags, and its cancellation-aware level.
+				logEntry = Add(ex, tags);
 			}
 			return logEntry;
 		}

@@ -313,12 +313,42 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 			return BuildIndices(call);
 		}
 
+		try
+		{
+			return LoadIndices(call);
+		}
+		catch (Exception e)
+		{
+			// The index is derived from the data directories, so an unreadable one is rebuilt
+			// rather than thrown from. Throwing would brick a repository that BuildIndices() can
+			// reconstruct, and Load() is reached through property getters that bindings evaluate.
+			// The corrupt file is left alone, the next Save() replaces it
+			call.Log.AddWarning("Rebuilding an unreadable repository index",
+				new Tag("GroupId", GroupId),
+				new Tag("Path", PrimaryIndexPath),
+				new Tag("Exception", e));
+
+			return BuildIndices(call);
+		}
+	}
+
+	private Indices LoadIndices(Call call)
+	{
 		using var stream = new FileStream(PrimaryIndexPath, FileMode.Open, FileAccess.Read, FileShare.Read);
 		using var reader = new BinaryReader(stream);
 
 		List<Item> items = [];
 		int count = reader.ReadInt32();
 		long nextIndex = reader.ReadInt64();
+		// Every entry requires at least an Int64 index and one byte for an empty string's
+		// 7-bit encoded length. Reject impossible counts before allocating or looping.
+		// Load() catches this and rebuilds from the data headers
+		long maximumPossibleCount = (stream.Length - stream.Position) / (sizeof(long) + 1);
+		if (count < 0 || count > maximumPossibleCount)
+		{
+			throw new InvalidDataException(
+				$"Invalid repository index count {count}; at most {maximumPossibleCount} entries fit in the file.");
+		}
 		for (int i = 0; i < count; i++)
 		{
 			long index = reader.ReadInt64();

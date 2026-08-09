@@ -114,7 +114,8 @@ public class ThemeManager
 	/// <summary>Deserializes a theme from JSON and saves it to the default and/or user repo if it does not yet exist or the version has changed.</summary>
 	public void AddJson(Call call, string json, bool isDefault = false)
 	{
-		var themeSettings = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, JsonSerializerOptions)!;
+		var themeSettings = JsonSerializer.Deserialize<AvaloniaThemeSettings>(json, JsonSerializerOptions)
+			?? throw new JsonException("Theme JSON must contain a theme object.");
 		themeSettings.Version = Project.Version;
 
 		if (isDefault)

@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SideScroll.Logs;
 using SideScroll.Tasks;
 
 namespace SideScroll.Tabs.Tests;
@@ -6,6 +7,12 @@ namespace SideScroll.Tabs.Tests;
 [Category("Tabs")]
 public class TabInstanceDisposeTests : BaseTest
 {
+	private class ThrowingAsyncTab : TabInstanceAsync
+	{
+		public override Task LoadAsync(Call call, TabModel model) =>
+			Task.FromException(new InvalidOperationException("Async load failed"));
+	}
+
 	[OneTimeSetUp]
 	public void BaseSetup()
 	{
@@ -45,5 +52,17 @@ public class TabInstanceDisposeTests : BaseTest
 		tabInstance.Dispose();
 
 		Assert.DoesNotThrow(tabInstance.Dispose);
+	}
+
+	[Test, Description("An async load exception contributes to task failure state as well as the model")]
+	public async Task AsyncLoadFailureIsLogged()
+	{
+		Call call = new();
+		var tabInstance = new ThrowingAsyncTab();
+
+		await tabInstance.LoadBackgroundAsync(call);
+
+		Assert.That(call.Log.Level, Is.EqualTo(LogLevel.Error));
+		Assert.That(call.Log.EntriesText(), Does.Contain("Async load failed"));
 	}
 }

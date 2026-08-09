@@ -732,8 +732,8 @@ public class TabInstance : IDisposable
 			}
 			catch (Exception e)
 			{
+				call.Log.Add(e);
 				model.AddItems(e);
-				//model.Tasks.Add(call.TaskInstance);
 			}
 		}
 

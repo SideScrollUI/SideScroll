@@ -189,6 +189,22 @@ public class LogTests : BaseTest
 		throw new InvalidOperationException("Expected");
 	}
 
+	[Test, Description("Each aggregate entry keeps the exception that produced its message")]
+	public void AggregateExceptionEntriesUseTheirInnerException()
+	{
+		Exception first = new InvalidOperationException("First");
+		Exception second = new ArgumentException("Second");
+		Log log = new();
+
+		log.Add(new AggregateException(first, second), new Tag("Operation", "Test"));
+
+		Assert.That(log.Items, Has.Count.EqualTo(2));
+		Assert.That(log.Items[0].Tags?.Single(tag => tag.Name == "Exception").Value, Is.SameAs(first));
+		Assert.That(log.Items[1].Tags?.Single(tag => tag.Name == "Exception").Value, Is.SameAs(second));
+		Assert.That(log.Items, Has.All.Matches<LogEntry>(entry =>
+			entry.Tags?.Any(tag => tag.Name == "Operation" && Equals(tag.Value, "Test")) == true));
+	}
+
 	[Test, Description("A child removed immediately by a zero retention limit no longer updates its parent")]
 	public void ZeroRetentionDoesNotKeepChildSubscription()
 	{

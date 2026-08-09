@@ -89,6 +89,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed theme creation leaving the application on a temporary theme variant when resource loading failed
 - Fixed corrected form values retaining stale validation errors
 - Fixed one unavailable drive preventing the Drives tab from loading any drives
+- Fixed a corrupt repository index count being accepted as an empty index or driving an excessive read loop. The index is derived from the data directories, so an unreadable one is now rebuilt from the headers rather than failing the load, matching what already happened when the file was missing. A truncated index recovers the same way
+- Fixed aggregate exception log entries retaining the outer exception instead of their corresponding inner exception
+- Fixed async tab-load failures not contributing to the task's logged failure state
+- Fixed theme JSON containing `null` causing a `NullReferenceException` instead of a clear invalid-theme error
 
 ### Changed
 

@@ -19,3 +19,6 @@ bin/
 obj/
 packages/
 qodana.yaml
+
+# Local working notes, not for publication
+KNOWN_ISSUES.md

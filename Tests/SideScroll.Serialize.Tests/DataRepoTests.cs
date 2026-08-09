@@ -506,6 +506,65 @@ public class DataRepoTests : SerializeBaseTest
 		public void SaveIndices(Indices indices) => Save(indices);
 	}
 
+	// Writes an index header with the given entry count and no entries after it
+	private static void WriteIndexCount(TestIndex index, int count)
+	{
+		using var stream = File.Create(index.PrimaryIndexPath);
+		using var writer = new BinaryWriter(stream);
+		writer.Write(count);
+		writer.Write(0L);
+	}
+
+	// 0 entries fit after a 12 byte header, so any positive count is impossible
+	[TestCase(-1)]
+	[TestCase(1)]
+	[TestCase(int.MaxValue)]
+	[Description(
+		"The index is derived from the data directories, so a corrupt count rebuilds from the headers " +
+		"rather than throwing. Throwing bricks a repository that BuildIndices() can reconstruct, and " +
+		"Load() is reached through property getters that bindings evaluate")]
+	public void IndexLoadRebuildsFromAnInvalidEntryCount(int count)
+	{
+		string groupId = $"InvalidIndexCount_{count}";
+		DataRepoInstance<int> instance = _dataRepo.Open<int>(groupId, true);
+		instance.DeleteAll(Call);
+		for (int i = 0; i < 3; i++)
+		{
+			instance.Save(Call, i.ToString(), i);
+		}
+
+		var index = new TestIndex(instance);
+		try
+		{
+			WriteIndexCount(index, count);
+
+			DataRepoIndex<int>.Indices indices = index.Load(Call);
+
+			Assert.That(indices.Items, Has.Count.EqualTo(3), "Rebuilt from the data headers.");
+			Assert.That(Call.Log.EntriesText(), Does.Contain("Rebuilding an unreadable repository index"));
+		}
+		finally
+		{
+			File.Delete(index.PrimaryIndexPath);
+		}
+	}
+
+	[Test, Description("Control: a valid index is still read from the file rather than rebuilt")]
+	public void IndexLoadReadsAValidIndex()
+	{
+		DataRepoInstance<int> instance = _dataRepo.Open<int>("ValidIndexCount", true);
+		instance.DeleteAll(Call);
+		for (int i = 0; i < 3; i++)
+		{
+			instance.Save(Call, i.ToString(), i);
+		}
+
+		DataRepoIndex<int>.Indices indices = new TestIndex(instance).Load(Call);
+
+		Assert.That(indices.Items, Has.Count.EqualTo(3));
+		Assert.That(Call.Log.EntriesText(), Does.Not.Contain("Rebuilding an unreadable repository index"));
+	}
+
 	[Test, Description(
 		"The index was opened with FileMode.Create before anything was written, so a failure part " +
 		"way through truncated the last valid one instead of leaving it alone")]
