@@ -95,6 +95,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed aggregate exception log entries retaining the outer exception instead of their corresponding inner exception
 - Fixed async tab-load failures not contributing to the task's logged failure state
 - Fixed theme JSON containing `null` causing a `NullReferenceException` instead of a clear invalid-theme error
+- Fixed compression utilities treating uppercase `.GZ` and `.ZIP` extensions differently from their lowercase forms
 
 ### Changed
 

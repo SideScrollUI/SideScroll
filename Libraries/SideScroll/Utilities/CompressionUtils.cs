@@ -15,7 +15,7 @@ public class CompressionUtils
 		if ((File.GetAttributes(fileToCompress.FullName) & FileAttributes.Hidden) == FileAttributes.Hidden)
 			return;
 
-		if (fileToCompress.Extension == ".gz")
+		if (fileToCompress.Extension.Equals(".gz", StringComparison.OrdinalIgnoreCase))
 			return;
 
 		using CallTimer compressCall = call.Timer("Compressing", new Tag("File", fileToCompress.FullName));
@@ -69,11 +69,11 @@ public class CompressionUtils
 	{
 		using CallTimer decompressCall = call.Timer("Decompressing", new Tag("File", fileToDecompress.FullName));
 
-		if (fileToDecompress.Extension == ".zip")
+		if (fileToDecompress.Extension.Equals(".zip", StringComparison.OrdinalIgnoreCase))
 		{
 			ExtractZip(fileToDecompress);
 		}
-		else if (fileToDecompress.Extension == ".gz")
+		else if (fileToDecompress.Extension.Equals(".gz", StringComparison.OrdinalIgnoreCase))
 		{
 			ExtractGzip(decompressCall, fileToDecompress);
 		}

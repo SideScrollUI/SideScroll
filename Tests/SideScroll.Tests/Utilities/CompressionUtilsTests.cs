@@ -172,4 +172,38 @@ public class CompressionUtilsTests : BaseTest
 			Assert.That(Directory.GetFiles(_testPath), Has.Exactly(2).Items);
 		});
 	}
+
+	[Test, Description("An uppercase gzip extension is already compressed and must not gain another extension")]
+	public void Compress_UppercaseGzipIsNotRecompressed()
+	{
+		string filePath = CreateTextFile("already.GZ", 100);
+
+		CompressionUtils.Compress(new Call(), new FileInfo(filePath));
+
+		Assert.That(File.Exists(filePath + ".gz"), Is.False);
+	}
+
+	[Test, Description("Gzip decompression recognizes an uppercase extension")]
+	public void Decompress_UppercaseGzip()
+	{
+		string filePath = CreateTextFile("uppercase.txt", 1_000);
+		CompressionUtils.Compress(new Call(), new FileInfo(filePath));
+		string uppercasePath = filePath + ".GZ";
+		File.Move(filePath + ".gz", uppercasePath);
+		File.Delete(filePath);
+
+		CompressionUtils.Decompress(new Call(), new FileInfo(uppercasePath));
+
+		Assert.That(File.ReadAllText(filePath), Is.EqualTo(new string('a', 1_000)));
+	}
+
+	[Test, Description("Zip decompression recognizes an uppercase extension")]
+	public void Decompress_UppercaseZip()
+	{
+		string zipPath = CreateZip("uppercase.ZIP", "contents.txt", "contents");
+
+		CompressionUtils.Decompress(new Call(), new FileInfo(zipPath));
+
+		Assert.That(File.ReadAllText(Path.Combine(_testPath, "uppercase", "contents.txt")), Is.EqualTo("contents"));
+	}
 }
