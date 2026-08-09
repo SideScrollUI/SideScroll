@@ -168,6 +168,51 @@ public class SerializeLazyTests : SerializeBaseTest
 		public virtual Child? Child { get; set; } //= new Child();
 	}
 
+	public class ProtectedGetterParent
+	{
+		public virtual Child? Child { protected get; set; }
+		public Child? GetChild() => Child;
+	}
+
+	public class InternalGetterParent
+	{
+		public virtual Child? Child { internal get; set; }
+	}
+
+	[Test, Description(
+		"A protected or internal getter on a virtual property is virtual, but HasVirtualProperty " +
+		"deliberately checks GetGetMethod(false). Switching to (true) turns lazy loading on for " +
+		"these and the generated subclass then loads them as null instead of their saved value")]
+	public void SerializeLazyNonPublicGetterIsNotLazyLoaded()
+	{
+		var input = new ProtectedGetterParent
+		{
+			Child = new Child { UintTest = 2 },
+		};
+
+		_serializerFile!.Save(Call, input);
+		ProtectedGetterParent output = _serializerFile.Load<ProtectedGetterParent>(Call, true)!;
+
+		// Lazy loading emits a generated subclass, so the exact type stays put when it isn't applied
+		Assert.That(output.GetType(), Is.SameAs(typeof(ProtectedGetterParent)));
+		Assert.That(output.GetChild()!.UintTest, Is.EqualTo(2), "The value still round trips.");
+	}
+
+	[Test, Description("Control: a public virtual getter is lazy loaded, and its value still round trips")]
+	public void SerializeLazyPublicVirtualGetter()
+	{
+		var input = new Parent
+		{
+			Child = new Child { UintTest = 3 },
+		};
+
+		_serializerFile!.Save(Call, input);
+		Parent output = _serializerFile.Load<Parent>(Call, true)!;
+
+		Assert.That(output.GetType(), Is.Not.SameAs(typeof(Parent)));
+		Assert.That(output.Child!.UintTest, Is.EqualTo(3));
+	}
+
 	public class Child
 	{
 		public uint UintTest { get; set; } = 1;

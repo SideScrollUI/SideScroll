@@ -207,7 +207,11 @@ public static class AvaloniaUtils
 			return false;
 		}
 
-		if (value == null) return true;
+		if (value == null)
+		{
+			DataValidationErrors.ClearErrors(control);
+			return true;
+		}
 
 		if (listProperty.GetCustomAttribute<StringLengthAttribute>() is { } stringLengthAttribute)
 		{
@@ -235,6 +239,7 @@ public static class AvaloniaUtils
 			}
 		}
 
+		DataValidationErrors.ClearErrors(control);
 		return true;
 	}
 

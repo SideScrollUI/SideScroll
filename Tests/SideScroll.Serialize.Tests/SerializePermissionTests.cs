@@ -176,6 +176,75 @@ public class SerializePermissionTests : SerializeBaseTest
 		Assert.That(output.Confidential, Is.EqualTo("default"));
 	}
 
+	[PublicData]
+	public class PrivateDerivedPrimitiveContainer
+	{
+		[PrivateData]
+		public object Hidden { get; set; } = "default";
+
+		public string Visible { get; set; } = "";
+	}
+
+	[Test, Description("Skipping a private object property must consume a derived primitive value")]
+	public void SerializePrivateDerivedPrimitiveKeepsStreamAligned()
+	{
+		var input = new PrivateDerivedPrimitiveContainer
+		{
+			Hidden = 42,
+			Visible = "after hidden value",
+		};
+
+		_serializer.PublicOnly = true;
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<PrivateDerivedPrimitiveContainer>(Call);
+
+		Assert.That(output.Hidden, Is.EqualTo("default"));
+		Assert.That(output.Visible, Is.EqualTo(input.Visible));
+	}
+
+	public class PrivateGetterContainer
+	{
+		public virtual string Value { private get; set; } = "default";
+		public string GetValue() => Value;
+	}
+
+	[Test, Description("A writeable property without a public getter must not crash lazy-property detection")]
+	public void SerializePropertyWithPrivateGetter()
+	{
+		var input = new PrivateGetterContainer { Value = "updated" };
+
+		_serializer.Save(Call, input);
+
+		Assert.DoesNotThrow(() => _serializer.Load<PrivateGetterContainer>(Call));
+	}
+
+	public class ProtectedGetterContainer
+	{
+		public virtual string Value { protected get; set; } = "default";
+		public string GetValue() => Value;
+	}
+
+	public class InternalGetterContainer
+	{
+		public virtual string Value { internal get; set; } = "default";
+		public string GetValue() => Value;
+	}
+
+	[Test, Description(
+		"A protected or internal getter on a virtual property is still virtual, but GetGetMethod(false) " +
+		"returns null for it, which reported the property as non-virtual and disabled lazy loading")]
+	public void SerializePropertyWithNonPublicVirtualGetter()
+	{
+		var protectedInput = new ProtectedGetterContainer { Value = "updated" };
+		_serializer.Save(Call, protectedInput);
+		Assert.That(_serializer.Load<ProtectedGetterContainer>(Call).GetValue(), Is.EqualTo("updated"));
+
+		var internalSerializer = new SerializerMemoryAtlas();
+		var internalInput = new InternalGetterContainer { Value = "updated" };
+		internalSerializer.Save(Call, internalInput);
+		Assert.That(internalSerializer.Load<InternalGetterContainer>(Call).GetValue(), Is.EqualTo("updated"));
+	}
+
 	public class PublicDefaultsContainer
 	{
 		public PublicClass? PublicField;

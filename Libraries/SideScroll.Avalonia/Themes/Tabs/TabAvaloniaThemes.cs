@@ -112,7 +112,7 @@ public class TabAvaloniaThemes : ITab
 		}
 
 		public static readonly StyledProperty<bool> HasNameProperty =
-			AvaloniaProperty.Register<ThemeHistory, bool>(nameof(HasName));
+			AvaloniaProperty.Register<ThemeId, bool>(nameof(HasName));
 
 		public void Reset()
 		{

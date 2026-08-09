@@ -229,8 +229,11 @@ public class TypeRepoObject : TypeRepo
 			{
 				if (!propertySchema.IsWriteable) continue;
 
-				MethodInfo getMethod = propertySchema.PropertyInfo.GetGetMethod(false)!;
-				if (getMethod.IsVirtual) return true;
+				// Public getters only. GetGetMethod(true) would report a protected or internal getter
+				// as virtual and turn lazy loading on for it, and the generated subclass then loads
+				// those properties as null. Without it they round trip normally
+				MethodInfo? getMethod = propertySchema.PropertyInfo.GetGetMethod(false);
+				if (getMethod?.IsVirtual == true) return true;
 			}
 			return false;
 		}

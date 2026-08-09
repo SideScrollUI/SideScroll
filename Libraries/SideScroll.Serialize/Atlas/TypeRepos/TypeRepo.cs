@@ -486,7 +486,7 @@ public abstract class TypeRepo : IDisposable
 				// Use the schema, Type is null when it can't be found
 				if (typeRepo.TypeSchema.IsPrimitive)
 				{
-					LoadObject();
+					typeRepo.LoadObject();
 				}
 				else
 				{

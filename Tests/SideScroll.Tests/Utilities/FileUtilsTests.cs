@@ -46,6 +46,69 @@ public class FileUtilsTests : BaseTest
 
 	// ─── DirectoryCopy ───────────────────────────────────────────────────
 
+	// Asserted against the rule rather than by calling DeleteDirectory() with a real root. A test
+	// that deleted to prove it doesn't delete becomes the failure it guards against if this regresses
+	private static FileUtils.DeletePathRejection Rejection(string? path) =>
+		FileUtils.ValidateDeletePath(path, out _);
+
+	[Test, Description("Recursive deletion must never accept a filesystem root")]
+	public void ValidateDeletePath_RejectsFilesystemRoots()
+	{
+		string root = Path.GetPathRoot(Path.GetFullPath(Path.GetTempPath()))!;
+
+		Assert.That(Rejection(root), Is.EqualTo(FileUtils.DeletePathRejection.FilesystemRoot));
+		Assert.That(Rejection(Path.TrimEndingDirectorySeparator(root)), Is.EqualTo(FileUtils.DeletePathRejection.FilesystemRoot));
+	}
+
+	[Test, Description(
+		"A path rooted against the current directory or drive reads as absolute but isn't. " +
+		"GetFullPath(\"C:\") is the working directory, and a leading separator rebases onto the current drive")]
+	public void ValidateDeletePath_RejectsPathsThatAreNotFullyQualified()
+	{
+		Assert.That(Rejection("relative/path"), Is.EqualTo(FileUtils.DeletePathRejection.NotFullyQualified));
+
+		if (OperatingSystem.IsWindows())
+		{
+			Assert.That(Rejection("C:"), Is.EqualTo(FileUtils.DeletePathRejection.NotFullyQualified));
+			Assert.That(Rejection(@"\some\path"), Is.EqualTo(FileUtils.DeletePathRejection.NotFullyQualified));
+
+			// Reads as a POSIX root and resolves onto the current drive
+			Assert.That(Rejection("/"), Is.EqualTo(FileUtils.DeletePathRejection.NotFullyQualified));
+		}
+	}
+
+	[TestCase(null)]
+	[TestCase("")]
+	[TestCase("   ")]
+	public void ValidateDeletePath_RejectsBlankPaths(string? path)
+	{
+		Assert.That(Rejection(path), Is.EqualTo(FileUtils.DeletePathRejection.Blank));
+	}
+
+	[Test, Description("Control: an ordinary absolute directory below a root is allowed")]
+	public void ValidateDeletePath_AllowsADirectoryBelowTheRoot()
+	{
+		string path = Path.Combine(Path.GetFullPath(Path.GetTempPath()), "SideScrollDeleteTarget");
+
+		Assert.That(FileUtils.ValidateDeletePath(path, out string? fullPath), Is.EqualTo(FileUtils.DeletePathRejection.Allowed));
+		Assert.That(fullPath, Is.EqualTo(path));
+	}
+
+	[Test, Description("Control: an allowed directory is still deleted, and a refused one logs a warning")]
+	public void DeleteDirectory_DeletesAnAllowedDirectory()
+	{
+		string path = Path.Combine(Path.GetTempPath(), "SideScrollDeleteTarget", Guid.NewGuid().ToString("N")[..8]);
+		Directory.CreateDirectory(Path.Combine(path, "nested"));
+		File.WriteAllText(Path.Combine(path, "nested", "file.txt"), "contents");
+
+		FileUtils.DeleteDirectory(Call, path);
+
+		Assert.That(Directory.Exists(path), Is.False);
+
+		FileUtils.DeleteDirectory(Call, "relative/path");
+		Assert.That(Call.Log.EntriesText(), Does.Contain("Refusing to delete directory"));
+	}
+
 	private string _basePath = null!;
 
 	[SetUp]

@@ -82,6 +82,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `TabAvaloniaEdit.SetFormatted()` assigning `TextType` after `Text`, so the JSON and XML highlighting wasn't applied along with the text and had to wait for the theme change that fires when the editor is attached. A failure while formatting also left the previous type applied to the plain text it fell back to
 - Fixed `TabAvaloniaEdit` keeping the syntax highlighting from its previous contents once the text stopped matching it, since nothing cleared `SyntaxHighlighting` when the type fell back to `Default`
 - Fixed negative and overflowing repository page indexes returning the first or another incorrect page; invalid negative requests are rejected and oversized offsets now return an empty page without overflowing
+- Fixed recursive directory deletion accepting filesystem roots, and paths that aren't fully qualified, from corrupt or crafted repository settings. `"C:"` resolves to the working directory and a leading separator rebases onto the current drive, so both read as absolute without being so. A directory outside SideScroll that is otherwise valid is still deleted
+- Fixed Atlas stream corruption when skipping an object reference containing a derived primitive value
+- Fixed lazy-property detection throwing for writeable properties without a public getter
+- Fixed the theme creator registering its `HasName` styled property for the wrong Avalonia owner type
+- Fixed theme creation leaving the application on a temporary theme variant when resource loading failed
+- Fixed corrected form values retaining stale validation errors
+- Fixed one unavailable drive preventing the Drives tab from loading any drives
 
 ### Changed
 

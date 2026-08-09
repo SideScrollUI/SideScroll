@@ -145,9 +145,15 @@ public class ThemeManager
 		};
 
 		var original = Application.RequestedThemeVariant;
-		Application.RequestedThemeVariant = themeSettings.GetVariant();
-		themeSettings.LoadFromCurrent();
-		Application.RequestedThemeVariant = original;
+		try
+		{
+			Application.RequestedThemeVariant = themeSettings.GetVariant();
+			themeSettings.LoadFromCurrent();
+		}
+		finally
+		{
+			Application.RequestedThemeVariant = original;
+		}
 
 		return themeSettings;
 	}

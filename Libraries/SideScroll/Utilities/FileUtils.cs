@@ -290,27 +290,103 @@ public static class FileUtils
 	}
 
 	/// <summary>
+	/// Why a path was rejected for recursive deletion, or <see cref="Allowed"/> when it wasn't
+	/// </summary>
+	internal enum DeletePathRejection
+	{
+		/// <summary>The path can be deleted</summary>
+		Allowed,
+
+		/// <summary>Null, empty, or whitespace</summary>
+		Blank,
+
+		/// <summary>The path couldn't be resolved to a full path</summary>
+		Unresolvable,
+
+		/// <summary>Rooted against the current directory or drive rather than named outright</summary>
+		NotFullyQualified,
+
+		/// <summary>A drive, share, or filesystem root</summary>
+		FilesystemRoot,
+	}
+
+	/// <summary>
+	/// Decides whether a path may be recursively deleted, without touching the filesystem
+	/// </summary>
+	/// <remarks>
+	/// Separated from <see cref="DeleteDirectory"/> so the rules can be tested without invoking a
+	/// recursive delete against a real root — a test that did would become the failure it guards
+	/// against if this check ever regressed
+	/// </remarks>
+	internal static DeletePathRejection ValidateDeletePath(string? path, out string? fullPath)
+	{
+		fullPath = null;
+
+		if (string.IsNullOrWhiteSpace(path))
+			return DeletePathRejection.Blank;
+
+		// Resolved against the current directory otherwise, so "C:" is the working directory and a
+		// leading "/" rebases onto the current drive. Both read as absolute and neither is
+		if (!Path.IsPathFullyQualified(path))
+			return DeletePathRejection.NotFullyQualified;
+
+		try
+		{
+			fullPath = Path.GetFullPath(path);
+		}
+		catch (Exception)
+		{
+			return DeletePathRejection.Unresolvable;
+		}
+
+		// TrimEndingDirectorySeparator leaves a root alone and trims anything below it, so a root
+		// only ever equals its own root
+		string? rootPath = Path.GetPathRoot(fullPath);
+		if (rootPath != null && Path.TrimEndingDirectorySeparator(fullPath).Equals(
+			Path.TrimEndingDirectorySeparator(rootPath),
+			OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal))
+		{
+			return DeletePathRejection.FilesystemRoot;
+		}
+
+		return DeletePathRejection.Allowed;
+	}
+
+	/// <summary>
 	/// Deletes a directory and all its contents if it exists
 	/// </summary>
+	/// <remarks>
+	/// Repository paths are publicly settable and deserialized, so a damaged or crafted value
+	/// reaches this. Roots and paths that aren't fully qualified are refused; note that an
+	/// otherwise valid directory outside SideScroll is still deleted
+	/// </remarks>
 	public static void DeleteDirectory(Call? call, string? path)
 	{
 		call ??= new();
 
-		if (path == null)
+		DeletePathRejection rejection = ValidateDeletePath(path, out string? fullPath);
+		if (rejection != DeletePathRejection.Allowed)
 		{
-			call.Log.Add("Path is blank, no directory to delete");
+			if (rejection == DeletePathRejection.Blank)
+			{
+				call.Log.Add("Path is blank, no directory to delete");
+			}
+			else
+			{
+				call.Log.AddWarning("Refusing to delete directory", new Tag("Path", path), new Tag("Reason", rejection));
+			}
 			return;
 		}
 
-		if (!Directory.Exists(path))
+		if (!Directory.Exists(fullPath))
 		{
-			call.Log.Add("No directory found to delete", new Tag("Path", path));
+			call.Log.Add("No directory found to delete", new Tag("Path", fullPath));
 			return;
 		}
 
 		try
 		{
-			Directory.Delete(path, true);
+			Directory.Delete(fullPath!, true);
 		}
 		catch (Exception e)
 		{
