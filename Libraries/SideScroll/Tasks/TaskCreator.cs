@@ -50,10 +50,13 @@ public class ConfirmationFlyoutConfig(string text, string confirmText, string ca
 /// </summary>
 public abstract class TaskCreator : INotifyPropertyChanged
 {
+	// INotifyPropertyChanged requires the event, nothing here raises it
+#pragma warning disable CS0067
 	/// <summary>
 	/// Occurs when a property value changes
 	/// </summary>
 	public event PropertyChangedEventHandler? PropertyChanged; // Used only for INotifyPropertyChanged memory leak fix?
+#pragma warning restore CS0067
 
 	/// <summary>
 	/// Gets or sets the action to execute when the task completes

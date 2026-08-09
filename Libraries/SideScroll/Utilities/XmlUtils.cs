@@ -30,7 +30,7 @@ public static class XmlUtils
 		try
 		{
 			document.LoadXml(text);
-			document.WriteContentTo(writer);
+			document.WriteTo(writer);
 
 			writer.Flush();
 			memoryStream.Flush();

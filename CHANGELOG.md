@@ -102,6 +102,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed non-recursive directory copying accepting identical source and destination paths
 - Fixed `ShallowClone()` invoking indexer properties without their required arguments
 - Fixed short decimal formatting appending a tera suffix to positive and negative infinity
+- Fixed SVG detection consuming or rewinding caller-owned streams
+- Fixed XML formatting dropping the document declaration
 
 ### Changed
 

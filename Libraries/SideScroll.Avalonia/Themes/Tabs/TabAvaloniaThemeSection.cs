@@ -57,7 +57,10 @@ public class TabAvaloniaThemeSection(TabAvaloniaThemeSettings.Instance tabInstan
 		public TabAvaloniaThemeSection Tab => tab;
 		public new IList? SelectedItems { get; set; }
 
+		// Hides the base event so the base one isn't raised for this tab, nothing raises this one
+#pragma warning disable CS0067
 		public new event EventHandler<TabSelectionChangedEventArgs>? OnSelectionChanged;
+#pragma warning restore CS0067
 
 		public override void Load(Call call, TabModel model)
 		{

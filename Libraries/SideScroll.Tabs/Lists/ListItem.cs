@@ -89,11 +89,14 @@ public class ListItem(object? key, object? value) : IListItem, INotifyPropertyCh
 	[HiddenColumn]
 	public bool IsAutoSelectable { get; set; } = true;
 
-#pragma warning disable 414
+	// INotifyPropertyChanged requires the event, nothing here raises it. The warning is CS0067,
+	// so the previous "disable 414" (a field warning) never suppressed anything
+#pragma warning disable CS0067
 	/// <summary>
 	/// Event raised when a property value changes
 	/// </summary>
 	public event PropertyChangedEventHandler? PropertyChanged;
+#pragma warning restore CS0067
 
 	/// <summary>Returns the item's <see cref="Key"/>.</summary>
 	public override string ToString() => Key?.ToString() ?? "";

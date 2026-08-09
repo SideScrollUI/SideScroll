@@ -47,7 +47,10 @@ public class DataRepoTests : SerializeBaseTest
 	private class OrderByItem
 	{
 		public int Value { get; set; }
+
+#pragma warning disable CS0649 // only referenced by name, GetProperty() shouldn't find it
 		public int Field;
+#pragma warning restore CS0649
 	}
 
 	private static DataItemCollection<OrderByItem> OrderByItems() =>

@@ -1,6 +1,7 @@
 using SideScroll.Attributes;
 using SideScroll.Collections;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Text;
@@ -149,6 +150,7 @@ public class Log : LogEntry
 	/// <summary>
 	/// Logs an exception and then re-throws it
 	/// </summary>
+	[DoesNotReturn]
 	public void Throw(Exception e)
 	{
 		Add(e);
@@ -158,6 +160,7 @@ public class Log : LogEntry
 	/// <summary>
 	/// Logs a message as an exception and throws a TaggedException
 	/// </summary>
+	[DoesNotReturn]
 	public void Throw(string text, params Tag[] tags)
 	{
 		Throw(new TaggedException(text, tags));
@@ -168,6 +171,7 @@ public class Log : LogEntry
 	/// Attempts to find a constructor that accepts a string message parameter.
 	/// </summary>
 	/// <typeparam name="T">The exception type to throw</typeparam>
+	[DoesNotReturn]
 	public void Throw<T>(string text, params Tag[] tags) where T : Exception
 	{
 		ConstructorInfo[] constructors = typeof(T).GetConstructors();

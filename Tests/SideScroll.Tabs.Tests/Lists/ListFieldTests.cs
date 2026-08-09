@@ -7,7 +7,9 @@ public class ListFieldTests
 {
 	private class TestClass
 	{
+#pragma warning disable CS0649 // only inspected through reflection
 		public int? NullableIntField;
+#pragma warning restore CS0649
 		public string StringField = "";
 		public readonly int ReadOnlyField = 1;
 		public const int ConstField = 2;

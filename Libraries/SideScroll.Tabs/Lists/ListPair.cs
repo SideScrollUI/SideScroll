@@ -44,11 +44,14 @@ public class ListPair(object key, object? value, object? obj = null, int? maxDes
 	[HiddenColumn]
 	public int? MaxDesiredHeight { get; set; } = maxDesiredHeight;
 
-#pragma warning disable 414
+	// INotifyPropertyChanged requires the event, nothing here raises it. The warning is CS0067,
+	// so the previous "disable 414" (a field warning) never suppressed anything
+#pragma warning disable CS0067
 	/// <summary>
 	/// Event raised when a property value changes
 	/// </summary>
 	public event PropertyChangedEventHandler? PropertyChanged;
+#pragma warning restore CS0067
 
 	/// <summary>Returns the pair's <see cref="Key"/>.</summary>
 	public override string ToString() => Key?.ToString() ?? "";
@@ -83,11 +86,14 @@ public class ListPair<TKey, TValue>(TKey key, TValue value, object? obj = null) 
 	[HiddenColumn]
 	public bool IsAutoSelectable { get; set; } = true;
 
-#pragma warning disable 414
+	// INotifyPropertyChanged requires the event, nothing here raises it. The warning is CS0067,
+	// so the previous "disable 414" (a field warning) never suppressed anything
+#pragma warning disable CS0067
 	/// <summary>
 	/// Event raised when a property value changes
 	/// </summary>
 	public event PropertyChangedEventHandler? PropertyChanged;
+#pragma warning restore CS0067
 
 	/// <summary>Returns the pair's <see cref="Key"/>.</summary>
 	public override string ToString() => Key?.ToString() ?? "";

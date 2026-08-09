@@ -65,4 +65,14 @@ public class SvgUtilsTests
 		Assert.That(SvgUtils.TryGetSvgImage(new Call(), WriteSvg("icon.txt"), out var image), Is.False);
 		Assert.That(image, Is.Null);
 	}
+
+	[Test, Description("SVG detection must not consume or rewind a caller-owned stream")]
+	public void IsSvgPreservesStreamPosition()
+	{
+		using var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes("<?xml version=\"1.0\"?><svg/>"));
+		stream.Position = 5;
+
+		Assert.That(SvgUtils.IsSvg(stream), Is.True);
+		Assert.That(stream.Position, Is.EqualTo(5));
+	}
 }

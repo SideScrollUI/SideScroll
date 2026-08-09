@@ -125,10 +125,12 @@ public static class SvgUtils
 	/// </summary>
 	public static bool IsSvg(Stream stream)
 	{
-		if (stream.Length < 10) return false;
-
+		long? originalPosition = null;
 		try
 		{
+			originalPosition = stream.Position;
+			if (stream.Length < 10) return false;
+
 			stream.Position = 0;
 			using var svgStream = new StreamReader(stream, leaveOpen: true);
 			string line = svgStream.ReadLine()!;
@@ -137,6 +139,20 @@ public static class SvgUtils
 		catch (Exception)
 		{
 			return false;
+		}
+		finally
+		{
+			if (originalPosition is { } position)
+			{
+				try
+				{
+					stream.Position = position;
+				}
+				catch (Exception)
+				{
+					// Content detection is best effort, including restoration if the stream became unavailable
+				}
+			}
 		}
 	}
 }
