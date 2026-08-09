@@ -97,7 +97,7 @@ public class TypeRepoArray(Serializer serializer, TypeSchema typeSchema) : TypeR
 		Array array;
 		if (_rank > 1)
 		{
-			array = Array.CreateInstance(_elementType, ReadLengths(objectIndex));
+			array = Array.CreateInstance(_elementType, ReadLengths(objectIndex, count));
 		}
 		else
 		{
@@ -110,30 +110,76 @@ public class TypeRepoArray(Serializer serializer, TypeSchema typeSchema) : TypeR
 		return array;
 	}
 
-	private int[] ReadLengths(int objectIndex)
+	/// <summary>
+	/// Reads each dimension's length, requiring their product to match the header's element count
+	/// </summary>
+	/// <remarks>
+	/// The lengths are what the array is created from, while only the header count was validated
+	/// against the data size. Without reconciling them a crafted payload could name dimensions
+	/// whose product exhausts memory in Array.CreateInstance(), or build an array of a different
+	/// size than the elements that follow and read past them into the next object's data
+	/// </remarks>
+	private int[] ReadLengths(int objectIndex, int count)
 	{
 		long position = Reader!.BaseStream.Position;
 		Reader.BaseStream.Position = ObjectOffsets![objectIndex];
 
 		int[] lengths = new int[_rank];
+		long total = 1;
 		for (int dimension = 0; dimension < _rank; dimension++)
 		{
-			lengths[dimension] = Reader.ReadInt32();
+			int length = Reader.ReadInt32();
+			if (length < 0)
+			{
+				Reader.BaseStream.Position = position;
+				throw new SerializerException("Array dimension length is negative",
+					new Tag("Type", TypeSchema.Name),
+					new Tag("Dimension", dimension),
+					new Tag("Length", length));
+			}
+
+			lengths[dimension] = length;
+
+			// Checked each step so the running product can't overflow. A zero length pins it to
+			// zero, which stays within range however large the remaining dimensions are
+			total *= length;
+			if (total > int.MaxValue)
+			{
+				Reader.BaseStream.Position = position;
+				throw new SerializerException("Array dimensions exceed the maximum element count",
+					new Tag("Type", TypeSchema.Name),
+					new Tag("Elements", total));
+			}
 		}
 
 		Reader.BaseStream.Position = position;
+
+		if (total != count)
+		{
+			throw new SerializerException("Array dimensions don't match the serialized element count",
+				new Tag("Type", TypeSchema.Name),
+				new Tag("Dimensions", string.Join(", ", lengths)),
+				new Tag("Elements", total),
+				new Tag("Count", count));
+		}
+
 		return lengths;
 	}
 
 	public override void LoadObjectData(object obj)
 	{
 		var array = (Array)obj;
-		ValidateBytesAvailable(array.Length);
 
 		if (_rank > 1)
 		{
+			// The lengths header sits ahead of the elements, so it counts against what's available
+			// too. Validating array.Length first ignored it and allowed a read past the end
+			ValidateBytesAvailable(LengthsSize);
+
 			// Skip the lengths already read by CreateObject()
 			Reader!.BaseStream.Position += LengthsSize;
+
+			ValidateBytesAvailable(array.Length);
 
 			int[] indices = new int[_rank];
 			for (int i = 0; i < array.Length; i++)
@@ -143,6 +189,8 @@ public class TypeRepoArray(Serializer serializer, TypeSchema typeSchema) : TypeR
 			}
 			return;
 		}
+
+		ValidateBytesAvailable(array.Length);
 
 		var list = (IList)obj;
 		for (int j = 0; j < list.Count; j++)

@@ -629,9 +629,24 @@ public class TypeSchema
 	/// <summary>
 	/// Loads member schemas from the binary reader
 	/// </summary>
+	// Every member is at least a one byte length for an empty name and an Int16 type index
+	private const int MinimumMemberSize = sizeof(byte) + sizeof(short);
+
 	public void LoadMembers<T>(Serializer serializer, BinaryReader reader) where T : MemberInfo
 	{
 		int count = reader.ReadInt32();
+
+		// Bounded before looping, so a corrupt count fails here rather than part way through the
+		// members, and a negative one doesn't silently produce a type with none
+		long maximumPossibleCount = (reader.BaseStream.Length - reader.BaseStream.Position) / MinimumMemberSize;
+		if (count < 0 || count > maximumPossibleCount)
+		{
+			throw new SerializerException("Invalid member count",
+				new Tag("Type", Name),
+				new Tag("Count", count),
+				new Tag("Maximum", maximumPossibleCount));
+		}
+
 		for (int i = 0; i < count; i++)
 		{
 			var memberSchema = MemberSchema.Load<T>(this, serializer, reader);

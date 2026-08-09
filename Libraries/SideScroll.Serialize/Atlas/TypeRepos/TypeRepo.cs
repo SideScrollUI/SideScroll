@@ -339,6 +339,19 @@ public abstract class TypeRepo : IDisposable
 		for (int i = 0; i < TypeSchema.NumObjects; i++)
 		{
 			int size = Reader!.ReadInt32();
+
+			// A negative size walks the offsets backwards, so later objects would read back over
+			// earlier data, and the running total can't pass the end of this type's data either
+			if (size < 0 || offset + size > TypeSchema.EndDataOffset)
+			{
+				throw new SerializerException("Invalid object size",
+					new Tag("Type", TypeSchema.Name),
+					new Tag("Index", i),
+					new Tag("Size", size),
+					new Tag("Offset", offset),
+					new Tag("End Data Offset", TypeSchema.EndDataOffset));
+			}
+
 			ObjectOffsets[i] = offset;
 			ObjectSizes[i] = size;
 			offset += size;
