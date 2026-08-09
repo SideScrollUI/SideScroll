@@ -96,6 +96,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed async tab-load failures not contributing to the task's logged failure state
 - Fixed theme JSON containing `null` causing a `NullReferenceException` instead of a clear invalid-theme error
 - Fixed compression utilities treating uppercase `.GZ` and `.ZIP` extensions differently from their lowercase forms
+- Fixed numeric values bypassing `Formatted()` validation for a negative maximum length
+- Fixed `Tag.MaxValueLength`, `ObjectExtensions.DefaultMaxFormattedLength`, and `DataGridExtensions.MaxValueLength` accepting negative values, which reached `Formatted()` while rendering a tag, formatting any value, or exporting a grid, and threw there instead of at the assignment. Zero is still allowed and truncates to empty
+- Fixed failed text probing leaving a seekable stream at a changed position
+- Fixed non-recursive directory copying accepting identical source and destination paths
+- Fixed `ShallowClone()` invoking indexer properties without their required arguments
+- Fixed short decimal formatting appending a tera suffix to positive and negative infinity
 
 ### Changed
 

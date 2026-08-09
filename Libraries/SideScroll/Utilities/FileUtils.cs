@@ -133,7 +133,8 @@ public static class FileUtils
 			// The destination is created below before the source subdirectories are enumerated, so a
 			// destination inside the source would be found by GetDirectories() and copied into
 			// itself, nesting until the path length limit stops it
-			if (copySubDirs && IsSameOrInside(sourceDirPath, destDirPath))
+			if (IsSamePath(sourceDirPath, destDirPath) ||
+				(copySubDirs && IsSameOrInside(sourceDirPath, destDirPath)))
 			{
 				throw new ArgumentException(
 					$"Destination directory can't be inside the source directory: {destDirPath}",
@@ -180,6 +181,9 @@ public static class FileUtils
 			relative != ".." &&
 			!relative.StartsWith(".." + Path.DirectorySeparatorChar, StringComparison.Ordinal);
 	}
+
+	private static bool IsSamePath(string firstPath, string secondPath) =>
+		Path.GetRelativePath(Path.GetFullPath(firstPath), Path.GetFullPath(secondPath)) == ".";
 
 	/// <summary>
 	/// Determines whether a file is currently open by attempting to open it exclusively
@@ -236,27 +240,34 @@ public static class FileUtils
 	/// <returns>True if the stream contains text; otherwise, false</returns>
 	public static bool IsTextStream(Stream stream)
 	{
+		long? originalPosition = null;
 		try
 		{
-			long originalPosition = 0;
 			if (stream.CanSeek)
 			{
 				originalPosition = stream.Position;
 			}
 
 			using var streamReader = new StreamReader(stream, System.Text.Encoding.UTF8, true, TextCheckBufferSize, leaveOpen: true);
-			bool result = IsTextStream(streamReader);
-
-			if (stream.CanSeek)
-			{
-				stream.Position = originalPosition;
-			}
-
-			return result;
+			return IsTextStream(streamReader);
 		}
 		catch (Exception)
 		{
 			return false;
+		}
+		finally
+		{
+			if (originalPosition is { } position)
+			{
+				try
+				{
+					stream.Position = position;
+				}
+				catch (Exception)
+				{
+					// Probing is best effort, including restoration if the stream became unavailable
+				}
+			}
 		}
 	}
 

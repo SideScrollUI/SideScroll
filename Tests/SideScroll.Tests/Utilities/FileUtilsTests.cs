@@ -6,6 +6,21 @@ namespace SideScroll.Tests.Utilities;
 [Category("Core")]
 public class FileUtilsTests : BaseTest
 {
+	private sealed class ThrowingReadStream(byte[] buffer) : MemoryStream(buffer)
+	{
+		public override int Read(byte[] buffer, int offset, int count)
+		{
+			Position++;
+			throw new IOException("Read failed");
+		}
+
+		public override int Read(Span<byte> buffer)
+		{
+			Position++;
+			throw new IOException("Read failed");
+		}
+	}
+
 	[OneTimeSetUp]
 	public void BaseSetup()
 	{
@@ -33,6 +48,15 @@ public class FileUtilsTests : BaseTest
 
 		Assert.That(FileUtils.IsTextStream(reader), Is.True);
 		Assert.That(reader.ReadToEnd(), Is.EqualTo("plain text"));
+	}
+
+	[Test, Description("A failed probe restores the caller-owned stream to its original position")]
+	public void IsTextStream_FailedReadPreservesPosition()
+	{
+		using var stream = new ThrowingReadStream([1, 2, 3]);
+
+		Assert.That(FileUtils.IsTextStream(stream), Is.False);
+		Assert.That(stream.Position, Is.Zero);
 	}
 
 	[Test]
@@ -176,13 +200,14 @@ public class FileUtilsTests : BaseTest
 			FileUtils.DirectoryCopy(Call, source, dest, copySubDirs: true));
 	}
 
-	[Test]
-	public void DirectoryCopy_DestinationIsSource_Throws()
+	[TestCase(true)]
+	[TestCase(false)]
+	public void DirectoryCopy_DestinationIsSource_Throws(bool copySubDirs)
 	{
 		string source = CreateSource();
 
 		Assert.Throws<ArgumentException>(() =>
-			FileUtils.DirectoryCopy(Call, source, source, copySubDirs: true));
+			FileUtils.DirectoryCopy(Call, source, source, copySubDirs));
 	}
 
 	[Test, Description("A destination beside the source is the normal case and still works")]

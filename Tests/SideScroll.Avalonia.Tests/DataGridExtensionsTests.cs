@@ -68,4 +68,42 @@ public class DataGridExtensionsTests
 
 		Assert.That(dataGrid.ToCsv(), Is.EqualTo("\"A\",\"C\"\n\"a1\",\"c1\"\n"));
 	}
+
+	[TestCase(-1)]
+	[TestCase(int.MinValue)]
+	[NonParallelizable] // MaxValueLength is static
+	[Description("A negative maximum reaches Formatted() for every exported cell, where it throws")]
+	public void RejectsNegativeMaxValueLength(int value)
+	{
+		int original = DataGridExtensions.MaxValueLength;
+		try
+		{
+			ArgumentOutOfRangeException exception = Assert.Throws<ArgumentOutOfRangeException>(
+				() => DataGridExtensions.MaxValueLength = value)!;
+
+			Assert.That(exception.ParamName, Is.EqualTo(nameof(DataGridExtensions.MaxValueLength)));
+			Assert.That(DataGridExtensions.MaxValueLength, Is.EqualTo(original), "The rejected value isn't stored.");
+			Assert.That(CreateGrid().ToCsv(), Is.EqualTo("\"A\",\"B\",\"C\"\n\"a1\",\"b1\",\"c1\"\n"));
+		}
+		finally
+		{
+			DataGridExtensions.MaxValueLength = original;
+		}
+	}
+
+	[Test, NonParallelizable, Description("Control: zero exports empty cells rather than being invalid")]
+	public void AllowsZeroMaxValueLength()
+	{
+		int original = DataGridExtensions.MaxValueLength;
+		try
+		{
+			DataGridExtensions.MaxValueLength = 0;
+
+			Assert.That(CreateGrid().ToCsv(), Is.EqualTo("\"A\",\"B\",\"C\"\n\"\",\"\",\"\"\n"));
+		}
+		finally
+		{
+			DataGridExtensions.MaxValueLength = original;
+		}
+	}
 }

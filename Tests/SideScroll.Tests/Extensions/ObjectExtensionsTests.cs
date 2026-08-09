@@ -68,6 +68,47 @@ public class ObjectExtensionsTests : BaseTest
 	public void Formatted_RejectsNegativeMaximumLength()
 	{
 		Assert.Throws<ArgumentOutOfRangeException>(() => "value".Formatted(-1));
+		Assert.Throws<ArgumentOutOfRangeException>(() => 123.Formatted(-1));
+	}
+
+	[TestCase(-1)]
+	[TestCase(int.MinValue)]
+	[NonParallelizable] // DefaultMaxFormattedLength is static
+	[Description(
+		"Formatted() uses this whenever no length is passed, which is nearly every call, so a " +
+		"negative one makes formatting throw everywhere instead of at the assignment")]
+	public void RejectsNegativeDefaultMaxFormattedLength(int value)
+	{
+		int original = ObjectExtensions.DefaultMaxFormattedLength;
+		try
+		{
+			ArgumentOutOfRangeException exception = Assert.Throws<ArgumentOutOfRangeException>(
+				() => ObjectExtensions.DefaultMaxFormattedLength = value)!;
+
+			Assert.That(exception.ParamName, Is.EqualTo(nameof(ObjectExtensions.DefaultMaxFormattedLength)));
+			Assert.That(ObjectExtensions.DefaultMaxFormattedLength, Is.EqualTo(original), "The rejected value isn't stored.");
+			Assert.That("still formats".Formatted(), Is.EqualTo("still formats"));
+		}
+		finally
+		{
+			ObjectExtensions.DefaultMaxFormattedLength = original;
+		}
+	}
+
+	[Test, NonParallelizable, Description("Control: zero truncates to an empty string rather than being invalid")]
+	public void AllowsZeroDefaultMaxFormattedLength()
+	{
+		int original = ObjectExtensions.DefaultMaxFormattedLength;
+		try
+		{
+			ObjectExtensions.DefaultMaxFormattedLength = 0;
+
+			Assert.That("value".Formatted(), Is.Empty);
+		}
+		finally
+		{
+			ObjectExtensions.DefaultMaxFormattedLength = original;
+		}
 	}
 
 	private class ThrowingGetters

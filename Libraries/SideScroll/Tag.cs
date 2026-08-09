@@ -30,7 +30,21 @@ public class Tag
 	/// <summary>
 	/// Gets or sets the maximum length for tag values when formatting
 	/// </summary>
-	public static int MaxValueLength { get; set; } = 10_000;
+	/// <remarks>
+	/// Zero is allowed and truncates to an empty value. A negative one reaches
+	/// <see cref="ObjectExtensions.Formatted"/> while a tag is being rendered, where it throws
+	/// </remarks>
+	/// <exception cref="ArgumentOutOfRangeException">The value is negative</exception>
+	public static int MaxValueLength
+	{
+		get => _maxValueLength;
+		set
+		{
+			ArgumentOutOfRangeException.ThrowIfNegative(value, nameof(MaxValueLength));
+			_maxValueLength = value;
+		}
+	}
+	private static int _maxValueLength = 10_000;
 
 	/// <summary>
 	/// Gets or sets the tag name

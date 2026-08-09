@@ -18,6 +18,9 @@ public static class NumberExtensions
 	/// </summary>
 	public static string FormattedShortDecimal(this double d, int minimumPrecision = 0)
 	{
+		if (!double.IsFinite(d))
+			return d.Formatted()!;
+
 		double absValue = Math.Abs(d);
 		string suffix;
 		double scaled;

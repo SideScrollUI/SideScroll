@@ -18,7 +18,21 @@ public static class DataGridExtensions
 	/// <summary>
 	/// Maximum length for cell values when exporting to string or CSV
 	/// </summary>
-	public static int MaxValueLength { get; set; } = 10_000;
+	/// <remarks>
+	/// Zero is allowed and exports empty cells. A negative one reaches
+	/// <see cref="ObjectExtensions.Formatted"/> for every exported cell, where it throws
+	/// </remarks>
+	/// <exception cref="ArgumentOutOfRangeException">The value is negative</exception>
+	public static int MaxValueLength
+	{
+		get => _maxValueLength;
+		set
+		{
+			ArgumentOutOfRangeException.ThrowIfNegative(value, nameof(MaxValueLength));
+			_maxValueLength = value;
+		}
+	}
+	private static int _maxValueLength = 10_000;
 
 	/// <summary>
 	/// Converts all values from a specific column to a string table (one value per line)

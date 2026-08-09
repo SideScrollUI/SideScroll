@@ -58,6 +58,9 @@ public static class SerializerExtensions
 
 		foreach (PropertyInfo property in properties)
 		{
+			if (property.GetIndexParameters().Length != 0)
+				continue;
+
 			try
 			{
 				property.SetValue(dest, property.GetValue(source, null), null);

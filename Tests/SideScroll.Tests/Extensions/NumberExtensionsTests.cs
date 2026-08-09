@@ -147,6 +147,8 @@ public class NumberExtensionsTests : BaseTest
 		Assert.That(1234567.0.FormattedShortDecimal(), Is.EqualTo("1.2 M"));
 		Assert.That(1234567890.0.FormattedShortDecimal(), Is.EqualTo("1.2 G"));
 		Assert.That(1234567890000.0.FormattedShortDecimal(), Is.EqualTo("1.2 T"));
+		Assert.That(double.PositiveInfinity.FormattedShortDecimal(), Is.EqualTo(double.PositiveInfinity.Formatted()));
+		Assert.That(double.NegativeInfinity.FormattedShortDecimal(), Is.EqualTo(double.NegativeInfinity.Formatted()));
 	}
 
 	[Test, Description(

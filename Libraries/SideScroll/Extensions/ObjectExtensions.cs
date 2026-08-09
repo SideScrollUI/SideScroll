@@ -13,7 +13,22 @@ public static class ObjectExtensions
 	/// <summary>
 	/// Default maximum length for formatted strings
 	/// </summary>
-	public static int DefaultMaxFormattedLength { get; set; } = 500;
+	/// <remarks>
+	/// This is what <see cref="Formatted"/> uses whenever no length is passed, which is nearly every
+	/// call, so a negative one makes formatting throw everywhere rather than at a single call site.
+	/// Zero is allowed and truncates to an empty string
+	/// </remarks>
+	/// <exception cref="ArgumentOutOfRangeException">The value is negative</exception>
+	public static int DefaultMaxFormattedLength
+	{
+		get => _defaultMaxFormattedLength;
+		set
+		{
+			ArgumentOutOfRangeException.ThrowIfNegative(value, nameof(DefaultMaxFormattedLength));
+			_defaultMaxFormattedLength = value;
+		}
+	}
+	private static int _defaultMaxFormattedLength = 500;
 
 	/// <summary>
 	/// Formats an object as a human-readable string with optional length limit. Handles various types intelligently:
@@ -29,6 +44,9 @@ public static class ObjectExtensions
 	{
 		if (obj == null)
 			return null;
+
+		int maxFormatLength = maxLength ?? DefaultMaxFormattedLength;
+		ArgumentOutOfRangeException.ThrowIfNegative(maxFormatLength);
 
 		Type type = obj.GetType();
 
@@ -50,9 +68,6 @@ public static class ObjectExtensions
 			string format = type.IsDecimal() ? "G" : "N0";
 			return ((IFormattable)obj).ToString(format, CultureInfo.CurrentCulture);
 		}
-
-		int maxFormatLength = maxLength ?? DefaultMaxFormattedLength;
-		ArgumentOutOfRangeException.ThrowIfNegative(maxFormatLength);
 
 		if (!type.IsPrimitive)
 		{
