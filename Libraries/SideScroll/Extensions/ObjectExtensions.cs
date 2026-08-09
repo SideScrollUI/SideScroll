@@ -247,14 +247,16 @@ public static class ObjectExtensions
 		if (!visited.Add(obj))
 			return null;
 
-		// Return first non-null property value
+		// Return first non-null property value.
+		// A throwing member is skipped rather than propagated. ObjectUtils.GetObjectId() builds on
+		// this, and bookmarking and row identity build on that, so one bad getter took down
+		// rendering for the whole row instead of falling through to the next member
 		PropertyInfo[] properties = type.GetProperties();
 		foreach (PropertyInfo propertyInfo in properties)
 		{
 			if (propertyInfo.CanRead && propertyInfo.GetIndexParameters().Length == 0)
 			{
-				object? propertyValue = propertyInfo.GetValue(obj);
-				string? toString = ToUniqueString(propertyValue, visited);
+				string? toString = TryGetUniqueString(() => propertyInfo.GetValue(obj), visited);
 				if (toString != null)
 					return toString;
 			}
@@ -264,12 +266,24 @@ public static class ObjectExtensions
 		FieldInfo[] fields = type.GetFields();
 		foreach (FieldInfo fieldInfo in fields)
 		{
-			object? fieldValue = fieldInfo.GetValue(obj);
-			string? toString = ToUniqueString(fieldValue, visited);
+			string? toString = TryGetUniqueString(() => fieldInfo.GetValue(obj), visited);
 			if (toString != null)
 				return toString;
 		}
 
 		return null;
+	}
+
+	private static string? TryGetUniqueString(Func<object?> getValue, HashSet<object>? visited)
+	{
+		try
+		{
+			return ToUniqueString(getValue(), visited);
+		}
+		catch (Exception)
+		{
+			// Identity is best effort, there's no caller that can act on a member failing here
+			return null;
+		}
 	}
 }

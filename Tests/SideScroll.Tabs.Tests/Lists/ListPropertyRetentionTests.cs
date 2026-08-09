@@ -173,4 +173,24 @@ public class ListPropertyRetentionTests : BaseTest
 	{
 		return new WeakReference(new ListProperty(source, nameof(Source.Favorite)));
 	}
+
+	[Test, Description(
+		"A missing property was null forgiven into the PropertyInfo constructor, so a typo or a " +
+		"rename surfaced as a NullReferenceException from inside ReflectionCache")]
+	public void ConstructorReportsAnUnknownPropertyName()
+	{
+		var source = new Source();
+
+		var exception = Assert.Throws<ArgumentException>(() => new ListProperty(source, "Missing"))!;
+		Assert.That(exception.Message, Does.Contain(nameof(Source)).And.Contains("Missing"));
+		Assert.That(exception.ParamName, Is.EqualTo("propertyName"));
+	}
+
+	[Test, Description("Control: a real property name still constructs")]
+	public void ConstructorAcceptsAKnownPropertyName()
+	{
+		var source = new Source();
+
+		Assert.That(new ListProperty(source, nameof(Source.Favorite)), Is.Not.Null);
+	}
 }

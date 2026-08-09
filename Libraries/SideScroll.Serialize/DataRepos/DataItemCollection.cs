@@ -207,9 +207,24 @@ public class DataItem<T>(string key, T value, string? path = null) : IDataItem
 	private FileInfo? _fileInfo;
 
 	/// <summary>
-	/// Gets the UTC modified date from the file information
+	/// Gets the UTC modified date from the file information, as of the last <see cref="Refresh"/>
 	/// </summary>
+	/// <remarks>
+	/// Deliberately cached. This is a row property with no [Hidden] attribute, so it renders as a
+	/// grid column, and refreshing on read put a stat syscall on the render path for every visible
+	/// row on each scroll and re-measure, and on every row when sorting by it. A path on an
+	/// unreachable network share blocks for the full timeout. Call <see cref="Refresh"/> when the
+	/// file may have changed
+	/// </remarks>
 	public DateTime? ModifiedUtc => FileInfo?.LastWriteTimeUtc;
+
+	/// <summary>
+	/// Discards the cached file information so the next read picks up the file's current state
+	/// </summary>
+	public void Refresh()
+	{
+		_fileInfo = null;
+	}
 
 	/// <summary>Returns the item's <see cref="Key"/>.</summary>
 	public override string ToString() => Key;

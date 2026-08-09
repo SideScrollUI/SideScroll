@@ -111,4 +111,26 @@ public class SerializerFileAtlasTests : SerializeBaseTest
 	{
 		Assert.Throws<ArgumentOutOfRangeException>(() => SerializerFileAtlas.SaveAttemptsMax = value);
 	}
+
+	[Test, Description(
+		"Exists checks DataPath, but LoadHeader() read HeaderPath unchecked, so a missing header " +
+		"threw a bare FileNotFoundException naming a path the caller never chose")]
+	public void LoadHeaderReportsAMissingHeader()
+	{
+		string basePath = Path.Combine(TestPath, "MissingHeader", Path.GetRandomFileName());
+		var serializer = SerializerFileAtlas.Create(basePath, "name");
+
+		var exception = Assert.Throws<SerializerException>(() => serializer.LoadHeader(Call))!;
+		Assert.That(exception.Message, Does.Contain("Header"));
+	}
+
+	[Test, Description("Control: a saved file's header still loads")]
+	public void LoadHeaderReadsASavedHeader()
+	{
+		string basePath = Path.Combine(TestPath, "SavedHeader", Path.GetRandomFileName());
+		var serializer = SerializerFileAtlas.Create(basePath, "name");
+		serializer.Save(Call, "value");
+
+		Assert.That(serializer.LoadHeader(Call), Is.Not.Null);
+	}
 }

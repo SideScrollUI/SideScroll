@@ -13,7 +13,8 @@ public static class MemberExtensions
 	/// </summary>
 	public static bool IsRowVisible(this FieldInfo fieldInfo)
 	{
-		if (fieldInfo.IsLiteral && !fieldInfo.IsInitOnly)
+		// IsLiteral alone, a const is never also readonly so !IsInitOnly was always true
+		if (fieldInfo.IsLiteral)
 			return false;
 
 #if !DEBUG

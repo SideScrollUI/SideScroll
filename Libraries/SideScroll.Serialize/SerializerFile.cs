@@ -126,7 +126,16 @@ public abstract class SerializerFile(string basePath, string? name = null)
 	{
 		using CallTimer callTimer = call.Timer(LogLevel.Debug, "Loading header", new Tag("Name", Name));
 
-		var memoryStream = new MemoryStream(File.ReadAllBytes(HeaderPath!));
+		// Checked like Exists does for DataPath, a missing header threw a bare FileNotFoundException
+		// naming a path the caller never chose
+		if (HeaderPath == null || !File.Exists(HeaderPath))
+		{
+			// Constructed directly, Throw<T>() needs a single string constructor and falls back to
+			// a plain TaggedException for one taking tags as well
+			callTimer.Log.Throw(new SerializerException("Header file not found", new Tag("Path", HeaderPath)));
+		}
+
+		var memoryStream = new MemoryStream(File.ReadAllBytes(HeaderPath));
 
 		var reader = new BinaryReader(memoryStream);
 		var header = new SerializerHeader();

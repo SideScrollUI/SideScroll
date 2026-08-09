@@ -69,4 +69,44 @@ public class ObjectExtensionsTests : BaseTest
 	{
 		Assert.Throws<ArgumentOutOfRangeException>(() => "value".Formatted(-1));
 	}
+
+	private class ThrowingGetters
+	{
+		public string Throws => throw new InvalidOperationException("getter");
+		public string Works => "identity";
+	}
+
+	private class OnlyThrowingGetters
+	{
+		public string Throws => throw new InvalidOperationException("getter");
+	}
+
+	[Test, Description(
+		"ObjectUtils.GetObjectId() builds on this and bookmarking and row identity build on that, " +
+		"so one throwing member took down rendering for the whole row instead of skipping it")]
+	public void ToUniqueString_SkipsThrowingMembers()
+	{
+		Assert.That(new ThrowingGetters().ToUniqueString(), Is.EqualTo("identity"));
+	}
+
+	[Test, Description("Nothing readable left means no identity, not a propagated exception")]
+	public void ToUniqueString_AllMembersThrowing_ReturnsNull()
+	{
+		Assert.That(new OnlyThrowingGetters().ToUniqueString(), Is.Null);
+	}
+
+	private class ThrowingField
+	{
+#pragma warning disable CS0649 // assigned via reflection only
+		public OnlyThrowingGetters? Nested;
+#pragma warning restore CS0649
+	}
+
+	[Test, Description("Control: the field loop is guarded the same way as the property loop")]
+	public void ToUniqueString_SkipsThrowingFields()
+	{
+		var item = new ThrowingField { Nested = new OnlyThrowingGetters() };
+
+		Assert.That(item.ToUniqueString(), Is.Null);
+	}
 }

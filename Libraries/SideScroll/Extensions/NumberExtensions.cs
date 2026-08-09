@@ -85,8 +85,18 @@ public static class NumberExtensions
 		int power = significantFigures - d - 1;
 
 		double magnitude = Math.Pow(10, power);
+
+		// Subnormal inputs (< 1e-308) drive the magnitude to infinity, and num * inf / inf is NaN,
+		// so the value was destroyed rather than rounded. Already at full precision, return it
+		if (double.IsInfinity(magnitude) || magnitude == 0)
+			return num;
+
 		double shifted = Math.Round(num * magnitude, MidpointRounding.AwayFromZero);
 		double ret = shifted / magnitude;
+
+		// The shift can still overflow for a large magnitude and a large value
+		if (double.IsNaN(ret) || double.IsInfinity(ret))
+			return num;
 
 		return ret;
 	}

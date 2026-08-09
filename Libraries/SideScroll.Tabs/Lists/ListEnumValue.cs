@@ -43,7 +43,11 @@ public class ListEnumValue(string name, bool isSelected, object value, string he
 
 		foreach (Enum flag in Enum.GetValues(enumType))
 		{
-			bool isSelected = isFlagsEnum ? enumValue.HasFlag(flag) : enumValue.Equals(flag);
+			// HasFlag(0) is always true, so a conventional None = 0 showed as selected alongside
+			// whichever flag was actually set. Zero is only selected when the value is zero
+			bool isSelected = isFlagsEnum
+				? (IsZero(flag, enumType) ? IsZero(enumValue, enumType) : enumValue.HasFlag(flag))
+				: enumValue.Equals(flag);
 
 			string name = flag.ToString();
 			object value = Convert.ChangeType(flag, Enum.GetUnderlyingType(enumType));
@@ -53,6 +57,15 @@ public class ListEnumValue(string name, bool isSelected, object value, string he
 		}
 
 		return flags;
+	}
+
+	// Compared against a default of the underlying type rather than converted to a number, an
+	// enum backed by ulong overflows Convert.ToInt64() at ulong.MaxValue
+	private static bool IsZero(Enum value, Type enumType)
+	{
+		Type underlyingType = Enum.GetUnderlyingType(enumType);
+		return Convert.ChangeType(value, underlyingType)
+			.Equals(Activator.CreateInstance(underlyingType));
 	}
 
 	/// <summary>

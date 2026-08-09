@@ -8,12 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Added `DataItem.Refresh()`, which discards the cached `FileInfo` so `ModifiedUtc` picks up the file's current state. It stays cached by default because it renders as a grid column, where refreshing on read would put a stat syscall on the render path for every visible row
 - Added `HttpUtils.DecodeString()` and `DefaultEncoding` (UTF-8) for decoding response bodies as text
 - Added `IDisposable` to both `DataViewCollection` classes, so a discarded collection can stop mirroring a repository view that outlives it
 - Added `TextHighlighter` and `TabAvaloniaEdit.Highlighters` for highlighting formats beyond JSON and XML, matched against the file extension or by probing the text. Registering one at startup highlights that format everywhere it's shown, including generic string and file tabs, and `TextHighlighting.Register()` and `Load()` load an AvaloniaEdit `.xshd` definition from an embedded resource
 - Added `ProcessUtils.StartDotnetProcess(IReadOnlyList<string>)`, which passes each argument through `ArgumentList` so values containing spaces or quotes reach the child process intact. The `string` overload leaves every value for the caller to quote, where an unquoted path under a directory like `C:\Users\First Last` splits into two arguments before the child process sees it
 
 ### Fixed
+- Fixed `ObjectExtensions.ToUniqueString()` propagating an exception from a property or field getter. `ObjectUtils.GetObjectId()` builds on it, and bookmarking and row identity build on that, so one throwing member took down rendering for the whole row instead of falling through to the next one
+- Fixed `ListEnumValue.Create()` showing a zero-valued flag as selected for every value, since `HasFlag(0)` is always true, so a conventional `None = 0` row appeared selected alongside whichever flag was actually set
+- Fixed `ListProperty(object, string)` null-forgiving an unknown property name, which surfaced as an `ArgumentNullException` for a parameter named `key` from inside `ReflectionCache`. It throws an `ArgumentException` naming the type and member now
+- Fixed `NumberExtensions.RoundToSignificantFigures(double)` returning `NaN` for subnormal values below about `1e-308`, where the scaling factor reaches infinity and destroys the value instead of rounding it
+- Fixed `SerializerFile.LoadHeader()` reading its header path without checking it exists, which threw a bare `FileNotFoundException` naming a path the caller never chose instead of a `SerializerException`
 - Fixed a search filter silently dropping everything after a `)` that has no `(` open, so `500) failed` searched for `500` alone and matched more rows than were asked for, with nothing to indicate the rest was ignored. A `)` only closes a subexpression when one is open now, and is otherwise an ordinary character in the term. Grouping, negation, and an unmatched `(` are unchanged
 - Fixed `AllIndexesOf()` and `AllIndexesOfYield()` rejecting a whitespace search value, so looking for a space threw. Only an empty value loops forever, and that's still rejected
 - Fixed `SvgUtils.TryGetSvgImage()` and `TabFileImage` comparing the `.svg` extension through `ToLower().EndsWith()`, which the current culture treats as ignoring zero width and soft hyphen characters, so a file the OS reads as a different extension was loaded as SVG. The comparison is ordinal now, matching `FileTypeDetector` and `TabFile.ExtensionTypes`

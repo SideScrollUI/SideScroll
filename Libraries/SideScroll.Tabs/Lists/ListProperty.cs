@@ -170,9 +170,21 @@ public class ListProperty : ListMember, IPropertyIsEditable
 	/// <summary>
 	/// Initializes a new ListProperty by property name
 	/// </summary>
+	/// <exception cref="ArgumentException"><paramref name="propertyName"/> isn't a public property of <paramref name="obj"/></exception>
 	public ListProperty(object obj, string propertyName, bool isCacheable = true) :
-		this(obj, obj.GetType().GetProperty(propertyName)!, isCacheable)
+		this(obj, GetProperty(obj, propertyName), isCacheable)
 	{
+	}
+
+	// A missing property used to be null forgiven into the PropertyInfo constructor, so a typo or
+	// a rename surfaced as a NullReferenceException from inside ReflectionCache
+	private static PropertyInfo GetProperty(object obj, string propertyName)
+	{
+		ArgumentNullException.ThrowIfNull(obj);
+		ArgumentNullException.ThrowIfNull(propertyName);
+
+		return obj.GetType().GetProperty(propertyName)
+			?? throw new ArgumentException($"{obj.GetType().Name} has no public property named '{propertyName}'", nameof(propertyName));
 	}
 
 	/// <summary>

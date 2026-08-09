@@ -175,6 +175,35 @@ public class DataRepoTests : SerializeBaseTest
 		Assert.That(pageView.GetPage(Call), Has.Exactly(1).Items);
 	}
 
+	[Test, Description(
+		"ModifiedUtc is a grid column, so it stays cached rather than putting a stat syscall on the " +
+		"render path for every visible row. Refresh() is how a caller opts into the current state")]
+	public void DataItemModifiedUtcIsCachedUntilRefreshed()
+	{
+		string path = Path.Combine(TestPath, "ModifiedUtc", Path.GetRandomFileName());
+		Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+		File.WriteAllText(path, "first");
+
+		var dataItem = new DataItem<int>("key", 1, path);
+		DateTime? first = dataItem.ModifiedUtc;
+		Assert.That(first, Is.Not.Null);
+
+		File.SetLastWriteTimeUtc(path, DateTime.UtcNow.AddHours(1));
+
+		Assert.That(dataItem.ModifiedUtc, Is.EqualTo(first), "Repeated reads don't touch the file.");
+
+		dataItem.Refresh();
+		Assert.That(dataItem.ModifiedUtc, Is.Not.EqualTo(first));
+	}
+
+	[Test, Description("A path that never existed still reports no modified time")]
+	public void DataItemModifiedUtcIsNullWithoutAFile()
+	{
+		var dataItem = new DataItem<int>("key", 1, Path.Combine(TestPath, "missing-" + Path.GetRandomFileName()));
+
+		Assert.That(dataItem.ModifiedUtc, Is.Null);
+	}
+
 	// 3 items at a page size of 2 gives 2 pages, so the last index is 1
 	private DataPageView<int> PageView(bool indexed, int itemCount = 3, int pageSize = 2)
 	{

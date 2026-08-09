@@ -149,5 +149,25 @@ public class NumberExtensionsTests : BaseTest
 		Assert.That(1234567890000.0.FormattedShortDecimal(), Is.EqualTo("1.2 T"));
 	}
 
+	[Test, Description(
+		"Math.Pow(10, power) reaches infinity below about 1e-308, and num * inf / inf is NaN, " +
+		"so the value was destroyed rather than rounded")]
+	public void RoundToSignificantFigures_SubnormalDoubles_KeepTheirValue()
+	{
+		Assert.That(double.Epsilon.RoundToSignificantFigures(3), Is.EqualTo(double.Epsilon));
+		Assert.That(1e-320.RoundToSignificantFigures(3), Is.EqualTo(1e-320));
+		Assert.That((-1e-320).RoundToSignificantFigures(3), Is.EqualTo(-1e-320));
+	}
+
+	[Test, Description("Control: ordinary values still round, and the existing special cases hold")]
+	public void RoundToSignificantFigures_OrdinaryValues()
+	{
+		Assert.That(1234.5678.RoundToSignificantFigures(3), Is.EqualTo(1230).Within(0.0001));
+		Assert.That(0.00012345.RoundToSignificantFigures(2), Is.EqualTo(0.00012).Within(0.0000001));
+		Assert.That(0.0.RoundToSignificantFigures(3), Is.EqualTo(0));
+		Assert.That(double.NaN.RoundToSignificantFigures(3), Is.NaN);
+		Assert.That(double.PositiveInfinity.RoundToSignificantFigures(3), Is.EqualTo(double.PositiveInfinity));
+	}
+
 	#endregion
 }

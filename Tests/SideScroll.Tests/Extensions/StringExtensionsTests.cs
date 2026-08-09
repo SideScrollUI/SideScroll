@@ -65,4 +65,11 @@ public class StringExtensionsTests : BaseTest
 		Assert.That("aaaa".AllIndexesOf("aa"), Is.EqualTo(new[] { 0, 2 }));
 		Assert.That("abc".AllIndexesOf("z"), Is.Empty);
 	}
+
+	[Test, Description("Control: an ordinary postfix is removed, and a missing one leaves the input alone")]
+	public void TrimEndRemovesThePostfix()
+	{
+		Assert.That("LoadAsync".TrimEnd("Async"), Is.EqualTo("Load"));
+		Assert.That("Load".TrimEnd("Async"), Is.EqualTo("Load"));
+	}
 }
