@@ -90,4 +90,46 @@ public class LiveChartSeriesTests : BaseTest
 	{
 		Assert.That(LiveChartSeries.BinDataPoints([], 1), Is.Empty);
 	}
+
+	// GetDataPoints() converts a NaN Y to null so the chart draws a gap, which is what the gap
+	// filled series from TimeRangeValue.FillAndMerge() is made of
+	private static List<LiveChartPoint> CreatePointsWithGaps(params (double X, double? Y)[] points)
+	{
+		return points
+			.Select(p => new LiveChartPoint(null, p.X, p.Y, null))
+			.ToList();
+	}
+
+	[Test, Description(
+		"A null Y is the gap GetDataPoints() creates for a NaN, and binning dereferenced it, so " +
+		"turning on XBinSize threw for any gap filled series")]
+	public void BinDataPointsSkipsNullValues()
+	{
+		List<LiveChartPoint> input = CreatePointsWithGaps((0, 5), (1, null), (2, 7));
+
+		List<LiveChartPoint> output = LiveChartSeries.BinDataPoints(input, 1);
+
+		// The middle bin holds only the gap, so it stays empty and becomes one
+		Assert.That(GetValues(output), Is.EqualTo(new double?[] { 5, double.NaN, 7 }));
+	}
+
+	[Test, Description("A null alongside a value in the same bin leaves that value alone")]
+	public void BinDataPointsIgnoresNullsSharingABin()
+	{
+		List<LiveChartPoint> input = CreatePointsWithGaps((0, 5), (0.5, null), (1, 7));
+
+		List<LiveChartPoint> output = LiveChartSeries.BinDataPoints(input, 1);
+
+		Assert.That(GetValues(output), Is.EqualTo(new double?[] { 5, 7 }));
+	}
+
+	[Test, Description("A series of nothing but gaps bins to a single break rather than throwing")]
+	public void BinDataPointsHandlesOnlyNulls()
+	{
+		List<LiveChartPoint> input = CreatePointsWithGaps((0, null), (1, null), (2, null));
+
+		List<LiveChartPoint> output = LiveChartSeries.BinDataPoints(input, 1);
+
+		Assert.That(GetValues(output), Is.EqualTo(new double?[] { double.NaN }));
+	}
 }

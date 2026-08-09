@@ -286,8 +286,13 @@ public class LiveChartSeries : IDisposable //: ChartSeries<ISeries>
 		var counts = new int[numBins]; // Tracked separately so an empty bin can be told apart from one summing to zero
 		foreach (LiveChartPoint dataPoint in dataPoints)
 		{
+			// A null Y is the gap GetDataPoints() creates for a NaN, so it contributes nothing.
+			// Dereferencing it threw, and leaving the count alone lets a bin holding only gaps stay
+			// empty, which the loop below already turns back into one
+			if (dataPoint.Y is not { } y) continue;
+
 			int bin = (int)Math.Floor((dataPoint.X!.Value - firstBinX) / xBinSize);
-			bins[bin] += dataPoint.Y!.Value;
+			bins[bin] += y;
 			counts[bin]++;
 		}
 
