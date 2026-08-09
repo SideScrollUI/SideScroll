@@ -1,4 +1,5 @@
 using SideScroll.Attributes;
+using System.Collections.Concurrent;
 using System.Reflection;
 
 namespace SideScroll.Extensions;
@@ -142,37 +143,56 @@ public static class TypeExtensions
 	}
 
 	/// <summary>
+	/// Caches the members matching an attribute, keyed by the type they were found on
+	/// </summary>
+	/// <remarks>
+	/// A type's metadata never changes once it's loaded, so the searches below only need to run
+	/// once. Giving each attribute its own generic instantiation keys on the type alone, avoiding
+	/// a composite key, and closes over nothing so the lookup delegates are cached too.
+	/// <see cref="Utilities.ObjectUtils.GetDataKey"/> runs these per row, where repeating the
+	/// reflection was most of the cost of building a list
+	/// </remarks>
+	private static class AttributeCache<T> where T : Attribute
+	{
+		public static readonly ConcurrentDictionary<Type, IReadOnlyList<PropertyInfo>> Properties = new();
+		public static readonly ConcurrentDictionary<Type, IReadOnlyList<FieldInfo>> Fields = new();
+	}
+
+	/// <summary>
 	/// Returns the first property decorated with the specified attribute type
 	/// </summary>
 	public static PropertyInfo? GetPropertyWithAttribute<T>(this Type type) where T : Attribute
 	{
-		return type.GetPropertiesWithAttribute<T>().FirstOrDefault();
+		IReadOnlyList<PropertyInfo> properties = type.GetPropertiesWithAttribute<T>();
+		return properties.Count > 0 ? properties[0] : null;
 	}
 
 	/// <summary>
 	/// Returns all properties decorated with the specified attribute type, ordered by declaration
 	/// </summary>
-	public static List<PropertyInfo> GetPropertiesWithAttribute<T>(this Type type) where T : Attribute
+	/// <remarks>The result is cached and shared between callers, so it must not be modified</remarks>
+	public static IReadOnlyList<PropertyInfo> GetPropertiesWithAttribute<T>(this Type type) where T : Attribute
 	{
 		// Properties are returned in a random order, so sort them by the MetadataToken to get the original order
-		return type.GetProperties()
+		return AttributeCache<T>.Properties.GetOrAdd(type, static t => t.GetProperties()
 			.Where(p => p.GetCustomAttribute<T>() != null)
 			.OrderBy(p => p.Module.Name)
 			.ThenBy(p => p.MetadataToken)
-			.ToList();
+			.ToArray());
 	}
 
 	/// <summary>
 	/// Returns all fields decorated with the specified attribute type, ordered by declaration
 	/// </summary>
-	public static List<FieldInfo> GetFieldsWithAttribute<T>(this Type type) where T : Attribute
+	/// <remarks>The result is cached and shared between callers, so it must not be modified</remarks>
+	public static IReadOnlyList<FieldInfo> GetFieldsWithAttribute<T>(this Type type) where T : Attribute
 	{
 		// Fields are returned in a random order, so sort them by the MetadataToken to get the original order
-		return type.GetFields()
+		return AttributeCache<T>.Fields.GetOrAdd(type, static t => t.GetFields()
 			.Where(f => f.GetCustomAttribute<T>() != null)
 			.OrderBy(f => f.Module.Name)
 			.ThenBy(f => f.MetadataToken)
-			.ToList();
+			.ToArray());
 	}
 
 	/// <summary>

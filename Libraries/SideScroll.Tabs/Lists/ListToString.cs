@@ -54,10 +54,36 @@ public class ListToString
 		if (obj == null)
 			return;
 
-		Value = obj.ToString();
+		try
+		{
+			Value = obj.ToString();
+		}
+		catch (Exception e)
+		{
+			// Show the failure instead of propagating it. Create() builds every row from this, so a
+			// single item with a throwing ToString() failed the entire collection and left the tab
+			// unrendered. Value is the only visible column, so a null would show an empty row
+			Value = "Exception: " + e.Message;
+		}
 
-		DataKey = ObjectUtils.GetDataKey(obj);
-		DataValue = ObjectUtils.GetDataValue(obj);
+		// A throwing [DataKey] or [DataValue] getter leaves the item unidentified rather than failing
+		// the collection it belongs to. Both are best effort, matching ListProperty and ListField,
+		// and are read separately so an unreadable value keeps a key that was read fine
+		try
+		{
+			DataKey = ObjectUtils.GetDataKey(obj);
+		}
+		catch (Exception)
+		{
+		}
+
+		try
+		{
+			DataValue = ObjectUtils.GetDataValue(obj);
+		}
+		catch (Exception)
+		{
+		}
 	}
 
 	/// <summary>
