@@ -84,9 +84,7 @@ public static class SvgUtils
 	{
 		image = null;
 
-		// Ordinal, ToLower() and EndsWith(string) both use the current culture, matching how
-		// FileTypeDetector and TabFile.ExtensionTypes compare extensions
-		if (!path.EndsWith(".svg", StringComparison.OrdinalIgnoreCase)) return false;
+		if (!HasSvgExtension(path)) return false;
 
 		try
 		{
@@ -103,6 +101,19 @@ public static class SvgUtils
 			call.Log.Add(e);
 			return false;
 		}
+	}
+
+	/// <summary>
+	/// Returns whether the path names an SVG file
+	/// </summary>
+	/// <remarks>
+	/// Ordinal, where ToLower() and EndsWith(string) both use the current culture, matching how
+	/// FileTypeDetector and TabFile.ExtensionTypes compare extensions. The culture treats a zero
+	/// width space as ignorable, so a file the OS reads as another extension matched here
+	/// </remarks>
+	internal static bool HasSvgExtension(string path)
+	{
+		return path.EndsWith(".svg", StringComparison.OrdinalIgnoreCase);
 	}
 
 	/// <summary>Loads an SVG image from a resource without any color replacement, throwing if the resource is not an SVG.</summary>

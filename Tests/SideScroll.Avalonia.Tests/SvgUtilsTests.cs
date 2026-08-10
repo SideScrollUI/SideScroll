@@ -1,3 +1,4 @@
+using Avalonia.Media;
 using NUnit.Framework;
 using SideScroll.Avalonia.Utilities;
 
@@ -42,21 +43,46 @@ public class SvgUtilsTests
 		return path;
 	}
 
+	// The extension rules are asserted against the check itself rather than through a load. Loading
+	// needs the SkiaSharp native stack, and where that's unavailable every load returns false, which
+	// made the rejection tests below pass without reaching the comparison they exist to cover
+
 	[TestCase("icon.svg")]
 	[TestCase("icon.SVG")]
 	[TestCase("icon.Svg")]
-	public void TryGetSvgImageAcceptsAnySvgCasing(string fileName)
+	public void SvgExtensionIsAcceptedInAnyCasing(string fileName)
 	{
-		Assert.That(SvgUtils.TryGetSvgImage(new Call(), WriteSvg(fileName), out _), Is.True);
+		Assert.That(SvgUtils.HasSvgExtension(fileName), Is.True);
 	}
 
 	[Test, Description(
 		"The gate was ToLower().EndsWith(\".svg\"), and both use the current culture, which treats a " +
 		"zero width space as ignorable. A file the OS reads as some other extension loaded as SVG")]
-	public void TryGetSvgImageRejectsAnIgnorableCharacterInTheExtension()
+	public void SvgExtensionRejectsAnIgnorableCharacter()
 	{
-		Assert.That(SvgUtils.TryGetSvgImage(new Call(), WriteSvg("icon.svg" + ZeroWidthSpace), out _), Is.False);
-		Assert.That(SvgUtils.TryGetSvgImage(new Call(), WriteSvg("icon.s" + ZeroWidthSpace + "vg"), out _), Is.False);
+		Assert.That(SvgUtils.HasSvgExtension("icon.svg" + ZeroWidthSpace), Is.False);
+		Assert.That(SvgUtils.HasSvgExtension("icon.s" + ZeroWidthSpace + "vg"), Is.False);
+	}
+
+	[TestCase("icon.txt")]
+	[TestCase("icon.svgz")]
+	[TestCase("svg")]
+	[TestCase("")]
+	public void SvgExtensionRejectsAnythingElse(string fileName)
+	{
+		Assert.That(SvgUtils.HasSvgExtension(fileName), Is.False);
+	}
+
+	[Test, Description("Loading needs the SkiaSharp native stack, which a minimal Linux image doesn't have")]
+	public void TryGetSvgImageLoadsAnSvgFile()
+	{
+		var call = new Call();
+		if (!SvgUtils.TryGetSvgImage(call, WriteSvg("icon.svg"), out IImage? image))
+		{
+			Assert.Ignore("SVG loading is unavailable here: " + call.Log.EntriesText());
+		}
+
+		Assert.That(image, Is.Not.Null);
 	}
 
 	[Test, Description("Control: a different extension is still rejected, and no image is returned")]
