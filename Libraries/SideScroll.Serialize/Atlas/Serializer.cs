@@ -446,12 +446,10 @@ public class Serializer : IDisposable
 		{
 			foreach (TypeRepoWriter typeRepoWriter in writers)
 			{
-				byte[] bytes = typeRepoWriter.MemoryStream.ToArray();
-
 				typeRepoWriter.TypeRepo.TypeSchema.StartDataOffset = writer.BaseStream.Position;
-				typeRepoWriter.TypeRepo.TypeSchema.DataSize = bytes.Length;
+				typeRepoWriter.TypeRepo.TypeSchema.DataSize = (int)typeRepoWriter.MemoryStream.Length;
 
-				writer.Write(bytes);
+				typeRepoWriter.MemoryStream.WriteTo(writer.BaseStream);
 			}
 		}
 

@@ -187,25 +187,30 @@ public class AvaloniaThemeSettings : INotifyPropertyChanged
 	{
 		var original = Application.Current!.RequestedThemeVariant;
 		Application.Current.RequestedThemeVariant = GetVariant();
-
-		foreach (ListProperty listProperty in GetProperties())
+		try
 		{
-			if (listProperty.GetCustomAttribute<ResourceKeyAttribute>() is not { } attribute) continue;
-
-			if (listProperty.Value != null) continue;
-
-			if (listProperty.UnderlyingType == typeof(Color))
+			foreach (ListProperty listProperty in GetProperties())
 			{
-				Color color = SideScrollTheme.GetBrushColor(attribute.Names.First());
-				listProperty.Value = color;
-			}
-			else if (listProperty.UnderlyingType == typeof(double))
-			{
-				double value = SideScrollTheme.GetDouble(attribute.Names.First());
-				listProperty.Value = value;
+				if (listProperty.GetCustomAttribute<ResourceKeyAttribute>() is not { } attribute) continue;
+
+				if (listProperty.Value != null) continue;
+
+				if (listProperty.UnderlyingType == typeof(Color))
+				{
+					Color color = SideScrollTheme.GetBrushColor(attribute.Names.First());
+					listProperty.Value = color;
+				}
+				else if (listProperty.UnderlyingType == typeof(double))
+				{
+					double value = SideScrollTheme.GetDouble(attribute.Names.First());
+					listProperty.Value = value;
+				}
 			}
 		}
-		Application.Current.RequestedThemeVariant = original;
+		finally
+		{
+			Application.Current.RequestedThemeVariant = original;
+		}
 	}
 
 	/// <summary>Builds an Avalonia <see cref="ResourceDictionary"/> from this settings object, mapping each <see cref="ResourceKeyAttribute"/> property to its corresponding resource key(s).</summary>

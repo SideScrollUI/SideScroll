@@ -156,22 +156,64 @@ public class TabTextBox : TextBox
 		if (attribute.MemberName != null)
 		{
 			MemberInfo[] memberInfos = property.Object.GetType().GetMember(attribute.MemberName);
-			if (memberInfos.Length != 1)
+			if (memberInfos.Length == 0)
 			{
-				throw new Exception($"Found {memberInfos.Length} members with name {attribute.MemberName}");
+				// Report the missing member only when there's nothing to fall back on, matching how
+				// a member that resolves to null falls through to the attribute's text below
+				Watermark = attribute.Text ?? $"[Watermark member '{attribute.MemberName}' not found]";
 			}
-
-			MemberInfo memberInfo = memberInfos.First();
-			if (memberInfo is PropertyInfo propertyInfo)
+			else
 			{
-				Watermark = propertyInfo.GetValue(property.Object)?.ToString();
-			}
-			else if (memberInfo is FieldInfo fieldInfo)
-			{
-				Watermark = fieldInfo.GetValue(property.Object)?.ToString();
+				Watermark = GetMemberText(GetMostDerived(memberInfos), property.Object);
 			}
 		}
 		Watermark ??= attribute.Text;
+	}
+
+	/// <summary>
+	/// Returns the member's value as the watermark text, or null when there isn't one to show
+	/// </summary>
+	/// <remarks>
+	/// A watermark is a hint, so a member that can't be read falls back to the attribute's own text
+	/// rather than failing the control it decorates. A property is read through reflection, so a
+	/// throwing getter arrives wrapped and used to escape the constructor
+	/// </remarks>
+	internal static string? GetMemberText(MemberInfo memberInfo, object obj)
+	{
+		try
+		{
+			return memberInfo switch
+			{
+				PropertyInfo propertyInfo => propertyInfo.GetValue(obj)?.ToString(),
+				FieldInfo fieldInfo => fieldInfo.GetValue(obj)?.ToString(),
+				_ => null,
+			};
+		}
+		catch (Exception)
+		{
+			return null;
+		}
+	}
+
+	/// <summary>
+	/// Returns the member a subclass declares over the one it hides, matching what the compiler resolves
+	/// </summary>
+	/// <remarks>
+	/// GetMember() resolves a hidden property to the derived one on its own, but returns both
+	/// declarations of a hidden field, where the base one holds a value nothing refers to. Their
+	/// order isn't guaranteed, so the declaring types are what choose between them
+	/// </remarks>
+	internal static MemberInfo GetMostDerived(MemberInfo[] memberInfos)
+	{
+		MemberInfo mostDerived = memberInfos[0];
+		foreach (MemberInfo memberInfo in memberInfos)
+		{
+			if (mostDerived.DeclaringType!.IsAssignableFrom(memberInfo.DeclaringType))
+			{
+				mostDerived = memberInfo;
+			}
+		}
+		return mostDerived;
 	}
 
 	private void BindProperty(ListProperty property)

@@ -53,7 +53,27 @@ public class TypeRepoList : TypeRepo
 			_listTypeRepo = Serializer.GetOrCreateRepo(log, _elementType);
 		}
 
-		_propertyInfoCapacity = LoadableType!.GetProperty("Capacity");
+		_propertyInfoCapacity = GetCapacityProperty(LoadableType!);
+	}
+
+	/// <summary>
+	/// Returns a writable Capacity property to preallocate with, or null when there isn't a usable one
+	/// </summary>
+	/// <remarks>
+	/// A subclass declaring its own Capacity of a different type than the one it hides leaves
+	/// GetProperty() unable to choose between them, which threw before the list could be read
+	/// </remarks>
+	private static PropertyInfo? GetCapacityProperty(Type type)
+	{
+		try
+		{
+			PropertyInfo? propertyInfo = type.GetProperty("Capacity");
+			return propertyInfo?.CanWrite == true ? propertyInfo : null;
+		}
+		catch (AmbiguousMatchException)
+		{
+			return null;
+		}
 	}
 
 	public override void AddChildObjects(object obj)
@@ -83,12 +103,34 @@ public class TypeRepoList : TypeRepo
 		var list = (IList)obj;
 		int count = Reader!.ReadInt32();
 		ValidateBytesAvailable(count);
-		_propertyInfoCapacity?.SetValue(list, count);
+		SetCapacity(list, count);
 
 		for (int j = 0; j < count; j++)
 		{
 			object? valueObject = _listTypeRepo!.LoadObjectRef();
 			list.Add(valueObject);
+		}
+	}
+
+	/// <summary>
+	/// Preallocates the list for the number of elements about to be added
+	/// </summary>
+	/// <remarks>
+	/// Only an optimization, so a Capacity that refuses the value still has to leave the elements
+	/// loading. A fixed size list throws NotSupportedException, and a list whose constructor added
+	/// more elements than were saved throws ArgumentOutOfRangeException for shrinking below its
+	/// Count. Both used to abandon the rest of the list
+	/// </remarks>
+	private void SetCapacity(IList list, int count)
+	{
+		if (_propertyInfoCapacity == null) return;
+
+		try
+		{
+			_propertyInfoCapacity.SetValue(list, count);
+		}
+		catch (Exception)
+		{
 		}
 	}
 

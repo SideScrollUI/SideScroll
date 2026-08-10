@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\SideScroll\SideScroll.csproj" />
+    <ProjectReference Include="..\..\Libraries\SideScroll.Resources\SideScroll.Resources.csproj" />
   </ItemGroup>
 
 </Project>

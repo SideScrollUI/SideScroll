@@ -21,8 +21,12 @@ namespace SideScroll.Avalonia.Controls.ScreenCapture;
 /// </summary>
 public class ScreenCapture : Grid, IDisposable
 {
-	/// <summary>Gets or sets the minimum pixel dimension (width or height) required before a selection can be copied.</summary>
-	public static int MinClipboardSize { get; set; } = 10;
+	public static int MinClipboardSize
+	{
+		get => _minClipboardSize;
+		set => _minClipboardSize = Math.Max(1, value);
+	}
+	private static int _minClipboardSize = 10;
 
 	private static RenderTargetBitmap? _clipboardBitmap;
 
@@ -232,6 +236,8 @@ public class ScreenCapture : Grid, IDisposable
 	private void ScreenCapture_PointerPressed(object? sender, PointerPressedEventArgs e)
 	{
 		_startPoint = e.GetPosition(_backgroundImage);
+		_selectionRect = new Rect();
+		UpdateSelectionImage();
 	}
 
 	private async void ScreenCapture_PointerReleased(object? sender, PointerReleasedEventArgs e)

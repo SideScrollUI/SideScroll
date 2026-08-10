@@ -14,10 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `TextHighlighter` and `TabAvaloniaEdit.Highlighters` for highlighting formats beyond JSON and XML, matched against the file extension or by probing the text. Registering one at startup highlights that format everywhere it's shown, including generic string and file tabs, and `TextHighlighting.Register()` and `Load()` load an AvaloniaEdit `.xshd` definition from an embedded resource
 - Added `ProcessUtils.StartDotnetProcess(IReadOnlyList<string>)`, which passes each argument through `ArgumentList` so values containing spaces or quotes reach the child process intact. The `string` overload leaves every value for the caller to quote, where an unquoted path under a directory like `C:\Users\First Last` splits into two arguments before the child process sees it
 
-### Changed
-- `TypeExtensions.GetPropertiesWithAttribute()` and `GetFieldsWithAttribute()` cache their results per type and attribute instead of re-running the search on every call, and return `IReadOnlyList<T>` rather than `List<T>` now that the result is shared. `ObjectUtils.GetDataKey()` and `GetDataValue()` call them per row, where the repeated reflection was most of the cost of building a list: 200,000 rows through `ListToString.Create()` went from ~250 ms and 183 MB to ~55 ms and 43 MB
-
 ### Fixed
+- Fixed a deserialized list's `Capacity` discarding the elements that followed it. `TypeRepoList` preallocates as an optimization, and both finding the property and setting it now fall back to loading without it: a `Capacity` hidden by one of a different type left `GetProperty()` unable to choose and threw before the list was read, and a setter that refused the value, whether it's fixed size or already holds more elements than were saved, abandoned every element with nothing logged
 - Fixed enabling `XBinSize` on a chart series containing gaps throwing an `InvalidOperationException`. `GetDataPoints()` converts a NaN Y to null so the chart breaks the line, which is what `TimeRangeValue.FillAndMerge()` produces, and binning dereferenced it. A gap contributes nothing to its bin now, and a bin holding only gaps stays one
 - Fixed HTTP requests ignoring task cancellation. `HttpCall` and `HttpUtils` never passed the call's cancel token to `SendAsync()`, `GetAsync()`, the content reads, or the delay between retries, so cancelling a task left its requests running and then worked through every remaining attempt. A cancelled call now stops at the attempt it's on
 - Fixed `ViewHttpResponse` never releasing the `HttpResponseMessage` it owns. `GetBytesAsync()` deliberately transfers ownership so the headers stay readable, and nothing disposed it afterwards. It's `IDisposable` now and `GetStringAsync()` disposes it
@@ -115,8 +113,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed short decimal formatting appending a tera suffix to positive and negative infinity
 - Fixed SVG detection consuming or rewinding caller-owned streams
 - Fixed XML formatting dropping the document declaration
+- Fixed `Serializer.SaveObjects` allocating massive `byte[]` arrays on the Large Object Heap for large object graphs by streaming directly to the underlying `BinaryWriter` stream instead of using `MemoryStream.ToArray()`
+- Fixed clicking the screen capture overlay without dragging recopying the previous selection rectangle by clearing it on pointer press
+- Fixed `ScreenCapture.MinClipboardSize` allowing zero or negative values, which caused a `PixelSize` crash on empty selections
+- Fixed a `[Watermark]` member name that can't be read aborting the control it decorates. A mistyped name threw, and so did a getter that failed, taking down the form rather than the one hint. A name that resolves to nothing falls back to the attribute's own text now, or names the missing member when there's no text to fall back on
+- Fixed a `[Watermark]` naming a field that a subclass redeclares with `new` being reported as ambiguous. `GetMember()` returns both declarations for a field, though not for a property, and the derived one is what the compiler resolves to
 
 ### Changed
+- `TypeExtensions.GetPropertiesWithAttribute()` and `GetFieldsWithAttribute()` cache their results per type and attribute instead of re-running the search on every call, and return `IReadOnlyList<T>` rather than `List<T>` now that the result is shared. `ObjectUtils.GetDataKey()` and `GetDataValue()` call them per row, where the repeated reflection was most of the cost of building a list: 200,000 rows through `ListToString.Create()` went from ~250 ms and 183 MB to ~55 ms and 43 MB
 
 ## [0.23] - 2026-08-03
 

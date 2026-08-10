@@ -37,7 +37,8 @@ public record ResourceView(Assembly Assembly, string BasePath, string GroupPath,
 	/// <summary>
 	/// Stream for reading the embedded resource content from the assembly
 	/// </summary>
-	public Stream Stream => Assembly.GetManifestResourceStream(Path)!;
+	public Stream Stream => Assembly.GetManifestResourceStream(Path)
+		?? throw new FileNotFoundException($"Embedded resource '{Path}' was not found in assembly '{Assembly.FullName}'.", Path);
 
 	/// <summary>
 	/// Reads the resource content as text

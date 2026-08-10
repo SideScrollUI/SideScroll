@@ -83,6 +83,38 @@ public class SerializeCollectionTests : SerializeBaseTest
 
 	public class StringList : List<string>;
 
+	public class ReadOnlyCapacityList : CollectionBase
+	{
+		public new int Capacity => InnerList.Capacity;
+
+		public void Add(string value) => List.Add(value);
+
+		public string this[int index] => (string)List[index]!;
+	}
+
+	public class ThrowingCapacityList : CollectionBase
+	{
+		public new int Capacity
+		{
+			get => InnerList.Capacity;
+			set => throw new NotSupportedException("Capacity is fixed");
+		}
+
+		public void Add(string value) => List.Add(value);
+
+		public string this[int index] => (string)List[index]!;
+	}
+
+	// Hiding Capacity with a different type leaves GetProperty() unable to choose between the two
+	public class AmbiguousCapacityList : CollectionBase
+	{
+		public new long Capacity { get; set; }
+
+		public void Add(string value) => List.Add(value);
+
+		public string this[int index] => (string)List[index]!;
+	}
+
 	[Test, Description("Serialize String List Type")]
 	public void SerializeStringListType()
 	{
@@ -97,6 +129,53 @@ public class SerializeCollectionTests : SerializeBaseTest
 
 		Assert.That(output[0], Is.EqualTo(input[0]));
 		Assert.That(output[1], Is.EqualTo(input[1]));
+	}
+
+	[Test, Description("Serialize IList with a read-only Capacity property")]
+	public void SerializeReadOnlyCapacityList()
+	{
+		var input = new ReadOnlyCapacityList();
+		input.Add("abc");
+		input.Add("123");
+
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<ReadOnlyCapacityList>(Call);
+
+		Assert.That(output, Has.Count.EqualTo(2));
+		Assert.That(output[0], Is.EqualTo("abc"));
+		Assert.That(output[1], Is.EqualTo("123"));
+	}
+
+	[Test, Description(
+		"A Capacity setter that refuses the value used to abandon the rest of the list, loading " +
+		"none of the elements without reporting anything")]
+	public void SerializeThrowingCapacityList()
+	{
+		var input = new ThrowingCapacityList();
+		input.Add("abc");
+		input.Add("123");
+
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<ThrowingCapacityList>(Call);
+
+		Assert.That(output, Has.Count.EqualTo(2));
+		Assert.That(output[0], Is.EqualTo("abc"));
+		Assert.That(output[1], Is.EqualTo("123"));
+	}
+
+	[Test, Description("A Capacity hidden by one of a different type threw before the list was read")]
+	public void SerializeAmbiguousCapacityList()
+	{
+		var input = new AmbiguousCapacityList();
+		input.Add("abc");
+		input.Add("123");
+
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<AmbiguousCapacityList>(Call);
+
+		Assert.That(output, Has.Count.EqualTo(2));
+		Assert.That(output[0], Is.EqualTo("abc"));
+		Assert.That(output[1], Is.EqualTo("123"));
 	}
 
 	[Test, Description("Serialize ConcurrentDictionary")]
