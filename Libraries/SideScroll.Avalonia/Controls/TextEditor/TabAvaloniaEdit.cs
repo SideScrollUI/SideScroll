@@ -170,7 +170,18 @@ public class TabAvaloniaEdit : Border, IDisposable
 		string? extension = Path != null ? System.IO.Path.GetExtension(Path) : null;
 
 		Highlighter = Highlighters.Find(highlighter => highlighter.Matches(extension, text));
-		TextType = Highlighter != null ? TextType.Custom : TextType.Default;
+
+		if (Highlighter != null)
+		{
+			TextType = TextType.Custom;
+		}
+		else if (TextType == TextType.Custom)
+		{
+			// New text can stop matching, so clear the highlighting, but only the kind set here.
+			// Callers can assign their own, like the CloudWatch Log Insights query editor does
+			TextType = TextType.Default;
+			TextEditor.SyntaxHighlighting = null;
+		}
 	}
 
 	private void UpdateTheme()
@@ -193,11 +204,6 @@ public class TabAvaloniaEdit : Border, IDisposable
 		{
 			EnableMonospace();
 			Highlighter.Apply(this);
-		}
-		else
-		{
-			// Text can stop matching a highlighter, so the previous one has to be cleared
-			TextEditor.SyntaxHighlighting = null;
 		}
 	}
 
@@ -265,14 +271,29 @@ public class TabAvaloniaEdit : Border, IDisposable
 			}
 			else
 			{
-				Text = text;
+				SetPlainText(text);
 			}
 		}
 		catch (Exception)
 		{
-			TextType = TextType.Default;
-			Text = text;
+			SetPlainText(text);
 		}
+	}
+
+	/// <summary>
+	/// Shows the text unformatted, clearing the highlighting an earlier call applied
+	/// </summary>
+	/// <remarks>
+	/// Both <see cref="SelectHighlighter"/> and <see cref="UpdateTheme"/> read <see cref="TextType"/>,
+	/// so leaving it on the format the previous call detected applied that format's highlighting to
+	/// text that isn't in it. Neither clears a highlighting it didn't set, which is what lets a
+	/// caller assign its own, so this has to clear the one it's replacing
+	/// </remarks>
+	private void SetPlainText(string text)
+	{
+		TextType = TextType.Default;
+		TextEditor.SyntaxHighlighting = null;
+		Text = text;
 	}
 
 	private void UpdateLineNumbers()
