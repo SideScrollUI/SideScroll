@@ -80,7 +80,11 @@ public class Serializer : IDisposable
 	/// <summary>
 	/// Gets the dictionary tracking cloned objects
 	/// </summary>
-	protected Dictionary<object, object> Clones { get; } = [];
+	/// <remarks>
+	/// Keyed by <see cref="SerializerObjectComparer"/> so two distinct objects that compare equal
+	/// clone separately instead of both becoming the first one's clone
+	/// </remarks>
+	protected Dictionary<object, object> Clones { get; } = new(SerializerObjectComparer.Instance);
 
 	/// <summary>
 	/// Gets the queue of clone operations to process

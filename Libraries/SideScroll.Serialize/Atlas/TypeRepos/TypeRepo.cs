@@ -137,7 +137,11 @@ public abstract class TypeRepo : IDisposable
 	/// <summary>
 	/// Gets the dictionary mapping objects to their indices (for saving only, not filled in for loading)
 	/// </summary>
-	public Dictionary<object, int> IdxObjectToIndex { get; } = [];
+	/// <remarks>
+	/// Keyed by <see cref="SerializerObjectComparer"/> so two distinct objects that compare equal
+	/// are saved separately instead of the second becoming a reference to the first
+	/// </remarks>
+	public Dictionary<object, int> IdxObjectToIndex { get; } = new(SerializerObjectComparer.Instance);
 
 	private bool _disposed;
 
