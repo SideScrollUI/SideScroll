@@ -178,7 +178,6 @@ public class TabAvaloniaEdit : Border, IDisposable
 		else if (TextType == TextType.Custom)
 		{
 			// New text can stop matching, so clear the highlighting, but only the kind set here.
-			// Callers can assign their own, like the CloudWatch Log Insights query editor does
 			TextType = TextType.Default;
 			TextEditor.SyntaxHighlighting = null;
 		}

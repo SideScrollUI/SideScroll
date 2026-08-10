@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Fixed
+
+### Changed
+
+## [0.24] - 2026-08-10
+
+### Added
 - Added `DataItem.Refresh()`, which discards the cached `FileInfo` so `ModifiedUtc` picks up the file's current state. It stays cached by default because it renders as a grid column, where refreshing on read would put a stat syscall on the render path for every visible row
 - Added `HttpUtils.DecodeString()` and `DefaultEncoding` (UTF-8) for decoding response bodies as text
 - Added `IDisposable` to both `DataViewCollection` classes, so a discarded collection can stop mirroring a repository view that outlives it
