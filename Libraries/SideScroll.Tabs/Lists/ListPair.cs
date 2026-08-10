@@ -44,8 +44,7 @@ public class ListPair(object key, object? value, object? obj = null, int? maxDes
 	[HiddenColumn]
 	public int? MaxDesiredHeight { get; set; } = maxDesiredHeight;
 
-	// INotifyPropertyChanged requires the event, nothing here raises it. The warning is CS0067,
-	// so the previous "disable 414" (a field warning) never suppressed anything
+	// INotifyPropertyChanged requires the event, nothing here raises it.
 #pragma warning disable CS0067
 	/// <summary>
 	/// Event raised when a property value changes
@@ -86,8 +85,7 @@ public class ListPair<TKey, TValue>(TKey key, TValue value, object? obj = null) 
 	[HiddenColumn]
 	public bool IsAutoSelectable { get; set; } = true;
 
-	// INotifyPropertyChanged requires the event, nothing here raises it. The warning is CS0067,
-	// so the previous "disable 414" (a field warning) never suppressed anything
+	// INotifyPropertyChanged requires the event, nothing here raises it.
 #pragma warning disable CS0067
 	/// <summary>
 	/// Event raised when a property value changes

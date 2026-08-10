@@ -400,7 +400,7 @@ public class TypeRepoObject : TypeRepo
 				}
 				else
 				{
-					throw new SerializerException("Missing FieldRepo: " + fieldRepo);
+					throw new SerializerException("Missing FieldRepo", new Tag("Field", fieldRepo));
 				}
 			}
 			else if (parameter is PropertyRepo propertyRepo)
@@ -411,7 +411,7 @@ public class TypeRepoObject : TypeRepo
 				}
 				else
 				{
-					throw new SerializerException("Missing PropertyRepo: " + propertyRepo);
+					throw new SerializerException("Missing PropertyRepo", new Tag("Property", propertyRepo));
 				}
 			}
 			else

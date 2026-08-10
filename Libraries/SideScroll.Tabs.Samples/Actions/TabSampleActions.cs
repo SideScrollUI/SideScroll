@@ -118,7 +118,7 @@ public class TabSampleActions : ITab
 
 		private async Task<int> MultiLevelRunTaskAsync(Call call, int id)
 		{
-			call.Log.Add("Sleeping: " + id);
+			call.Log.Add("Sleeping", new Tag("Id", id));
 
 			await Task.Delay(_random.Next(0, 1000), call.TaskInstance!.CancelToken);
 
