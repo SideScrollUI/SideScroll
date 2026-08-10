@@ -136,6 +136,23 @@ public static class JsonConverters
 		}
 	}
 
+	/// <summary>
+	/// Stops a member from being written, and from being read back into
+	/// </summary>
+	/// <remarks>
+	/// ShouldSerialize is only consulted while writing, so clearing the setter is what keeps a
+	/// member the export deliberately left out from being populated by naming it in the json handed
+	/// back. Without it a [PrivateData] member was excluded from a public export and then set from
+	/// an imported one, letting a member override the [PublicData] type around it in one direction
+	/// only. A member bound to a constructor parameter is still assigned through the constructor,
+	/// which no JsonPropertyInfo governs
+	/// </remarks>
+	private static void Exclude(JsonPropertyInfo property)
+	{
+		property.ShouldSerialize = (_, _) => false;
+		property.Set = null;
+	}
+
 	private static void IgnorePrivateDataAttributeModifier(JsonTypeInfo typeInfo)
 	{
 		if (typeInfo.Kind != JsonTypeInfoKind.Object)
@@ -146,14 +163,14 @@ public static class JsonConverters
 			// Check if the property has PrivateDataAttribute
 			if (property.AttributeProvider?.IsDefined(typeof(PrivateDataAttribute), inherit: true) == true)
 			{
-				property.ShouldSerialize = (_, _) => false;
+				Exclude(property);
 				continue;
 			}
 
 			// Check if the property's type has PrivateDataAttribute
 			if (property.PropertyType.IsDefined(typeof(PrivateDataAttribute), inherit: true))
 			{
-				property.ShouldSerialize = (_, _) => false;
+				Exclude(property);
 			}
 		}
 	}
@@ -168,7 +185,7 @@ public static class JsonConverters
 			// Check if the property has UnserializedAttribute
 			if (property.AttributeProvider?.IsDefined(typeof(UnserializedAttribute), inherit: true) == true)
 			{
-				property.ShouldSerialize = (_, _) => false;
+				Exclude(property);
 			}
 		}
 	}
@@ -204,7 +221,7 @@ public static class JsonConverters
 
 			if (!hasPublicDataAttribute)
 			{
-				property.ShouldSerialize = (_, _) => false;
+				Exclude(property);
 			}
 		}
 	}
