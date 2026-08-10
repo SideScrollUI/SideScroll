@@ -160,8 +160,18 @@ internal static class ReflectionCache
 
 	// ── Compute helpers (run once per type key) ───────────────────────────
 
+	// RemoveHidden() picks the member a subclass redeclares over the one it hides, whichever order
+	// their MetadataTokens put them in. Sorting followed declaration order, so which of the two a
+	// caller bound came down to whether the subclass was declared after the type it derives from.
+	//
+	// It runs before the filters rather than after, because a filter that drops the redeclaration
+	// leaves the hidden one behind for RemoveHidden() to keep as the only member of that name.
+	// Marking a redeclared member [Hidden], or leaving its getter non public, would then show the
+	// base member's value instead of hiding it. This costs one pass over the members the filters
+	// would have dropped, once per type, since these are cached
 	private static PropertyInfo[] ComputeProperties(Type type, bool includeBaseTypes, bool includeStatic)
 		=> type.GetProperties()
+			.RemoveHidden()
 			.Where(p => p.IsRowVisible())
 			.Where(p => p.GetGetMethod(false)?.GetParameters().Length == 0)
 			.Where(p => includeBaseTypes || p.DeclaringType == type)
@@ -179,8 +189,12 @@ internal static class ReflectionCache
 			.ThenBy(m => m.MetadataToken)
 			.ToArray();
 
+	// A field is always returned for both declarations, never resolved the way a property is, so
+	// every field a subclass redeclares reached here twice. RemoveHidden() runs first for the same
+	// reason it does above
 	private static FieldInfo[] ComputeFields(Type type, bool includeBaseTypes, bool includeStatic)
 		=> type.GetFields()
+			.RemoveHidden()
 			.Where(f => f.IsRowVisible())
 			.Where(f => includeBaseTypes || f.DeclaringType == type)
 			.Where(f => includeStatic || !f.IsStatic)

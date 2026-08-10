@@ -59,4 +59,67 @@ public static class MemberExtensions
 		return propertyInfo.GetCustomAttribute<HiddenAttribute>() == null && // [Hidden]
 			propertyInfo.GetCustomAttribute<HiddenColumnAttribute>() == null; // [HiddenRow]
 	}
+
+	/// <summary>
+	/// Returns whether the member is declared further down the hierarchy than the one it hides
+	/// </summary>
+	private static bool IsMoreDerivedThan(this MemberInfo memberInfo, MemberInfo other)
+	{
+		return other.DeclaringType!.IsAssignableFrom(memberInfo.DeclaringType);
+	}
+
+	/// <summary>
+	/// Returns the member a subclass declares over the ones it hides, matching what the compiler resolves
+	/// </summary>
+	/// <remarks>Reflection returns the members in no guaranteed order, so it can't choose between them</remarks>
+	public static T GetMostDerived<T>(this IReadOnlyList<T> members) where T : MemberInfo
+	{
+		T mostDerived = members[0];
+		foreach (T member in members)
+		{
+			if (member.IsMoreDerivedThan(mostDerived))
+			{
+				mostDerived = member;
+			}
+		}
+		return mostDerived;
+	}
+
+	/// <summary>
+	/// Returns the members with each hidden declaration replaced by the one hiding it
+	/// </summary>
+	/// <remarks>
+	/// <para>
+	/// Reflection resolves a member a subclass redeclares with the same signature, but returns both
+	/// declarations when it can't: always for a field, and for a property whose type changed. The
+	/// base declaration holds a value nothing refers to, so leaving both in makes whichever the
+	/// caller happens to reach for the winner.
+	/// </para>
+	/// <para>
+	/// Each name keeps the position it first appeared at, so this only removes members and never
+	/// reorders the rest.
+	/// </para>
+	/// </remarks>
+	public static List<T> RemoveHidden<T>(this IReadOnlyList<T> members) where T : MemberInfo
+	{
+		var indexes = new Dictionary<string, int>(members.Count);
+		List<T> remaining = new(members.Count);
+
+		foreach (T member in members)
+		{
+			if (indexes.TryGetValue(member.Name, out int index))
+			{
+				if (member.IsMoreDerivedThan(remaining[index]))
+				{
+					remaining[index] = member;
+				}
+			}
+			else
+			{
+				indexes[member.Name] = remaining.Count;
+				remaining.Add(member);
+			}
+		}
+		return remaining;
+	}
 }

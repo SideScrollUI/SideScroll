@@ -10,6 +10,7 @@ using SideScroll.Attributes;
 using SideScroll.Avalonia.Controls.Converters;
 using SideScroll.Avalonia.Themes;
 using SideScroll.Avalonia.Utilities;
+using SideScroll.Extensions;
 using SideScroll.Tabs.Lists;
 using SideScroll.Utilities;
 using System.ComponentModel.DataAnnotations;
@@ -164,7 +165,7 @@ public class TabTextBox : TextBox
 			}
 			else
 			{
-				Watermark = GetMemberText(GetMostDerived(memberInfos), property.Object);
+				Watermark = GetMemberText(memberInfos.GetMostDerived(), property.Object);
 			}
 		}
 		Watermark ??= attribute.Text;
@@ -193,27 +194,6 @@ public class TabTextBox : TextBox
 		{
 			return null;
 		}
-	}
-
-	/// <summary>
-	/// Returns the member a subclass declares over the one it hides, matching what the compiler resolves
-	/// </summary>
-	/// <remarks>
-	/// GetMember() resolves a hidden property to the derived one on its own, but returns both
-	/// declarations of a hidden field, where the base one holds a value nothing refers to. Their
-	/// order isn't guaranteed, so the declaring types are what choose between them
-	/// </remarks>
-	internal static MemberInfo GetMostDerived(MemberInfo[] memberInfos)
-	{
-		MemberInfo mostDerived = memberInfos[0];
-		foreach (MemberInfo memberInfo in memberInfos)
-		{
-			if (mostDerived.DeclaringType!.IsAssignableFrom(memberInfo.DeclaringType))
-			{
-				mostDerived = memberInfo;
-			}
-		}
-		return mostDerived;
 	}
 
 	private void BindProperty(ListProperty property)

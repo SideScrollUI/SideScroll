@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using SideScroll.Avalonia.Controls;
+using SideScroll.Extensions;
 using System.Reflection;
 
 namespace SideScroll.Avalonia.Tests;
@@ -25,7 +26,7 @@ public class TabTextBoxTests
 	private static MemberInfo Resolve(string name)
 	{
 		MemberInfo[] memberInfos = typeof(DerivedModel).GetMember(name);
-		return TabTextBox.GetMostDerived(memberInfos);
+		return memberInfos.GetMostDerived();
 	}
 
 	[Test, Description(
@@ -57,7 +58,7 @@ public class TabTextBoxTests
 	{
 		MemberInfo[] memberInfos = typeof(BaseModel).GetMember(nameof(BaseModel.HintField));
 
-		Assert.That(TabTextBox.GetMostDerived(memberInfos), Is.SameAs(memberInfos[0]));
+		Assert.That(memberInfos.GetMostDerived(), Is.SameAs(memberInfos[0]));
 	}
 
 	[Test, Description("The declaring types choose between them, not the order GetMember() returned")]
@@ -66,8 +67,8 @@ public class TabTextBoxTests
 		MemberInfo[] memberInfos = typeof(DerivedModel).GetMember(nameof(DerivedModel.HintField));
 		MemberInfo[] reversed = [.. memberInfos.Reverse()];
 
-		Assert.That(TabTextBox.GetMostDerived(reversed).DeclaringType, Is.EqualTo(typeof(DerivedModel)));
-		Assert.That(TabTextBox.GetMostDerived(memberInfos).DeclaringType, Is.EqualTo(typeof(DerivedModel)));
+		Assert.That(reversed.GetMostDerived().DeclaringType, Is.EqualTo(typeof(DerivedModel)));
+		Assert.That(memberInfos.GetMostDerived().DeclaringType, Is.EqualTo(typeof(DerivedModel)));
 	}
 
 	private class ThrowingModel
