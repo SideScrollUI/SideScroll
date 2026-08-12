@@ -1,0 +1,87 @@
+name: Publish to NuGet
+
+on:
+  # Re-enable once a manual run has verified the trusted publishing setup
+  # push:
+  #   tags: [ "v*" ]
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Push the packages to nuget.org, instead of only uploading them as a build artifact'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    # Only run on the main repository, not on forks
+    if: github.repository == 'SideScrollUI/SideScroll'
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write  # Allows NuGet/login to exchange a GitHub OIDC token for a temporary API key
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v7
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Install .NET WASM workload
+      run: dotnet workload install wasm-tools-net8
+
+    # Packages are versioned from Directory.Build.props, not from the tag, so a
+    # mismatch would publish a version that doesn't match the tag it came from
+    - name: Verify tag matches version
+      if: startsWith(github.ref, 'refs/tags/')
+      run: |
+        version=$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' Directory.Build.props | head -1)
+        tag=${GITHUB_REF_NAME#v}
+        if [ "$version" != "$tag" ]; then
+          echo "::error::Tag $GITHUB_REF_NAME doesn't match <Version>$version</Version> in Directory.Build.props"
+          exit 1
+        fi
+        echo "Publishing version $version"
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build -c Release --no-restore -p:ContinuousIntegrationBuild=true
+
+    - name: Test
+      run: dotnet test -c Release --no-build --verbosity normal
+
+    - name: Pack
+      run: dotnet pack -c Release --no-build -o Packages
+
+    - name: Upload packages
+      uses: actions/upload-artifact@v7
+      with:
+        name: nuget-packages
+        path: Packages/*
+        if-no-files-found: error
+
+    # Temporary API keys are only valid for an hour, so request one right before pushing
+    - name: NuGet login
+      id: login
+      if: startsWith(github.ref, 'refs/tags/') || inputs.publish
+      uses: NuGet/login@v1
+      with:
+        user: ${{ secrets.NUGET_USER }}
+
+    # .snupkg symbol packages are pushed automatically alongside their .nupkg
+    - name: Push to NuGet
+      if: startsWith(github.ref, 'refs/tags/') || inputs.publish
+      run: |
+        dotnet nuget push "Packages/*.nupkg" \
+          --source https://api.nuget.org/v3/index.json \
+          --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" \
+          --skip-duplicate
