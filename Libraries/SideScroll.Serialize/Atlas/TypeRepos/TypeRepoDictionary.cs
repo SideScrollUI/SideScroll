@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace SideScroll.Serialize.Atlas.TypeRepos;
 
-public class TypeRepoDictionary : TypeRepo
+public class TypeRepoDictionary : TypeRepo, IPreloadRepo
 {
 	public class Creator : IRepoCreator
 	{
@@ -82,6 +82,21 @@ public class TypeRepoDictionary : TypeRepo
 		{
 			Serializer.WriteObjectRef(_typeKey!, item.Key, writer);
 			Serializer.WriteObjectRef(_typeValue!, item.Value, writer);
+		}
+	}
+
+	// Preload the keys first so they hash on their own values before being added to the dictionary
+	// Otherwise a key that hashes on its members has whatever an unloaded one does, which every
+	// other key of its type also has, so they collide and the entries that follow are abandoned
+	public void PreloadObjectData(object? obj)
+	{
+		int count = Reader!.ReadInt32();
+		ValidateBytesAvailable(count);
+
+		for (int j = 0; j < count; j++)
+		{
+			_list1TypeRepo!.LoadObjectRef();
+			_list2TypeRepo!.LoadObjectRef();
 		}
 	}
 

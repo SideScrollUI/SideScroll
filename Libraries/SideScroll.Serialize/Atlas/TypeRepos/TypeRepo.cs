@@ -135,6 +135,16 @@ public abstract class TypeRepo : IDisposable
 	public BinaryReader? Reader { get; set; }
 
 	/// <summary>
+	/// Gets or sets the log a failure while loading an object is reported to
+	/// </summary>
+	/// <remarks>
+	/// Assigned by <see cref="Create"/> along with <see cref="Reader"/>, so it can't be missed for a
+	/// repo created down one of the paths that doesn't set it. <see cref="InitializeLoading"/> would
+	/// be the other place, but every subclass overrides it without calling the base
+	/// </remarks>
+	public Log? LoadLog { get; set; }
+
+	/// <summary>
 	/// Gets the dictionary mapping objects to their indices (for saving only, not filled in for loading)
 	/// </summary>
 	/// <remarks>
@@ -213,13 +223,20 @@ public abstract class TypeRepo : IDisposable
 	/// </summary>
 	public static TypeRepo Create(Log log, Serializer serializer, TypeSchema typeSchema)
 	{
+		TypeRepo typeRepo = CreateRepo(log, serializer, typeSchema);
+
+		// Attached to every repo here rather than at each of the returns below, which is what let a
+		// failure while loading go unreported for want of a log
+		typeRepo.Reader = serializer.Reader;
+		typeRepo.LoadLog = log;
+		return typeRepo;
+	}
+
+	private static TypeRepo CreateRepo(Log log, Serializer serializer, TypeSchema typeSchema)
+	{
 		if (typeSchema.IsUnserialized)
 		{
-			var typeRepoUnknown = new TypeRepoUnknown(serializer, typeSchema)
-			{
-				Reader = serializer.Reader,
-			};
-			return typeRepoUnknown;
+			return new TypeRepoUnknown(serializer, typeSchema);
 		}
 
 		if (serializer.PublicOnly && !typeSchema.IsPublicOnly)
@@ -237,21 +254,13 @@ public abstract class TypeRepo : IDisposable
 					Debug.Print(message); // For unit tests
 				}
 			}
-			var typeRepoUnknown = new TypeRepoUnknown(serializer, typeSchema)
-			{
-				Reader = serializer.Reader,
-			};
-			return typeRepoUnknown;
+			return new TypeRepoUnknown(serializer, typeSchema);
 		}
-
-		TypeRepo? typeRepo;
 
 		foreach (IRepoCreator creator in RepoCreators)
 		{
-			typeRepo = creator.TryCreateRepo(serializer, typeSchema);
-			if (typeRepo != null)
+			if (creator.TryCreateRepo(serializer, typeSchema) is { } typeRepo)
 			{
-				typeRepo.Reader = serializer.Reader;
 				return typeRepo;
 			}
 		}
@@ -259,14 +268,9 @@ public abstract class TypeRepo : IDisposable
 		// Derived types can still have valid constructors
 		if (!typeSchema.HasConstructor)
 		{
-			typeRepo = new TypeRepoUnknown(serializer, typeSchema);
+			return new TypeRepoUnknown(serializer, typeSchema);
 		}
-		else
-		{
-			typeRepo = new TypeRepoObject(serializer, typeSchema);
-		}
-		typeRepo.Reader = serializer.Reader;
-		return typeRepo;
+		return new TypeRepoObject(serializer, typeSchema);
 	}
 
 	/*public virtual void CreateObjects()
@@ -607,8 +611,15 @@ public abstract class TypeRepo : IDisposable
 		{
 			LoadObjectData(obj);
 		}
-		catch
+		catch (Exception e)
 		{
+			// Reported, not rethrown. The object keeps whatever was read before the failure, and
+			// throwing would fail loads that currently return usable data. Staying silent is what
+			// made every partial load indistinguishable from a complete one, including a collection
+			// losing all of its elements
+			LoadLog?.Add(e,
+				new Tag("Type", TypeSchema.Name),
+				new Tag("Index", objectIndex));
 		}
 	}
 

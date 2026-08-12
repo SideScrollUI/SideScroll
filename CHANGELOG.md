@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Fixed
+- Fixed a deserialized dictionary keeping only its first entry when its keys hash on their own members, which comparing by an id and every `record` key does. `TypeRepoDictionary` added each key before reading it, so every key of that type hashed as an empty one and collided, and the entry that survived was stored under that hash and couldn't be found by an equal key afterwards. It preloads its keys now, the way `TypeRepoHashSet` already did
+- Fixed a failure part way through loading an object being discarded without a trace, so the object came back partly filled and indistinguishable from a complete one. It's reported to the load's log now, with the type and object index. Loading still returns what it read rather than failing a file that partly works
 
 ### Changed
 
