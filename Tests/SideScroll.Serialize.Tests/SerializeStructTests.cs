@@ -190,4 +190,93 @@ public class SerializeStructTests : SerializeBaseTest
 		Assert.That(clone.Property.X, Is.EqualTo(1));
 		Assert.That(clone.InAList.Select(p => p.X), Is.EqualTo(new[] { 12, 14 }));
 	}
+	// ─── Declared constructors ───────────────────────────────────────────
+
+	/// <summary>Its constructor parameter matches no member, so nothing can bind to it</summary>
+	[PublicData]
+	public struct UnboundConstructor
+	{
+		public UnboundConstructor(bool ignored) { X = 1; Y = 2; }
+
+		public int X { get; set; }
+		public int Y { get; set; }
+	}
+
+	/// <summary>Read only members, restorable only through the declared constructor</summary>
+	[PublicData]
+	public readonly struct ReadOnlyPair
+	{
+		public ReadOnlyPair(int x, int y) { X = x; Y = y; }
+
+		public int X { get; }
+		public int Y { get; }
+	}
+
+	[PublicData]
+	public struct MatchingConstructor
+	{
+		public MatchingConstructor(int x, int y) { X = x; Y = y; }
+
+		public int X { get; set; }
+		public int Y { get; set; }
+	}
+
+	[PublicData]
+	public record struct RecordStruct(int X, int Y);
+
+	[PublicData]
+	public class ConstructorHolder
+	{
+		public UnboundConstructor Unbound { get; set; }
+		public ReadOnlyPair Pair { get; set; }
+		public MatchingConstructor Matching { get; set; }
+		public RecordStruct Record { get; set; }
+	}
+
+	private static ConstructorHolder CreateConstructorHolder() => new()
+	{
+		Unbound = new UnboundConstructor { X = 1, Y = 2 },
+		Pair = new ReadOnlyPair(3, 4),
+		Matching = new MatchingConstructor(5, 6),
+		Record = new RecordStruct(7, 8),
+	};
+
+	[Test, Description(
+		"Declaring a constructor holds a struct back from the empty one so read only members can be " +
+		"restored through it. One that binds to nothing left the type with no constructor at all, " +
+		"which made it unloadable and skipped it without reporting anything")]
+	public void StructWithAnUnboundConstructorKeepsItsMembers()
+	{
+		var output = SaveLoad(CreateConstructorHolder());
+
+		Assert.That(output.Unbound.X, Is.EqualTo(1));
+		Assert.That(output.Unbound.Y, Is.EqualTo(2));
+	}
+
+	[Test, Description("Control: read only members still restore through the declared constructor")]
+	public void ReadOnlyStructKeepsItsMembers()
+	{
+		var output = SaveLoad(CreateConstructorHolder());
+
+		Assert.That(output.Pair.X, Is.EqualTo(3));
+		Assert.That(output.Pair.Y, Is.EqualTo(4));
+	}
+
+	[Test, Description("Control: a constructor that binds is still preferred")]
+	public void StructWithAMatchingConstructorKeepsItsMembers()
+	{
+		var output = SaveLoad(CreateConstructorHolder());
+
+		Assert.That(output.Matching.X, Is.EqualTo(5));
+		Assert.That(output.Matching.Y, Is.EqualTo(6));
+	}
+
+	[Test, Description("Control: a record struct binds to its positional constructor")]
+	public void RecordStructKeepsItsMembers()
+	{
+		var output = SaveLoad(CreateConstructorHolder());
+
+		Assert.That(output.Record.X, Is.EqualTo(7));
+		Assert.That(output.Record.Y, Is.EqualTo(8));
+	}
 }

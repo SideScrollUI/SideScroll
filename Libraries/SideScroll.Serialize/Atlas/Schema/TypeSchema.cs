@@ -226,6 +226,25 @@ public class TypeSchema
 			InitializeProperties(serializer);
 
 			CustomConstructor = GetCustomConstructor();
+			UseEmptyConstructorWhenUnbound();
+		}
+	}
+
+	/// <summary>
+	/// Lets a value type be created by <see cref="Activator"/> when no declared constructor binds to
+	/// its members
+	/// </summary>
+	/// <remarks>
+	/// A struct declaring a constructor is held back from the empty one so read only members can be
+	/// restored through the declared one. When nothing binds to it there's nothing to restore that
+	/// way, and being left with no constructor at all made the type unloadable, which skipped it in
+	/// silence. Activator always creates a value type, so there's something to fall back to
+	/// </remarks>
+	private void UseEmptyConstructorWhenUnbound()
+	{
+		if (Type?.IsValueType == true && CustomConstructor == null)
+		{
+			HasEmptyConstructor = true;
 		}
 	}
 
@@ -485,6 +504,7 @@ public class TypeSchema
 		LoadMembers<PropertyInfo>(serializer, reader);
 
 		CustomConstructor = GetCustomConstructor();
+		UseEmptyConstructorWhenUnbound();
 	}
 
 	private void LoadType(Log log)
