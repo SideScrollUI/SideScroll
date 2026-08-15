@@ -68,6 +68,7 @@ public abstract class TypeRepo : IDisposable
 		new TypeRepoList.Creator(),
 		new TypeRepoDictionary.Creator(),
 		new TypeRepoHashSet.Creator(),
+		new TypeRepoCollection.Creator(), // After the repos above, which claim the collections they handle
 		new TypeRepoVersion.Creator(),
 		new TypeRepoDecimal.Creator(),
 		new TypeRepoGuid.Creator(),

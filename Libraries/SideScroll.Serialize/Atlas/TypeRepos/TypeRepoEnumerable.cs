@@ -30,11 +30,49 @@ public class TypeRepoEnumerable : TypeRepo
 		{
 			ElementType = GetElementType(LoadableType) ?? typeof(object);
 
-			AddMethod = LoadableType.GetMethods()
-				.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Length == 1);
+			AddMethod = FindAddMethod(LoadableType, ElementType);
 
 			_countPropertyInfo = LoadableType.GetProperty("Count");
 		}
+	}
+
+	/// <summary>
+	/// The methods a collection adds a single element through, in the order they're looked for
+	/// </summary>
+	private static readonly string[] AddMethodNames = ["Add", "Enqueue", "Push", "AddLast"];
+
+	/// <summary>
+	/// Finds the method to add one element with, or null if the collection has none
+	/// </summary>
+	/// <remarks>
+	/// Not always Add: a Queue enqueues, a Stack pushes, and a LinkedList implements ICollection's
+	/// Add explicitly so only AddLast is public. The element type picks between overloads, since
+	/// LinkedList.AddLast() also takes a node
+	/// </remarks>
+	private static MethodInfo? FindAddMethod(Type type, Type? elementType)
+	{
+		// Read once, GetMethods() copies the runtime's cache on every call
+		MethodInfo[] methods = type.GetMethods();
+
+		foreach (string name in AddMethodNames)
+		{
+			MethodInfo? fallback = null;
+			foreach (MethodInfo method in methods)
+			{
+				if (method.Name != name || method.GetParameters() is not { Length: 1 } parameters)
+					continue;
+
+				if (parameters[0].ParameterType == elementType)
+					return method;
+
+				fallback ??= method;
+			}
+
+			// An earlier name wins over a later one taking the element type
+			if (fallback != null)
+				return fallback;
+		}
+		return null;
 	}
 
 	/// <summary>

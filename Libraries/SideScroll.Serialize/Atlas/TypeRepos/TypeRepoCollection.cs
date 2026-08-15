@@ -1,87 +1,127 @@
-using SideScroll.Logs;
 using SideScroll.Serialize.Atlas.Schema;
 using System.Collections;
-using System.Reflection;
 
 namespace SideScroll.Serialize.Atlas.TypeRepos;
 
-// not used yet
-public class TypeRepoCollection : TypeRepo
+/// <summary>
+/// Loads the collections that don't implement <see cref="IList"/> or <see cref="IDictionary"/> and
+/// aren't a <see cref="HashSet{T}"/>, which the repos before this one claim
+/// </summary>
+/// <remarks>
+/// Without one of their own they were left to <see cref="TypeRepoObject"/>, which reaches a type's
+/// contents through its properties. A collection doesn't expose its elements that way, so they
+/// saved with their element count and reloaded empty, reporting success either way
+/// </remarks>
+public class TypeRepoCollection : TypeRepoEnumerable, IPreloadRepo
 {
-	/*public class Creator : IRepoCreator
+	public class Creator : IRepoCreator
 	{
-		public TypeRepo TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
+		public TypeRepo? TryCreateRepo(Serializer serializer, TypeSchema typeSchema)
 		{
-			if (CanAssign(typeSchema.type))
+			if (CanAssign(typeSchema.Type))
+			{
 				return new TypeRepoCollection(serializer, typeSchema);
+			}
 			return null;
 		}
-	}*/
+	}
 
-	private TypeRepo? _listTypeRepo;
-	private readonly MethodInfo? _addMethod;
-	private readonly Type? _elementType;
+	/// <summary>
+	/// Gets or sets the collections handled here, matched against a type and the types it derives from
+	/// </summary>
+	/// <remarks>
+	/// Named rather than inferred from having an add method, so a type that happens to be enumerable
+	/// keeps being saved through its properties instead of silently losing them to this
+	/// </remarks>
+	public static HashSet<Type> SupportedTypes { get; set; } =
+	[
+		typeof(SortedSet<>),
+		typeof(Queue<>),
+		typeof(Stack<>),
+		typeof(LinkedList<>),
+	];
+
+	// Enumerating a Stack yields the most recently pushed first, so pushing them back in that order
+	// would reverse it on every load
+	private readonly bool _reversesOnEnumeration;
 
 	public TypeRepoCollection(Serializer serializer, TypeSchema typeSchema) :
 		base(serializer, typeSchema)
 	{
-		Type[] types = LoadableType!.GetGenericArguments();
-		if (types.Length > 0)
-		{
-			_elementType = types[0];
-		}
-
-		_addMethod = LoadableType.GetMethods()
-			.FirstOrDefault(m => m.Name == "Add" && m.GetParameters().Length == 1);
+		_reversesOnEnumeration = IsGenericType(LoadableType, typeof(Stack<>));
 	}
 
-	public override void InitializeLoading(Log log)
+	public static bool CanAssign(Type? type)
 	{
-		if (_elementType != null)
-		{
-			_listTypeRepo = Serializer.GetOrCreateRepo(log, _elementType);
-		}
+		return SupportedTypes.Any(supported => IsGenericType(type, supported));
 	}
 
-	public override void AddChildObjects(object obj)
+	private static bool IsGenericType(Type? type, Type genericTypeDefinition)
 	{
-		var collection = (ICollection)obj;
-		foreach (object? item in collection)
+		for (Type? baseType = type; baseType != null && baseType != typeof(object); baseType = baseType.BaseType)
 		{
-			Serializer.AddObjectRef(item);
+			if (baseType.IsGenericType && baseType.GetGenericTypeDefinition() == genericTypeDefinition)
+			{
+				return true;
+			}
 		}
+		return false;
 	}
 
-	public override void SaveObject(BinaryWriter writer, object obj)
+	/// <summary>
+	/// Reads the elements once before any are added, so they're complete when they're ordered
+	/// </summary>
+	/// <remarks>
+	/// A <see cref="SortedSet{T}"/> compares each element as it's added, and one compared before its
+	/// own members are read compares equal to every other element of its type, which the set then
+	/// discards as a duplicate. The collections that keep insertion order don't need this, they just
+	/// read the same bytes twice
+	/// </remarks>
+	public void PreloadObjectData(object? obj)
 	{
-		var collection = (ICollection)obj;
+		int count = Reader!.ReadInt32();
+		ValidateBytesAvailable(count);
 
-		writer.Write(collection.Count);
-		foreach (object? item in collection)
+		for (int j = 0; j < count; j++)
 		{
-			Serializer.WriteObjectRef(_elementType!, item, writer);
+			ListTypeRepo!.LoadObjectRef();
 		}
 	}
 
 	public override void LoadObjectData(object obj)
 	{
-		//(ICollection<listTypeRepo.type>)objects[i];
 		int count = Reader!.ReadInt32();
+		ValidateBytesAvailable(count);
+
+		var values = new object?[count];
 		for (int j = 0; j < count; j++)
 		{
-			object? objectValue = _listTypeRepo!.LoadObjectRef();
-			_addMethod!.Invoke(obj, [objectValue]);
+			values[j] = ListTypeRepo!.LoadObjectRef();
 		}
+
+		AddAll(obj, values);
 	}
 
 	public override void Clone(object source, object dest)
 	{
-		var iSource = (ICollection)source;
-		var iDest = (ICollection)dest;
-		foreach (object? item in iSource)
+		object?[] values = ((IEnumerable)source)
+			.Cast<object?>()
+			.Select(Serializer.Clone)
+			.ToArray();
+
+		AddAll(dest, values);
+	}
+
+	private void AddAll(object obj, object?[] values)
+	{
+		if (_reversesOnEnumeration)
 		{
-			object? clone = Serializer.Clone(item);
-			_addMethod!.Invoke(iDest, [clone]);
+			Array.Reverse(values);
+		}
+
+		foreach (object? value in values)
+		{
+			AddMethod!.Invoke(obj, [value]);
 		}
 	}
 }

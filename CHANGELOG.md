@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Fixed
+- Fixed `SortedSet`, `Queue`, `Stack`, and `LinkedList` saving their contents and reloading empty. None of them is an `IList`, an `IDictionary`, or a `HashSet`, so none had a repo of its own and each was left to `TypeRepoObject`, which reaches a type's contents through its properties, where a collection doesn't expose its elements. Nothing reported it either way. The new `TypeRepoCollection` loads them through the method each one adds with, and a `Stack` is filled in reverse since it enumerates from the top
 - Fixed a deserialized dictionary keeping only its first entry when its keys hash on their own members, which comparing by an id and every `record` key does. `TypeRepoDictionary` added each key before reading it, so every key of that type hashed as an empty one and collided, and the entry that survived was stored under that hash and couldn't be found by an equal key afterwards. It preloads its keys now, the way `TypeRepoHashSet` already did
 - Fixed a failure part way through loading an object being discarded without a trace, so the object came back partly filled and indistinguishable from a complete one. It's reported to the load's log now, with the type and object index. Loading still returns what it read rather than failing a file that partly works
 
