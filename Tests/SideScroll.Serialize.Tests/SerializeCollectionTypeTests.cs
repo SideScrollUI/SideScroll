@@ -123,8 +123,8 @@ public class SerializeCollectionTypeTests : SerializeBaseTest
 		Assert.That(output.Stack.Pop(), Is.EqualTo("top"));
 	}
 
-	[Test, Description("Cloning shares the loading path's ordering, including the stack's")]
-	public void CloneKeepsCollectionOrder()
+	[Test, Description("DeepClone() saves and loads, so this covers the same path as the tests above")]
+	public void DeepCloneKeepsCollectionOrder()
 	{
 		var stack = new Stack<string>(Values);
 
@@ -132,6 +132,23 @@ public class SerializeCollectionTypeTests : SerializeBaseTest
 
 		Assert.That(clone, Is.EqualTo(new[] { "gamma", "beta", "alpha" }));
 		Assert.That(clone, Is.Not.SameAs(stack));
+	}
+
+	[Test, Description(
+		"Serializer.Clone() copies in memory instead of saving and loading, so it reverses the " +
+		"stack separately from the load path")]
+	public void CloneKeepsCollectionOrderInMemory()
+	{
+		var input = new Holder();
+		input.Queue.Enqueue("first");
+		input.Queue.Enqueue("second");
+		input.Stack.Push("bottom");
+		input.Stack.Push("top");
+
+		Holder clone = new Serializer().Clone(Call.Log, input)!;
+
+		Assert.That(clone.Queue, Is.EqualTo(new[] { "first", "second" }));
+		Assert.That(clone.Stack, Is.EqualTo(new[] { "top", "bottom" }));
 	}
 
 	[Test, Description("Only the named collections are claimed, so an enumerable type keeps its properties")]

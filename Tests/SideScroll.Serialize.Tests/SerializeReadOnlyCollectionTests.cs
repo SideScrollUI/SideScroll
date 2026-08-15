@@ -104,12 +104,25 @@ public class SerializeReadOnlyCollectionTests : SerializeBaseTest
 		public ReadOnlyCollection<SelfReferencing> Collection { get; set; } = new([]);
 	}
 
-	[Test, Description("Cloning has to build the collection around its list too")]
-	public void CloneReadOnlyCollection()
+	[Test, Description("DeepClone() saves and loads, so this covers the same path as the tests above")]
+	public void DeepCloneReadOnlyCollection()
 	{
 		var input = new Holder { Names = new(["alpha", "beta"]) };
 
 		var clone = input.DeepClone(Call);
+
+		Assert.That(clone.Names, Is.EqualTo(new[] { "alpha", "beta" }));
+		Assert.That(clone.Names, Is.Not.SameAs(input.Names));
+	}
+
+	[Test, Description(
+		"Serializer.Clone() copies in memory instead of saving and loading, and builds its " +
+		"destination through Activator, which can't create one of these")]
+	public void CloneReadOnlyCollectionInMemory()
+	{
+		var input = new Holder { Names = new(["alpha", "beta"]) };
+
+		Holder clone = new Serializer().Clone(Call.Log, input)!;
 
 		Assert.That(clone.Names, Is.EqualTo(new[] { "alpha", "beta" }));
 		Assert.That(clone.Names, Is.Not.SameAs(input.Names));

@@ -127,6 +127,15 @@ public abstract class TypeRepo : IDisposable
 	public object?[] ObjectsLoaded { get; set; }
 
 	/// <summary>
+	/// Whether each object's data has been read, so the queue doesn't read it a second time
+	/// </summary>
+	/// <remarks>
+	/// A value type is read as soon as it's referenced rather than waiting for the queue, and the
+	/// queued pass would otherwise repeat it, appending a second copy of anything it collects
+	/// </remarks>
+	private readonly bool[] _dataLoaded;
+
+	/// <summary>
 	/// Gets the count of objects that have been loaded
 	/// </summary>
 	public int ObjectsLoadedCount { get; protected set; }
@@ -218,6 +227,7 @@ public abstract class TypeRepo : IDisposable
 			LoadableType = Type;
 		}
 		ObjectsLoaded = new object?[typeSchema.NumObjects];
+		_dataLoaded = new bool[typeSchema.NumObjects];
 	}
 
 	/// <summary>
@@ -541,7 +551,7 @@ public abstract class TypeRepo : IDisposable
 			if (objectType == ObjectType.BaseType)
 			{
 				int objectIndex = Reader.ReadInt32();
-				return LoadObject(objectIndex);
+				return LoadReferencedObject(objectIndex);
 			}
 
 			if (objectType == ObjectType.DerivedType)
@@ -555,7 +565,7 @@ public abstract class TypeRepo : IDisposable
 					return typeRepo.LoadObject();
 
 				int objectIndex = Reader.ReadInt32();
-				return typeRepo.LoadObject(objectIndex);
+				return typeRepo.LoadReferencedObject(objectIndex);
 			}
 
 			return null;
@@ -563,8 +573,31 @@ public abstract class TypeRepo : IDisposable
 		else
 		{
 			int objectIndex = Reader.ReadInt32();
-			return LoadObject(objectIndex);
+			return LoadReferencedObject(objectIndex);
 		}
+	}
+
+	/// <summary>
+	/// Loads the object a reference points at, reading a value type's data before returning it
+	/// </summary>
+	/// <remarks>
+	/// A reference type is filled in later through the load queue, which whatever holds it sees
+	/// because it holds the same instance. Assigning a value type copies it, so the holder would
+	/// keep the copy it took before the queue ran, which is every member of a struct left at its
+	/// default. Reading it here happens partway through the caller's own data, so the position it
+	/// was reading from is restored afterwards
+	/// </remarks>
+	private object? LoadReferencedObject(int objectIndex)
+	{
+		object? obj = LoadObject(objectIndex);
+
+		if (LoadableType?.IsValueType == true)
+		{
+			long position = Reader!.BaseStream.Position;
+			LoadObjectData(objectIndex);
+			Reader.BaseStream.Position = position;
+		}
+		return obj;
 	}
 
 	/// <summary>
@@ -606,6 +639,9 @@ public abstract class TypeRepo : IDisposable
 	/// </summary>
 	public void LoadObjectData(int objectIndex)
 	{
+		if (_dataLoaded[objectIndex]) return;
+		_dataLoaded[objectIndex] = true; // Set first, so a member referencing this one back doesn't recurse
+
 		object? obj = GetObjectAt(objectIndex);
 		if (obj == null) return;
 
