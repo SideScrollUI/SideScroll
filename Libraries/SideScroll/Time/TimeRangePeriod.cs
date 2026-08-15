@@ -140,7 +140,6 @@ public class TimeRangePeriod : ITags
 			return null;
 
 		DateTime minStartTime = periodTimeWindow.StartTime;//.Trim(periodDuration);
-		DateTime maxEndTime = periodTimeWindow.EndTime;
 
 		// The window is extended by a period above so the trailing boundary still gets one, but
 		// values are only aggregated up to the end that was actually asked for. Filtering against
