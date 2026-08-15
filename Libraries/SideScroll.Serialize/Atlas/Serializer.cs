@@ -659,7 +659,12 @@ public class Serializer : IDisposable
 			return obj;
 		}
 
-		if (typeRepo is TypeRepoArray or TypeRepoArrayBytes)
+		// Needs the list it wraps before it exists, so it can't be created empty and copied into
+		if (typeRepo is TypeRepoReadOnlyCollection readOnlyRepo)
+		{
+			clone = readOnlyRepo.CreateClone();
+		}
+		else if (typeRepo is TypeRepoArray or TypeRepoArrayBytes)
 		{
 			var sourceArray = (Array)obj;
 			int[] lengths = new int[sourceArray.Rank];

@@ -65,6 +65,7 @@ public abstract class TypeRepo : IDisposable
 		new TypeRepoType.Creator(),
 		new TypeRepoArrayBytes.Creator(),
 		new TypeRepoArray.Creator(),
+		new TypeRepoReadOnlyCollection.Creator(), // Before List, which claims it as an IList and can't add to it
 		new TypeRepoList.Creator(),
 		new TypeRepoDictionary.Creator(),
 		new TypeRepoHashSet.Creator(),
