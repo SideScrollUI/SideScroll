@@ -11,6 +11,25 @@ namespace SideScroll.Serialize;
 public abstract class SerializerMemory
 {
 	/// <summary>
+	/// Gets or sets the maximum number of bytes a compressed payload is allowed to expand to
+	/// </summary>
+	/// <remarks>
+	/// What a caller supplies is the compressed form, and its size says nothing about how far it
+	/// expands. A payload small enough to paste into a link can decompress until the process runs
+	/// out of memory, which happens before any of the data is validated
+	/// </remarks>
+	public static long MaxDecompressedSize
+	{
+		get => _maxDecompressedSize;
+		set
+		{
+			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(MaxDecompressedSize));
+			_maxDecompressedSize = value;
+		}
+	}
+	private static long _maxDecompressedSize = 100_000_000;
+
+	/// <summary>
 	/// Gets or sets the memory stream used for serialization
 	/// </summary>
 	public MemoryStream Stream { get; protected set; } = new();
@@ -173,7 +192,33 @@ public abstract class SerializerMemory
 		using var inStream = new MemoryStream(bytes);
 		using var tinyStream = new GZipStream(inStream, CompressionMode.Decompress);
 
-		tinyStream.CopyTo(outStream);
+		CopyUpTo(tinyStream, outStream, MaxDecompressedSize);
+	}
+
+	/// <summary>
+	/// Copies the decompressed bytes, stopping rather than reading a payload that never ends
+	/// </summary>
+	/// <remarks>
+	/// Stream.CopyTo() reads until the source runs out, which a compressed payload decides. The
+	/// count is checked before each write so nothing past the limit is kept
+	/// </remarks>
+	private static void CopyUpTo(Stream source, Stream destination, long maxBytes)
+	{
+		byte[] buffer = new byte[81920]; // Stream.CopyTo()'s default
+		long total = 0;
+
+		int read;
+		while ((read = source.Read(buffer, 0, buffer.Length)) > 0)
+		{
+			total += read;
+			if (total > maxBytes)
+			{
+				throw new SerializerException("Compressed data expands past the maximum allowed size",
+					new Tag("MaxDecompressedSize", maxBytes));
+			}
+
+			destination.Write(buffer, 0, read);
+		}
 	}
 
 	/// <summary>
