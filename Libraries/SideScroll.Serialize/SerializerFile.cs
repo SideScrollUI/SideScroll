@@ -114,7 +114,22 @@ public abstract class SerializerFile(string basePath, string? name = null)
 		catch (Exception e)
 		{
 			callTimer.Log.AddError("Exception loading file", new Tag("Exception", e.ToString()));
+
+			if (taskInstance != null)
+			{
+				taskInstance.Errored = true;
+				taskInstance.Message ??= e.Message;
+			}
+
 			return null; // returns null if reference type, otherwise default value (i.e. 0)
+		}
+		finally
+		{
+			// Every load finishes its task here rather than in each implementation. They each did it
+			// at whatever point they had something to return, so a failed one left the task running
+			// for as long as its caller held it, and the Atlas one never finished it at all. The
+			// timer above doesn't either, it owns a sub task and isn't marked as one
+			taskInstance?.SetFinished();
 		}
 	}
 

@@ -1,3 +1,4 @@
+using SideScroll.Serialize.Atlas.Schema;
 using SideScroll.Tasks;
 
 namespace SideScroll.Serialize.Atlas;
@@ -183,17 +184,18 @@ public class SerializerFileAtlas : SerializerFile
 	}*/
 
 	/// <summary>
-	/// Loads the serializer schema without loading the object data
+	/// Loads the type schemas without loading the object data
 	/// </summary>
-	public Serializer LoadSchema(Call call)
+	public IReadOnlyList<TypeSchema> LoadSchema(Call call)
 	{
 		using var fileStream = new FileStream(HeaderPath!, FileMode.Open, FileAccess.Read, FileShare.Read);
-
 		using var reader = new BinaryReader(fileStream);
-
-		Serializer serializer = new();
+		using Serializer serializer = new();
 		serializer.Load(call, reader, Name, false);
-		return serializer;
+
+		// Serializer.Dispose() releases the reader and clears its own schema collection.
+		// Return a separate collection whose schema objects contain no stream resources.
+		return serializer.TypeSchemas.ToArray();
 	}
 
 	/// <summary>

@@ -154,9 +154,8 @@ public class SerializerFileJson : SerializerFile
 
 		byte[] jsonBytes = File.ReadAllBytes(DataPath!);
 
-		taskInstance?.SetFinished();
-
 		// Use expectedType if provided, otherwise fallback to Dictionary
+		// SerializerFile.Load() finishes the task, including when this throws
 		return expectedType != null
 			? JsonSerializer.Deserialize(jsonBytes, expectedType, options)
 			: JsonSerializer.Deserialize<Dictionary<string, object?>>(jsonBytes, options);

@@ -34,6 +34,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed `Serializer.WriteObjectRef` throwing `KeyNotFoundException` when encountering unregistered objects by gracefully throwing a descriptive `SerializerException`
 - Fixed `Bookmark.Create` throwing `NullReferenceException` on empty or invalid payloads by checking for a null deserialized result and throwing `InvalidDataException` instead
 - Fixed `TabBookmark.Import` and `TabDataBookmark.Import` throwing `StackOverflowException` when importing a cyclic bookmark by adding cycle detection
+- Fixed `SerializerFileAtlas.LoadSchema()` returning a serializer whose reader had already been disposed. It now returns only the standalone type schemas and disposes the temporary serializer used to read them
+- Fixed a load's task not reflecting what the load did. Each serializer finished its own task at whatever point it had something to return: `SerializerFileJson` and `SerializerLocalStorage` did it before deserializing, so malformed data was reported as a successful load, and `SerializerFileAtlas` only set `Percent` and never finished one at all. Moving the call after the deserialize would have left a failure unfinished instead, since `SerializerFile.Load()` catches the exception and returns null and nothing else completes the task — the `CallTimer` around it owns a sub task and isn't marked as one. `Load()` finishes the task itself now, for every serializer and whether or not the load succeeded, and marks a failed one errored with the exception's message
+- Fixed `AvaloniaHeadlessCapture.RenderAndCrop()` retaining its temporary full-size bitmap, window, and `TabViewer` after returning the cropped image. The helper now disposes the capture and viewer and closes the window on both success and failure
 
 ### Changed
 

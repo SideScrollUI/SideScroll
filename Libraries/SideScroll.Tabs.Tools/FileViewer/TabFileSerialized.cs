@@ -25,9 +25,9 @@ public class TabFileSerialized(string path) : ITab
 			model.Items = _items = [];
 			try
 			{
-				var serializer = _serializerFile.LoadSchema(call);
+				var typeSchemas = _serializerFile.LoadSchema(call);
 
-				_items.Add(new ListItem("Schema", serializer.TypeSchemas));
+				_items.Add(new ListItem("Schema", typeSchemas));
 
 				model.AddActions([
 					new TaskDelegate("Load Public Data", LoadPublicData, true, true),

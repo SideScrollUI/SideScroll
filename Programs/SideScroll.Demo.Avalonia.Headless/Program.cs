@@ -19,7 +19,7 @@ internal static class Program
 
 		var project = Project.Load(SampleProjectSettings.Default);
 
-		Bitmap bitmap = AvaloniaHeadlessCapture.RenderAndCrop(
+		using Bitmap bitmap = AvaloniaHeadlessCapture.RenderAndCrop(
 			project,
 			tab: new TabAvaloniaSamples(),
 			captureFrame: window => window.CaptureRenderedFrame(),

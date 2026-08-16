@@ -111,6 +111,9 @@ public partial class SerializerLocalStorage : SerializerFile
 			? JsonConverters.PublicSerializerOptions
 			: JsonConverters.PrivateSerializerOptions;
 
+		// SerializerFile.Load() finishes the task for every path through here, so this only marks the
+		// failure. It can't leave that to Load() either, these exceptions are caught rather than let
+		// out to it
 		try
 		{
 			string? json = GetLocalStorageItem(StorageKey);
@@ -126,8 +129,6 @@ public partial class SerializerLocalStorage : SerializerFile
 				new Tag("Key", StorageKey),
 				new Tag("Size", json.Length));
 
-			taskInstance?.SetFinished();
-
 			// Use expectedType if provided, otherwise fallback to Dictionary
 			return expectedType != null
 				? JsonSerializer.Deserialize(json, expectedType, options)
@@ -136,6 +137,13 @@ public partial class SerializerLocalStorage : SerializerFile
 		catch (Exception e)
 		{
 			call.Log.Add(e, new Tag("Key", StorageKey));
+
+			if (taskInstance != null)
+			{
+				taskInstance.Errored = true;
+				taskInstance.Message ??= e.Message;
+			}
+
 			return null;
 		}
 	}

@@ -143,7 +143,10 @@ public static class AvaloniaHeadlessCapture
 	/// </summary>
 	/// <param name="project">The project used to initialise the viewer.</param>
 	/// <param name="tab">The root tab to load.</param>
-	/// <param name="captureFrame">Called with the rendered window to produce the raw full-size bitmap.</param>
+	/// <param name="captureFrame">
+	/// Called with the rendered window to produce the raw full-size bitmap. The returned bitmap is
+	/// temporary and is disposed after the cropped bitmap has been created.
+	/// </param>
 	/// <param name="minTabDepth">First column to include in the crop (1 = leftmost).</param>
 	/// <param name="maxTabDepth">Last column to include. <c>null</c> means the deepest rendered column.</param>
 	/// <param name="maxTabDepthRender">How many levels to render. Defaults to <paramref name="maxTabDepth"/>.</param>
@@ -164,12 +167,30 @@ public static class AvaloniaHeadlessCapture
 		int? renderDepth = maxTabDepthRender ?? maxTabDepth;
 
 		Window window = RenderTab(project, tab, renderDepth, maxWidth, maxHeight, timeoutMs);
+		TabViewer? viewer = null;
+		try
+		{
+			viewer = (TabViewer)window.Content!;
+			Rect captureRect = GetCaptureRect(viewer, minTabDepth, maxTabDepth);
 
-		var viewer = (TabViewer)window.Content!;
-		Rect captureRect = GetCaptureRect(viewer, minTabDepth, maxTabDepth);
-
-		WriteableBitmap? full = captureFrame(window);
-		return CropToCaptureRect(full!, captureRect);
+			using WriteableBitmap full = captureFrame(window)
+				?? throw new InvalidOperationException("The capture delegate returned no bitmap");
+			return CropToCaptureRect(full, captureRect);
+		}
+		finally
+		{
+			// RenderTab() transfers ownership of its window to the caller. This convenience
+			// method doesn't expose it, so it must also release the viewer's subscriptions,
+			// tab tree, tasks, and static project references before closing the window.
+			try
+			{
+				viewer?.Dispose();
+			}
+			finally
+			{
+				window.Close();
+			}
+		}
 	}
 
 	/// <summary>Crops <paramref name="source"/> to <paramref name="rect"/>, clamped to the bitmap's actual pixel dimensions.</summary>

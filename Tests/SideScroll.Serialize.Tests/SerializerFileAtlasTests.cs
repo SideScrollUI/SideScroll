@@ -1,5 +1,7 @@
 using NUnit.Framework;
 using SideScroll.Serialize.Atlas;
+using SideScroll.Serialize.Atlas.Schema;
+using SideScroll.Tasks;
 
 namespace SideScroll.Serialize.Tests;
 
@@ -132,5 +134,50 @@ public class SerializerFileAtlasTests : SerializeBaseTest
 		serializer.Save(Call, "value");
 
 		Assert.That(serializer.LoadHeader(Call), Is.Not.Null);
+	}
+
+	[Test, Description("Schema loading returns standalone schema data instead of a serializer backed by a closed reader")]
+	public void LoadSchemaReturnsStandaloneSchemas()
+	{
+		string basePath = Path.Combine(TestPath, nameof(LoadSchemaReturnsStandaloneSchemas), Path.GetRandomFileName());
+		var serializerFile = new SerializerFileAtlas(basePath, "name");
+		serializerFile.Save(Call, new Dictionary<string, int> { ["answer"] = 42 });
+
+		IReadOnlyList<TypeSchema> schemas = serializerFile.LoadSchema(Call);
+
+		Assert.That(schemas, Is.Not.Empty);
+		Assert.That(schemas.Select(schema => schema.Name), Does.Contain(typeof(Dictionary<string, int>).ToString()));
+		Assert.DoesNotThrow(() => _ = schemas.SelectMany(schema => schema.MemberSchemas).ToList());
+	}
+
+	[Test, Description(
+		"The Atlas loader only set Percent and never finished its task, so a caller passing one " +
+		"waited on it after a load that had already succeeded")]
+	public void LoadFinishesTask()
+	{
+		string basePath = Path.Combine(TestPath, nameof(LoadFinishesTask), Path.GetRandomFileName());
+		var serializerFile = new SerializerFileAtlas(basePath, "name");
+		serializerFile.Save(Call, new Dictionary<string, int> { ["answer"] = 42 });
+		var taskInstance = new TaskInstance();
+
+		Dictionary<string, int>? result = serializerFile.Load<Dictionary<string, int>>(Call, taskInstance: taskInstance);
+
+		Assert.That(result, Is.EqualTo(new Dictionary<string, int> { ["answer"] = 42 }));
+		Assert.That(taskInstance.Finished, Is.True);
+		Assert.That(taskInstance.Errored, Is.False);
+	}
+
+	[Test, Description("A failed Atlas load finishes the task as errored, the same as the other serializers")]
+	public void FailedLoadFinishesTaskAsErrored()
+	{
+		string basePath = Path.Combine(TestPath, nameof(FailedLoadFinishesTaskAsErrored), Path.GetRandomFileName());
+		var serializerFile = new SerializerFileAtlas(basePath, "name");
+		var taskInstance = new TaskInstance();
+
+		Dictionary<string, int>? result = serializerFile.Load<Dictionary<string, int>>(Call, taskInstance: taskInstance);
+
+		Assert.That(result, Is.Null);
+		Assert.That(taskInstance.Finished, Is.True);
+		Assert.That(taskInstance.Errored, Is.True);
 	}
 }
