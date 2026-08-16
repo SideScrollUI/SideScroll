@@ -76,19 +76,28 @@ public class ConcurrentRateLimiterTests : BaseTest
 	[Test, Description("Cancelling while rate-limited releases the concurrency slot")]
 	public async Task RateLimiter_CancelledRateWait_DoesNotLeakConcurrencySlot()
 	{
-		using var limiter = new ConcurrentRateLimiter(maxConcurrentRequests: 1, maxRequestsPerSecond: 1);
+		// 10 per second, so a refilled token arrives in about 100ms rather than the second a rate of
+		// 1 made the final wait below take. The initial burst is the rate itself, so all of it is
+		// drained first to reach the rate limited state this covers
+		const int RequestsPerSecond = 10;
+		using var limiter = new ConcurrentRateLimiter(maxConcurrentRequests: 1, maxRequestsPerSecond: RequestsPerSecond);
 
-		// Consume the initial rate token, then release only the concurrency slot
-		using (await limiter.WaitAsync())
+		// Consume the initial rate tokens, releasing only the concurrency slot each time. These
+		// return immediately, the limiter isn't rate limited until they're gone
+		for (int i = 0; i < RequestsPerSecond; i++)
 		{
+			using (await limiter.WaitAsync())
+			{
+			}
 		}
 
+		// Cancelled well inside the ~100ms refill, so the wait is rate limited when it's cancelled
 		using var cancellation = new CancellationTokenSource(TimeSpan.FromMilliseconds(10));
 		Assert.ThrowsAsync<OperationCanceledException>(async () =>
 			await limiter.WaitAsync(cancellation.Token));
 
-		// This needs the concurrency slot released by the cancelled wait. A rate token
-		// should arrive in about one second; a leaked concurrency slot would block indefinitely
+		// This needs the concurrency slot released by the cancelled wait. A rate token should
+		// arrive within about 100ms; a leaked concurrency slot would block until this times out
 		using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(2));
 		using IDisposable release = await limiter.WaitAsync(timeout.Token);
 	}
