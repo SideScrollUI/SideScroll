@@ -157,4 +157,46 @@ public class TimeRangeValueTests : BaseTest
 		Assert.That(copy.Value, Is.EqualTo(original.Value));
 		Assert.That(copy.Tags, Is.EqualTo(original.Tags));
 	}
+
+	[Test, Description(
+		"Tags is public, settable, and deserialized, so it can be left unset. Every reader " +
+		"dereferences it, so one value without a list aborted the whole series it was in")]
+	public void TagsAssignedNullReadsAsEmpty()
+	{
+		var timeRangeValue = new TimeRangeValue(StartTime, StartTime.AddMinutes(1), 1)
+		{
+			Tags = null!,
+		};
+
+		Assert.That(timeRangeValue.Tags, Is.Empty);
+		Assert.That(timeRangeValue.Description, Is.Empty);
+	}
+
+	[Test, Description("Aggregating a series containing one of them still works")]
+	public void PeriodsWithANullTagCollection()
+	{
+		List<TimeRangeValue> values =
+		[
+			new(StartTime, StartTime.AddMinutes(1), 1) { Tags = null! },
+			new(StartTime.AddMinutes(10), StartTime.AddMinutes(11), 2),
+		];
+		var timeWindow = new TimeWindow(StartTime, StartTime.AddHours(1));
+
+		List<TimeRangeValue>? periods = null;
+		Assert.DoesNotThrow(() => periods = TimeRangePeriod.PeriodCounts(values, timeWindow, TimeSpan.FromMinutes(10)));
+		Assert.That(periods, Is.Not.Null.And.Not.Empty);
+	}
+
+	[Test, Description("A list that was assigned is still the one returned")]
+	public void AssignedTagsAreKept()
+	{
+		List<Tag> tags = [new("Name", "Value")];
+		var timeRangeValue = new TimeRangeValue(StartTime, StartTime.AddMinutes(1), 1)
+		{
+			Tags = tags,
+		};
+
+		Assert.That(timeRangeValue.Tags, Is.SameAs(tags));
+		Assert.That(timeRangeValue.Description, Does.Contain("Value"));
+	}
 }

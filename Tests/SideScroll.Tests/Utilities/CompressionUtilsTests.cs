@@ -347,4 +347,37 @@ public class CompressionUtilsTests : BaseTest
 		Assert.Throws<ArgumentOutOfRangeException>(() => CompressionUtils.MaxExtractedSize = value);
 		Assert.Throws<ArgumentOutOfRangeException>(() => CompressionUtils.MaxEntries = value);
 	}
+
+	[TestCase(".txt")]
+	[TestCase(".rar")]
+	[TestCase("")]
+	[Description(
+		"An extension that isn't handled fell out of the if/else having already logged " +
+		"\"Decompressing\", so a caller couldn't tell it apart from a successful extraction")]
+	public void UnsupportedExtensionIsReported(string extension)
+	{
+		string filePath = Path.Combine(_testPath, nameof(UnsupportedExtensionIsReported) + extension);
+		Directory.CreateDirectory(_testPath);
+		File.WriteAllText(filePath, "not an archive");
+
+		var exception = Assert.Throws<InvalidDataException>(
+			() => CompressionUtils.Decompress(new Call(), new FileInfo(filePath)))!;
+
+		Assert.That(exception.Message, Does.Contain(".zip").And.Contain(".gz"));
+	}
+
+	[Test, Description("Control: a supported extension still extracts")]
+	public void SupportedExtensionStillDecompresses()
+	{
+		Directory.CreateDirectory(_testPath);
+		string filePath = Path.Combine(_testPath, nameof(SupportedExtensionStillDecompresses) + ".txt");
+		File.WriteAllText(filePath, "contents");
+
+		var call = new Call();
+		CompressionUtils.Compress(call, new FileInfo(filePath));
+		File.Delete(filePath);
+
+		Assert.DoesNotThrow(() => CompressionUtils.Decompress(call, new FileInfo(filePath + ".gz")));
+		Assert.That(File.ReadAllText(filePath), Is.EqualTo("contents"));
+	}
 }

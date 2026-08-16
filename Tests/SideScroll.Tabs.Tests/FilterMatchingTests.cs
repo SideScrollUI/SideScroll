@@ -133,7 +133,7 @@ public class FilterMatchingTests : BaseTest
 
 	private static bool MatchesRow(string filterText, string value)
 	{
-		List<PropertyInfo> properties = TabDataColumns.GetVisibleProperties(typeof(Row));
+		IReadOnlyList<PropertyInfo> properties = TabDataColumns.GetVisibleProperties(typeof(Row));
 		return new Filter(filterText).Matches(new Row(value), properties);
 	}
 
@@ -201,7 +201,7 @@ public class FilterMatchingTests : BaseTest
 				.ToList();
 			var row = new NestedRow("parent", items);
 
-			List<PropertyInfo> properties = TabDataColumns.GetVisibleProperties(typeof(NestedRow));
+			IReadOnlyList<PropertyInfo> properties = TabDataColumns.GetVisibleProperties(typeof(NestedRow));
 
 			Assert.That(new Filter("item00").Matches(row, properties), Is.True,
 				"Text within the limit is still searchable.");
@@ -222,7 +222,7 @@ public class FilterMatchingTests : BaseTest
 			.ToList();
 		var row = new NestedRow("parent", items);
 
-		List<PropertyInfo> properties = TabDataColumns.GetVisibleProperties(typeof(NestedRow));
+		IReadOnlyList<PropertyInfo> properties = TabDataColumns.GetVisibleProperties(typeof(NestedRow));
 
 		Assert.That(new Filter("item00").Matches(row, properties), Is.True);
 		Assert.That(new Filter("item19").Matches(row, properties), Is.True);

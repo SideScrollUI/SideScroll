@@ -427,7 +427,7 @@ public class Filter
 	{
 		// Resolves arrays and non-generic list subclasses, unlike GetGenericArguments()
 		Type? elementType = list.GetType().GetElementTypeForAll();
-		List<PropertyInfo> visibleProperties = elementType != null
+		IReadOnlyList<PropertyInfo> visibleProperties = elementType != null
 			? TabDataColumns.GetVisibleProperties(elementType)
 			: []; // Untyped list, the items still match on their own text
 
@@ -447,7 +447,7 @@ public class Filter
 	/// </summary>
 	/// <param name="obj">The object to check</param>
 	/// <param name="columnProperties">The properties to extract text values from</param>
-	public bool Matches(object obj, List<PropertyInfo> columnProperties)
+	public bool Matches(object obj, IReadOnlyList<PropertyInfo> columnProperties)
 	{
 		List<string> uppercaseValues = [];
 		if (obj is DataRowView dataRowView)
@@ -492,7 +492,7 @@ public class Filter
 	}
 	private static int _maxSearchTextValues = 1_000;
 
-	private static void GetItemSearchText(object obj, List<PropertyInfo> columnProperties, List<string> uppercaseValues, int depth = MaxSearchTextDepth)
+	private static void GetItemSearchText(object obj, IReadOnlyList<PropertyInfo> columnProperties, List<string> uppercaseValues, int depth = MaxSearchTextDepth)
 	{
 		if (uppercaseValues.Count >= MaxSearchTextValues)
 			return;
@@ -527,7 +527,7 @@ public class Filter
 			{
 				if (depth <= 0) return;
 
-				List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleElementProperties(list);
+				IReadOnlyList<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleElementProperties(list);
 				foreach (var item in list)
 				{
 					if (item == null) continue;

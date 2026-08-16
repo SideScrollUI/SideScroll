@@ -2,6 +2,7 @@ using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Tabs.Lists;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.Reflection;
 
 namespace SideScroll.Tabs;
@@ -16,7 +17,9 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 	/// </summary>
 	public List<string> ColumnNameOrder { get; set; } = columnNameOrder ?? [];
 
-	private static readonly Dictionary<Type, List<PropertyInfo>> VisiblePropertiesCache = [];
+	// Read only, this is handed to every caller asking about a type. Returning the list itself let
+	// one of them sort, clear, or append through it and change the columns for every later grid
+	private static readonly Dictionary<Type, ReadOnlyCollection<PropertyInfo>> VisiblePropertiesCache = [];
 
 	/// <summary>
 	/// Gets the method columns for a type based on ButtonColumnAttribute annotations
@@ -34,6 +37,11 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 			if (attribute == null)
 				continue;
 
+			// The grid invokes these with no arguments, so one needing any, or needing a type
+			// argument bound first, threw when its button was pressed rather than being left out
+			if (methodInfo.IsGenericMethodDefinition || methodInfo.GetParameters().Length > 0)
+				continue;
+
 			methodColumns.Add(new TabMethodColumn(methodInfo, attribute.Name ?? methodInfo.Name));
 		}
 		return methodColumns;
@@ -42,14 +50,14 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 	/// <summary>
 	/// Gets the visible properties for a type, using caching for performance
 	/// </summary>
-	public static List<PropertyInfo> GetVisibleProperties(Type type)
+	public static IReadOnlyList<PropertyInfo> GetVisibleProperties(Type type)
 	{
 		lock (VisiblePropertiesCache)
 		{
-			if (VisiblePropertiesCache.TryGetValue(type, out List<PropertyInfo>? list))
+			if (VisiblePropertiesCache.TryGetValue(type, out ReadOnlyCollection<PropertyInfo>? list))
 				return list;
 
-			list = type.GetVisibleProperties();
+			list = type.GetVisibleProperties().AsReadOnly();
 			VisiblePropertiesCache.Add(type, list);
 			return list;
 		}
@@ -58,7 +66,7 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 	/// <summary>
 	/// Gets the visible properties for the element type of a list
 	/// </summary>
-	public static List<PropertyInfo> GetVisibleElementProperties(IList list)
+	public static IReadOnlyList<PropertyInfo> GetVisibleElementProperties(IList list)
 	{
 		Type listType = list.GetType();
 		Type? elementType = listType.GetElementTypeForAll();
@@ -66,9 +74,9 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 		return GetVisibleProperties(elementType);
 	}
 
-	private List<PropertyInfo> GetOrderedPropertyColumns(Type elementType)
+	private IReadOnlyList<PropertyInfo> GetOrderedPropertyColumns(Type elementType)
 	{
-		List<PropertyInfo> visibleProperties = GetVisibleProperties(elementType);
+		IReadOnlyList<PropertyInfo> visibleProperties = GetVisibleProperties(elementType);
 		if (ColumnNameOrder.Count > 0)
 		{
 			var propertyNames = visibleProperties.ToDictionary(propertyInfo => propertyInfo.Name);
@@ -101,7 +109,7 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 	/// </summary>
 	public List<TabPropertyColumn> GetPropertyColumns(Type elementType)
 	{
-		List<PropertyInfo> visibleProperties = GetOrderedPropertyColumns(elementType);
+		IReadOnlyList<PropertyInfo> visibleProperties = GetOrderedPropertyColumns(elementType);
 
 		List<TabPropertyColumn> propertyColumns = [];
 

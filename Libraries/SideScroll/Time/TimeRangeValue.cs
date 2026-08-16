@@ -50,8 +50,19 @@ public class TimeRangeValue : ITags
 	/// <summary>
 	/// Gets or sets the tags associated with this time range value
 	/// </summary>
+	/// <remarks>
+	/// Never null. This is public, settable, and deserialized, so JSON or application code can
+	/// leave it unset, and every reader dereferences it — one value without a list aborted the
+	/// aggregation of the whole series it was in. The backing field is private, which the
+	/// serializer doesn't collect, so what's persisted is unchanged
+	/// </remarks>
 	// [Tags]
-	public List<Tag> Tags { get; set; } = [];
+	public List<Tag> Tags
+	{
+		get => _tags ??= [];
+		set => _tags = value ?? [];
+	}
+	private List<Tag>? _tags = [];
 
 	/// <summary>
 	/// Gets a comma-separated description of all tags

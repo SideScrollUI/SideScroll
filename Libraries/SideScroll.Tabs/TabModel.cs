@@ -675,7 +675,7 @@ public class TabModel
 		depth--;
 		foreach (IList itemList in ItemLists)
 		{
-			List<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleElementProperties(itemList);
+			IReadOnlyList<PropertyInfo> visibleProperties = TabDataColumns.GetVisibleElementProperties(itemList);
 
 			TabDataBookmark tabDataBookmark = new()
 			{

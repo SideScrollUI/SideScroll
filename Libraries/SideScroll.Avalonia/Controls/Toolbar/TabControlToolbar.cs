@@ -9,6 +9,7 @@ using SideScroll.Resources;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Lists;
 using SideScroll.Tabs.Toolbar;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls.Toolbar;
@@ -44,12 +45,24 @@ public class TabControlToolbar : Grid, IDisposable
 	}
 
 	/// <summary>Populates the toolbar by reflecting the properties of the given <see cref="TabToolbar"/> model.</summary>
+	/// <remarks>
+	/// Replaces what's already there. This is public and can be called again to refresh or swap a
+	/// toolbar, and appending left a second copy of every button, label, separator, hotkey, and
+	/// event handler rather than rebuilding
+	/// </remarks>
 	public void LoadToolbar(TabToolbar toolbar)
 	{
+		Children.Clear();
+		ColumnDefinitions.Clear();
+
 		var properties = toolbar.GetType().GetVisibleProperties();
 		foreach (PropertyInfo propertyInfo in properties)
 		{
-			var propertyValue = propertyInfo.GetValue(toolbar);
+			// A toolbar property can be computed, and one that threw stopped every control after it
+			// from being added. That one is left out instead
+			if (!TryGetValue(toolbar, propertyInfo, out object? propertyValue))
+				continue;
+
 			if (propertyValue != null && propertyInfo.GetCustomAttribute<SeparatorAttribute>() != null)
 			{
 				AddSeparator();
@@ -92,6 +105,22 @@ public class TabControlToolbar : Grid, IDisposable
 					AddButton(toolButton);
 				}
 			}
+		}
+	}
+
+	/// <summary>Reads a toolbar property, returning false when its getter throws.</summary>
+	private static bool TryGetValue(TabToolbar toolbar, PropertyInfo propertyInfo, out object? value)
+	{
+		try
+		{
+			value = propertyInfo.GetValue(toolbar);
+			return true;
+		}
+		catch (Exception e)
+		{
+			Debug.WriteLine($"LoadToolbar: skipping {propertyInfo.Name}, its getter threw: {e.Message}");
+			value = null;
+			return false;
 		}
 	}
 

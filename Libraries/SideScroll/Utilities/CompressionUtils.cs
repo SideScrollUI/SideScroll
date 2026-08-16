@@ -115,6 +115,13 @@ public class CompressionUtils
 		{
 			ExtractGzip(decompressCall, fileToDecompress);
 		}
+		else
+		{
+			// Anything else fell through having already logged "Decompressing", so a caller couldn't
+			// tell a format that was never handled apart from one that extracted successfully
+			throw new InvalidDataException(
+				$"Can't decompress a {fileToDecompress.Extension} file, expected .zip or .gz: {fileToDecompress.Name}");
+		}
 	}
 
 	/// <summary>
