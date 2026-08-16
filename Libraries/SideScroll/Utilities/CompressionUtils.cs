@@ -1,3 +1,4 @@
+using SideScroll.Extensions;
 using System.IO.Compression;
 
 namespace SideScroll.Utilities;
@@ -7,6 +8,43 @@ namespace SideScroll.Utilities;
 /// </summary>
 public class CompressionUtils
 {
+	/// <summary>
+	/// Gets or sets the maximum number of bytes an archive is allowed to expand to
+	/// </summary>
+	/// <remarks>
+	/// An archive's own size says nothing about how far it expands, so a small one can fill the
+	/// disk it's extracted onto. Checked against the sizes a zip declares before anything is
+	/// written, and against the bytes read for a gzip, which declares nothing
+	/// </remarks>
+	public static long MaxExtractedSize
+	{
+		get => _maxExtractedSize;
+		set
+		{
+			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(MaxExtractedSize));
+			_maxExtractedSize = value;
+		}
+	}
+	private static long _maxExtractedSize = 1_000_000_000;
+
+	/// <summary>
+	/// Gets or sets the maximum number of entries an archive is allowed to contain
+	/// </summary>
+	/// <remarks>
+	/// Each entry costs a file and its metadata, so an archive of many tiny entries takes far
+	/// longer to extract than its size suggests
+	/// </remarks>
+	public static int MaxEntries
+	{
+		get => _maxEntries;
+		set
+		{
+			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(MaxEntries));
+			_maxEntries = value;
+		}
+	}
+	private static int _maxEntries = 100_000;
+
 	/// <summary>
 	/// Compresses a file using GZip compression
 	/// </summary>
@@ -79,6 +117,36 @@ public class CompressionUtils
 		}
 	}
 
+	/// <summary>
+	/// Rejects an archive that declares more than the limits allow, before any of it is written
+	/// </summary>
+	/// <remarks>
+	/// A zip records each entry's uncompressed length in its own directory, so the total is known
+	/// without extracting anything. That's the archive's own claim rather than a measurement, but
+	/// an archive that lies about it is rejected by extraction itself
+	/// </remarks>
+	private static void ValidateZipLimits(FileInfo fileToDecompress)
+	{
+		using ZipArchive archive = ZipFile.OpenRead(fileToDecompress.FullName);
+
+		if (archive.Entries.Count > MaxEntries)
+		{
+			throw new InvalidDataException(
+				$"Archive has {archive.Entries.Count} entries, more than the {MaxEntries} allowed: {fileToDecompress.Name}");
+		}
+
+		long totalSize = 0;
+		foreach (ZipArchiveEntry entry in archive.Entries)
+		{
+			totalSize += entry.Length;
+			if (totalSize > MaxExtractedSize)
+			{
+				throw new InvalidDataException(
+					$"Archive expands past the {MaxExtractedSize} bytes allowed: {fileToDecompress.Name}");
+			}
+		}
+	}
+
 	private static void ExtractZip(FileInfo fileToDecompress)
 	{
 		string targetPath = Path.ChangeExtension(fileToDecompress.FullName, null);
@@ -91,6 +159,8 @@ public class CompressionUtils
 		bool backedUp = false;
 		try
 		{
+			ValidateZipLimits(fileToDecompress);
+
 			ZipFile.ExtractToDirectory(fileToDecompress.FullName, tempPath);
 
 			if (Directory.Exists(targetPath))
@@ -141,7 +211,13 @@ public class CompressionUtils
 			{
 				using (GZipStream decompressionStream = new(originalFileStream, CompressionMode.Decompress, leaveOpen: true))
 				{
-					decompressionStream.CopyTo(decompressedFileStream);
+					// A gzip carries no size to check ahead of time, so the bytes are counted as
+					// they're read
+					if (!decompressionStream.TryCopyUpTo(decompressedFileStream, MaxExtractedSize))
+					{
+						throw new InvalidDataException(
+							$"Archive expands past the {MaxExtractedSize} bytes allowed: {fileToDecompress.Name}");
+					}
 				}
 
 				decompressedFileStream.Flush();

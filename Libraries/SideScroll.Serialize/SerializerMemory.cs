@@ -192,32 +192,10 @@ public abstract class SerializerMemory
 		using var inStream = new MemoryStream(bytes);
 		using var tinyStream = new GZipStream(inStream, CompressionMode.Decompress);
 
-		CopyUpTo(tinyStream, outStream, MaxDecompressedSize);
-	}
-
-	/// <summary>
-	/// Copies the decompressed bytes, stopping rather than reading a payload that never ends
-	/// </summary>
-	/// <remarks>
-	/// Stream.CopyTo() reads until the source runs out, which a compressed payload decides. The
-	/// count is checked before each write so nothing past the limit is kept
-	/// </remarks>
-	private static void CopyUpTo(Stream source, Stream destination, long maxBytes)
-	{
-		byte[] buffer = new byte[81920]; // Stream.CopyTo()'s default
-		long total = 0;
-
-		int read;
-		while ((read = source.Read(buffer, 0, buffer.Length)) > 0)
+		if (!tinyStream.TryCopyUpTo(outStream, MaxDecompressedSize))
 		{
-			total += read;
-			if (total > maxBytes)
-			{
-				throw new SerializerException("Compressed data expands past the maximum allowed size",
-					new Tag("MaxDecompressedSize", maxBytes));
-			}
-
-			destination.Write(buffer, 0, read);
+			throw new SerializerException("Compressed data expands past the maximum allowed size",
+				new Tag("MaxDecompressedSize", MaxDecompressedSize));
 		}
 	}
 
