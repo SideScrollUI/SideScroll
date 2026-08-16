@@ -369,6 +369,16 @@ public class TabInstance : IDisposable
 
 	private bool _disposed;
 
+	/// <summary>
+	/// Every task started for this tab, which is what gets cancelled when it closes
+	/// </summary>
+	/// <remarks>
+	/// <see cref="TabModel.Tasks"/> is a display collection, holding only tasks that opted into
+	/// being shown and capped at <see cref="TaskInstanceCollection.MaxTasks"/>, so it was never
+	/// the set this owns
+	/// </remarks>
+	private readonly List<TaskInstance> _trackedTasks = [];
+
 	/// <summary>Returns the tab's <see cref="Label"/>.</summary>
 	public override string ToString() => Label;
 
@@ -457,7 +467,17 @@ public class TabInstance : IDisposable
 
 			// Cancel tasks, then release the cancellation source each one owns. TaskInstance waits
 			// for anything still running before disposing it
-			foreach (TaskInstance taskInstance in Model.Tasks)
+			List<TaskInstance> ownedTasks;
+			lock (_trackedTasks)
+			{
+				// Model.Tasks is added to directly elsewhere, so it's included rather than assumed
+				// to be covered. Cancel() and Dispose() both no-op once disposed, so a task in both
+				// is safe to reach twice
+				ownedTasks = [.. _trackedTasks, .. Model.Tasks];
+				_trackedTasks.Clear();
+			}
+
+			foreach (TaskInstance taskInstance in ownedTasks)
 			{
 				taskInstance.Cancel();
 				taskInstance.Dispose();
@@ -590,6 +610,15 @@ public class TabInstance : IDisposable
 	public void AddTask(TaskInstance taskInstance, bool showTask)
 	{
 		taskInstance.ShowTask = showTask || ShowTasks;
+
+		lock (_trackedTasks)
+		{
+			// Only what's still running needs cancelling, so finished tasks are dropped here rather
+			// than accumulating for as long as the tab is open
+			_trackedTasks.RemoveAll(task => task.Finished);
+			_trackedTasks.Add(taskInstance);
+		}
+
 		if (taskInstance.ShowTask || Model.ShowTasks)
 		{
 			if (!Model.Tasks.Contains(taskInstance))
