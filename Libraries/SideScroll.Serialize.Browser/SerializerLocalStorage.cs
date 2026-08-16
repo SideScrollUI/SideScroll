@@ -63,46 +63,45 @@ public partial class SerializerLocalStorage : SerializerFile
 	/// </summary>
 	protected override void EnsureStorageExists() { }
 
-	/// <summary>Serializes <paramref name="obj"/> to JSON and writes it to localStorage under <see cref="StorageKey"/>, logging success or failure to <paramref name="call"/>.</summary>
+	/// <summary>Serializes <paramref name="obj"/> to JSON and writes it to localStorage under <see cref="StorageKey"/>, logging the result to <paramref name="call"/>.</summary>
+	/// <exception cref="SerializerException">localStorage rejected the write, its quota is limited</exception>
+	/// <remarks>
+	/// Serialization and interop failures aren't caught either, so a save that stored nothing
+	/// reaches the caller instead of returning as though it had succeeded. Callers can discard
+	/// their only copy of what they saved, so failing quietly loses it
+	/// </remarks>
 	protected override void SaveInternal(Call call, object obj, string? name = null, bool publicOnly = false)
 	{
 		var options = publicOnly
 			? JsonConverters.PublicSerializerOptions
 			: JsonConverters.PrivateSerializerOptions;
 
-		try
+		string json = JsonSerializer.Serialize(obj, obj.GetType(), options);
+
+		if (!SetLocalStorageItem(StorageKey, json))
 		{
-			string json = JsonSerializer.Serialize(obj, obj.GetType(), options);
-			bool success = SetLocalStorageItem(StorageKey, json);
-
-			if (success)
-			{
-				string headerJson = JsonSerializer.Serialize(new StorageHeader { Name = name });
-				success = SetLocalStorageItem(ConvertPathToHeaderStorageKey(BasePath), headerJson);
-			}
-
-			if (success)
-			{
-				call.Log.AddDebug("Saved to localStorage",
-					new Tag("Name", name),
-					new Tag("Key", StorageKey),
-					new Tag("Size", json.Length));
-			}
-			else
-			{
-				call.Log.AddWarning("Failed to save to localStorage",
-					new Tag("Name", name),
-					new Tag("Type", obj.GetType()),
-					new Tag("Key", StorageKey));
-			}
+			throw new SerializerException("Failed to save to localStorage",
+				new Tag("Name", name),
+				new Tag("Type", obj.GetType()),
+				new Tag("Key", StorageKey),
+				new Tag("Size", json.Length));
 		}
-		catch (Exception e)
+
+		// The data is stored at this point, so a rejected header leaves it without one rather than
+		// losing it. Still a failed save, the header is what names it when it's loaded back
+		string headerJson = JsonSerializer.Serialize(new StorageHeader { Name = name });
+		if (!SetLocalStorageItem(ConvertPathToHeaderStorageKey(BasePath), headerJson))
 		{
-			call.Log.Add(e,
+			throw new SerializerException("Saved to localStorage without its header",
 				new Tag("Name", name),
 				new Tag("Type", obj.GetType()),
 				new Tag("Key", StorageKey));
 		}
+
+		call.Log.AddDebug("Saved to localStorage",
+			new Tag("Name", name),
+			new Tag("Key", StorageKey),
+			new Tag("Size", json.Length));
 	}
 
 	/// <summary>Reads JSON from localStorage under <see cref="StorageKey"/>, deserializes it to <paramref name="expectedType"/> (or a generic dictionary if unspecified), and returns the result.</summary>
