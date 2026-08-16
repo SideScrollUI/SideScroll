@@ -6,6 +6,7 @@ using Avalonia.Threading;
 using SideScroll.Avalonia.Controls.Viewer;
 using SideScroll.Avalonia.Tabs;
 using SideScroll.Avalonia.Themes;
+using SideScroll.Extensions;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Settings;
 using SideScroll.Utilities;
@@ -232,19 +233,25 @@ public class BaseWindow : Window
 		set
 		{
 			Size maxBounds = GetMaxBounds();
+			// Clamped() rather than Math.Clamp(), which throws when the maximum is below the
+			// minimum. GetMaxBounds() returns 0 while Screens.All is empty, which a remote session
+			// or a monitor change passes through, and a display can be narrower than MinWidth, so
+			// restoring saved settings threw before the window existed to report it
 			// These are causing the window to be shifted down
-			Width = Math.Clamp(value.Width, MinWidth, maxBounds.Width);
-			Height = Math.Clamp(value.Height, MinHeight, MaxHeight);
+			Width = value.Width.Clamped(MinWidth, maxBounds.Width);
+			Height = value.Height.Clamped(MinHeight, MaxHeight);
 
 			double minLeft = 0;
 			if (Project.UserSettings.EnableCustomTitleBar == false)
 			{
 				minLeft = -WindowsBorderWidth;
 			}
-			double left = Math.Clamp(value.Left, minLeft, maxBounds.Width - Width + minLeft); // Values can be negative
+			// The size keeping its minimum leaves the window larger than the space measured for it,
+			// so these maximums go below their minimum for the same reason
+			double left = value.Left.Clamped(minLeft, maxBounds.Width - Width + minLeft); // Values can be negative
 
 			double maxHeight = MaxHeight;
-			double top = Math.Clamp(value.Top, 0, maxHeight - Height);
+			double top = value.Top.Clamped(0, maxHeight - Height);
 			Position = new PixelPoint((int)left, (int)top);
 
 			// Avalonia bug? WindowState doesn't update correctly for macOS

@@ -70,6 +70,24 @@ public static class NumberExtensions
 	}
 
 	/// <summary>
+	/// Clamps a value to a range, returning <paramref name="min"/> when <paramref name="max"/>
+	/// falls below it instead of throwing
+	/// </summary>
+	/// <remarks>
+	/// <see cref="Math.Clamp(double, double, double)"/> throws when the maximum is below the
+	/// minimum, which ordinary values reach rather than only a mistake: available screen space is
+	/// 0 while the screen list is empty, and a display can be narrower than a window's minimum
+	/// size. The minimum wins there, so a window stays usably sized rather than failing to open
+	/// </remarks>
+	public static double Clamped(this double value, double min, double max)
+	{
+		if (max < min)
+			return min;
+
+		return Math.Clamp(value, min, max);
+	}
+
+	/// <summary>
 	/// Rounds a double to the specified number of significant figures
 	/// </summary>
 	public static double RoundToSignificantFigures(this double num, int significantFigures)
