@@ -297,4 +297,50 @@ public class TaskInstanceTests : BaseTest
 
 		Assert.DoesNotThrow(child.Cancel);
 	}
+
+	[Test]
+	[Description(
+		"Work queued before a tab closed still runs afterwards and creates sub-tasks from the " +
+		"disposed one, which threw ObjectDisposedException reading the released source's token")]
+	public void SubTaskOfADisposedParentIsCreatedCancelled()
+	{
+		TaskInstance parent = new();
+		parent.Dispose();
+
+		TaskInstance child = parent.AddSubTask(new Call());
+
+		Assert.That(child.CancelToken.IsCancellationRequested, Is.True);
+		Assert.DoesNotThrow(() => _ = child.TokenSource.Token, "it owns a live source rather than the released one");
+		Assert.DoesNotThrow(child.Cancel);
+	}
+
+	[Test]
+	[Description("Call.Timer() builds a sub-task, which is how a save after the tab closed reached this")]
+	public void TimerOnACallWhoseTaskWasDisposedDoesNotThrow()
+	{
+		Call call = new("outer");
+		TaskInstance taskInstance = new("outer");
+		call.TaskInstance = taskInstance;
+
+		taskInstance.Dispose();
+
+		Assert.DoesNotThrow(() =>
+		{
+			using CallTimer timer = call.Timer("Saving object");
+		});
+	}
+
+	[Test]
+	[Description("A sub-task of a live parent still shares its source, so cancelling the parent stops it")]
+	public void SubTaskOfALiveParentSharesItsSource()
+	{
+		TaskInstance parent = new();
+		TaskInstance child = parent.AddSubTask(new Call());
+
+		Assert.That(child.CancelToken.IsCancellationRequested, Is.False);
+
+		parent.Cancel();
+
+		Assert.That(child.CancelToken.IsCancellationRequested, Is.True);
+	}
 }

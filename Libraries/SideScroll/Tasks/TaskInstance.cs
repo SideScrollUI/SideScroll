@@ -209,8 +209,21 @@ public class TaskInstance : INotifyPropertyChanged, IDisposable
 		Label = call.Name;
 		Call = call;
 		Creator = parentTask.Creator;
-		TokenSource = parentTask.TokenSource;
-		_ownsTokenSource = false;
+
+		// A disposed parent has released its source, and reading a token from a released one throws.
+		// Work queued before its owner was disposed still runs afterwards and reaches here through
+		// Call.Timer(), so a sub-task of one keeps its own source and starts out cancelled, which is
+		// what anything descending from a task that's been torn down should see
+		if (parentTask._disposed)
+		{
+			_tokenSource.Cancel();
+		}
+		else
+		{
+			TokenSource = parentTask.TokenSource;
+			_ownsTokenSource = false;
+		}
+
 		ParentTask = parentTask;
 		call.TaskInstance = this;
 
