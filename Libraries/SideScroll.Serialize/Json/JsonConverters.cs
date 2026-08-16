@@ -314,6 +314,24 @@ public class ObjectJsonConverter : JsonConverter<object>
 		typeof(Nullable<>),
 	];
 
+	/// <summary>
+	/// Types written without their own type alongside them, because <see cref="Read"/> reconstructs
+	/// each one as itself
+	/// </summary>
+	/// <remarks>
+	/// These are what the fallback in <see cref="Read"/> produces: a JSON string, true or false, and
+	/// the number types it tries in order. Anything else written bare comes back as one of these
+	/// rather than as what it was
+	/// </remarks>
+	private static readonly HashSet<Type> BareTypes =
+	[
+		typeof(string),
+		typeof(bool),
+		typeof(int),
+		typeof(long),
+		typeof(double),
+	];
+
 	public override bool CanConvert(Type typeToConvert)
 	{
 		return typeToConvert == typeof(object) || typeToConvert.IsInterface;
@@ -434,14 +452,12 @@ public class ObjectJsonConverter : JsonConverter<object>
 			return;
 		}
 
-		// For primitives and simple types that don't need type information, serialize directly
-		if (runtimeType.IsPrimitive ||
-			runtimeType == typeof(string) ||
-			runtimeType == typeof(decimal) ||
-			runtimeType == typeof(DateTime) ||
-			runtimeType == typeof(DateTimeOffset) ||
-			runtimeType == typeof(TimeSpan) ||
-			runtimeType == typeof(Guid))
+		// Only the types Read() reconstructs as themselves go out bare. Everything else carries its
+		// type, including primitives: a byte or short comes back as the int the fallback reads a
+		// number into, a float as a double, a char as the string JSON wrote it as, and a decimal as
+		// whatever the fallback picked for its magnitude. DateTime, DateTimeOffset, TimeSpan, and
+		// Guid are all just strings once written, so they came back as strings
+		if (BareTypes.Contains(runtimeType))
 		{
 			JsonSerializer.Serialize(writer, value, runtimeType, options);
 			return;

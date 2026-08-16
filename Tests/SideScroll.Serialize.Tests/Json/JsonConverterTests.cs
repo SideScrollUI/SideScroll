@@ -957,10 +957,11 @@ public class JsonConverterTests : SerializeBaseTest
 		var output = JsonSerializer.Deserialize<ObjectContainerPublicTypes>(json, JsonConverters.PublicSerializerOptions);
 
 		Assert.That(output, Is.Not.Null);
-		Assert.That(output!.DateTimeObject, Is.Not.Null);
-		// DateTime gets serialized in ISO 8601 format, parse and convert to UTC for comparison
-		var outputDateTime = DateTime.Parse(output.DateTimeObject!.ToString()!).ToUniversalTime();
-		Assert.That(outputDateTime, Is.EqualTo(inputDateTime));
+
+		// Comes back as a DateTime rather than the string it used to, so it compares directly.
+		// Parsing its ToString() was what the old behavior needed, and that reads back as
+		// Unspecified and shifts by the local offset when converted
+		Assert.That(output!.DateTimeObject, Is.EqualTo(inputDateTime));
 	}
 
 	[Test, Description("Test object members containing TimeSpan")]
@@ -1162,8 +1163,10 @@ public class JsonConverterTests : SerializeBaseTest
 		Assert.That(output.ObjectProperty!.ToString(), Is.EqualTo("Hello"));
 	}
 
-	[Test, Description("Test DateTime in object members doesn't include type information")]
-	public void SerializeObjectDateTimeWithoutTypeInfo()
+	[Test, Description(
+		"DateTime in an object member carries its type. Written bare it's just a string, which is " +
+		"what it came back as, so the member no longer held a DateTime after a round trip")]
+	public void SerializeObjectDateTimeWithTypeInfo()
 	{
 		var testDate = new DateTime(2024, 6, 15, 12, 30, 0, DateTimeKind.Utc);
 		var input = new ObjectContainerPublicTypes
@@ -1173,15 +1176,13 @@ public class JsonConverterTests : SerializeBaseTest
 
 		string json = JsonSerializer.Serialize(input, JsonConverters.PublicSerializerOptions);
 
-		// DateTime should serialize directly without type wrapper
-		Assert.That(json, Does.Not.Contain("$type"));
+		Assert.That(json, Does.Contain("$type"));
 
 		var output = JsonSerializer.Deserialize<ObjectContainerPublicTypes>(json, JsonConverters.PublicSerializerOptions);
 
 		Assert.That(output, Is.Not.Null);
-		Assert.That(output!.DateTimeObject, Is.Not.Null);
-		var outputDateTime = DateTime.Parse(output.DateTimeObject!.ToString()!).ToUniversalTime();
-		Assert.That(outputDateTime, Is.EqualTo(testDate));
+		Assert.That(output!.DateTimeObject, Is.TypeOf<DateTime>());
+		Assert.That(output.DateTimeObject, Is.EqualTo(testDate));
 	}
 
 	[PublicData]
