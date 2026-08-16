@@ -66,6 +66,75 @@ public class ItemCollectionUITests : BaseTest
 		Assert.That(items, Is.EqualTo(new[] { "new", "a" }));
 	}
 
+	[Test, Description(
+		"Falling back to a bare SynchronizationContext made UsePost true from then on, so every " +
+		"change was posted to the thread pool, including ones already on the UI thread")]
+	public void InitializingWithoutAContextLeavesItNull()
+	{
+		ItemCollectionUI<int> collection = [];
+
+		Task.Run(() => collection.InitializeContext()).Wait();
+
+		Assert.That(collection.Context, Is.Null);
+		Assert.That(collection.UsePost, Is.False);
+	}
+
+	[Test, Description("Without a context an item is added in place rather than queued elsewhere")]
+	public void AddWithoutAContextAppliesImmediately()
+	{
+		ItemCollectionUI<int> collection = [];
+		Task.Run(() => collection.InitializeContext()).Wait();
+
+		collection.Add(5);
+
+		Assert.That(collection, Is.EqualTo(new[] { 5 }));
+	}
+
+	[Test, Description("A later call can still pick up a context, the unusable one used to be kept")]
+	public void InitializeContextRetriesAfterFindingNone()
+	{
+		ItemCollectionUI<int> collection = [];
+		Task.Run(() => collection.InitializeContext()).Wait();
+
+		QueuedContext context = new();
+		SynchronizationContext.SetSynchronizationContext(context);
+		try
+		{
+			collection.InitializeContext();
+			Assert.That(collection.Context, Is.SameAs(context));
+		}
+		finally
+		{
+			SynchronizationContext.SetSynchronizationContext(null);
+		}
+	}
+
+	[Test, Description("A context that is found is still captured and still marshalled to")]
+	public void ContextFromTheCallingThreadIsKept()
+	{
+		ItemCollectionUI<int> collection = [];
+		QueuedContext context = new();
+
+		SynchronizationContext.SetSynchronizationContext(context);
+		try
+		{
+			collection.InitializeContext();
+		}
+		finally
+		{
+			// Off that context now, the way a background thread adding to it would be
+			SynchronizationContext.SetSynchronizationContext(null);
+		}
+
+		Assert.That(collection.Context, Is.SameAs(context));
+
+		collection.Add(7);
+		Assert.That(collection, Is.Empty, "queued, not applied yet");
+
+		context.Drain();
+		Assert.That(collection, Is.EqualTo(new[] { 7 }));
+	}
+
 	private sealed class QueuedContext : SynchronizationContext
 	{
 		private readonly Queue<(SendOrPostCallback Callback, object? State)> _callbacks = new();

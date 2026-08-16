@@ -120,11 +120,18 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	/// <summary>
 	/// Initializes or resets the SynchronizationContext to the current thread's context
 	/// </summary>
+	/// <remarks>
+	/// Not falling back to a new SynchronizationContext when there's none to capture. Posting to a
+	/// bare one queues to the thread pool, so initializing off the UI thread sent every later change
+	/// there, including ones made on the UI thread that <see cref="UsePost"/> would otherwise have
+	/// run in place. A null context leaves them on the calling thread, and lets a later call still
+	/// pick one up rather than keeping the one that can't marshal anywhere
+	/// </remarks>
 	public void InitializeContext(bool reset = false)
 	{
 		if (Context == null || reset)
 		{
-			Context = SynchronizationContext.Current ?? new();
+			Context = SynchronizationContext.Current;
 		}
 	}
 
