@@ -6,6 +6,18 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.5.1" />
   </ItemGroup>
 
+  <!-- Runs an Avalonia Application in process so controls needing one can be constructed and
+       driven. Without it a control's icons, themes, and dispatcher aren't available, which is why
+       the tests that predate this reach their logic through extracted helpers instead. -->
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Headless.NUnit" Version="$(AvaloniaVersion)" />
+    <!-- Not transitive: nothing else brings the Fluent theme in -->
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
+    <!-- Transitive, but only through Svg.Controls.Skia.Avalonia, which pins an older Avalonia.Skia
+         than the rest of Avalonia here. Declared so it stays on $(AvaloniaVersion) -->
+    <PackageReference Include="Avalonia.Skia" Version="$(AvaloniaVersion)" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\SideScroll.Avalonia\SideScroll.Avalonia.csproj" />
     <ProjectReference Include="..\..\Libraries\SideScroll.Avalonia.Charts.LiveCharts\SideScroll.Avalonia.Charts.LiveCharts.csproj" />
