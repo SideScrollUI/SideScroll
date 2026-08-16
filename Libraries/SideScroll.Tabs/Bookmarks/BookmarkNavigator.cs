@@ -86,7 +86,11 @@ public class BookmarkNavigator : INotifyPropertyChanged
 	/// </summary>
 	public BookmarkNavigator()
 	{
-		Context = SynchronizationContext.Current ?? new();
+		// Not falling back to a new SynchronizationContext. Posting to a bare one queues to the
+		// thread pool, so every notification ran off thread, including ones raised on the UI thread
+		// that would otherwise have stayed there. A null context invokes directly instead, which is
+		// what NotifyPropertyChanged() already does with one
+		Context = SynchronizationContext.Current;
 
 		Bookmark bookmark = new()
 		{
@@ -142,7 +146,11 @@ public class BookmarkNavigator : INotifyPropertyChanged
 		if (bookmark == null)
 			return;
 
-		Bookmark currentBookmark = History[CurrentIndex];
+		// Through Current for its bounds check. History and CurrentIndex are both settable and
+		// deserialized, so the index can point outside what History holds, which threw here
+		if (Current is not { } currentBookmark)
+			return;
+
 		currentBookmark.TabBookmark = bookmark.TabBookmark;
 	}
 
@@ -152,10 +160,13 @@ public class BookmarkNavigator : INotifyPropertyChanged
 	/// <returns>The previous bookmark, or null if at the beginning</returns>
 	public Bookmark? SeekBackward()
 	{
-		if (CurrentIndex <= 0) return null;
+		// Checked against the history rather than only against zero. The index is settable and
+		// deserialized, so one past the end walked back to another position still outside it
+		int index = CurrentIndex - 1;
+		if (index < 0 || index >= History.Count) return null;
 
-		CurrentIndex--;
-		Bookmark oldBookmark = History[CurrentIndex];
+		CurrentIndex = index;
+		Bookmark oldBookmark = History[index];
 		Bookmark newBookmark = oldBookmark.DeepClone(); // Sanitize
 		Append(newBookmark, false); // Fork instead?
 		return newBookmark;
@@ -167,10 +178,12 @@ public class BookmarkNavigator : INotifyPropertyChanged
 	/// <returns>The next bookmark, or null if at the end</returns>
 	public Bookmark? SeekForward()
 	{
-		if (CurrentIndex >= History.Count - 1) return null;
+		// The upper bound was already covered, a negative index is the one that reached the history
+		int index = CurrentIndex + 1;
+		if (index < 0 || index >= History.Count) return null;
 
-		CurrentIndex++;
-		return History[CurrentIndex];
+		CurrentIndex = index;
+		return History[index];
 	}
 
 	/// <summary>
