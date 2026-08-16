@@ -46,4 +46,53 @@ public class LogUtilsTests : BaseTest
 			new InvalidOperationException("Second").ToString(),
 		}));
 	}
+
+	[TestCase("../outside")]
+	[TestCase("../../outside")]
+	[TestCase("sub/name")]
+	[TestCase(@"sub\name")]
+	[TestCase("..")]
+	[Description(
+		"The prefix names the log file, and was concatenated straight into it, so one carrying a " +
+		"separator or a parent segment wrote outside the directory the caller asked for")]
+	public void APrefixThatEscapesTheDirectoryIsRejected(string filePrefix)
+	{
+		Assert.Throws<ArgumentException>(
+			() => LogUtils.Save(_directory, filePrefix, new InvalidOperationException("Test")));
+
+		Assert.That(Directory.Exists(_directory) ? Directory.GetFiles(_directory) : [], Is.Empty,
+			"nothing was written");
+	}
+
+	[Test, Description("A rooted prefix makes Path.Combine() discard the directory entirely")]
+	public void ARootedPrefixIsRejected()
+	{
+		string rooted = Path.Combine(Path.GetTempPath(), "escaped");
+
+		Assert.Throws<ArgumentException>(
+			() => LogUtils.Save(_directory, rooted, new InvalidOperationException("Test")));
+	}
+
+	[TestCase("")]
+	[TestCase("   ")]
+	[Description("An empty prefix names a file that starts with its own extension")]
+	public void AnEmptyPrefixIsRejected(string filePrefix)
+	{
+		Assert.Throws<ArgumentException>(
+			() => LogUtils.Save(_directory, filePrefix, new InvalidOperationException("Test")));
+	}
+
+	[TestCase("Test")]
+	[TestCase("My App")]
+	[TestCase("App.Name")]
+	[TestCase("App-Name_1")]
+	[Description("An ordinary prefix still writes, including the dots and spaces a product name has")]
+	public void AnOrdinaryPrefixStillWrites(string filePrefix)
+	{
+		Assert.DoesNotThrow(
+			() => LogUtils.Save(_directory, filePrefix, new InvalidOperationException("Test")));
+
+		Assert.That(Directory.GetFiles(_directory), Has.Length.EqualTo(1));
+		Assert.That(Path.GetFileName(Directory.GetFiles(_directory)[0]), Does.StartWith(filePrefix));
+	}
 }

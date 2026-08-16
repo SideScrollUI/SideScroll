@@ -41,14 +41,8 @@ public static class HeadlessAppBuilder
 public static class HeadlessWindow
 {
 	/// <summary>
-	/// Shows a window and settles its layout, including anything applied while rendering
+	/// Shows a window and settles its layout
 	/// </summary>
-	/// <remarks>
-	/// <see cref="Layoutable.Measure"/> and <see cref="Layoutable.Arrange"/> alone aren't enough.
-	/// A <see cref="ScrollViewer"/>'s offset isn't realized until a frame is rendered, so a control
-	/// scrolled out of view still reports its unscrolled position and a test reads the layout it
-	/// asked for rather than the one on screen
-	/// </remarks>
 	public static void ShowAndSettle(Window window)
 	{
 		window.Show();
@@ -58,12 +52,18 @@ public static class HeadlessWindow
 	/// <summary>
 	/// Settles a shown window's layout after a change, such as assigning a scroll offset
 	/// </summary>
+	/// <remarks>
+	/// Draining the dispatcher is what does this. <see cref="Layoutable.Measure"/> and
+	/// <see cref="Layoutable.Arrange"/> aren't enough on their own — a <see cref="ScrollViewer"/>'s
+	/// offset isn't applied until the queued work runs, so a control scrolled out of view still
+	/// reports its unscrolled position and a test reads the layout it asked for rather than the one
+	/// on screen. Measuring and arranging first only sizes a window that hasn't been laid out yet
+	/// </remarks>
 	public static void Settle(Window window)
 	{
 		window.Measure(new Size(window.Width, window.Height));
 		window.Arrange(new Rect(0, 0, window.Width, window.Height));
 
-		AvaloniaHeadlessPlatform.ForceRenderTimerTick();
 		Dispatcher.UIThread.RunJobs();
 	}
 }
