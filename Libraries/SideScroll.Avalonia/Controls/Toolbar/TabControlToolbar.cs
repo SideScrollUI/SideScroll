@@ -52,6 +52,7 @@ public class TabControlToolbar : Grid, IDisposable
 	/// </remarks>
 	public void LoadToolbar(TabToolbar toolbar)
 	{
+		DisposeControls();
 		Children.Clear();
 		ColumnDefinitions.Clear();
 
@@ -278,6 +279,19 @@ public class TabControlToolbar : Grid, IDisposable
 	}
 
 	public virtual void Dispose()
+	{
+		DisposeControls();
+	}
+
+	/// <summary>
+	/// Disposes the controls currently in the toolbar, releasing the subscriptions they hold
+	/// </summary>
+	/// <remarks>
+	/// Only the controls' own subscriptions. The <see cref="ToolToggleButton.ListProperty"/> they
+	/// bind to belongs to the toolbar model and is released by <see cref="TabToolbar.Dispose"/>, so
+	/// the same model can be loaded again after this
+	/// </remarks>
+	private void DisposeControls()
 	{
 		foreach (Control control in Children)
 		{

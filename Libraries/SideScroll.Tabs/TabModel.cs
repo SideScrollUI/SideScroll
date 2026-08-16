@@ -4,6 +4,7 @@ using SideScroll.Collections;
 using SideScroll.Extensions;
 using SideScroll.Tabs.Bookmarks.Models;
 using SideScroll.Tabs.Lists;
+using SideScroll.Tabs.Toolbar;
 using SideScroll.Tasks;
 using System.Collections;
 using System.Data;
@@ -625,6 +626,16 @@ public class TabModel
 	/// </summary>
 	private void DisposeItems()
 	{
+		// A toolbar owns the ListProperty bindings its toggle buttons hold, and the controls
+		// rendering them only release their own subscriptions, so this is what lets them go
+		foreach (TabObject tabObject in Objects)
+		{
+			if (tabObject.Object is TabToolbar toolbar)
+			{
+				toolbar.Dispose();
+			}
+		}
+
 		foreach (IList list in ItemLists)
 		{
 			try

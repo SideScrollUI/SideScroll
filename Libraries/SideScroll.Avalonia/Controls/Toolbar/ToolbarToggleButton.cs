@@ -71,13 +71,11 @@ public class ToolbarToggleButton : ToolbarButton
 	{
 		if (disposing && ListProperty != null)
 		{
-			// The bound object holds the ListProperty, which holds this button and its TabInstance.
-			// Toolbars bind to objects owned by the parent tab, so those outlive this control
+			// Only this control's own subscription. The ListProperty belongs to the ToolToggleButton
+			// on the toolbar model, which outlives the control and can be rendered again — disposing
+			// it here unsubscribed it from its bound object, leaving the next control bound to a
+			// property that no longer observes anything. TabToolbar disposes it instead
 			ListProperty.PropertyChanged -= ListProperty_PropertyChanged;
-
-			// LoadToolbar() creates one control per ToolToggleButton, and both are rebuilt on every
-			// load, so this button owns the binding and has to release it from the bound object
-			ListProperty.Dispose();
 		}
 
 		base.Dispose(disposing);
