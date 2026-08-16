@@ -30,6 +30,26 @@ public class LiveChartSeries : IDisposable //: ChartSeries<ISeries>
 	/// <summary>Gets or sets the default marker geometry size in pixels.</summary>
 	public static double DefaultGeometrySize { get; set; } = 5;
 
+	/// <summary>
+	/// Gets or sets the maximum number of bins a series is divided into
+	/// </summary>
+	/// <remarks>
+	/// The count comes from the data's own range divided by the configured bin size, so points far
+	/// apart with a small size ask for far more bins than a chart has pixels to draw them in. The
+	/// bin size widens to fit this instead. <see cref="DateTime"/> values are binned in ticks, where
+	/// a year is 3.15e14 of them, so an unfitted size reaches these counts on ordinary data
+	/// </remarks>
+	public static int MaxBins
+	{
+		get => _maxBins;
+		set
+		{
+			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(MaxBins));
+			_maxBins = value;
+		}
+	}
+	private static int _maxBins = 10_000;
+
 	/// <summary>Gets the parent chart control.</summary>
 	public TabLiveChart Chart { get; }
 	/// <summary>Gets the source data series.</summary>
@@ -279,8 +299,15 @@ public class LiveChartSeries : IDisposable //: ChartSeries<ISeries>
 		double firstBinX = Math.Floor(firstX / xBinSize) * xBinSize; // use start of interval
 		double lastBinX = dataPoints.Last().X!.Value;
 
+		// A NaN or infinite X divides into no meaningful number of bins, and binning it anyway
+		// produced a count the conversion below turned into an allocation size
+		double range = lastBinX - firstBinX;
+		if (!double.IsFinite(range)) return dataPoints;
+
+		xBinSize = FitBinSize(range, xBinSize);
+
 		// The last point's bin is the highest one, rounding up would add an empty bin after it
-		int numBins = (int)Math.Floor((lastBinX - firstBinX) / xBinSize) + 1;
+		int numBins = (int)Math.Floor(range / xBinSize) + 1;
 
 		var bins = new double[numBins];
 		var counts = new int[numBins]; // Tracked separately so an empty bin can be told apart from one summing to zero
@@ -317,6 +344,28 @@ public class LiveChartSeries : IDisposable //: ChartSeries<ISeries>
 		}
 
 		return binDataPoints;
+	}
+
+	/// <summary>
+	/// Widens <paramref name="xBinSize"/> until <paramref name="range"/> divides into no more than
+	/// <see cref="MaxBins"/> bins, leaving a size that already fits unchanged
+	/// </summary>
+	/// <remarks>
+	/// Two arrays are allocated per bin, so an unfitted count spent 12 bytes on each of them: a
+	/// billion bins claimed around 12 GB while still appearing to succeed, since the pages are only
+	/// committed as they're written. Beyond that the count stopped being representable, and the
+	/// conversion to <see cref="int"/> saturates rather than wrapping, so the increment after it
+	/// turned the size negative and threw <see cref="OverflowException"/> instead
+	/// </remarks>
+	internal static double FitBinSize(double range, double xBinSize)
+	{
+		if (range <= 0) return xBinSize;
+
+		double numBins = Math.Floor(range / xBinSize) + 1;
+		if (numBins <= MaxBins) return xBinSize;
+
+		// Measured against the same origin, so the bins the caller goes on to fill still cover it
+		return range / MaxBins;
 	}
 
 	private void SeriesChanged(ListSeries listSeries, NotifyCollectionChangedEventArgs e)
