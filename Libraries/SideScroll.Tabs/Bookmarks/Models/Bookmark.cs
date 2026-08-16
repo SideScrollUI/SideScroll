@@ -114,7 +114,11 @@ public class Bookmark
 		serializer.PublicOnly = publicOnly;
 		serializer.LoadBase64String(base64);
 
-		Bookmark bookmark = serializer.Load<Bookmark>(call);
+		Bookmark? bookmark = serializer.Load<Bookmark>(call);
+		if (bookmark == null)
+		{
+			throw new InvalidDataException("Failed to decode bookmark from base64 string");
+		}
 		bookmark.Imported = true;
 		return bookmark;
 	}

@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using SideScroll.Attributes;
 using SideScroll.Serialize.Atlas;
+using SideScroll.Logs;
 using SideScroll.Serialize.Atlas.Schema;
 using System.Text;
 
@@ -290,5 +291,59 @@ public class SerializeSchemaChangeTests : SerializeBaseTest
 		Assert.That(output.ListProperty, Is.EqualTo(new[] { 4, 5 }));
 		Assert.That(output.ObjectProperty, Is.EqualTo("saved object"));
 		Assert.That(output.NumberProperty, Is.EqualTo(9));
+	}
+	// Same member name, different field type, so loading one as the other reaches SetValue() with a
+	// value the field can't take
+	public class FieldTypeOldXX
+	{
+		public string Value = "text";
+		public int Kept = 7;
+	}
+
+	public class FieldTypeNewXX
+	{
+		public int Value = 0;
+		public int Kept = 0;
+	}
+
+	[Test, Description(
+		"A field whose type no longer matches what was saved is skipped at schema initialization, " +
+		"so the object around it still loads and the skip is reported")]
+	public void ChangedFieldTypeIsSkippedAndReported()
+	{
+		FieldTypeOldXX input = new();
+
+		_serializer.Save(Call, input);
+		ReplaceBytes(nameof(FieldTypeOldXX), nameof(FieldTypeNewXX));
+
+		var output = _serializer.Load<FieldTypeNewXX>(Call);
+
+		// The rest of the object still loads
+		Assert.That(output.Kept, Is.EqualTo(7));
+		Assert.That(output.Value, Is.EqualTo(0), "The mismatched field is left at its default");
+
+		Assert.That(AllEntriesText(Call.Log), Does.Contain("type has changed"),
+			"InitializeField() already detects the mismatch and reports it");
+	}
+
+	private static string AllEntriesText(Log log)
+	{
+		var text = new StringBuilder();
+		void Append(LogEntry entry)
+		{
+			text.AppendLine(entry.ToString());
+			if (entry is Log childLog)
+			{
+				foreach (LogEntry child in childLog.Items)
+				{
+					Append(child);
+				}
+			}
+		}
+		foreach (LogEntry entry in log.Items)
+		{
+			Append(entry);
+		}
+		return text.ToString();
 	}
 }

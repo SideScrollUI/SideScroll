@@ -114,6 +114,15 @@ public class TabDataBookmark
 	/// </summary>
 	public void Import(Project project)
 	{
+		// By reference, matching TabBookmark.Import()
+		Import(project, new HashSet<object>(ReferenceEqualityComparer.Instance));
+	}
+
+	internal void Import(Project project, HashSet<object> visited)
+	{
+		if (!visited.Add(this))
+			return;
+
 		SelectionType = SelectionType.Link;
 		foreach (SelectedRowView selectedRowView in SelectedRows)
 		{
@@ -131,7 +140,7 @@ public class TabDataBookmark
 					project.Data.App.Save(DataRepoGroupId, dataKey, row.DataValue);
 				}
 			}
-			selectedRowView.TabBookmark.Import(project);
+			selectedRowView.TabBookmark.Import(project, visited);
 		}
 	}
 

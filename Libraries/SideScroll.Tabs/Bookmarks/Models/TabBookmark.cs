@@ -186,9 +186,20 @@ public class TabBookmark
 	/// </summary>
 	public void Import(Project project)
 	{
+		// By reference, so this tracks the bookmarks already visited rather than the ones that
+		// compare equal to one. Neither type overrides Equals() today, and detection that depends
+		// on them never doing so would start skipping real subtrees the moment one did
+		Import(project, new HashSet<object>(ReferenceEqualityComparer.Instance));
+	}
+
+	internal void Import(Project project, HashSet<object> visited)
+	{
+		if (!visited.Add(this))
+			return;
+
 		foreach (TabDataBookmark tabDataBookmark in TabDatas)
 		{
-			tabDataBookmark.Import(project);
+			tabDataBookmark.Import(project, visited);
 		}
 	}
 

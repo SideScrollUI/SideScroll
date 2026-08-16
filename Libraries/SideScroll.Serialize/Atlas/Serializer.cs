@@ -554,7 +554,10 @@ public class Serializer : IDisposable
 		else
 		{
 			Type type = obj.GetType();
-			TypeRepo typeRepo = IdxTypeToRepo[type];
+			if (!IdxTypeToRepo.TryGetValue(type, out TypeRepo? typeRepo))
+			{
+				throw new SerializerException("Type was not registered before serialization", new Tag("Type", type));
+			}
 			if (typeRepo is TypeRepoUnknown)
 			{
 				// different value for non-null?
@@ -589,7 +592,10 @@ public class Serializer : IDisposable
 						return;
 					}
 				}
-				int objectIndex = typeRepo.IdxObjectToIndex[obj];
+				if (!typeRepo.IdxObjectToIndex.TryGetValue(obj, out int objectIndex))
+				{
+					throw new SerializerException("Object was not registered before serialization", new Tag("Type", type));
+				}
 				writer.Write(objectIndex);
 			}
 		}

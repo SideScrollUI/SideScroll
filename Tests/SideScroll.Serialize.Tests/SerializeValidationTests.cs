@@ -94,4 +94,15 @@ public class SerializeValidationTests : SerializeBaseTest
 
 		Assert.That(output, Is.EqualTo("input"));
 	}
+
+	[Test, Description("Writing an unregistered object throws SerializerException")]
+	public void WriteUnregisteredObjectThrowsSerializerException()
+	{
+		Serializer serializer = new();
+		using var stream = new MemoryStream();
+		using var writer = new BinaryWriter(stream);
+		
+		// String was not registered via AddObjectRef
+		Assert.That(() => serializer.WriteObjectRef(typeof(string), "unregistered", writer), Throws.Exception.TypeOf<SerializerException>());
+	}
 }

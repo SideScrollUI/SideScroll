@@ -8,8 +8,12 @@ namespace SideScroll.Network.Http;
 /// <summary>
 /// HTTP response cache that stores deserialized objects with optional expiration
 /// </summary>
-public class HttpMemoryCache
+public class HttpMemoryCache : IDisposable
 {
+	private readonly record struct CacheKey(string Key, Type Type);
+
+	private bool _disposed;
+
 	/// <summary>
 	/// Gets or sets the default maximum number of items for new cache instances
 	/// </summary>
@@ -42,6 +46,9 @@ public class HttpMemoryCache
 	/// </summary>
 	public HttpMemoryCache(int? maxItems = null, TimeSpan? cacheDuration = null)
 	{
+		if (cacheDuration <= TimeSpan.Zero)
+			throw new ArgumentOutOfRangeException(nameof(cacheDuration), "Cache duration must be positive.");
+
 		MaxItems = maxItems ?? DefaultMaxItems;
 		CacheDuration = cacheDuration;
 
@@ -65,11 +72,21 @@ public class HttpMemoryCache
 	/// <summary>
 	/// Adds an object to the cache with the specified key
 	/// </summary>
-	public void Add(string key, object? obj)
+	/// <remarks>
+	/// Keyed by <typeparamref name="T"/> rather than the object's own type, so a uri stored through
+	/// a base typed reference is found by <see cref="TryGetValue"/> asking for that same base type.
+	/// The two only agree while both read the type from the call site
+	/// </remarks>
+	public void Add<T>(string key, T? obj)
 	{
 		if (obj == null)
 			return;
 
+		Add(key, obj, typeof(T));
+	}
+
+	private void Add(string key, object obj, Type type)
+	{
 		MemoryCacheEntryOptions options = new()
 		{
 			Size = 1, // Assume all items are the same size for now
@@ -80,7 +97,7 @@ public class HttpMemoryCache
 			options.AbsoluteExpirationRelativeToNow = CacheDuration.Value;
 		}
 
-		MemoryCache.Set(key, obj, options);
+		MemoryCache.Set(new CacheKey(key, type), obj, options);
 	}
 
 	/// <summary>
@@ -105,10 +122,10 @@ public class HttpMemoryCache
 			return false;
 		}
 
-		if (MemoryCache.TryGetValue(uri, out object? result))
+		if (MemoryCache.TryGetValue(new CacheKey(uri, typeof(T)), out T? result))
 		{
 			call.Log.Add("Found cached copy", new Tag("Uri", uri));
-			t = (T?)result;
+			t = result;
 			return true;
 		}
 
@@ -129,5 +146,15 @@ public class HttpMemoryCache
 		}
 		t = default;
 		return false;
+	}
+
+	/// <summary>Releases the underlying memory cache.</summary>
+	public void Dispose()
+	{
+		if (_disposed) return;
+
+		_disposed = true;
+		MemoryCache.Dispose();
+		GC.SuppressFinalize(this);
 	}
 }

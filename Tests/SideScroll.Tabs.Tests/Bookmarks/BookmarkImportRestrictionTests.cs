@@ -62,4 +62,39 @@ public class BookmarkImportRestrictionTests : BaseTest
 		Assert.That(json, Does.Not.Contain("description"));
 		Assert.That(json, Does.Not.Contain("IsRoot"));
 	}
+
+	[Test, Description("Importing a bookmark with a cycle does not throw StackOverflowException")]
+	public void ImportedBookmarkHandlesCycles()
+	{
+		TabBookmark root = new TabBookmark();
+		TabDataBookmark data = new TabDataBookmark();
+		root.TabDatas.Add(data);
+		
+		SelectedRowView rowView = new SelectedRowView("Row") { TabBookmark = root };
+		data.SelectedRows.Add(rowView);
+
+		var project = new Project();
+		
+		// This will throw StackOverflowException without cycle detection
+		Assert.DoesNotThrow(() => root.Import(project));
+	}
+
+	[Test, Description(
+		"Cycle detection tracks the bookmarks already visited, not the ones that compare equal to " +
+		"one. Two distinct but equal siblings are both real subtrees and both have to be imported")]
+	public void ImportedBookmarkKeepsEqualSiblings()
+	{
+		TabBookmark root = new();
+		TabDataBookmark first = new() { DataRepoGroupId = "group" };
+		TabDataBookmark second = new() { DataRepoGroupId = "group" };
+		root.TabDatas.Add(first);
+		root.TabDatas.Add(second);
+
+		root.Import(new Project());
+
+		// Import() marks each one it reaches, so a sibling skipped as a duplicate stays unset
+		Assert.That(first.SelectionType, Is.EqualTo(SelectionType.Link));
+		Assert.That(second.SelectionType, Is.EqualTo(SelectionType.Link),
+			"The second was skipped as though it were the first");
+	}
 }
