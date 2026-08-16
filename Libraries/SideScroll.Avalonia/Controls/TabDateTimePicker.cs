@@ -162,8 +162,14 @@ public class TabDateTimePicker : Grid
 
 		if (DateTimeUtils.TryParseTimeSpan(clipboardText, out TimeSpan timeSpan))
 		{
-			DateTime? newDateTime = _dateTimeConverter.Convert(timeSpan, typeof(string), null, CultureInfo.InvariantCulture) as DateTime?;
+			// Through SetTime(), which merges the time onto the date already held. Converting the
+			// TimeSpan instead returned a string, which cast to a null DateTime and cleared the
+			// property while the text box went on showing the imported time. It also reset the
+			// converter's stored date, since converting reads it back out of the value it's given
+			DateTime newDateTime = _dateTimeConverter.SetTime(timeSpan);
+
 			Property.PropertyInfo.SetValue(Property.Object, newDateTime);
+			_datePicker.SelectedDate = newDateTime;
 			_timeTextBox.Text = timeSpan.ToString();
 			new MessageFlyout("Imported Time").ShowAt(_importButton!);
 		}

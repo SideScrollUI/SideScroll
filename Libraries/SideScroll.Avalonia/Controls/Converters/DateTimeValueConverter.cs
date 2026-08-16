@@ -89,26 +89,44 @@ public class DateTimeValueConverter : IValueConverter
 		}
 	}
 
-	/// <summary>Parses the given time text and merges it with the stored date, returning a validation error string if the format is invalid.</summary>
-	public object? SetTime(string timeText)
+	/// <summary>
+	/// Parses the given time text and merges it with the stored date, returning a
+	/// <see cref="BindingNotification"/> instead if the format is invalid
+	/// </summary>
+	/// <remarks>
+	/// Private because the return type only makes sense to a binding. A caller that already has a
+	/// <see cref="TimeSpan"/> uses <see cref="SetTime(TimeSpan)"/>, which can't fail to parse and
+	/// so returns the <see cref="DateTime"/> itself
+	/// </remarks>
+	private object? SetTime(string timeText)
 	{
 		// Debug.WriteLine($"SetTime {timeText}");
 
-		PreviousTimeText = timeText;
-
 		if (!DateTimeUtils.TryParseTimeSpan(timeText, out TimeSpan timeSpan))
 		{
+			PreviousTimeText = timeText;
+
 			// This doesn't always clear correctly after fixing a validation if the DateTime matches the previous valid value
 			// So don't show an error message for now to make it a little less confusing
 			return new BindingNotification(new DataValidationException(""), BindingErrorType.DataValidationError);
 		}
 
-		if (PreviousDateTime is not { } dateTime)
-		{
-			dateTime = TimeZoneView.Now.Date;
-		}
-
-		PreviousDateTime = dateTime.Date.Add(timeSpan);
+		// The text the caller typed rather than a reformatted one, so Convert() can echo it back
+		SetTime(timeSpan);
+		PreviousTimeText = timeText;
 		return PreviousDateTime;
+	}
+
+	/// <summary>
+	/// Merges a time onto the stored date, or onto today's date if there isn't one yet
+	/// </summary>
+	/// <returns>The stored date with its time replaced</returns>
+	public DateTime SetTime(TimeSpan timeSpan)
+	{
+		DateTime dateTime = PreviousDateTime ?? TimeZoneView.Now.Date;
+
+		PreviousTimeText = timeSpan.ToString();
+		PreviousDateTime = dateTime.Date.Add(timeSpan);
+		return PreviousDateTime.Value;
 	}
 }

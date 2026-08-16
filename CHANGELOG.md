@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `StreamExtensions.TryCopyUpTo()`, which copies a stream up to a limit and returns false without writing past it, rather than reading until the source decides to stop. Used wherever compressed data supplied by a caller is expanded
 
 ### Fixed
+- Fixed importing a time from the clipboard clearing the bound date and time. `TabDateTimePicker` converted the parsed `TimeSpan` through `DateTimeValueConverter.Convert()` asking for a string, then cast that string to a `DateTime?`, which is always null, so the property was set to nothing while the text box went on showing the imported time. Converting also reset the date the converter holds for the date binding, since it reads that back out of the value it was given. It merges through `SetTime()` now, which keeps the date already bound, and the date picker is updated to match
 - Fixed `LogUtils.Save()` writing outside the directory it was given. The caller supplied prefix names the log file and was concatenated straight into it, with nothing rejecting a separator, a parent segment, or a root — `../other/name` wrote outside the directory, and a rooted or drive qualified prefix made `Path.Combine()` discard it entirely. A prefix that isn't a plain file name throws an `ArgumentException` now
 - Fixed the toolbar model's bindings being released by the control rendering them. A `ToolToggleButton`'s `ListProperty` subscribes to the object it's bound to, and `ToolbarToggleButton.Dispose()` disposed it, so a model rendered in two toolbars or rendered again after a reload was left bound to a property that no longer observed anything. `TabToolbar` owns and disposes those bindings now, the control releases only its own subscription, and `TabModel` disposes the toolbars among its objects so a closing tab reaches them. `TabControlToolbar.LoadToolbar()` disposes the controls it replaces, which is now safe
 - Fixed `TabDataColumns.GetVisibleProperties()` handing out the list it cached. Every caller asking about a type got the same `List<PropertyInfo>`, so one of them sorting, clearing, or appending through it changed the columns for every later grid and schema export of that type, for the rest of the process. It returns an `IReadOnlyList<PropertyInfo>` over a cached `ReadOnlyCollection` now, which refuses the mutation rather than only discouraging it
@@ -59,6 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `ProcessUtils.StartDotnetProcess(IReadOnlyList<string>)`, which passes each argument through `ArgumentList` so values containing spaces or quotes reach the child process intact. The `string` overload leaves every value for the caller to quote, where an unquoted path under a directory like `C:\Users\First Last` splits into two arguments before the child process sees it
 
 ### Fixed
+- Fixed importing a time from the clipboard clearing the bound date and time. `TabDateTimePicker` converted the parsed `TimeSpan` through `DateTimeValueConverter.Convert()` asking for a string, then cast that string to a `DateTime?`, which is always null, so the property was set to nothing while the text box went on showing the imported time. Converting also reset the date the converter holds for the date binding, since it reads that back out of the value it was given. It merges through `SetTime()` now, which keeps the date already bound, and the date picker is updated to match
 - Fixed a reused `TabAvaloniaEdit` keeping the previous call's syntax highlighting. `SetFormatted()` left `TextType` on the format it last detected when the new text was neither JSON nor XML, and both `SelectHighlighter()` and `UpdateTheme()` read it, so showing JSON and then plain text colored the plain text as JSON
 - Fixed `TabAvaloniaEdit` discarding a caller's own syntax highlighting. It was cleared for every `TextType` that isn't JSON, XML, or a registered `TextHighlighter`, from a method that also runs on every theme change, so switching between light and dark removed it. Only a highlighting the editor applied itself is cleared now
 - Fixed two distinct objects that compare equal being saved and cloned as one. `TypeRepo.IdxObjectToIndex` and `Serializer.Clones` used the default comparer, so a type overriding `Equals()` to compare part of itself, which comparing by an id and every `record` does, made the second object a reference to the first and replaced whatever else differed between them. Both compare by reference now through the new `SerializerObjectComparer`, which keeps immutable reference types and all value types matched by value so repeated strings are still stored once and boxed values still match across reads
@@ -179,6 +181,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a `Header.json` file to JSON repositories so an item's saved name is preserved across loads, instead of being reconstructed from its contents
 
 ### Fixed
+- Fixed importing a time from the clipboard clearing the bound date and time. `TabDateTimePicker` converted the parsed `TimeSpan` through `DateTimeValueConverter.Convert()` asking for a string, then cast that string to a `DateTime?`, which is always null, so the property was set to nothing while the text box went on showing the imported time. Converting also reset the date the converter holds for the date binding, since it reads that back out of the value it was given. It merges through `SetTime()` now, which keeps the date already bound, and the date picker is updated to match
 - Fixed tab preloading evaluating one row past `MaxPreloadItems`, since the count was tested after the property getters ran. A maximum of zero also preloaded a row instead of disabling preloading
 - Fixed `ItemCollection.AddRange()` raising only the collection change, so a binding to `Count` never updated. It now raises the `Count` and `Item[]` property changes that `ObservableCollection` pairs with every change
 - Fixed DataGrid exports throwing an `InvalidCastException` for a column whose `Header` isn't a string, since the property is typed `object`
@@ -334,6 +337,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Context Menu theming for the pressed item background and foreground
 
 ### Fixed
+- Fixed importing a time from the clipboard clearing the bound date and time. `TabDateTimePicker` converted the parsed `TimeSpan` through `DateTimeValueConverter.Convert()` asking for a string, then cast that string to a `DateTime?`, which is always null, so the property was set to nothing while the text box went on showing the imported time. Converting also reset the date the converter holds for the date binding, since it reads that back out of the value it was given. It merges through `SetTime()` now, which keeps the date already bound, and the date picker is updated to match
 - Updated Avalonia Headless Tab Loading to handle delays better
 - Fixed `TaskInstance.ProgressMax` not updating for sub-tasks
 - Fixed Light theme read-only CheckBox check color to stand out more than the border
@@ -368,6 +372,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `[RequiredGroup]` for TabForm to require at least one value to be filled in
 
 ### Fixed
+- Fixed importing a time from the clipboard clearing the bound date and time. `TabDateTimePicker` converted the parsed `TimeSpan` through `DateTimeValueConverter.Convert()` asking for a string, then cast that string to a `DateTime?`, which is always null, so the property was set to nothing while the text box went on showing the imported time. Converting also reset the date the converter holds for the date binding, since it reads that back out of the value it was given. It merges through `SetTime()` now, which keeps the date already bound, and the date picker is updated to match
 - Fixed DataGrid not updating default selections for new items
 - Fixed TabDateTimePicker Button Padding
 - Fixed ShowTasks not showing the TabInstance's TaskInstance when required
@@ -392,6 +397,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added caching for environment Path variables
 
 ### Fixed
+- Fixed importing a time from the clipboard clearing the bound date and time. `TabDateTimePicker` converted the parsed `TimeSpan` through `DateTimeValueConverter.Convert()` asking for a string, then cast that string to a `DateTime?`, which is always null, so the property was set to nothing while the text box went on showing the imported time. Converting also reset the date the converter holds for the date binding, since it reads that back out of the value it was given. It merges through `SetTime()` now, which keeps the date already bound, and the date picker is updated to match
 - Fixed Atlas Serializer Decimal Member Handling with other Object Members
 - Fixed classes being marked as skippable if they have no innerValue
 
@@ -408,6 +414,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Theming for ComboBoxForegroundPressed
 
 ### Fixed
+- Fixed importing a time from the clipboard clearing the bound date and time. `TabDateTimePicker` converted the parsed `TimeSpan` through `DateTimeValueConverter.Convert()` asking for a string, then cast that string to a `DateTime?`, which is always null, so the property was set to nothing while the text box went on showing the imported time. Converting also reset the date the converter holds for the date binding, since it reads that back out of the value it was given. It merges through `SetTime()` now, which keeps the date already bound, and the date picker is updated to match
 - Fixed creating a leaf tab link from an existing link
 - Fixed json link viewing exceptions blocking the link tab from showing
 - Fixed TabModel.AddObject() fill not being passed for text controls
@@ -423,6 +430,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Summary Docs for SideScroll.Network and Avalonia Controls
 
 ### Fixed
+- Fixed importing a time from the clipboard clearing the bound date and time. `TabDateTimePicker` converted the parsed `TimeSpan` through `DateTimeValueConverter.Convert()` asking for a string, then cast that string to a `DateTime?`, which is always null, so the property was set to nothing while the text box went on showing the imported time. Converting also reset the date the converter holds for the date binding, since it reads that back out of the value it was given. It merges through `SetTime()` now, which keeps the date already bound, and the date picker is updated to match
 - Fixed JSON serialization not handling primary constuctors with readonly properties
   - This fixes Links not saving or loading correctly in Browsers
 - Fixed DataTable Clipboard copying
@@ -443,6 +451,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - TabSampleDataGridMixedHeights to test the mouse wheel scrolling problem
 
 ### Fixed
+- Fixed importing a time from the clipboard clearing the bound date and time. `TabDateTimePicker` converted the parsed `TimeSpan` through `DateTimeValueConverter.Convert()` asking for a string, then cast that string to a `DateTime?`, which is always null, so the property was set to nothing while the text box went on showing the imported time. Converting also reset the date the converter holds for the date binding, since it reads that back out of the value it was given. It merges through `SetTime()` now, which keeps the date already bound, and the date picker is updated to match
 - Fixed SideScroll.Desktop.slnf
 - Fixed TabInstance Bookmarking when there's duplicate keys
 
@@ -471,6 +480,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Summary docs for TabDataColumns, TabItemCollection, TabUtils, Linker, SerializerExtensions, AvaloniaExtensions, DataGridExtensions, Log, LogEntry, LogTimer, CallTimer, Tag, DataRepos, ToolButton, TabModel, ResourceView, TimeZoneView, Tab Toolbars, Tab Interfaces, TabInstance, Tab Bookmarks, Tab Settings, Filter, Project, and LazyJsonNode
 
 ### Fixed
+- Fixed importing a time from the clipboard clearing the bound date and time. `TabDateTimePicker` converted the parsed `TimeSpan` through `DateTimeValueConverter.Convert()` asking for a string, then cast that string to a `DateTime?`, which is always null, so the property was set to nothing while the text box went on showing the imported time. Converting also reset the date the converter holds for the date binding, since it reads that back out of the value it was given. It merges through `SetTime()` now, which keeps the date already bound, and the date picker is updated to match
 - Fixed Bookmark JSON Serialization for enums
 - Fixed TabViewSettings.Address with multiple paths
 - Fixed NumberExtensions.RoundToSignificantFigures() for NaN and Infinity
@@ -507,6 +517,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated Avalonia to 11.3.11
 
 ### Fixed
+- Fixed importing a time from the clipboard clearing the bound date and time. `TabDateTimePicker` converted the parsed `TimeSpan` through `DateTimeValueConverter.Convert()` asking for a string, then cast that string to a `DateTime?`, which is always null, so the property was set to nothing while the text box went on showing the imported time. Converting also reset the date the converter holds for the date binding, since it reads that back out of the value it was given. It merges through `SetTime()` now, which keeps the date already bound, and the date picker is updated to match
 - Tab Resizing not updating MaxDesiredWidth
   - This also fixes resizing DataGrid columns and missing DataGrid values
 - Custom Titlebar not responding to mouse clicks near the bottom of the title bar when maximized
@@ -536,6 +547,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated Avalonia to 11.3.8
 
 ### Fixed
+- Fixed importing a time from the clipboard clearing the bound date and time. `TabDateTimePicker` converted the parsed `TimeSpan` through `DateTimeValueConverter.Convert()` asking for a string, then cast that string to a `DateTime?`, which is always null, so the property was set to nothing while the text box went on showing the imported time. Converting also reset the date the converter holds for the date binding, since it reads that back out of the value it was given. It merges through `SetTime()` now, which keeps the date already bound, and the date picker is updated to match
 - Regression for ImageButton.StartTaskAsync() not passing UseBackgroundThread
   - This could cause async Tasks to not show logs while active
 
@@ -558,6 +570,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated DataGrid so it no longer moves focus when right clicking
 
 ### Fixed
+- Fixed importing a time from the clipboard clearing the bound date and time. `TabDateTimePicker` converted the parsed `TimeSpan` through `DateTimeValueConverter.Convert()` asking for a string, then cast that string to a `DateTime?`, which is always null, so the property was set to nothing while the text box went on showing the imported time. Converting also reset the date the converter holds for the date binding, since it reads that back out of the value it was given. It merges through `SetTime()` now, which keeps the date already bound, and the date picker is updated to match
 - DataGrid Clipboard export for string values that contain null characters
 
 ## [0.12] - 2025-10-15
@@ -575,6 +588,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated Avalonia to 11.3.7
 
 ### Fixed
+- Fixed importing a time from the clipboard clearing the bound date and time. `TabDateTimePicker` converted the parsed `TimeSpan` through `DateTimeValueConverter.Convert()` asking for a string, then cast that string to a `DateTime?`, which is always null, so the property was set to nothing while the text box went on showing the imported time. Converting also reset the date the converter holds for the date binding, since it reads that back out of the value it was given. It merges through `SetTime()` now, which keeps the date already bound, and the date picker is updated to match
 - Removing extra UI items when deleting from DataView layer
 - Native theme loading not accounting for Brush opacity
 - DataRepo Indices that use restricted characters in the GroupId
@@ -596,6 +610,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated Avalonia to 11.3.6
 
 ### Fixed
+- Fixed importing a time from the clipboard clearing the bound date and time. `TabDateTimePicker` converted the parsed `TimeSpan` through `DateTimeValueConverter.Convert()` asking for a string, then cast that string to a `DateTime?`, which is always null, so the property was set to nothing while the text box went on showing the imported time. Converting also reset the date the converter holds for the date binding, since it reads that back out of the value it was given. It merges through `SetTime()` now, which keeps the date already bound, and the date picker is updated to match
 - DataGrid Theming for cells that are both selected and pointer over
 - Max object limit when loading a private file
 
@@ -617,6 +632,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated Avalonia to 11.3.4
 
 ### Fixed
+- Fixed importing a time from the clipboard clearing the bound date and time. `TabDateTimePicker` converted the parsed `TimeSpan` through `DateTimeValueConverter.Convert()` asking for a string, then cast that string to a `DateTime?`, which is always null, so the property was set to nothing while the text box went on showing the imported time. Converting also reset the date the converter holds for the date binding, since it reads that back out of the value it was given. It merges through `SetTime()` now, which keeps the date already bound, and the date picker is updated to match
 - Regression for serializer failing to restore all class members when removing previous members
 - Regression for invalid parsing validations not showing an error
 
@@ -641,6 +657,7 @@ Previous versions were in development. See git history for details.
 - Removed features
 
 ### Fixed
+- Fixed importing a time from the clipboard clearing the bound date and time. `TabDateTimePicker` converted the parsed `TimeSpan` through `DateTimeValueConverter.Convert()` asking for a string, then cast that string to a `DateTime?`, which is always null, so the property was set to nothing while the text box went on showing the imported time. Converting also reset the date the converter holds for the date binding, since it reads that back out of the value it was given. It merges through `SetTime()` now, which keeps the date already bound, and the date picker is updated to match
 - Bug fixes
 
 ### Security
