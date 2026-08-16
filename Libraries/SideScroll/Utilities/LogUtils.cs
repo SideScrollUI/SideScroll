@@ -44,8 +44,8 @@ public static class LogUtils
 		ArgumentException.ThrowIfNullOrWhiteSpace(filePrefix);
 
 		if (Path.IsPathRooted(filePrefix) ||
-			filePrefix.Contains(Path.DirectorySeparatorChar) ||
-			filePrefix.Contains(Path.AltDirectorySeparatorChar) ||
+			filePrefix.Contains('/') ||
+			filePrefix.Contains('\\') ||
 			filePrefix.Contains(Path.VolumeSeparatorChar) ||
 			filePrefix.Contains("..", StringComparison.Ordinal) ||
 			filePrefix.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
