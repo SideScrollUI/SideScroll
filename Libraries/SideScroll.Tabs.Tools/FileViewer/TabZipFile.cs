@@ -68,7 +68,13 @@ public class TabZipFile : ITab, IFileTypeView
 				if (fullName.EndsWith('/'))
 				{
 					string dirPath = fullName.TrimEnd('/');
-					EnsureDirectoryPath(directories, dirPath, rootNodes);
+					if (dirPath.Length == 0)
+						continue;
+
+					// The archive stores this directory itself, so it has a time of its own. Only the
+					// directory named by the entry, not the ones walked through to reach it
+					ZipDirectoryView directory = EnsureDirectoryPath(directories, dirPath, rootNodes);
+					directory.LastWriteTime = entry.LastWriteTime.DateTime;
 				}
 				else
 				{
@@ -105,7 +111,9 @@ public class TabZipFile : ITab, IFileTypeView
 			if (directories.TryGetValue(path, out var existing))
 				return existing;
 
-			string[] parts = path.Split('/');
+			// Empty components removed, otherwise a path an archive stores with repeated separators,
+			// such as "a//b/", builds a directory with no name for the row to show
+			string[] parts = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
 			ZipDirectoryView? parent = null;
 			string currentPath = "";
 
@@ -186,8 +194,15 @@ public class ZipDirectoryView : ZipNodeView, IHasLinks
 	/// <inheritdoc/>
 	public override long? Size => null;
 
-	/// <summary>Gets the last write time of the directory entry.</summary>
-	public DateTime? LastWriteTime { get; }
+	/// <summary>
+	/// Gets the last write time of the directory entry, or null for one the archive doesn't store
+	/// </summary>
+	/// <remarks>
+	/// Settable because a directory can be created while walking a file's path before the archive's
+	/// own entry for it is reached, and only that entry carries a time. A directory that exists
+	/// solely as a step in some file's path has none to report
+	/// </remarks>
+	public DateTime? LastWriteTime { get; set; }
 
 	/// <inheritdoc/>
 	public override TimeSpan? Modified => LastWriteTime?.Age();
