@@ -44,6 +44,10 @@ public abstract class NodeView : IHasLinks, INotifyPropertyChanged
 		get => _favorite;
 		set
 		{
+			// Assigning what it already holds isn't a change. UpdateDataRepo() saves or deletes a
+			// file, so a binding writing the current value back rewrote the repository for nothing
+			if (_favorite == value) return;
+
 			_favorite = value;
 			UpdateDataRepo();
 			NotifyPropertyChanged();
