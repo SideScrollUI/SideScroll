@@ -132,9 +132,25 @@ public class TabFile(FileView fileView) : ITab
 
 			if (extension == ".json")
 			{
-				string text = File.ReadAllText(path);
-				items.Add(new ListItem("Contents", text));
-				items.Add(new ListItem("Json", LazyJsonNode.Parse(text)));
+				// Contents is a path like every other text file, rather than the file read into a
+				// string and held for as long as the tab is open. LoadPath() reads it again for the
+				// parse, but that copy is released once the nodes are built, where holding both the
+				// raw text and the parsed nodes kept two copies of the file for the tab's lifetime
+				items.Add(new ListItem("Contents", new FilePath(path)));
+
+				// A file that doesn't parse still opens, showing its contents. The exception used to
+				// escape LoadAsync() before any item was added, so a malformed file gave an empty tab
+				// rather than the text needed to see what was wrong with it
+				try
+				{
+					items.Add(new ListItem("Json", LazyJsonNode.LoadPath(path)));
+				}
+				catch (Exception e)
+				{
+					call.Log.AddWarning("Couldn't parse JSON",
+						new Tag("Path", path),
+						new Tag("Exception", e.Message));
+				}
 			}
 			else
 			{
