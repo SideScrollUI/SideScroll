@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SideScroll.Logs;
 using SideScroll.Tabs.Tools.FileViewer;
 
 namespace SideScroll.Tabs.Tests;
@@ -128,5 +129,117 @@ public class FileTypeDetectorTests : BaseTest
 		FileTypeDetector.RegisterProbe(new MatchAll<string>());
 
 		Assert.That(FileTypeDetector.ProbeFile(CreateFile()), Is.EqualTo(typeof(string)));
+	}
+
+	/// <summary>Throws instead of answering, standing in for a probe that's broken rather than declining</summary>
+	private class ThrowingProbe(int priority = 0) : IFileTypeProbe
+	{
+		public int Priority => priority;
+
+		public bool CanHandle(string filePath, ReadOnlySpan<byte> headerBytes)
+			=> throw new InvalidOperationException("probe unavailable");
+
+		public Type GetTabType() => typeof(string);
+	}
+
+	/// <summary>Claims every file, so it detects whether the probes after a broken one still run</summary>
+	private class ClaimingProbe(int priority = 0) : IFileTypeProbe
+	{
+		public int Priority => priority;
+
+		public bool CanHandle(string filePath, ReadOnlySpan<byte> headerBytes) => true;
+
+		public Type GetTabType() => typeof(int);
+	}
+
+	[Test, Description("A probe that throws is skipped, and the ones after it still get to claim the file")]
+	public void AThrowingProbeDoesNotStopTheOnesAfterIt()
+	{
+		FileTypeDetector.RegisterProbe(new ThrowingProbe(priority: 10));
+		FileTypeDetector.RegisterProbe(new ClaimingProbe(priority: 5));
+
+		Assert.That(FileTypeDetector.ProbeFile(CreateFile()), Is.EqualTo(typeof(int)));
+	}
+
+	[Test, Description("A throwing delegate probe is skipped the same way")]
+	public void AThrowingDelegateProbeDoesNotStopTheOnesAfterIt()
+	{
+		FileTypeDetector.RegisterProbe(_ => throw new InvalidOperationException("probe unavailable"), priority: 10);
+		FileTypeDetector.RegisterProbe(_ => typeof(int), priority: 5);
+
+		Assert.That(FileTypeDetector.ProbeFile(CreateFile()), Is.EqualTo(typeof(int)));
+	}
+
+	[Test, Description("Every probe throwing leaves detection to fall back to the extension, not to fail")]
+	public void EveryProbeThrowingReturnsNull()
+	{
+		FileTypeDetector.RegisterProbe(new ThrowingProbe());
+		FileTypeDetector.RegisterProbe(_ => throw new InvalidOperationException("probe unavailable"));
+
+		Assert.That(FileTypeDetector.ProbeFile(CreateFile()), Is.Null);
+	}
+
+	[Test, Description(
+		"A probe that's broken was indistinguishable from one that declined the file, so the log " +
+		"has to name which one it was")]
+	public void AThrowingProbeIsReported()
+	{
+		FileTypeDetector.RegisterProbe(new ThrowingProbe());
+
+		FileTypeDetector.ProbeFile(CreateFile(), Call);
+
+		Assert.That(Call.Log.Level, Is.GreaterThanOrEqualTo(LogLevel.Warn));
+		Assert.That(LogText(Call.Log), Does.Contain(nameof(ThrowingProbe)));
+	}
+
+	[Test, Description("A throwing delegate is named by the method it points at")]
+	public void AThrowingDelegateProbeIsReported()
+	{
+		FileTypeDetector.RegisterProbe(ThrowingDelegate);
+
+		FileTypeDetector.ProbeFile(CreateFile(), Call);
+
+		Assert.That(Call.Log.Level, Is.GreaterThanOrEqualTo(LogLevel.Warn));
+		Assert.That(LogText(Call.Log), Does.Contain(nameof(ThrowingDelegate)));
+	}
+
+	/// <summary>Flattens a log's entries and their tags, which its own ToString() doesn't render</summary>
+	private static string LogText(Log log)
+	{
+		var text = new System.Text.StringBuilder();
+		void Walk(Log current)
+		{
+			foreach (LogEntry entry in current.Items)
+			{
+				text.Append(entry.Text).Append(' ');
+				foreach (Tag tag in entry.Tags ?? [])
+				{
+					text.Append(tag.Name).Append('=').Append(tag.Value).Append(' ');
+				}
+
+				if (entry is Log childLog)
+				{
+					Walk(childLog);
+				}
+			}
+		}
+
+		Walk(log);
+		return text.ToString();
+	}
+
+	private static Type? ThrowingDelegate(FileProbeContext context)
+		=> throw new InvalidOperationException("probe unavailable");
+
+	[Test, Description("A probe that declines is not reported, only one that failed")]
+	public void ADecliningProbeIsNotReported()
+	{
+		List<int> order = [];
+		FileTypeDetector.RegisterProbe(new RecordingProbe(order, 0));
+
+		FileTypeDetector.ProbeFile(CreateFile(), Call);
+
+		Assert.That(order, Is.Not.Empty, "precondition: the probe ran");
+		Assert.That(Call.Log.Level, Is.LessThan(LogLevel.Warn));
 	}
 }

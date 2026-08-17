@@ -44,13 +44,13 @@ public class TabFile(FileView fileView) : ITab
 	/// <summary>
 	/// Detects the appropriate tab type for a file by checking probes and then extensions.
 	/// </summary>
-	private static Type? DetectFileType(string path)
+	private static Type? DetectFileType(string path, Call? call = null)
 	{
 		if (!File.Exists(path))
 			return null;
 
 		// First try content-based probing
-		Type? probedType = FileTypeDetector.ProbeFile(path);
+		Type? probedType = FileTypeDetector.ProbeFile(path, call);
 		if (probedType != null)
 			return probedType;
 
@@ -122,7 +122,7 @@ public class TabFile(FileView fileView) : ITab
 			string extension = System.IO.Path.GetExtension(path).ToLowerInvariant();
 
 			// Use probe-based detection or fall back to extension-based detection
-			Type? type = DetectFileType(path);
+			Type? type = DetectFileType(path, call);
 			if (type != null)
 			{
 				var viewTab = (IFileTypeView)Activator.CreateInstance(type)!;

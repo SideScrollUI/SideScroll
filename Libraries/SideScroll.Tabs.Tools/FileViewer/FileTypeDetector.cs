@@ -149,8 +149,9 @@ public static class FileTypeDetector
 	/// Probes a file to detect its type using registered probes.
 	/// </summary>
 	/// <param name="filePath">The path to the file to probe</param>
+	/// <param name="call">Records a probe that failed rather than declined, when one is available</param>
 	/// <returns>The detected tab type, or null if no probe matched</returns>
-	public static Type? ProbeFile(string filePath)
+	public static Type? ProbeFile(string filePath, Call? call = null)
 	{
 		if (!File.Exists(filePath))
 			return null;
@@ -185,9 +186,11 @@ public static class FileTypeDetector
 							return probe.GetTabType();
 						}
 					}
-					catch
+					catch (Exception e)
 					{
-						// Ignore probe errors and continue to next probe
+						// Named, so a probe that's broken can be told apart from one that declined.
+						// Continues to the next either way, one probe shouldn't stop detection
+						LogProbeFailure(call, probe.GetType().Name, filePath, e);
 					}
 				}
 			}
@@ -205,18 +208,40 @@ public static class FileTypeDetector
 							return result;
 						}
 					}
-					catch
+					catch (Exception e)
 					{
-						// Ignore probe errors and continue to next probe
+						// A delegate has no type of its own worth naming, so the method it points at
+						LogProbeFailure(call, probe.Method.Name, filePath, e);
 					}
 				}
 			}
 		}
-		catch
+		catch (Exception e)
 		{
-			// If probing fails, return null
+			// Reading the file itself failed, rather than any one probe. Still returns null so the
+			// caller falls back to the extension, but a file that can't be opened at all is worth
+			// telling apart from one no probe recognised
+			call?.Log.AddWarning("Couldn't probe file",
+				new Tag("Path", filePath),
+				new Tag("Exception", e.Message));
 		}
 
 		return null;
+	}
+
+	/// <summary>
+	/// Records a probe that threw rather than declining the file
+	/// </summary>
+	/// <remarks>
+	/// A probe failing is uncommon enough to be worth reporting where it can be seen, rather than
+	/// only in a debug build. Detection carries on to the next probe either way, so this is a
+	/// warning rather than an error
+	/// </remarks>
+	private static void LogProbeFailure(Call? call, string probeName, string filePath, Exception e)
+	{
+		call?.Log.AddWarning("File type probe failed",
+			new Tag("Probe", probeName),
+			new Tag("Path", filePath),
+			new Tag("Exception", e.Message));
 	}
 }
