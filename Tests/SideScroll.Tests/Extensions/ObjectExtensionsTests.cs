@@ -150,4 +150,60 @@ public class ObjectExtensionsTests : BaseTest
 
 		Assert.That(item.ToUniqueString(), Is.Null);
 	}
+
+	/// <summary>An enumerable whose Count is a long, which a large collection exposes</summary>
+	private class LongCountCollection : IEnumerable
+	{
+		public long Count => 5_000_000_000L;
+		public IEnumerator GetEnumerator() => Array.Empty<object>().GetEnumerator();
+	}
+
+	/// <summary>An enumerable whose Count getter throws, like a stream that's been closed</summary>
+	private class ThrowingCountCollection : IEnumerable
+	{
+		public int Count => throw new InvalidOperationException("count unavailable");
+		public IEnumerator GetEnumerator() => Array.Empty<object>().GetEnumerator();
+	}
+
+	/// <summary>An enumerable with a Count that isn't a number</summary>
+	private class StringCountCollection : IEnumerable
+	{
+		public string Count => "many";
+		public IEnumerator GetEnumerator() => Array.Empty<object>().GetEnumerator();
+	}
+
+	/// <summary>An enumerable with an ordinary int Count, reached through the same branch</summary>
+	private class IntCountCollection : IEnumerable
+	{
+		public int Count => 1234;
+		public IEnumerator GetEnumerator() => Array.Empty<object>().GetEnumerator();
+	}
+
+	[Test, Description(
+		"The Count property is found by name, so its type isn't known. Unboxing it to an int threw " +
+		"for a long one, which a collection large enough to need one has")]
+	public void ALongCountIsFormatted()
+	{
+		Assert.That(new LongCountCollection().Formatted(), Is.EqualTo(5_000_000_000L.ToString("N0")));
+	}
+
+	[Test, Description("An ordinary int Count still formats through the same branch")]
+	public void AnIntCountIsFormatted()
+	{
+		Assert.That(new IntCountCollection().Formatted(), Is.EqualTo(1234.ToString("N0")));
+	}
+
+	[Test, Description(
+		"Formatted() is a display path, so a Count that can't be read has to fall through rather " +
+		"than fail the whole display")]
+	public void AThrowingCountDoesNotFailTheDisplay()
+	{
+		Assert.DoesNotThrow(() => new ThrowingCountCollection().Formatted());
+	}
+
+	[Test, Description("A Count that isn't a number falls through the same way")]
+	public void ANonNumericCountDoesNotFailTheDisplay()
+	{
+		Assert.DoesNotThrow(() => new StringCountCollection().Formatted());
+	}
 }

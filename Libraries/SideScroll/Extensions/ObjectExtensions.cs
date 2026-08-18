@@ -125,11 +125,23 @@ public static class ObjectExtensions
 
 		if (typeof(IEnumerable).IsAssignableFrom(type))
 		{
+			// Any property named Count, so nothing here knows its type. Unboxing it to an int threw
+			// for a long one, which a collection large enough to need one has, and for a Count that
+			// isn't a number at all. The getter can throw too, like the Stream one below
 			PropertyInfo? countProp = type.GetProperty("Count");
 			if (countProp != null)
 			{
-				int count = (int)countProp.GetValue(obj, null)!;
-				return count.ToString("N0");
+				try
+				{
+					if (countProp.GetValue(obj, null) is IConvertible count)
+					{
+						return count.ToInt64(null).ToString("N0");
+					}
+				}
+				catch (Exception)
+				{
+					// Falls through to the branches below rather than failing the whole display
+				}
 			}
 		}
 
