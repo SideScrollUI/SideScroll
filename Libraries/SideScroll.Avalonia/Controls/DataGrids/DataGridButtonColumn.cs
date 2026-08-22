@@ -2,6 +2,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using SideScroll.Attributes;
+using SideScroll.Avalonia.Controls.Flyouts;
+using SideScroll.Tasks;
 using System.Diagnostics;
 using System.Reflection;
 
@@ -24,6 +26,19 @@ public class DataGridButtonColumn : DataGridBoundColumn
 
 	/// <summary>Gets or sets the name of a boolean property on the row object that controls button visibility, or <c>null</c> to always show.</summary>
 	public string? VisiblePropertyName { get; set; }
+
+	/// <summary>
+	/// Gets or sets the confirmation prompt to show before running the click action,
+	/// or <c>null</c> to run it immediately.
+	/// </summary>
+	public IFlyoutConfig? Confirmation { get; set; }
+
+	// Created on the first confirmed click and reused for every row, a flyout per cell would build
+	// its entire content tree for rows that never get clicked
+	private ConfirmationFlyout? _confirmationFlyout;
+
+	// The row awaiting confirmation, captured when clicked since cells get reused for other rows
+	private object? _pendingItem;
 
 	/// <summary>Creates a column that invokes <paramref name="methodInfo"/> on the row object when clicked.</summary>
 	public DataGridButtonColumn(MethodInfo methodInfo, string buttonText)
@@ -64,16 +79,51 @@ public class DataGridButtonColumn : DataGridBoundColumn
 
 	private void Button_Click(object? sender, RoutedEventArgs e)
 	{
+		Button button = (Button)sender!;
+
+		if (Confirmation is ConfirmationFlyoutConfig config)
+		{
+			ShowConfirmation(button, config);
+		}
+		else if (button.DataContext is { } item)
+		{
+			Invoke(item);
+		}
+	}
+
+	private void ShowConfirmation(Button button, ConfirmationFlyoutConfig config)
+	{
+		if (button.DataContext is not { } item) return;
+
+		// The cell can be recycled for another row while the flyout is open, so the row can't be
+		// looked up again when confirming
+		_pendingItem = item;
+
+		_confirmationFlyout ??= new ConfirmationFlyout(InvokePendingItem, config.Text, config.ConfirmText, config.CancelText);
+
+		_confirmationFlyout.ShowAt(button);
+	}
+
+	private void InvokePendingItem()
+	{
+		if (_pendingItem is not { } item) return;
+
+		// Cleared before invoking so a deleted row isn't held onto until the next click
+		_pendingItem = null;
+		Invoke(item);
+	}
+
+	private void Invoke(object item)
+	{
 		try
 		{
-			Button button = (Button)sender!;
 			if (ClickAction != null)
 			{
-				ClickAction(button.DataContext!);
+				ClickAction(item);
 			}
 			else
 			{
-				MethodInfo!.Invoke(button.DataContext, []);
+				MethodInfo!.Invoke(item, []);
 			}
 		}
 		catch (Exception ex)

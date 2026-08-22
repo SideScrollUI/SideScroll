@@ -1,4 +1,5 @@
 using SideScroll.Collections;
+using SideScroll.Tasks;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 
@@ -71,6 +72,16 @@ public class DataViewCollection<TDataType, TViewType> : IDisposable where TViewT
 			Items.EnableDeleting = value;
 			Items.OnDelete = value ? DeleteByViewObject : null;
 		}
+	}
+
+	/// <summary>
+	/// Gets or sets the confirmation prompt to show before deleting a row,
+	/// or <see langword="null"/> to delete without confirming.
+	/// </summary>
+	public IFlyoutConfig? DeleteConfirmation
+	{
+		get => Items.DeleteConfirmation;
+		set => Items.DeleteConfirmation = value;
 	}
 
 	/// <summary>
@@ -318,6 +329,16 @@ public class DataViewCollection<T> : IDisposable
 			Items.EnableDeleting = value;
 			Items.OnDelete = value ? DeleteByObject : null;
 		}
+	}
+
+	/// <summary>
+	/// Gets or sets the confirmation prompt to show before deleting a row,
+	/// or <see langword="null"/> to delete without confirming.
+	/// </summary>
+	public IFlyoutConfig? DeleteConfirmation
+	{
+		get => Items.DeleteConfirmation;
+		set => Items.DeleteConfirmation = value;
 	}
 
 	/// <summary>

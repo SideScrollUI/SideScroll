@@ -791,10 +791,14 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 	/// Adds a "Delete" button column that invokes <see cref="IDeletableList.OnDelete"/> with the row's
 	/// data object when clicked. Called automatically by <see cref="AddColumns"/> when
 	/// <see cref="IDeletableList.EnableDeleting"/> is <see langword="true"/> on the list.
+	/// Prompts first when <see cref="IDeletableList.DeleteConfirmation"/> is set.
 	/// </summary>
 	public void AddDeleteColumn(IDeletableList deletableList)
 	{
-		var column = new DataGridButtonColumn("-", obj => deletableList.OnDelete?.Invoke(obj));
+		var column = new DataGridButtonColumn("-", obj => deletableList.OnDelete?.Invoke(obj))
+		{
+			Confirmation = deletableList.DeleteConfirmation,
+		};
 		DataGrid.Columns.Add(column);
 		DataGrid.IsReadOnly = false;
 		_columnNames[column] = "Delete";

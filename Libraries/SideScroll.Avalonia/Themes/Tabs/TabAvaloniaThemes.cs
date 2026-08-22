@@ -6,6 +6,7 @@ using SideScroll.Resources;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs;
 using SideScroll.Tabs.Toolbar;
+using SideScroll.Tasks;
 using System.ComponentModel.DataAnnotations;
 
 namespace SideScroll.Avalonia.Themes.Tabs;
@@ -57,6 +58,7 @@ public class TabAvaloniaThemes : ITab
 			var dataCollection = new DataViewCollection<AvaloniaThemeSettings, TabAvaloniaThemeSettings>(_dataRepoThemes)
 			{
 				EnableDeleting = true,
+				DeleteConfirmation = new ConfirmationFlyoutConfig("Are you sure you want to delete this theme?", "Delete"),
 			};
 			//dataCollection.DataRepoSecondary = DataShared.LoadView<AvaloniaThemeSettings>(call, "Themes", nameof(AvaloniaThemeSettings.Name));
 			model.AddItems(dataCollection.Items);

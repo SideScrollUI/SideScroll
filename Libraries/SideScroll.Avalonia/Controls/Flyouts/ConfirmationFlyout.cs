@@ -52,8 +52,10 @@ public class ConfirmationFlyout : Flyout
 							{
 								button.Click += (_, _) =>
 								{
-									action();
+									// Hide first, the action can remove the control this is anchored to,
+									// or show a flyout of its own
 									Hide();
+									action();
 								};
 							})
 					}

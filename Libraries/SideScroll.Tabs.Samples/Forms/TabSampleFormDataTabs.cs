@@ -3,6 +3,7 @@ using SideScroll.Resources;
 using SideScroll.Serialize;
 using SideScroll.Serialize.DataRepos;
 using SideScroll.Tabs.Toolbar;
+using SideScroll.Tasks;
 
 namespace SideScroll.Tabs.Samples.Forms;
 
@@ -69,7 +70,8 @@ public class TabSampleFormDataTabs : ITab
 
 			var dataCollection = new DataViewCollection<SampleItem, TabSampleItem>(_dataRepoView)
 			{
-				EnableDeleting = true
+				EnableDeleting = true,
+				// DeleteConfirmation = new ConfirmationFlyoutConfig("Are you sure you want to delete this item?", "Delete"),
 			};
 			model.AddItems(dataCollection.Items);
 		}

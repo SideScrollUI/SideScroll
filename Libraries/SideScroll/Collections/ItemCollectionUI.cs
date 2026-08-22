@@ -1,3 +1,4 @@
+using SideScroll.Tasks;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -20,6 +21,12 @@ public interface IDeletableList
 	/// Set by <c>DataViewCollection</c> to wire the button back to the repository delete logic.
 	/// </summary>
 	Action<object>? OnDelete { get; set; }
+
+	/// <summary>
+	/// Gets or sets the confirmation prompt to show before invoking <see cref="OnDelete"/>,
+	/// or <see langword="null"/> to delete without confirming.
+	/// </summary>
+	IFlyoutConfig? DeleteConfirmation { get; set; }
 }
 
 /// <summary>
@@ -86,6 +93,12 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	/// Typically set by a <c>DataViewCollection</c> to route deletes back to the data repository.
 	/// </summary>
 	public Action<object>? OnDelete { get; set; }
+
+	/// <summary>
+	/// Gets or sets the confirmation prompt to show before invoking <see cref="OnDelete"/>,
+	/// or <see langword="null"/> to delete without confirming.
+	/// </summary>
+	public IFlyoutConfig? DeleteConfirmation { get; set; }
 
 	/// <summary>
 	/// Controls thread safety behavior:
