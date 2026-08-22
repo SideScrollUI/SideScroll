@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace SideScroll.Tabs.Samples.Charts;
 
-public class TabSampleChartTimeSeries : ITab
+public class TabSampleChartLogarithmic : ITab
 {
 	public TabInstance Create() => new Instance();
 
@@ -18,14 +18,14 @@ public class TabSampleChartTimeSeries : ITab
 
 			AddAnimals(model, endTime);
 			AddToys(model, endTime);
-			AddBirds(model, endTime);
 		}
 
 		private static void AddAnimals(TabModel model, DateTime endTime)
 		{
-			var chartView = new ChartView("Animals")
+			var chartView = new ChartView("Base 10")
 			{
 				ShowTimeTracker = true,
+				LogBase = 10,
 			};
 
 			chartView.AddSeries("Cats", ChartSamples.CreateTimeSeries(endTime), seriesType: SeriesType.Average);
@@ -42,24 +42,13 @@ public class TabSampleChartTimeSeries : ITab
 
 		private static void AddToys(TabModel model, DateTime endTime)
 		{
-			var chartViewToys = new ChartView("Toys")
+			var chartViewToys = new ChartView("Identical Values - Base 2")
 			{
 				ShowTimeTracker = true,
+				LogBase = 2,
 			};
-			chartViewToys.AddSeries("Toys", ChartSamples.CreateIdenticalTimeSeries(endTime), seriesType: SeriesType.Average);
+			chartViewToys.AddSeries("Toys", ChartSamples.CreateIdenticalTimeSeries(endTime, null, 24, 1), seriesType: SeriesType.Average);
 			model.AddObject(chartViewToys);
-		}
-
-		private static void AddBirds(TabModel model, DateTime endTime)
-		{
-			var chartView = new ChartView("Birds")
-			{
-				ShowTimeTracker = true,
-			};
-
-			chartView.AddSeries("Birds", ChartSamples.CreateTimeSeries(endTime, minValue: 9999999, maxValue: 10000000), seriesType: SeriesType.Average);
-
-			model.AddObject(chartView);
 		}
 	}
 }

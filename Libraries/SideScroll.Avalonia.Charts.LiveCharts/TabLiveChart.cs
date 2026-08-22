@@ -587,10 +587,21 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		{
 			// Log 0 can return infinity, which is difficult to render
 			double safeMinimum = minimum > 0 ? minimum : 1;
-			double safeMaximum = Math.Max(safeMinimum * 1.01, maximum); // Ensure max > min
+			double safeMaximum = Math.Max(safeMinimum, maximum);
 
-			YAxis.MinLimit = Math.Max(0, Math.Log(safeMinimum, logBase) * 0.85);
-			YAxis.MaxLimit = Math.Log(safeMaximum, logBase) * 1.15;
+			double logMinimum = Math.Log(safeMinimum, logBase);
+			double logMaximum = Math.Log(safeMaximum, logBase);
+
+			// The margins have to be added in log space, scaling them shrinks them to nothing for values near 1
+			double logMargin = (logMaximum - logMinimum) * MarginPercent;
+			if (logMargin == 0)
+			{
+				// Identical values, pad a full order of magnitude so the line isn't drawn on top of the axis
+				logMargin = 1;
+			}
+
+			YAxis.MinLimit = logMinimum - logMargin;
+			YAxis.MaxLimit = logMaximum + logMargin;
 
 			if (maximum - minimum > 5)
 			{

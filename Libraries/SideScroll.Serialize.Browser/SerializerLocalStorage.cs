@@ -12,23 +12,19 @@ namespace SideScroll.Serialize.Browser;
 /// agnostic and covered by tests. This binds it to localStorage and keeps the static helpers the
 /// repository classes call
 /// </remarks>
+/// <remarks>
+/// Initializes a new instance of the SerializerLocalStorage class
+/// </remarks>
+/// <param name="basePath">Logical path used to generate storage key</param>
+/// <param name="name">Name for this storage instance</param>
 [SupportedOSPlatform("browser")]
-public class SerializerLocalStorage : SerializerKeyValueStore
+public class SerializerLocalStorage(string basePath, string name = "") :
+	SerializerKeyValueStore(LocalStorageKeyValueStore.Default, basePath, name)
 {
-	/// <summary>
-	/// Initializes a new instance of the SerializerLocalStorage class
-	/// </summary>
-	/// <param name="basePath">Logical path used to generate storage key</param>
-	/// <param name="name">Name for this storage instance</param>
-	public SerializerLocalStorage(string basePath, string name = "") :
-		base(LocalStorageKeyValueStore.Default, basePath, name)
-	{
-	}
-
 	/// <summary>
 	/// Gets all localStorage keys with the SideScroll data prefix
 	/// </summary>
-	public static List<string> GetAllKeys()
+	public static new List<string> GetAllKeys()
 	{
 		try
 		{
@@ -56,7 +52,7 @@ public class SerializerLocalStorage : SerializerKeyValueStore
 		=> StorageKeys.IsDataKeyInGroup(storageKey, groupPath);
 
 	/// <summary>Returns whether data exists for a logical path.</summary>
-	public static bool PathExists(string path)
+	public static new bool PathExists(string path)
 		=> LocalStorageKeyValueStore.Default.Exists(StorageKeys.DataKey(path));
 
 	/// <summary>
@@ -85,7 +81,7 @@ public class SerializerLocalStorage : SerializerKeyValueStore
 	public static void RemoveItem(string key) => LocalStorageKeyValueStore.Default.Remove(key);
 
 	/// <summary>Removes data and metadata stored for a logical path.</summary>
-	public static void RemovePath(string path)
+	public static new void RemovePath(string path)
 	{
 		LocalStorageKeyValueStore.Default.Remove(StorageKeys.DataKey(path));
 		LocalStorageKeyValueStore.Default.Remove(StorageKeys.HeaderKey(path));
