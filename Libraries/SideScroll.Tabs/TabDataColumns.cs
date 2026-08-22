@@ -79,7 +79,15 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 		IReadOnlyList<PropertyInfo> visibleProperties = GetVisibleProperties(elementType);
 		if (ColumnNameOrder.Count > 0)
 		{
-			var propertyNames = visibleProperties.ToDictionary(propertyInfo => propertyInfo.Name);
+			// Last one wins for a repeated name, which is the derived declaration after the
+			// MetadataToken sort, the same rule ListProperty.Create() and ListField.Create() use.
+			// Reflection returns both declarations for a property a subclass redeclares with a
+			// different type, and ToDictionary() threw for the duplicate name
+			Dictionary<string, PropertyInfo> propertyNames = [];
+			foreach (PropertyInfo propertyInfo in visibleProperties)
+			{
+				propertyNames[propertyInfo.Name] = propertyInfo;
+			}
 
 			// Add all previously seen property infos
 			List<PropertyInfo> orderedPropertyInfos = [];
@@ -94,7 +102,8 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 			// Add remaining properties in their original order
 			foreach (var propertyInfo in visibleProperties)
 			{
-				if (propertyNames.ContainsKey(propertyInfo.Name))
+				if (propertyNames.TryGetValue(propertyInfo.Name, out PropertyInfo? remaining) &&
+					ReferenceEquals(remaining, propertyInfo))
 				{
 					orderedPropertyInfos.Add(propertyInfo);
 				}

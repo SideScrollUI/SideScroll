@@ -111,8 +111,7 @@ public class TabFile(FileView fileView) : ITab
 
 			if (SelectFileDelegate != null)
 			{
-				toolbar.ButtonSelect = new("Select", Icons.Svg.Enter);
-				toolbar.ButtonSelect.Action = SelectFile;
+				toolbar.ButtonSelect = new("Select", Icons.Svg.Enter, SelectFile);
 			}
 
 			model.AddObject(toolbar);
