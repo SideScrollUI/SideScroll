@@ -136,7 +136,7 @@ public class ListMethod : ListMember
 		MethodInfo[] methodInfos = ReflectionCache.GetMethods(obj.GetType(), includeBaseTypes, includeStatic);
 
 		var listMethods = new ItemCollection<ListMethod>();
-		var methodToIndex = new Dictionary<string, int>(methodInfos.Length);
+		var merger = new MemberNameMerger<ListMethod>(listMethods, methodInfos.Length);
 		foreach (MethodInfo methodInfo in methodInfos)
 		{
 			var listMethod = new ListMethod(obj, methodInfo);
@@ -145,17 +145,7 @@ public class ListMethod : ListMember
 			if (ReflectionCache.MethodHasValueDependentHide(methodInfo) && !listMethod.IsRowVisible())
 				continue;
 
-			if (methodToIndex.TryGetValue(methodInfo.Name, out int index))
-			{
-				// Replace base method with derived
-				listMethods.RemoveAt(index);
-				listMethods.Insert(index, listMethod);
-			}
-			else
-			{
-				methodToIndex[methodInfo.Name] = listMethods.Count;
-				listMethods.Add(listMethod);
-			}
+			merger.AddOrReplace(methodInfo.Name, listMethod);
 		}
 		return listMethods;
 	}

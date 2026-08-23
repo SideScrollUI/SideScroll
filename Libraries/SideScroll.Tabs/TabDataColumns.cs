@@ -57,7 +57,19 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 			if (VisiblePropertiesCache.TryGetValue(type, out ReadOnlyCollection<PropertyInfo>? list))
 				return list;
 
-			list = type.GetVisibleProperties().AsReadOnly();
+			// Reflection returns both declarations for a property a subclass redeclares with a
+			// different type, which showed as two columns with the same name, one of them bound to
+			// the declaration the other hides. Merging here rather than at the point of use also
+			// covers the filter and the column count heuristic, and is cached with the rest
+			List<PropertyInfo> propertyInfos = type.GetVisibleProperties();
+			List<PropertyInfo> merged = [];
+			var merger = new MemberNameMerger<PropertyInfo>(merged, propertyInfos.Count);
+			foreach (PropertyInfo propertyInfo in propertyInfos)
+			{
+				merger.AddOrReplace(propertyInfo.Name, propertyInfo);
+			}
+
+			list = merged.AsReadOnly();
 			VisiblePropertiesCache.Add(type, list);
 			return list;
 		}
@@ -76,34 +88,26 @@ public class TabDataColumns(List<string>? columnNameOrder = null)
 
 	private IReadOnlyList<PropertyInfo> GetOrderedPropertyColumns(Type elementType)
 	{
+		// Names are unique, GetVisibleProperties() merges a redeclaration reflection returns twice.
+		// ToDictionary() threw here for the duplicate name before it did
 		IReadOnlyList<PropertyInfo> visibleProperties = GetVisibleProperties(elementType);
 		if (ColumnNameOrder.Count > 0)
 		{
-			// Last one wins for a repeated name, which is the derived declaration after the
-			// MetadataToken sort, the same rule ListProperty.Create() and ListField.Create() use.
-			// Reflection returns both declarations for a property a subclass redeclares with a
-			// different type, and ToDictionary() threw for the duplicate name
-			Dictionary<string, PropertyInfo> propertyNames = [];
-			foreach (PropertyInfo propertyInfo in visibleProperties)
-			{
-				propertyNames[propertyInfo.Name] = propertyInfo;
-			}
+			Dictionary<string, PropertyInfo> propertyNames = visibleProperties.ToDictionary(propertyInfo => propertyInfo.Name);
 
 			// Add all previously seen property infos
 			List<PropertyInfo> orderedPropertyInfos = [];
 			foreach (string columnName in ColumnNameOrder)
 			{
-				if (propertyNames.TryGetValue(columnName, out PropertyInfo? propertyInfo))
+				if (propertyNames.Remove(columnName, out PropertyInfo? propertyInfo))
 				{
 					orderedPropertyInfos.Add(propertyInfo);
-					propertyNames.Remove(columnName);
 				}
 			}
 			// Add remaining properties in their original order
-			foreach (var propertyInfo in visibleProperties)
+			foreach (PropertyInfo propertyInfo in visibleProperties)
 			{
-				if (propertyNames.TryGetValue(propertyInfo.Name, out PropertyInfo? remaining) &&
-					ReferenceEquals(remaining, propertyInfo))
+				if (propertyNames.ContainsKey(propertyInfo.Name))
 				{
 					orderedPropertyInfos.Add(propertyInfo);
 				}

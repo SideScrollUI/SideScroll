@@ -143,4 +143,59 @@ public class TabDataColumnsTests : BaseTest
 
 		Assert.That(result.Select(column => column.PropertyInfo.Name), Is.EqualTo(new[] { "Value", "Other" }));
 	}
+
+	public class OrderedShadowBaseRow
+	{
+		public string? Alpha { get; set; }
+		public string? Beta { get; set; }
+		public string? Gamma { get; set; }
+	}
+
+	/// <summary>Redeclares the middle property, so the base and derived positions differ</summary>
+	public class OrderedShadowRow : OrderedShadowBaseRow
+	{
+		public new int Beta { get; set; }
+		public string? Delta { get; set; }
+	}
+
+	[Test, Description(
+		"Both declarations reached the grid when the columns hadn't been reordered, showing two " +
+		"columns of the same name, the first of them bound to the declaration the other hides. " +
+		"Only the reordering path deduplicated, so a type rendered differently before and after a drag")]
+	public void ARetypedShadowedPropertyIsOneColumnWithoutReordering()
+	{
+		var columns = new TabDataColumns();
+
+		List<TabPropertyColumn> result = columns.GetPropertyColumns(typeof(OrderedShadowRow));
+
+		Assert.That(result.Select(column => column.PropertyInfo.Name),
+			Is.EqualTo(new[] { "Alpha", "Beta", "Gamma", "Delta" }));
+	}
+
+	[Test, Description(
+		"The kept declaration takes the position of the one it hides, so a column stays where it " +
+		"was when a subclass redeclares a property. Deduplicating by last one wins moved it to the " +
+		"derived declaration's position instead, which no other member list does")]
+	public void AShadowedColumnKeepsTheHiddenDeclarationsPosition()
+	{
+		var columns = new TabDataColumns(["Delta"]);
+
+		List<TabPropertyColumn> result = columns.GetPropertyColumns(typeof(OrderedShadowRow));
+
+		Assert.That(result.Select(column => column.PropertyInfo.Name),
+			Is.EqualTo(new[] { "Delta", "Alpha", "Beta", "Gamma" }));
+	}
+
+	[Test, Description(
+		"Control: the columns match the rows ListProperty.Create() builds for the same type, " +
+		"which is the convention the grid was diverging from")]
+	public void ShadowedColumnsMatchTheOrderListPropertyUses()
+	{
+		var columns = new TabDataColumns();
+
+		List<TabPropertyColumn> result = columns.GetPropertyColumns(typeof(OrderedShadowRow));
+
+		Assert.That(result.Select(column => column.PropertyInfo.Name),
+			Is.EqualTo(Lists.ListProperty.Create(new OrderedShadowRow()).Select(property => property.Name)));
+	}
 }

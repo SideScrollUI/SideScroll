@@ -215,7 +215,7 @@ public class ListProperty : ListMember, IPropertyIsEditable
 		PropertyInfo[] propertyInfos = ReflectionCache.GetProperties(obj.GetType(), includeBaseTypes, includeStatic);
 
 		var listProperties = new ItemCollection<ListProperty>();
-		var propertyToIndex = new Dictionary<string, int>(propertyInfos.Length);
+		var merger = new MemberNameMerger<ListProperty>(listProperties, propertyInfos.Length);
 		foreach (PropertyInfo propertyInfo in propertyInfos)
 		{
 			var listProperty = new ListProperty(obj, propertyInfo);
@@ -223,16 +223,7 @@ public class ListProperty : ListMember, IPropertyIsEditable
 			if (ReflectionCache.PropertyHasValueDependentHide(propertyInfo) && !listProperty.IsRowVisible())
 				continue;
 
-			if (propertyToIndex.TryGetValue(propertyInfo.Name, out int index))
-			{
-				listProperties.RemoveAt(index);
-				listProperties.Insert(index, listProperty);
-			}
-			else
-			{
-				propertyToIndex[propertyInfo.Name] = listProperties.Count;
-				listProperties.Add(listProperty);
-			}
+			merger.AddOrReplace(propertyInfo.Name, listProperty);
 		}
 		return ExpandInlined(listProperties, includeBaseTypes, inlineDepth);
 	}

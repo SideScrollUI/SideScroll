@@ -115,7 +115,7 @@ public class ListField : ListMember, IPropertyIsEditable
 
 		ItemCollection<ListField> listFields = [];
 		// Replace any overridden/new field & properties
-		var fieldToIndex = new Dictionary<string, int>(fieldInfos.Length);
+		var merger = new MemberNameMerger<ListField>(listFields, fieldInfos.Length);
 		foreach (FieldInfo fieldInfo in fieldInfos)
 		{
 			var listField = new ListField(obj, fieldInfo);
@@ -123,16 +123,7 @@ public class ListField : ListMember, IPropertyIsEditable
 			if (ReflectionCache.FieldHasValueDependentHide(fieldInfo) && !listField.IsRowVisible())
 				continue;
 
-			if (fieldToIndex.TryGetValue(fieldInfo.Name, out int index))
-			{
-				listFields.RemoveAt(index);
-				listFields.Insert(index, listField);
-			}
-			else
-			{
-				fieldToIndex[fieldInfo.Name] = listFields.Count;
-				listFields.Add(listField);
-			}
+			merger.AddOrReplace(fieldInfo.Name, listField);
 		}
 		return listFields;
 	}

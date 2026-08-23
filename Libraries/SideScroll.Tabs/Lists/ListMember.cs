@@ -278,13 +278,17 @@ public abstract class ListMember(object obj, MemberInfo memberInfo) : IListPair,
 			listMembers.Add(member);
 		}
 
+		// Unlike the properties and methods above, which GetMergedMethodMembers() has already
+		// merged, a field a subclass redeclares arrives twice and showed as two rows of the
+		// same name. ListField.Create() merges its own the same way
+		var fieldMerger = new MemberNameMerger<ListMember>(listMembers, fieldInfos.Length);
 		foreach (FieldInfo fieldInfo in fieldInfos)
 		{
 			var listField = new ListField(obj, fieldInfo);
 			// IsRowVisible() is unconditionally true when the field has no [Hide]/[HideRow] attributes.
 			if (ReflectionCache.FieldHasValueDependentHide(fieldInfo) && !listField.IsRowVisible())
 				continue;
-			listMembers.Add(listField);
+			fieldMerger.AddOrReplace(fieldInfo.Name, listField);
 		}
 
 		return ExpandInlined(listMembers, includeBaseTypes, includeStatic, inlineDepth);
