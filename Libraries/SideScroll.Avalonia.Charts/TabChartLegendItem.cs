@@ -180,6 +180,9 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 			Margin = new Thickness(2, 2, 6, 2),
 			//VerticalAlignment = VerticalAlignment.Center,
 			HorizontalAlignment = HorizontalAlignment.Stretch,
+			// Without trimming, an oversized name's desired width widens the star column past what's
+			// available, pushing the total column right and out of the legend
+			TextTrimming = TextTrimming.CharacterEllipsis,
 			Foreground = SideScrollTheme.ChartLabelForeground,
 			[Grid.ColumnProperty] = 1,
 		};

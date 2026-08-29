@@ -48,11 +48,16 @@ public class TabSampleChartDimensions : ITab
 		private const int MaxValue = 100;
 		private const int SampleCount = 10;
 
-		private readonly Random _random = new();
+		private const string SeriesName1 = "Cats";
+		private const string SeriesName2 = "Dogs";
 
-		private readonly DateTime _baseDateTime = TimeZoneView.Now
-			.Trim(TimeSpan.TicksPerMinute)
-			.AddMinutes(-SampleCount);
+		private static readonly TimeSpan PeriodDuration = TimeSpan.FromDays(1);
+
+		private static readonly DateTime _baseDateTime = TimeZoneView.Now
+			.Trim(PeriodDuration)
+			.Subtract(SampleCount * PeriodDuration);
+
+		private readonly Random _random = new();
 
 		private ItemCollection<ChartSample> _samples = [];
 
@@ -67,8 +72,8 @@ public class TabSampleChartDimensions : ITab
 			model.AddObject(toolbar);
 
 			_samples = [];
-			AddSeries("Cats");
-			AddSeries("Dogs");
+			AddSeries(SeriesName1);
+			AddSeries(SeriesName2);
 
 			ChartView chartView = new();
 			chartView.AddDimensions(_samples,
@@ -133,7 +138,7 @@ public class TabSampleChartDimensions : ITab
 			ChartSample sample = new()
 			{
 				Animal = animal,
-				Timestamp = _baseDateTime.AddMinutes(i),
+				Timestamp = _baseDateTime.Add(i * PeriodDuration),
 				Value = _random.Next(50, MaxValue),
 				TestItem = new TestItem
 				{
@@ -148,7 +153,7 @@ public class TabSampleChartDimensions : ITab
 			ChartSample sample = new()
 			{
 				Animal = animal,
-				Timestamp = _baseDateTime.AddMinutes(i),
+				Timestamp = _baseDateTime.Add(i * PeriodDuration),
 				TestItem = new TestItem
 				{
 					Amount = _random.Next(0, MaxValue),
@@ -160,8 +165,8 @@ public class TabSampleChartDimensions : ITab
 		// UI context
 		private void AddSampleUI(Call call, object state)
 		{
-			AddSample("Cats", _samples.Count);
-			AddSample("Dogs", _samples.Count);
+			AddSample(SeriesName1, _samples.Count);
+			AddSample(SeriesName2, _samples.Count);
 		}
 	}
 }

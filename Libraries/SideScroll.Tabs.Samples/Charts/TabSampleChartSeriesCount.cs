@@ -18,6 +18,7 @@ public class TabSampleChartSeriesCount : ITab
 			{
 				new(10, TabModel.Create("10", CreateChartView(10))),
 				new(25, TabModel.Create("25", CreateChartView(25))),
+				new(50, TabModel.Create("50", CreateChartView(50))),
 			};
 		}
 

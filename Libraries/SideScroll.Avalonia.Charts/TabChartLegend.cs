@@ -81,7 +81,8 @@ public abstract class TabChartLegend<TSeries> : Grid
 		{
 			TextBlockTotal = new TabTextBlock
 			{
-				Margin = new Thickness(2),
+				// Right margin matches the item totals' so the header lines up with the column
+				Margin = new Thickness(2, 2, 6, 2),
 				HorizontalAlignment = HorizontalAlignment.Right,
 			};
 		}
