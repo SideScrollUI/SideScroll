@@ -150,6 +150,11 @@
           <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#ff7989d9" />
           <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="#ff778ae6" />
 
+          <!-- Disabled recedes toward the background, so a button that can't be pressed draws less than one that can -->
+          <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="#ffeef0fc" />
+          <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="#ff8f96bd" />
+          <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="#ffdfe3f5" />
+
           <SolidColorBrush x:Key="ButtonWarningBackground" Color="#ffd97c4e" />
           <SolidColorBrush x:Key="ButtonWarningBackgroundPointerOver" Color="#ffe06d34" />
 
@@ -158,6 +163,11 @@
 
           <SolidColorBrush x:Key="ButtonWarningBorderBrush" Color="#ffb25e34" />
           <SolidColorBrush x:Key="ButtonWarningBorderBrushPointerOver" Color="#ffa15028" />
+
+          <!-- Keeps the warning hue while disabled, so a destructive action stays distinguishable -->
+          <SolidColorBrush x:Key="ButtonWarningBackgroundDisabled" Color="#fff4e6dd" />
+          <SolidColorBrush x:Key="ButtonWarningForegroundDisabled" Color="#ffae9080" />
+          <SolidColorBrush x:Key="ButtonWarningBorderBrushDisabled" Color="#ffecdcd2" />
 
           <CornerRadius x:Key="ButtonCornerRadius">12</CornerRadius>
           <Thickness x:Key="ButtonBorderThemeThickness">1.5</Thickness>
@@ -589,6 +599,11 @@
           <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#ff02026b" />
           <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="#ff02026b" />
 
+          <!-- Disabled recedes toward the background, so a button that can't be pressed draws less than one that can -->
+          <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="#ff191b33" />
+          <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="#ff787a96" />
+          <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="#ff131530" />
+
           <SolidColorBrush x:Key="ButtonWarningBackground" Color="#ff733314" />
           <SolidColorBrush x:Key="ButtonWarningBackgroundPointerOver" Color="#ff96461e" />
 
@@ -597,6 +612,11 @@
 
           <SolidColorBrush x:Key="ButtonWarningBorderBrush" Color="#ff140d09" />
           <SolidColorBrush x:Key="ButtonWarningBorderBrushPointerOver" Color="#ff401b0a" />
+
+          <!-- Keeps the warning hue while disabled, so a destructive action stays distinguishable -->
+          <SolidColorBrush x:Key="ButtonWarningBackgroundDisabled" Color="#ff2e2019" />
+          <SolidColorBrush x:Key="ButtonWarningForegroundDisabled" Color="#ff8d786a" />
+          <SolidColorBrush x:Key="ButtonWarningBorderBrushDisabled" Color="#ff1c1410" />
 
           <!-- Simple and Fluent Tab/Toolbar Button -->
           

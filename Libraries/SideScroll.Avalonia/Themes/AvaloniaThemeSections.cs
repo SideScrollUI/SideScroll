@@ -401,6 +401,9 @@ public class ButtonTheme : ThemeSection
 	[ResourceKey("ButtonBackgroundPressed", "ToggleButtonBackgroundPressed")]
 	public Color? BackgroundPressed { get; set; }
 
+	[ResourceKey("ButtonBackgroundDisabled", "ToggleButtonBackgroundDisabled")]
+	public Color? BackgroundDisabled { get; set; }
+
 	// Foreground
 	[Header("Foreground"), ResourceKey("ButtonForeground", "ToggleButtonForeground")]
 	public Color? Foreground { get; set; }
@@ -411,6 +414,9 @@ public class ButtonTheme : ThemeSection
 	[ResourceKey("ButtonForegroundPressed", "ToggleButtonForegroundPressed")]
 	public Color? ForegroundPressed { get; set; }
 
+	[ResourceKey("ButtonForegroundDisabled", "ToggleButtonForegroundDisabled")]
+	public Color? ForegroundDisabled { get; set; }
+
 	// Border
 	[Header("Border"), ResourceKey("ButtonBorderBrush", "ToggleButtonBorderBrush")]
 	public Color? Border { get; set; }
@@ -420,6 +426,9 @@ public class ButtonTheme : ThemeSection
 
 	[ResourceKey("ButtonBorderBrushPressed", "ToggleButtonBorderBrushPressed")]
 	public Color? BorderPressed { get; set; }
+
+	[ResourceKey("ButtonBorderBrushDisabled", "ToggleButtonBorderBrushDisabled")]
+	public Color? BorderDisabled { get; set; }
 
 	[Range(0, 5), ResourceKey("ButtonBorderThemeThickness")]
 	public double? BorderThickness { get; set; }
@@ -434,17 +443,26 @@ public class ButtonTheme : ThemeSection
 	[Name("Background Pointer Over"), ResourceKey("ButtonWarningBackgroundPointerOver")]
 	public Color? WarningBackgroundPointerOver { get; set; }
 
+	[Name("Background Disabled"), ResourceKey("ButtonWarningBackgroundDisabled")]
+	public Color? WarningBackgroundDisabled { get; set; }
+
 	[Separator, ResourceKey("ButtonWarningForeground"), Name("Foreground")]
 	public Color? WarningForeground { get; set; }
 
 	[Name("Foreground Pointer Over"), ResourceKey("ButtonWarningForegroundPointerOver")]
 	public Color? WarningForegroundPointerOver { get; set; }
 
+	[Name("Foreground Disabled"), ResourceKey("ButtonWarningForegroundDisabled")]
+	public Color? WarningForegroundDisabled { get; set; }
+
 	[Separator, ResourceKey("ButtonWarningBorderBrush")]
 	public Color? WarningBorder { get; set; }
 
 	[ResourceKey("ButtonWarningBorderBrushPointerOver")]
 	public Color? WarningBorderPointerOver { get; set; }
+
+	[ResourceKey("ButtonWarningBorderBrushDisabled")]
+	public Color? WarningBorderDisabled { get; set; }
 }
 
 /// <summary>Theme section for label, text box, combo box, check box, and radio-button colors.</summary>

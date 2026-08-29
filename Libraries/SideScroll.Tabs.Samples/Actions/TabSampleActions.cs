@@ -9,7 +9,10 @@ public class TabSampleActions : ITab
 
 	private class Instance : TabInstance
 	{
+		private readonly SynchronizationContext _context = SynchronizationContext.Current ?? new();
 		private readonly Random _random = new();
+
+		private SampleActionState? _actionState;
 
 		public override void Load(Call call, TabModel model)
 		{
@@ -24,6 +27,24 @@ public class TabSampleActions : ITab
 				new TaskAction("Action", () => PassParams(1, "abc")),
 				new TaskDelegateAsync("Long load (Async)", SleepAsync, true, true),
 				new TaskDelegate("StartAsync error", StartAsyncError, true, true),
+			]);
+
+			// Uncheck to disable the actions below, showing the disabled style for each accent
+			_actionState = new SampleActionState(_context);
+			model.AddForm(_actionState);
+
+			model.AddActions([
+				new TaskAction("Bound Action", () => PassParams(2, "def"))
+				{
+					Description = "Enabled by the checkbox above",
+					IsEnabledBinding = new PropertyBinding(nameof(SampleActionState.ActionsEnabled), _actionState),
+				},
+				new TaskAction("Bound Warning Action", () => PassParams(3, "ghi"))
+				{
+					AccentType = AccentType.Warning,
+					Description = "Enabled by the checkbox above",
+					IsEnabledBinding = new PropertyBinding(nameof(SampleActionState.ActionsEnabled), _actionState),
+				},
 			]);
 		}
 

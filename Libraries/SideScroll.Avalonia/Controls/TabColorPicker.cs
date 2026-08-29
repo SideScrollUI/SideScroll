@@ -34,13 +34,24 @@ public class TabColorPicker : ColorPicker, IDisposable
 		BorderThickness = new Thickness(1);
 		MaxWidth = TabForm.ControlMaxWidth;
 
-		Resources.Add("ComboBoxDropDownGlyphForeground", SideScrollTheme.ButtonForeground);
-		Resources.Add("TextControlForegroundDisabled", SideScrollTheme.ButtonForeground);
+		LoadTheme();
+
+		ActualThemeVariantChanged += (_, _) => LoadTheme();
 
 		AvaloniaUtils.AddContextMenu(this);
 
 		ColorChanged += TabColorPicker_ColorChanged;
 		PropertyChanged += TabColorPicker_PropertyChanged;
+	}
+
+	/// <summary>
+	/// Re-resolves the theme overrides. A resource dictionary entry holds the brush it was given
+	/// rather than re-resolving it, so these are replaced whenever the theme changes
+	/// </summary>
+	private void LoadTheme()
+	{
+		Resources["ComboBoxDropDownGlyphForeground"] = SideScrollTheme.ButtonForeground;
+		Resources["TextControlForegroundDisabled"] = SideScrollTheme.ButtonForeground;
 	}
 
 	/// <summary>Creates a color picker bound to <paramref name="property"/>.</summary>

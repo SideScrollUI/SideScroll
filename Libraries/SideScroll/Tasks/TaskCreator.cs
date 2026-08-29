@@ -109,6 +109,12 @@ public abstract class TaskCreator : INotifyPropertyChanged
 	public IFlyoutConfig? Flyout { get; set; }
 
 	/// <summary>
+	/// Gets or sets the property binding that controls whether the action's button is enabled
+	/// </summary>
+	[HiddenColumn]
+	public PropertyBinding? IsEnabledBinding { get; set; }
+
+	/// <summary>
 	/// Gets or sets the synchronization context for thread marshalling
 	/// </summary>
 	[HiddenColumn]

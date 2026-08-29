@@ -53,6 +53,11 @@ public class TabViewActions : UserControl
 				HorizontalContentAlignment = HorizontalAlignment.Center,
 				[ToolTip.TipProperty] = taskCreator.Description,
 			};
+			if (taskCreator.IsEnabledBinding is { } propertyBinding)
+			{
+				button.BindIsEnabled(propertyBinding.Path, propertyBinding.Object);
+			}
+
 			button.Click += Button_Click;
 			_taskCreators[button] = taskCreator;
 			Grid.SetRow(button, rowIndex++);
