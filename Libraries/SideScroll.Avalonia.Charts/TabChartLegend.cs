@@ -2,12 +2,16 @@ using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 using SideScroll.Avalonia.Controls;
 using SideScroll.Avalonia.Utilities;
 using SideScroll.Charts;
 using SideScroll.Collections;
+using System.Text;
 
 namespace SideScroll.Avalonia.Charts;
 
@@ -39,6 +43,9 @@ public abstract class TabChartLegend<TSeries> : Grid
 
 	/// <summary>Raised when the visible set of series changes due to selection or highlight actions.</summary>
 	public event EventHandler<EventArgs>? OnVisibleSeriesChanged;
+
+	/// <summary>The legend item the context menu was opened on, or <c>null</c> if it was opened outside of one.</summary>
+	private TabChartLegendItem<TSeries>? _contextMenuItem;
 
 	/// <summary>Returns the <see cref="ChartView"/>'s string representation.</summary>
 	public override string? ToString() => ChartView.ToString();
@@ -86,6 +93,22 @@ public abstract class TabChartLegend<TSeries> : Grid
 
 	private void AddContextMenu()
 	{
+		var menuItemCopyName = new TabMenuItem("Copy - _Name");
+		menuItemCopyName.Click += async delegate
+		{
+			if (_contextMenuItem == null) return;
+
+			await ClipboardUtils.SetTextAsync(this, _contextMenuItem.ToString() ?? "");
+		};
+
+		var menuItemCopyRow = new TabMenuItem("Copy - _Row");
+		menuItemCopyRow.Click += async delegate
+		{
+			if (_contextMenuItem == null) return;
+
+			await ClipboardUtils.SetTextAsync(this, GetRowText(_contextMenuItem));
+		};
+
 		var menuItemCopyAll = new TabMenuItem("Copy - _All");
 		menuItemCopyAll.Click += async delegate
 		{
@@ -102,10 +125,32 @@ public abstract class TabChartLegend<TSeries> : Grid
 		{
 			ItemsSource = new AvaloniaList<object>
 			{
+				menuItemCopyName,
+				menuItemCopyRow,
+				new Separator(),
 				menuItemCopyAll,
 				menuItemCopySelected,
 			}
 		};
+
+		// The legend has no selection, so the item has to be resolved from where the menu was opened,
+		// tunneling so it's known before the ContextMenu opens
+		AddHandler(ContextRequestedEvent, (_, e) =>
+		{
+			_contextMenuItem = (e.Source as Visual)?.FindAncestorOfType<TabChartLegendItem<TSeries>>(true);
+
+			bool hasItem = _contextMenuItem != null;
+			menuItemCopyName.IsEnabled = hasItem;
+			menuItemCopyRow.IsEnabled = hasItem;
+		}, RoutingStrategies.Tunnel);
+	}
+
+	private static string GetRowText(TabChartLegendItem<TSeries> legendItem)
+	{
+		StringBuilder stringBuilder = new();
+		stringBuilder.AppendLine("Name: " + legendItem);
+		stringBuilder.AppendLine("Total: " + legendItem.Total);
+		return stringBuilder.ToString();
 	}
 
 	private async Task CopyToClipboardAsync(bool selectedOnly)
