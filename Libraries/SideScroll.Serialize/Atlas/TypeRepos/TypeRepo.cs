@@ -591,7 +591,8 @@ public abstract class TypeRepo : IDisposable
 	{
 		object? obj = LoadObject(objectIndex);
 
-		if (LoadableType?.IsValueType == true)
+		// A null obj means the index was invalid, which LoadObjectData(int) doesn't bounds check
+		if (obj != null && LoadableType?.IsValueType == true)
 		{
 			long position = Reader!.BaseStream.Position;
 			LoadObjectData(objectIndex);
