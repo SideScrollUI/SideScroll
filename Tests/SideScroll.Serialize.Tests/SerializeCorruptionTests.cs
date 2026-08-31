@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SideScroll.Attributes;
 using SideScroll.Serialize.Atlas;
 
 namespace SideScroll.Serialize.Tests;
@@ -92,6 +93,77 @@ public class SerializeCorruptionTests : SerializeBaseTest
 	public void OversizedDimensionsAreRejected()
 	{
 		Assert.Throws<SerializerException>(() => Load(PatchDimensions(int.MaxValue, int.MaxValue)));
+	}
+
+	[PublicData]
+	public struct Point
+	{
+		public int X { get; set; }
+		public int Y { get; set; }
+	}
+
+	[PublicData]
+	public class PointHolder
+	{
+		public int Before { get; set; }
+		public Point Point { get; set; }
+		public int After { get; set; }
+	}
+
+	private const int BeforeMarker = 0x1BEF0BEF;
+	private const int AfterMarker = 0x2AF7A2F7;
+
+	private static byte[] SerializedHolder() => Serialize(new PointHolder
+	{
+		Before = BeforeMarker,
+		Point = new Point { X = 1, Y = 2 },
+		After = AfterMarker,
+	});
+
+	// A struct is written as the index of the object holding its data. Members are written in
+	// order, so that index follows the Before marker and the one object type byte in front of it.
+	// Patching anything else leaves the struct loading normally, which the assertions catch
+	private static byte[] PatchStructIndex(int objectIndex)
+	{
+		byte[] bytes = SerializedHolder();
+		int offset = IndexOfInts(bytes, BeforeMarker) + sizeof(int) + 1;
+
+		BitConverter.GetBytes(objectIndex).CopyTo(bytes, offset);
+		return bytes;
+	}
+
+	[Test, Description("Control: the unpatched holder loads, so the patch tests start from a working file")]
+	public void StructHolderRoundTrips()
+	{
+		var output = Load(SerializedHolder()) as PointHolder;
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.Point.X, Is.EqualTo(1));
+		Assert.That(output.Point.Y, Is.EqualTo(2));
+		Assert.That(output.After, Is.EqualTo(AfterMarker));
+	}
+
+	[Test, Description(
+		"A value type has its data read eagerly so the holder doesn't copy an unfilled struct, and " +
+		"that read used the index after it had already been rejected as out of range, throwing past " +
+		"every member that follows")]
+	public void StructIndexPastTheEndLoadsAsDefault()
+	{
+		var output = Load(PatchStructIndex(int.MaxValue)) as PointHolder;
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.Point, Is.EqualTo(default(Point)));
+		Assert.That(output.After, Is.EqualTo(AfterMarker), "The members after the struct still load");
+	}
+
+	[Test]
+	public void NegativeStructIndexLoadsAsDefault()
+	{
+		var output = Load(PatchStructIndex(-1)) as PointHolder;
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.Point, Is.EqualTo(default(Point)));
+		Assert.That(output.After, Is.EqualTo(AfterMarker), "The members after the struct still load");
 	}
 
 	// A byte patching sweep over every offset used to live here. It cost ~400ms, and reverting each
