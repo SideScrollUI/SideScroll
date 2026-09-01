@@ -33,7 +33,7 @@ public class SerializeDecompressionLimitTests : SerializeBaseTest
 	}
 
 	/// <summary>Compresses highly repetitive data, which gzip shrinks by orders of magnitude</summary>
-	private static string CreateBomb(int decompressedBytes)
+	private static string CreateExpandingPayload(int decompressedBytes)
 	{
 		using var outStream = new MemoryStream();
 		using (var gzip = new GZipStream(outStream, CompressionMode.Compress))
@@ -50,16 +50,16 @@ public class SerializeDecompressionLimitTests : SerializeBaseTest
 	[Test, Description(
 		"A payload small enough to paste into a link decompressed until the process ran out of " +
 		"memory, before any of the data was validated")]
-	public void ADecompressionBombIsRejected()
+	public void APayloadThatExpandsPastTheLimitIsRejected()
 	{
 		SerializerMemory.MaxDecompressedSize = 1_000_000;
 
-		string bomb = CreateBomb(20_000_000);
-		Assert.That(bomb.Length, Is.LessThan(200_000), "The compressed payload stays small");
+		string payload = CreateExpandingPayload(20_000_000);
+		Assert.That(payload.Length, Is.LessThan(200_000), "The compressed payload stays small");
 
 		var serializer = new SerializerMemoryAtlas();
 
-		Assert.Throws<SerializerException>(() => serializer.LoadBase64String(bomb));
+		Assert.Throws<SerializerException>(() => serializer.LoadBase64String(payload));
 	}
 
 	[Test, Description("The limit is reported rather than the load failing somewhere further on")]
@@ -70,7 +70,7 @@ public class SerializeDecompressionLimitTests : SerializeBaseTest
 		var serializer = new SerializerMemoryAtlas();
 
 		SerializerException exception = Assert.Throws<SerializerException>(
-			() => serializer.LoadBase64String(CreateBomb(20_000_000)))!;
+			() => serializer.LoadBase64String(CreateExpandingPayload(20_000_000)))!;
 
 		Assert.That(exception.Message, Does.Contain("maximum allowed size"));
 	}
@@ -82,7 +82,7 @@ public class SerializeDecompressionLimitTests : SerializeBaseTest
 
 		var serializer = new SerializerMemoryAtlas();
 
-		Assert.Throws<SerializerException>(() => serializer.LoadBase64String(CreateBomb(20_000_000)));
+		Assert.Throws<SerializerException>(() => serializer.LoadBase64String(CreateExpandingPayload(20_000_000)));
 		Assert.That(serializer.Stream.Length, Is.LessThanOrEqualTo(SerializerMemory.MaxDecompressedSize));
 	}
 
@@ -112,7 +112,7 @@ public class SerializeDecompressionLimitTests : SerializeBaseTest
 
 		var serializer = new SerializerMemoryAtlas();
 
-		Assert.DoesNotThrow(() => serializer.LoadBase64String(CreateBomb(1_000_000)));
+		Assert.DoesNotThrow(() => serializer.LoadBase64String(CreateExpandingPayload(1_000_000)));
 	}
 
 	[TestCase(0)]

@@ -226,13 +226,13 @@ public class CompressionUtilsTests : BaseTest
 	}
 
 	/// <summary>Highly repetitive contents, which compress by orders of magnitude</summary>
-	private string CreateBombZip(string name, int entryBytes)
+	private string CreateExpandingZip(string name, int entryBytes)
 	{
 		string zipPath = Path.Combine(_testPath, name);
 
 		using var stream = new FileStream(zipPath, FileMode.Create);
 		using var archive = new ZipArchive(stream, ZipArchiveMode.Create);
-		using var entryStream = archive.CreateEntry("bomb.txt").Open();
+		using var entryStream = archive.CreateEntry("expanded.txt").Open();
 
 		var zeros = new byte[81920];
 		for (int written = 0; written < entryBytes; written += zeros.Length)
@@ -242,7 +242,7 @@ public class CompressionUtilsTests : BaseTest
 		return zipPath;
 	}
 
-	private string CreateBombGzip(string name, int decompressedBytes)
+	private string CreateExpandingGzip(string name, int decompressedBytes)
 	{
 		string gzipPath = Path.Combine(_testPath, name);
 
@@ -263,7 +263,7 @@ public class CompressionUtilsTests : BaseTest
 	public void ExtractZip_RejectsAnArchiveThatExpandsPastTheLimit()
 	{
 		CompressionUtils.MaxExtractedSize = 1_000_000;
-		string zipPath = CreateBombZip("bomb.zip", 20_000_000);
+		string zipPath = CreateExpandingZip("expanding.zip", 20_000_000);
 
 		Assert.That(new FileInfo(zipPath).Length, Is.LessThan(200_000), "The archive itself stays small");
 
@@ -275,12 +275,45 @@ public class CompressionUtilsTests : BaseTest
 	public void ExtractZip_RejectedArchiveExtractsNothing()
 	{
 		CompressionUtils.MaxExtractedSize = 1_000_000;
-		string zipPath = CreateBombZip("bomb2.zip", 20_000_000);
+		string zipPath = CreateExpandingZip("expanding2.zip", 20_000_000);
 
 		Assert.Throws<InvalidDataException>(
 			() => CompressionUtils.Decompress(new Call(), new FileInfo(zipPath)));
 
-		Assert.That(Directory.Exists(Path.Combine(_testPath, "bomb2")), Is.False);
+		Assert.That(Directory.Exists(Path.Combine(_testPath, "expanding2")), Is.False);
+	}
+
+	/// <summary>
+	/// Rewrites the uncompressed length an archive declares, in the entry's own header and in the
+	/// central directory, so it claims less than its stream actually holds
+	/// </summary>
+	private static void UnderstateDeclaredLength(string zipPath, uint declared)
+	{
+		byte[] raw = File.ReadAllBytes(zipPath);
+
+		// Uncompressed size sits 22 bytes into a local file header and 24 into a central directory one
+		int local = raw.AsSpan().IndexOf(new byte[] { 0x50, 0x4B, 0x03, 0x04 });
+		int central = raw.AsSpan().IndexOf(new byte[] { 0x50, 0x4B, 0x01, 0x02 });
+
+		BitConverter.GetBytes(declared).CopyTo(raw, local + 22);
+		BitConverter.GetBytes(declared).CopyTo(raw, central + 24);
+
+		File.WriteAllBytes(zipPath, raw);
+	}
+
+	[Test, Description(
+		"The declared total is only a bound because ZipArchive stops at it. An archive claiming " +
+		"less than it holds extracts to its claim, so what was checked is what reaches the disk")]
+	public void ExtractZip_AnUnderstatedArchiveIsTruncatedToWhatItDeclared()
+	{
+		string zipPath = CreateExpandingZip("understated.zip", 20_000_000);
+		UnderstateDeclaredLength(zipPath, 100);
+
+		CompressionUtils.Decompress(new Call(), new FileInfo(zipPath));
+
+		string extracted = Path.Combine(_testPath, "understated", "expanded.txt");
+		Assert.That(new FileInfo(extracted).Length, Is.EqualTo(100),
+			"The 20MB the archive holds must not reach the disk after declaring 100 bytes");
 	}
 
 	[Test, Description("Each entry costs a file and its metadata, however small the archive is")]
@@ -308,7 +341,7 @@ public class CompressionUtilsTests : BaseTest
 	public void ExtractGzip_RejectsAnArchiveThatExpandsPastTheLimit()
 	{
 		CompressionUtils.MaxExtractedSize = 1_000_000;
-		string gzipPath = CreateBombGzip("bomb.txt.gz", 20_000_000);
+		string gzipPath = CreateExpandingGzip("expanding.txt.gz", 20_000_000);
 
 		Assert.That(new FileInfo(gzipPath).Length, Is.LessThan(200_000));
 
@@ -320,12 +353,12 @@ public class CompressionUtilsTests : BaseTest
 	public void ExtractGzip_RejectedArchiveLeavesNoTempFile()
 	{
 		CompressionUtils.MaxExtractedSize = 1_000_000;
-		string gzipPath = CreateBombGzip("bomb2.txt.gz", 20_000_000);
+		string gzipPath = CreateExpandingGzip("expanding2.txt.gz", 20_000_000);
 
 		Assert.Throws<InvalidDataException>(
 			() => CompressionUtils.Decompress(new Call(), new FileInfo(gzipPath)));
 
-		Assert.That(Directory.GetFiles(_testPath, "bomb2.txt.*"), Has.Length.EqualTo(1),
+		Assert.That(Directory.GetFiles(_testPath, "expanding2.txt.*"), Has.Length.EqualTo(1),
 			"Only the archive itself should remain");
 	}
 

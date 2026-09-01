@@ -129,8 +129,11 @@ public class CompressionUtils
 	/// </summary>
 	/// <remarks>
 	/// A zip records each entry's uncompressed length in its own directory, so the total is known
-	/// without extracting anything. That's the archive's own claim rather than a measurement, but
-	/// an archive that lies about it is rejected by extraction itself
+	/// without extracting anything. That's the archive's own claim rather than a measurement, and
+	/// what makes it a bound is that ZipArchive stops reading an entry at the length its directory
+	/// declares. One claiming less than it holds is truncated to its claim rather than rejected,
+	/// and its CRC isn't checked on the way through, so it extracts short files and reports
+	/// success
 	/// </remarks>
 	private static void ValidateZipLimits(FileInfo fileToDecompress)
 	{
