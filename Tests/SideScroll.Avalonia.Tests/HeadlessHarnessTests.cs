@@ -1,4 +1,5 @@
 using Avalonia.Headless.NUnit;
+using Avalonia.Media;
 using NUnit.Framework;
 using SideScroll.Avalonia.Controls.Toolbar;
 using SideScroll.Resources;
@@ -49,5 +50,13 @@ public class HeadlessHarnessTests
 	{
 		Assert.That(global::Avalonia.Application.Current, Is.Not.Null);
 		Assert.That(global::Avalonia.Application.Current!.Styles, Is.Not.Empty);
+	}
+
+	[AvaloniaTest, Description(
+		"Text is drawn with the embedded font rather than one off the machine, so the tests that " +
+		"measure text measure the same thing wherever they run")]
+	public void TheEmbeddedFontIsTheDefault()
+	{
+		Assert.That(FontManager.Current.DefaultFontFamily.Name, Is.EqualTo("Inter"));
 	}
 }

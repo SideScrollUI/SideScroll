@@ -11,6 +11,9 @@
        the tests that predate this reach their logic through extracted helpers instead. -->
   <ItemGroup>
     <PackageReference Include="Avalonia.Headless.NUnit" Version="$(AvaloniaVersion)" />
+    <!-- The tests draw with an embedded font rather than the machine's, so text measurement
+         doesn't vary with what's installed where they run -->
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)" />
     <!-- Not transitive: nothing else brings the Fluent theme in -->
     <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
     <!-- Transitive, but only through Svg.Controls.Skia.Avalonia, which pins an older Avalonia.Skia
