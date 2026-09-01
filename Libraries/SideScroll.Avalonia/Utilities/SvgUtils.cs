@@ -47,9 +47,35 @@ public static class SvgUtils
 		}
 		catch (Exception e)
 		{
-			Debug.Fail(e.ToString());
+			// A native library that can't be loaded is an environment this icon can't be rendered
+			// in, not a resource that's wrong, so it isn't asserted on. Svg.Skia rasterizes through
+			// SkiaSharp regardless of Avalonia's render backend, and that needs libfontconfig.so.1,
+			// which a minimal Linux container often doesn't have. Returning null is already the
+			// behavior a Release build has, where Debug.Fail compiles away
+			if (!IsMissingNativeLibrary(e))
+			{
+				Debug.Fail(e.ToString());
+			}
 			return null;
 		}
+	}
+
+	/// <summary>
+	/// Whether an exception was caused by a native library that couldn't be loaded
+	/// </summary>
+	/// <remarks>
+	/// Walks the whole chain rather than checking the exception itself. The first access wraps the
+	/// <see cref="DllNotFoundException"/> in a <see cref="TypeInitializationException"/> for the
+	/// type whose initializer called into it, and every access afterwards rethrows that same
+	/// wrapper, so neither one is the missing library exception directly
+	/// </remarks>
+	internal static bool IsMissingNativeLibrary(Exception? e)
+	{
+		for (; e != null; e = e.InnerException)
+		{
+			if (e is DllNotFoundException) return true;
+		}
+		return false;
 	}
 
 	/// <summary>
