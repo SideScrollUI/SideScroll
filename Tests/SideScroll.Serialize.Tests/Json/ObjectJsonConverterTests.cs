@@ -54,7 +54,11 @@ public class ObjectJsonConverterTests
 	{
 		foreach (object value in new object[] { 42, 1.5, true, false, "text", (long)9_000_000_000 })
 		{
-			Assert.That(RoundTrip(value), Is.EqualTo(value), value.GetType().Name);
+			object? result = RoundTrip(value);
+
+			// Is.EqualTo converts between numeric types, so the type is what has to be asserted first
+			Assert.That(result, Is.TypeOf(value.GetType()), value.GetType().Name);
+			Assert.That(result, Is.EqualTo(value), value.GetType().Name);
 		}
 	}
 
@@ -70,6 +74,23 @@ public class ObjectJsonConverterTests
 			Assert.That(result, Is.TypeOf(value.GetType()), value.GetType().Name);
 			Assert.That(result, Is.EqualTo(value), value.GetType().Name);
 		}
+	}
+
+	[Test, Description(
+		"A bare number is read back by magnitude, not by the type that wrote it, so int is the only " +
+		"one of the bare number types whose whole range survives")]
+	public void NumbersInsideIntRangeComeBackAsInt()
+	{
+		// A long small enough to be an int
+		Assert.That(RoundTrip(42L), Is.TypeOf<int>());
+
+		// A double is written without a decimal point when it has nothing to put after one, so 2.0
+		// is written as 2 and is a whole number by the time the reader sees it
+		Assert.That(RoundTrip(2.0d), Is.TypeOf<int>());
+
+		// The value is what's preserved, so the two compare equal to what went in
+		Assert.That(RoundTrip(42L), Is.EqualTo(42L));
+		Assert.That(RoundTrip(2.0d), Is.EqualTo(2.0d));
 	}
 
 	[Test, Description("A bare value written before this still loads, the reader dispatches on shape")]

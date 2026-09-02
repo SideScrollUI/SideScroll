@@ -1,3 +1,4 @@
+using Avalonia.Headless.NUnit;
 using NUnit.Framework;
 using SideScroll.Avalonia.Controls;
 using SideScroll.Tabs;
@@ -22,7 +23,7 @@ public class TabFormTests
 		};
 	}
 
-	[Test]
+	[AvaloniaTest]
 	public void UpdateReloadsTheForm()
 	{
 		var formObject = CreateFormObject(new TestItem("A"));
@@ -34,7 +35,7 @@ public class TabFormTests
 		Assert.That(form.Object, Is.SameAs(updated));
 	}
 
-	[Test]
+	[AvaloniaTest]
 	public void DisposedFormStopsReloading()
 	{
 		var original = new TestItem("A");
@@ -62,6 +63,7 @@ public class TabFormTests
 		return new WeakReference(form);
 	}
 
+	[AvaloniaTest]
 	[TestCase(true, false, TestName = "Disposed form is collected")]
 	[TestCase(false, true, TestName = "Undisposed form is held by the form object")]
 	[Description(

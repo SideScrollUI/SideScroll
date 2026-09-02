@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Headless.NUnit;
 using NUnit.Framework;
 using SideScroll.Avalonia.Extensions;
 
@@ -29,7 +30,7 @@ public class DataGridExtensionsTests
 		return dataGrid;
 	}
 
-	[Test, Description(
+	[AvaloniaTest, Description(
 		"DataGrid.Columns keeps its insertion order and DisplayIndex is the only record of what's " +
 		"on screen, so exporting through a plain Dictionary kept the original order after a move")]
 	public void ToCsvFollowsTheDisplayOrder()
@@ -41,7 +42,7 @@ public class DataGridExtensionsTests
 		Assert.That(dataGrid.ToCsv(), Is.EqualTo("\"C\",\"A\",\"B\"\n\"c1\",\"a1\",\"b1\"\n"));
 	}
 
-	[Test, Description("The string table follows the display order the same way")]
+	[AvaloniaTest, Description("The string table follows the display order the same way")]
 	public void ToStringTableFollowsTheDisplayOrder()
 	{
 		DataGrid dataGrid = CreateGrid();
@@ -51,7 +52,7 @@ public class DataGridExtensionsTests
 		Assert.That(dataGrid.ToStringTable(), Does.Contain("| C  | A  | B  |"));
 	}
 
-	[Test, Description("Control: an unmoved grid exports in its column order")]
+	[AvaloniaTest, Description("Control: an unmoved grid exports in its column order")]
 	public void ToCsvUsesTheColumnOrderWhenNothingMoved()
 	{
 		DataGrid dataGrid = CreateGrid();
@@ -59,7 +60,7 @@ public class DataGridExtensionsTests
 		Assert.That(dataGrid.ToCsv(), Is.EqualTo("\"A\",\"B\",\"C\"\n\"a1\",\"b1\",\"c1\"\n"));
 	}
 
-	[Test, Description("Control: hidden columns stay out of the export")]
+	[AvaloniaTest, Description("Control: hidden columns stay out of the export")]
 	public void ToCsvSkipsHiddenColumns()
 	{
 		DataGrid dataGrid = CreateGrid();
@@ -69,6 +70,7 @@ public class DataGridExtensionsTests
 		Assert.That(dataGrid.ToCsv(), Is.EqualTo("\"A\",\"C\"\n\"a1\",\"c1\"\n"));
 	}
 
+	[AvaloniaTest]
 	[TestCase(-1)]
 	[TestCase(int.MinValue)]
 	[NonParallelizable] // MaxValueLength is static
@@ -91,7 +93,7 @@ public class DataGridExtensionsTests
 		}
 	}
 
-	[Test, NonParallelizable, Description("Control: zero exports empty cells rather than being invalid")]
+	[AvaloniaTest, NonParallelizable, Description("Control: zero exports empty cells rather than being invalid")]
 	public void AllowsZeroMaxValueLength()
 	{
 		int original = DataGridExtensions.MaxValueLength;

@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Headless.NUnit;
 using NUnit.Framework;
 using SideScroll.Avalonia.Controls;
 using SideScroll.Tabs.Lists;
@@ -46,7 +47,7 @@ public class TabFormattedComboBoxTests
 		return nullItem;
 	}
 
-	[Test]
+	[AvaloniaTest]
 	public void SetSelectedItemToNull_WithoutNullItem_ClearsSelection()
 	{
 		var testItem = new TestItem { Text = "A" };
@@ -62,7 +63,7 @@ public class TabFormattedComboBoxTests
 			"Setting null should not add a new FormattedItem to the list");
 	}
 
-	[Test]
+	[AvaloniaTest]
 	public void SetSelectedItemToNull_WithNullItem_SelectsNullItem()
 	{
 		var testItem = new TestItem { Text = "A" };
@@ -75,7 +76,7 @@ public class TabFormattedComboBoxTests
 		Assert.That(comboBox.SelectedItem, Is.Null, "The unwrapped selected value should be null");
 	}
 
-	[Test]
+	[AvaloniaTest]
 	public void SetSelectedItem_WithNullItemInList_MatchesNonNullValue()
 	{
 		// Regression: GetFormattedItem() used to throw a NullReferenceException
@@ -93,7 +94,7 @@ public class TabFormattedComboBoxTests
 			"An existing item should be matched instead of adding a duplicate");
 	}
 
-	[Test]
+	[AvaloniaTest]
 	public void SelectedFormattedItem_NullPropertyValue_ReturnsNullItem()
 	{
 		var testItem = new TestItem { Text = "A" };
@@ -105,7 +106,7 @@ public class TabFormattedComboBoxTests
 		Assert.That(comboBox.SelectedFormattedItem, Is.SameAs(nullItem));
 	}
 
-	[Test]
+	[AvaloniaTest]
 	public void PropertyChangedToNull_WithNullItem_SelectsNullItem()
 	{
 		var testItem = new TestItem { Text = "A" };
@@ -117,7 +118,7 @@ public class TabFormattedComboBoxTests
 		Assert.That(((ComboBox)comboBox).SelectedItem, Is.SameAs(nullItem));
 	}
 
-	[Test]
+	[AvaloniaTest]
 	public void PropertyChangedToNull_WithoutNullItem_ClearsSelection()
 	{
 		var testItem = new TestItem { Text = "A" };
@@ -129,7 +130,7 @@ public class TabFormattedComboBoxTests
 		Assert.That(comboBox.SelectedItem, Is.Null);
 	}
 
-	[Test]
+	[AvaloniaTest]
 	public void FixedListDisablesEditingForReadOnlyProperty()
 	{
 		var testItem = new ReadOnlyTestItem();
@@ -155,6 +156,7 @@ public class TabFormattedComboBoxTests
 		return new WeakReference(comboBox);
 	}
 
+	[AvaloniaTest]
 	[TestCase(true, false, TestName = "Disposed combo box is collected")]
 	[TestCase(false, true, TestName = "Undisposed combo box is held by the bound object")]
 	[NUnit.Framework.Description(

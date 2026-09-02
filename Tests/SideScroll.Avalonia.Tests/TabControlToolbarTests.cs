@@ -1,3 +1,4 @@
+using Avalonia.Headless.NUnit;
 using NUnit.Framework;
 using SideScroll.Attributes;
 using SideScroll.Avalonia.Controls.Toolbar;
@@ -20,7 +21,7 @@ public class TabControlToolbarTests
 		public string Second { get; set; } = "Second";
 	}
 
-	[Test, Description(
+	[AvaloniaTest, Description(
 		"Nothing was cleared, so a second call appended a duplicate of every control, column, " +
 		"hotkey, and event handler instead of rebuilding")]
 	public void LoadingTwiceReplacesTheControls()
@@ -40,7 +41,7 @@ public class TabControlToolbarTests
 		Assert.That(toolbar.ColumnDefinitions, Has.Count.EqualTo(columns));
 	}
 
-	[Test, Description("A different model replaces the previous one rather than being appended to it")]
+	[AvaloniaTest, Description("A different model replaces the previous one rather than being appended to it")]
 	public void LoadingASecondToolbarReplacesTheFirst()
 	{
 		var toolbar = new TabControlToolbar();
@@ -62,7 +63,7 @@ public class TabControlToolbarTests
 		public string Last { get; set; } = "Last";
 	}
 
-	[Test, Description(
+	[AvaloniaTest, Description(
 		"Every property getter is called before it's known whether it's a control, so one that " +
 		"threw stopped the toolbar rendering at that point and lost every control after it")]
 	public void AThrowingPropertyDoesNotStopTheRest()

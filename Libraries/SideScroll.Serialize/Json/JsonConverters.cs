@@ -322,6 +322,14 @@ public class ObjectJsonConverter : JsonConverter<object>
 	/// These are what the fallback in <see cref="Read"/> produces: a JSON string, true or false, and
 	/// the number types it tries in order. Anything else written bare comes back as one of these
 	/// rather than as what it was
+	/// <para>
+	/// A number is the one case where that isn't the type it went out as. The fallback has only the
+	/// digits to go on, so it reads one back by magnitude rather than by the type that wrote it, and
+	/// int is the narrowest it tries. A long inside int range comes back as an int, and a double is
+	/// written without a decimal point when it has nothing to put after one, so 2.0 is written as 2
+	/// and comes back as an int as well. The value is preserved, the type it's boxed as is not, so a
+	/// caller unboxing one of these with a cast to long or double has to convert instead
+	/// </para>
 	/// </remarks>
 	private static readonly HashSet<Type> BareTypes =
 	[
