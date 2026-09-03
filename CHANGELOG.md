@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Fixed
+
+### Changed
+
+## [0.25] - 2026-09-02
+
+### Added
 - Added `LiveChartSeries.MaxBins` (10,000), the most bins a series is divided into before its bin size is widened to fit
 - Added `NumberExtensions.Clamped()`, which returns the minimum when the maximum falls below it rather than throwing the way `Math.Clamp()` does, for ranges whose bounds are measured rather than chosen
 - Added `StreamExtensions.TryCopyUpTo()`, which copies a stream up to a limit and returns false without writing past it, rather than reading until the source decides to stop. Used wherever compressed data supplied by a caller is expanded
@@ -58,8 +66,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed creating a sub-task from a disposed one throwing `ObjectDisposedException`. A sub-task adopted its parent's cancellation source, and reading a token from a released one throws, so work queued before a tab closed and run afterwards crashed on the way in — a grid's selection change saving the closed tab's settings reached it through `Call.Timer()`. A sub-task of a disposed parent keeps its own source and starts out cancelled now, which is what anything descending from a task that's been torn down should see
 - Fixed a load's task not reflecting what the load did. Each serializer finished its own task at whatever point it had something to return: `SerializerFileJson` and `SerializerLocalStorage` did it before deserializing, so malformed data was reported as a successful load, and `SerializerFileAtlas` only set `Percent` and never finished one at all. Moving the call after the deserialize would have left a failure unfinished instead, since `SerializerFile.Load()` catches the exception and returns null and nothing else completes the task — the `CallTimer` around it owns a sub task and isn't marked as one. `Load()` finishes the task itself now, for every serializer and whether or not the load succeeded, and marks a failed one errored with the exception's message
 - Fixed `AvaloniaHeadlessCapture.RenderAndCrop()` retaining its temporary full-size bitmap, window, and `TabViewer` after returning the cropped image. The helper now disposes the capture and viewer and closes the window on both success and failure
-
-### Changed
 
 ## [0.24] - 2026-08-10
 
