@@ -1,9 +1,9 @@
 name: Publish to NuGet
 
 on:
-  # Re-enable once a manual run has verified the trusted publishing setup
-  # push:
-  #   tags: [ "v*" ]
+  # Publishes on the first push to main after <Version> changes to a version that has no release tag
+  push:
+    branches: [ "main" ]
   workflow_dispatch:
     inputs:
       publish:
@@ -14,16 +14,71 @@ on:
 permissions:
   contents: read
 
+# Never publish two versions at once
+concurrency:
+  group: publish-nuget
+  cancel-in-progress: false
+
 jobs:
-  publish:
+  version:
     # Only run on the main repository, not on forks
     if: github.repository == 'SideScrollUI/SideScroll'
 
     runs-on: ubuntu-latest
 
+    outputs:
+      tag: ${{ steps.check.outputs.tag }}
+      released: ${{ steps.check.outputs.released }}
+      push: ${{ steps.check.outputs.push }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v7
+
+    # A release tag is what marks a version as published, so an untagged version is a new one
+    - name: Check version
+      id: check
+      run: |
+        version=$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' Directory.Build.props | head -1)
+        if [ -z "$version" ]; then
+          echo "::error::Could not read <Version> from Directory.Build.props"
+          exit 1
+        fi
+
+        # Matches the release tags this repository already uses, which are the version verbatim
+        tag="v$version"
+
+        if [ -n "$(git ls-remote --tags origin "refs/tags/$tag")" ]; then
+          released=true
+        else
+          released=false
+        fi
+
+        # Pushing to main publishes new versions only, while a manual run publishes on request
+        if [ "${{ github.event_name }}" = 'workflow_dispatch' ]; then
+          push=${{ inputs.publish }}
+        elif [ "$released" = 'true' ]; then
+          push=false
+        else
+          push=true
+        fi
+
+        echo "tag=$tag" >> "$GITHUB_OUTPUT"
+        echo "released=$released" >> "$GITHUB_OUTPUT"
+        echo "push=$push" >> "$GITHUB_OUTPUT"
+
+        echo "Version $version ($tag), already released: $released, publishing: $push" >> "$GITHUB_STEP_SUMMARY"
+
+  publish:
+    needs: version
+    # Manual runs always build, so the packages can be checked before publishing them
+    if: github.repository == 'SideScrollUI/SideScroll' && (github.event_name == 'workflow_dispatch' || needs.version.outputs.push == 'true')
+
+    runs-on: ubuntu-latest
+
     permissions:
-      contents: read
-      id-token: write  # Allows NuGet/login to exchange a GitHub OIDC token for a temporary API key
+      contents: write # Allows pushing the release tag
+      id-token: write # Allows NuGet/login to exchange a GitHub OIDC token for a temporary API key
 
     steps:
     - name: Checkout
@@ -36,19 +91,6 @@ jobs:
 
     - name: Install .NET WASM workload
       run: dotnet workload install wasm-tools-net8
-
-    # Packages are versioned from Directory.Build.props, not from the tag, so a
-    # mismatch would publish a version that doesn't match the tag it came from
-    - name: Verify tag matches version
-      if: startsWith(github.ref, 'refs/tags/')
-      run: |
-        version=$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' Directory.Build.props | head -1)
-        tag=${GITHUB_REF_NAME#v}
-        if [ "$version" != "$tag" ]; then
-          echo "::error::Tag $GITHUB_REF_NAME doesn't match <Version>$version</Version> in Directory.Build.props"
-          exit 1
-        fi
-        echo "Publishing version $version"
 
     - name: Restore dependencies
       run: dotnet restore
@@ -72,16 +114,26 @@ jobs:
     # Temporary API keys are only valid for an hour, so request one right before pushing
     - name: NuGet login
       id: login
-      if: startsWith(github.ref, 'refs/tags/') || inputs.publish
+      if: needs.version.outputs.push == 'true'
       uses: NuGet/login@v1
       with:
-        user: ${{ secrets.NUGET_USER }}
+        user: sidescrollui # nuget.org profile name that owns the trusted publishing policy
 
     # .snupkg symbol packages are pushed automatically alongside their .nupkg
     - name: Push to NuGet
-      if: startsWith(github.ref, 'refs/tags/') || inputs.publish
+      if: needs.version.outputs.push == 'true'
       run: |
         dotnet nuget push "Packages/*.nupkg" \
           --source https://api.nuget.org/v3/index.json \
           --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" \
           --skip-duplicate
+
+    # Tag only after publishing succeeds, so a failed run doesn't mark the version as released
+    - name: Tag release
+      if: needs.version.outputs.push == 'true' && needs.version.outputs.released == 'false'
+      env:
+        TAG: ${{ needs.version.outputs.tag }}
+      run: |
+        git tag "$TAG" "$GITHUB_SHA"
+        git push origin "$TAG"
+        echo "Tagged $TAG" >> "$GITHUB_STEP_SUMMARY"
