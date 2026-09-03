@@ -171,7 +171,9 @@ public abstract class SchemaObject
 {
 	/// <summary>
 	/// The object kind, matching the polymorphic JSON discriminator. <see cref="JsonIgnoreAttribute"/>
-	/// so it isn't serialized twice — the discriminator already emits it as <c>"Type"</c>.
+	/// so it isn't serialized twice — the discriminator already emits it as <c>"Type"</c>. Every
+	/// override repeats the attribute, since System.Text.Json reads it off the declaration it finds
+	/// on the derived type and throws for a property colliding with the discriminator without it.
 	/// </summary>
 	[JsonIgnore, DataKey]
 	public abstract string Type { get; }
@@ -204,6 +206,7 @@ public abstract class SchemaObject
 public class SchemaText : SchemaObject
 {
 	/// <inheritdoc/>
+	[JsonIgnore]
 	public override string Type => "Text";
 
 	/// <summary>The display text.</summary>
@@ -216,6 +219,7 @@ public class SchemaText : SchemaObject
 public class SchemaActions : SchemaObject
 {
 	/// <inheritdoc/>
+	[JsonIgnore]
 	public override string Type => "Actions";
 
 	/// <summary>The action buttons.</summary>
@@ -298,6 +302,7 @@ public class SchemaAction
 public class SchemaChart : SchemaObject
 {
 	/// <inheritdoc/>
+	[JsonIgnore]
 	public override string Type => "Chart";
 
 	/// <summary>The chart's name.</summary>
@@ -326,6 +331,7 @@ public class SchemaChart : SchemaObject
 public class SchemaToolbar : SchemaObject
 {
 	/// <inheritdoc/>
+	[JsonIgnore]
 	public override string Type => "Toolbar";
 
 	/// <summary>The controls in order.</summary>
@@ -392,6 +398,7 @@ public class SchemaControl
 public class SchemaForm : SchemaObject
 {
 	/// <inheritdoc/>
+	[JsonIgnore]
 	public override string Type => "Form";
 
 	/// <summary>The form's visible properties, in order.</summary>
@@ -418,6 +425,7 @@ public class SchemaForm : SchemaObject
 public class SchemaList : SchemaObject
 {
 	/// <inheritdoc/>
+	[JsonIgnore]
 	public override string Type => "List";
 
 	/// <summary>The visible columns, mirroring the data grid's columns for the list's element type.</summary>

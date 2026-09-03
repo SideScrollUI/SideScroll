@@ -37,7 +37,7 @@ dotnet publish -c Release
 
 Then serve the output folder:
 ```bash
-cd bin/Release/net8.0-browser/publish/wwwroot
+cd bin/Release/net10.0-browser/publish/wwwroot
 python -m http.server 8000
 ```
 

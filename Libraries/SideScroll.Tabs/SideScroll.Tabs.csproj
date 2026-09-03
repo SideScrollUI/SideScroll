@@ -1,10 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="8.0.6" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SideScroll.Resources\SideScroll.Resources.csproj" />
     <ProjectReference Include="..\SideScroll.Serialize\SideScroll.Serialize.csproj" />
   </ItemGroup>
