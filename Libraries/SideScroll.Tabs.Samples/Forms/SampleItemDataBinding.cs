@@ -10,16 +10,16 @@ public class SampleItemDataBinding(SynchronizationContext context) : INotifyProp
 	[DataKey, Required, StringLength(30)]
 	public string? Value
 	{
-		get => _value;
+		get;
 		set
 		{
-			_value = value;
+			field = value;
 			NotifyPropertyChanged();
 
-			String = _value;
+			String = field;
 			NotifyPropertyChanged(nameof(String));
 
-			if (int.TryParse(_value, out int i))
+			if (int.TryParse(field, out int i))
 			{
 				Integer = i;
 				NotifyPropertyChanged(nameof(Integer));
@@ -37,14 +37,13 @@ public class SampleItemDataBinding(SynchronizationContext context) : INotifyProp
 				NotifyPropertyChanged(nameof(Boolean));
 			}
 
-			if (double.TryParse(_value, out double d))
+			if (double.TryParse(field, out double d))
 			{
 				Double = d;
 				NotifyPropertyChanged(nameof(Double));
 			}
 		}
 	}
-	private string? _value;
 
 	[ReadOnly(true)]
 	public string? String { get; set; }

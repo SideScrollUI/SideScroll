@@ -176,14 +176,13 @@ public class LogEntry : INotifyPropertyChanged
 	[HideRow(null)]
 	public TimeSpan? Duration
 	{
-		get => _duration;
+		get;
 		set
 		{
-			_duration = value;
+			field = value;
 			NotifyPropertyChanged();
 		}
 	}
-	private TimeSpan? _duration;
 
 	private string TagText => Tags == null ? "" : string.Join<Tag>(' ', Tags);
 

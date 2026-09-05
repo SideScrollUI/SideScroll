@@ -13,14 +13,13 @@ public class TaskInstanceCollection : ItemCollection<TaskInstance>
 	/// </summary>
 	public int MaxTasks
 	{
-		get => _maxTasks;
+		get;
 		set
 		{
-			_maxTasks = Math.Max(0, value);
+			field = Math.Max(0, value);
 			TrimToMaxTasks();
 		}
-	}
-	private int _maxTasks = 10;
+	} = 10;
 
 	/// <summary>
 	/// Initializes a new empty task instance collection

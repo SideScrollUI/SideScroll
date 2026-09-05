@@ -18,14 +18,13 @@ public class CompressionUtils
 	/// </remarks>
 	public static long MaxExtractedSize
 	{
-		get => _maxExtractedSize;
+		get;
 		set
 		{
 			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(MaxExtractedSize));
-			_maxExtractedSize = value;
+			field = value;
 		}
-	}
-	private static long _maxExtractedSize = 1_000_000_000;
+	} = 1_000_000_000;
 
 	/// <summary>
 	/// Gets or sets the maximum number of entries an archive is allowed to contain
@@ -36,14 +35,13 @@ public class CompressionUtils
 	/// </remarks>
 	public static int MaxEntries
 	{
-		get => _maxEntries;
+		get;
 		set
 		{
 			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(MaxEntries));
-			_maxEntries = value;
+			field = value;
 		}
-	}
-	private static int _maxEntries = 100_000;
+	} = 100_000;
 
 	/// <summary>
 	/// Compresses a file using GZip compression

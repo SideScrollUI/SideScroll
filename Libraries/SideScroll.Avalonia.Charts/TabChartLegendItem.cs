@@ -38,14 +38,13 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 	/// <summary>Gets the polygon shape used as the color swatch checkbox for this legend item.</summary>
 	protected Polygon? Polygon;
 
-	private int _index;
 	/// <summary>Gets or sets the 1-based display rank shown as a prefix in the legend label when ordering is enabled.</summary>
 	public int Index
 	{
-		get => _index;
+		get;
 		set
 		{
-			_index = value;
+			field = value;
 			UpdateTitleText();
 		}
 	}
@@ -54,18 +53,17 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 	/// <summary>Gets or sets the aggregate total value for this series.</summary>
 	public double? Total { get; set; }
 
-	private bool _isSelected = true;
 	/// <summary>Gets or sets whether this series is selected (visible). Updates the color swatch fill accordingly.</summary>
 	public bool IsSelected
 	{
-		get => _isSelected;
+		get;
 		set
 		{
 			ChartSeries.IsSelected = value;
-			_isSelected = value;
+			field = value;
 			SetFilled(value);
 		}
-	}
+	} = true;
 
 	private readonly SolidColorBrush _colorBrush;
 
@@ -214,23 +212,21 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 		Children.Add(TextBlockTotal);
 	}
 
-	private bool _highlight;
-
 	/// <summary>Gets or sets whether this legend item is highlighted (hovered). When highlighted, the series color is shown at full intensity and others are faded.</summary>
 	public bool Highlight
 	{
-		get => _highlight;
+		get;
 		set
 		{
-			if (value == _highlight)
+			if (value == field)
 				return;
 
-			_highlight = value;
-			if (_highlight)
+			field = value;
+			if (field)
 			{
 				Polygon!.Points = PolygonPointsLarge;
 				SetFilled(true);
-				_highlight = true;
+				field = true;
 				TextBlock!.Foreground = SideScrollTheme.ChartLabelForegroundHighlight;
 				if (TextBlockTotal != null)
 				{
@@ -240,7 +236,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 			else
 			{
 				Polygon!.Points = PolygonPointsSmall;
-				_highlight = false;
+				field = false;
 				SetFilled(IsSelected);
 				TextBlock!.Foreground = SideScrollTheme.ChartLabelForeground;
 				if (TextBlockTotal != null)
@@ -251,7 +247,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 			UpdateVisible();
 
-			Legend.UpdateHighlight(_highlight);
+			Legend.UpdateHighlight(field);
 		}
 	}
 

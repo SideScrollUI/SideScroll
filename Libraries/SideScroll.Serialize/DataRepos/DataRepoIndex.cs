@@ -23,14 +23,13 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 	/// </summary>
 	public int? MaxItems
 	{
-		get => _maxItems;
+		get;
 		set
 		{
 			ArgumentOutOfRangeException.ThrowIfNegative(value ?? 0);
-			_maxItems = value;
+			field = value;
 		}
-	}
-	private int? _maxItems = ValidateMaxItems(maxItems);
+	} = ValidateMaxItems(maxItems);
 
 	private static int? ValidateMaxItems(int? value)
 	{

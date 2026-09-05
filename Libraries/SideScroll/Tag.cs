@@ -37,14 +37,13 @@ public class Tag
 	/// <exception cref="ArgumentOutOfRangeException">The value is negative</exception>
 	public static int MaxValueLength
 	{
-		get => _maxValueLength;
+		get;
 		set
 		{
 			ArgumentOutOfRangeException.ThrowIfNegative(value, nameof(MaxValueLength));
-			_maxValueLength = value;
+			field = value;
 		}
-	}
-	private static int _maxValueLength = 10_000;
+	} = 10_000;
 
 	/// <summary>
 	/// Gets or sets the tag name

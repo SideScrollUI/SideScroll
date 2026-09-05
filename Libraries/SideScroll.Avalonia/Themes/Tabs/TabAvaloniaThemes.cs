@@ -88,14 +88,13 @@ public class TabAvaloniaThemes : ITab
 		[Required, StringLength(50)]
 		public string? Name
 		{
-			get => _name;
+			get;
 			set
 			{
-				_name = value;
-				HasName = !_name.IsNullOrEmpty();
+				field = value;
+				HasName = !field.IsNullOrEmpty();
 			}
 		}
-		private string? _name;
 
 		public static List<string> Variants { get; } =
 		[

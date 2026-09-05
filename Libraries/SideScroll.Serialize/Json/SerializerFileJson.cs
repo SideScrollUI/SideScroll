@@ -33,14 +33,13 @@ public class SerializerFileJson : SerializerFile
 	/// </remarks>
 	public static int SaveAttemptsMax
 	{
-		get => _saveAttemptsMax;
+		get;
 		set
 		{
 			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(SaveAttemptsMax));
-			_saveAttemptsMax = value;
+			field = value;
 		}
-	}
-	private static int _saveAttemptsMax = 10;
+	} = 10;
 
 	/// <summary>
 	/// Gets or sets the backoff time between save attempts (multiplied by attempt number)

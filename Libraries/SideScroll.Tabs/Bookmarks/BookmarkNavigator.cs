@@ -28,16 +28,15 @@ public class BookmarkNavigator : INotifyPropertyChanged
 	/// </summary>
 	public int CurrentIndex
 	{
-		get => _currentIndex;
+		get;
 		set
 		{
-			_currentIndex = value;
+			field = value;
 			NotifyPropertyChanged();
 			NotifyPropertyChanged(nameof(CanSeekBackward));
 			NotifyPropertyChanged(nameof(CanSeekForward));
 		}
-	}
-	private int _currentIndex = -1;
+	} = -1;
 
 	/// <summary>
 	/// Gets or sets the next unique ID to assign to bookmarks

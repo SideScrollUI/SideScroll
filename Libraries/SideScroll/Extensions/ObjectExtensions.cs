@@ -21,14 +21,13 @@ public static class ObjectExtensions
 	/// <exception cref="ArgumentOutOfRangeException">The value is negative</exception>
 	public static int DefaultMaxFormattedLength
 	{
-		get => _defaultMaxFormattedLength;
+		get;
 		set
 		{
 			ArgumentOutOfRangeException.ThrowIfNegative(value, nameof(DefaultMaxFormattedLength));
-			_defaultMaxFormattedLength = value;
+			field = value;
 		}
-	}
-	private static int _defaultMaxFormattedLength = 500;
+	} = 500;
 
 	/// <summary>
 	/// Formats an object as a human-readable string with optional length limit. Handles various types intelligently:

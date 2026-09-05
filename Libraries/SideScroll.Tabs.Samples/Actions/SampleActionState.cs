@@ -13,14 +13,13 @@ public class SampleActionState(SynchronizationContext context) : INotifyProperty
 	[Name("Actions Enabled")]
 	public bool ActionsEnabled
 	{
-		get => _actionsEnabled;
+		get;
 		set
 		{
-			_actionsEnabled = value;
+			field = value;
 			NotifyPropertyChanged();
 		}
-	}
-	private bool _actionsEnabled = true;
+	} = true;
 
 	public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -23,14 +23,13 @@ public static class HttpClientManager
 	/// </summary>
 	public static int MaxClients
 	{
-		get => _maxClients;
+		get;
 		set
 		{
 			ArgumentOutOfRangeException.ThrowIfNegative(value, nameof(MaxClients));
-			_maxClients = value;
+			field = value;
 		}
-	}
-	private static int _maxClients = 32;
+	} = 32;
 
 	private static readonly HttpClientHandler _handler = new()
 	{
