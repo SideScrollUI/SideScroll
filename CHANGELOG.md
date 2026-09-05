@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Changed
+- The four dedicated lock objects — `ItemCollectionUI._lock`, `HttpCache._entryLock`, `LinkCollection._lock`, and `LogSettings.Lock` — are `System.Threading.Lock` rather than `object` now. Every `lock` statement over them binds to `Lock.EnterScope()` instead of `Monitor`, which is cheaper uncontended, and the type refuses the `Monitor.Enter` and `lock (someObject)` mistakes it used to allow. Nothing uses `Monitor.Wait` or `Pulse`, which `Lock` does not support, and none of the fields is widened to `object` anywhere, which would silently fall back to the old behavior
 - Updated every project from .NET 8 to .NET 10, including the `net10.0-browser` WebAssembly targets, so the packages now require a .NET 10 runtime. `Microsoft.Extensions.Caching.Memory` and `Microsoft.JSInterop` moved to 10.0.11, and the explicit `System.Text.Json` reference was dropped because it ships in the .NET 10 shared framework. CI installs the `wasm-tools` workload rather than `wasm-tools-net8`. `SchemaObject`'s derived `Type` overrides carry a `[JsonIgnore]` of their own now — they inherited one from the abstract declaration under System.Text.Json 8, but 10 rejects a polymorphic type whose derived property collides with its own `Type` discriminator, which threw `InvalidOperationException` out of every schema export
 
 ## [0.25] - 2026-09-02

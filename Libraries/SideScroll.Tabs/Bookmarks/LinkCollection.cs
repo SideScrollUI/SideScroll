@@ -74,7 +74,7 @@ public class LinkCollection
 
 	private readonly DataRepoView<LinkedBookmark> _dataRepoView;
 
-	private readonly object _lock = new();
+	private readonly Lock _lock = new();
 
 	/// <summary>
 	/// Initializes a new link collection for the specified project and group
