@@ -154,10 +154,7 @@ public class SerializerFileAtlas : SerializerFile
 		}
 		serializer.LogLoadedTypes(call);
 
-		if (taskInstance != null)
-		{
-			taskInstance.Percent = 100;
-		}
+		taskInstance?.Percent = 100;
 
 		if (!lazy)
 		{

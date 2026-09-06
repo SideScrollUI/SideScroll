@@ -120,7 +120,9 @@ public class TabZipFile : ITab, IFileTypeView
 			for (int i = 0; i < parts.Length; i++)
 			{
 				if (i > 0)
+				{
 					currentPath += '/';
+				}
 				currentPath += parts[i];
 
 				if (!directories.TryGetValue(currentPath, out var dir))

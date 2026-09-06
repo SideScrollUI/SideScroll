@@ -100,10 +100,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 	private void SetFilled(bool filled)
 	{
-		if (Polygon != null)
-		{
-			Polygon.Fill = filled && Count > 0 ? _colorBrush : Brushes.Transparent;
-		}
+		Polygon?.Fill = filled && Count > 0 ? _colorBrush : Brushes.Transparent;
 	}
 
 	/// <summary>Refreshes the point count, total value, and swatch fill from the underlying series data.</summary>
@@ -115,10 +112,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 			IsSelected = true; // Now has points
 		}
 		Count = ChartSeries.ListSeries.List.Count;
-		if (TextBlockTotal != null)
-		{
-			TextBlockTotal.Text = Total?.FormattedShortDecimal();
-		}
+		TextBlockTotal?.Text = Total?.FormattedShortDecimal();
 		UpdateCheckBox();
 	}
 
@@ -228,10 +222,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 				SetFilled(true);
 				field = true;
 				TextBlock!.Foreground = SideScrollTheme.ChartLabelForegroundHighlight;
-				if (TextBlockTotal != null)
-				{
-					TextBlockTotal.Foreground = SideScrollTheme.ChartLabelForegroundHighlight;
-				}
+				TextBlockTotal?.Foreground = SideScrollTheme.ChartLabelForegroundHighlight;
 			}
 			else
 			{
@@ -239,10 +230,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 				field = false;
 				SetFilled(IsSelected);
 				TextBlock!.Foreground = SideScrollTheme.ChartLabelForeground;
-				if (TextBlockTotal != null)
-				{
-					TextBlockTotal.Foreground = SideScrollTheme.ChartLabelForeground;
-				}
+				TextBlockTotal?.Foreground = SideScrollTheme.ChartLabelForeground;
 			}
 
 			UpdateVisible();

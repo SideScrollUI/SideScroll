@@ -323,10 +323,8 @@ public class ScreenCapture : Grid, IDisposable
 			_contentGrid.PointerMoved -= ScreenCapture_PointerMoved;
 		}
 
-		if (_backgroundImage != null)
-			_backgroundImage.Source = null;
-		if (_selectionImage != null)
-			_selectionImage.Source = null;
+		_backgroundImage?.Source = null;
+		_selectionImage?.Source = null;
 
 		_selectionBitmap?.Dispose();
 		_selectionBitmap = null;

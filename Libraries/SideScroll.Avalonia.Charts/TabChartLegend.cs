@@ -336,10 +336,7 @@ public abstract class TabChartLegend<TSeries> : Grid
 		}
 		UpdatePositions();
 
-		if (TextBlockTotal != null)
-		{
-			TextBlockTotal.Text = ChartView.LegendTitle ?? GetTotalName();
-		}
+		TextBlockTotal?.Text = ChartView.LegendTitle ?? GetTotalName();
 
 		// Possibly faster? But more likely to cause problems
 		/*var prevLegends = idxLegendItems.Clone<Dictionary<string, TabChartLegendItem>>();

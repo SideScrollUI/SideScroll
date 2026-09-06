@@ -329,7 +329,9 @@ public class TaskInstance : INotifyPropertyChanged, IDisposable
 			lock (SubTasks)
 			{
 				foreach (TaskInstance subTask in SubTasks)
+				{
 					totalPercent += subTask.Percent;
+				}
 			}
 			Percent = totalPercent / NumSubTasks;
 		}
