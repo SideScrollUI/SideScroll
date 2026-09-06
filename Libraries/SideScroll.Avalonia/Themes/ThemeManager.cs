@@ -234,7 +234,12 @@ public class ThemeManager
 
 	private static JsonSerializerOptions CreateJsonSerializerOptions()
 	{
-		var options = new JsonSerializerOptions { WriteIndented = true };
+		var options = new JsonSerializerOptions
+		{
+			WriteIndented = true,
+			// Reject duplicate properties rather than silently keeping the last one
+			AllowDuplicateProperties = false,
+		};
 		options.Converters.Add(new JsonColorConverter());
 		return options;
 	}
