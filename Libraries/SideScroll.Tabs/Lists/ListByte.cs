@@ -12,12 +12,11 @@ public class ListByte(int index, byte b)
 	/// </summary>
 	public static int MaxBytes
 	{
-		get => _maxBytes;
+		get;
 		// A negative limit throws while allocating the read buffer in Load(), and makes Create()
 		// return nothing at all
-		set => _maxBytes = Math.Max(0, value);
-	}
-	private static int _maxBytes = 100_000;
+		set => field = Math.Max(0, value);
+	} = 100_000;
 
 	/// <summary>
 	/// Gets the zero-based index of the byte

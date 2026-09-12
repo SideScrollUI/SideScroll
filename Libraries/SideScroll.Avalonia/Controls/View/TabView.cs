@@ -170,10 +170,7 @@ public class TabView : Grid, IDisposable
 		{
 			ReloadControls();
 		}
-		if (_parentContainerBorder != null)
-		{
-			_parentContainerBorder.BorderBrush = SideScrollTheme.TabBackgroundBorder;
-		}
+		_parentContainerBorder?.BorderBrush = SideScrollTheme.TabBackgroundBorder;
 	}
 
 	/// <summary>Arranges child controls and, on the first valid pass, schedules the deferred child-control loader.</summary>
@@ -449,10 +446,7 @@ public class TabView : Grid, IDisposable
 		if (TabViewSettings.Width is { } splitterDistance and > MinDesiredSplitterDistance)
 		{
 			_containerGrid.ColumnDefinitions[0].Width = new GridLength((int)splitterDistance);
-			if (_parentContainerBorder != null)
-			{
-				_parentContainerBorder.Width = splitterDistance;
-			}
+			_parentContainerBorder?.Width = splitterDistance;
 		}
 		else
 		{
@@ -838,10 +832,7 @@ public class TabView : Grid, IDisposable
 	/// <summary>Recalculates and applies the width of the filler panel so the grid splitter has room to drag rightward.</summary>
 	protected void UpdateSplitterFiller()
 	{
-		if (_fillerPanel != null)
-		{
-			_fillerPanel.Width = GetFillerPanelWidth();
-		}
+		_fillerPanel?.Width = GetFillerPanelWidth();
 	}
 
 	private void UpdateChildControls(bool recreate = false)

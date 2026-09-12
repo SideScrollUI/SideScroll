@@ -35,6 +35,8 @@ public static class JsonConverters
 			IgnoreReadOnlyFields = true,
 			IncludeFields = true,
 			WriteIndented = true,
+			// Reject duplicate properties rather than silently keeping the last one
+			AllowDuplicateProperties = false,
 			TypeInfoResolver = new DefaultJsonTypeInfoResolver
 			{
 				Modifiers =
@@ -68,6 +70,8 @@ public static class JsonConverters
 			IgnoreReadOnlyFields = true,
 			IncludeFields = true,
 			WriteIndented = true,
+			// Reject duplicate properties rather than silently keeping the last one
+			AllowDuplicateProperties = false,
 			TypeInfoResolver = new DefaultJsonTypeInfoResolver
 			{
 				Modifiers =

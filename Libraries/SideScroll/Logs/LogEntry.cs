@@ -35,7 +35,7 @@ public class LogSettings
 	/// </summary>
 	public LogLevel DebugPrintLogLevel { get; set; } = LogLevel.Warn;
 
-	internal readonly object Lock = new(); // todo: replace this with individual ones? or a non-blocking version
+	internal readonly Lock Lock = new(); // todo: replace this with individual ones? or a non-blocking version
 
 	/// <summary>
 	/// Gets or sets the synchronization context, inherited from creator (which can be a Parent Log)
@@ -176,14 +176,13 @@ public class LogEntry : INotifyPropertyChanged
 	[HideRow(null)]
 	public TimeSpan? Duration
 	{
-		get => _duration;
+		get;
 		set
 		{
-			_duration = value;
+			field = value;
 			NotifyPropertyChanged();
 		}
 	}
-	private TimeSpan? _duration;
 
 	private string TagText => Tags == null ? "" : string.Join<Tag>(' ', Tags);
 

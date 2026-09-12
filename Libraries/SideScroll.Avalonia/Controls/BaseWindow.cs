@@ -139,10 +139,7 @@ public class BaseWindow : Window
 
 	private void Border_ActualThemeVariantChanged(object? sender, EventArgs e)
 	{
-		if (Border != null)
-		{
-			Border.BorderBrush = SideScrollTheme.TabBackgroundBorder;
-		}
+		Border?.BorderBrush = SideScrollTheme.TabBackgroundBorder;
 	}
 
 	private void WindowStateChanged(WindowState state)

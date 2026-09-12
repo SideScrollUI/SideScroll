@@ -9,26 +9,24 @@ public class HttpCall(Call call)
 	/// <summary>Gets or sets the maximum number of download attempts before throwing.</summary>
 	public static int MaxAttempts
 	{
-		get => _maxAttempts;
+		get;
 		set
 		{
 			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(MaxAttempts));
-			_maxAttempts = value;
+			field = value;
 		}
-	}
-	private static int _maxAttempts = 4;
+	} = 4;
 
 	/// <summary>Gets or sets the base sleep duration in milliseconds between retry attempts.</summary>
 	public static int SleepMilliseconds
 	{
-		get => _sleepMilliseconds;
+		get;
 		set
 		{
 			ArgumentOutOfRangeException.ThrowIfNegative(value, nameof(SleepMilliseconds));
-			_sleepMilliseconds = value;
+			field = value;
 		}
-	}
-	private static int _sleepMilliseconds = 500; // < ^ MaxAttempts
+	} = 500; // < ^ MaxAttempts
 
 	/// <summary>Gets the logging call context used for timing and diagnostics.</summary>
 	public Call Call => call;

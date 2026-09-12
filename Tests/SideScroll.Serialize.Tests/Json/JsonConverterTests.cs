@@ -2016,4 +2016,47 @@ public class JsonConverterTests : SerializeBaseTest
 	}
 
 	#endregion
+
+	#region Duplicate Property Tests
+
+	[Test, Description("A duplicate property is rejected rather than silently keeping the last value")]
+	public void DuplicatePropertiesAreRejected()
+	{
+		// Two parsers disagreeing over which value wins is what makes a duplicate worth rejecting,
+		// so a link carrying one has to fail rather than resolve to either
+		string json = """{"PublicData":"first","PublicData":"second"}""";
+
+		Assert.Throws<JsonException>(() =>
+			JsonSerializer.Deserialize<PrivateDataContainer>(json, JsonConverters.PublicSerializerOptions));
+	}
+
+	[Test, Description("The private options reject a duplicate property too")]
+	public void DuplicatePropertiesAreRejectedByPrivateOptions()
+	{
+		string json = """{"PublicData":"first","PublicData":"second"}""";
+
+		Assert.Throws<JsonException>(() =>
+			JsonSerializer.Deserialize<PrivateDataContainer>(json, JsonConverters.PrivateSerializerOptions));
+	}
+
+	[Test, Description("A duplicate nested inside an object is rejected as well")]
+	public void NestedDuplicatePropertiesAreRejected()
+	{
+		string json = """{"Value":{"Username":"first","Username":"second"}}""";
+
+		Assert.Throws<JsonException>(() =>
+			JsonSerializer.Deserialize<ObjectContainerValue>(json, JsonConverters.PublicSerializerOptions));
+	}
+
+	[Test, Description("A property appearing once still deserializes")]
+	public void SinglePropertiesStillDeserialize()
+	{
+		string json = """{"PublicData":"only"}""";
+
+		var output = JsonSerializer.Deserialize<PrivateDataContainer>(json, JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output!.PublicData, Is.EqualTo("only"));
+	}
+
+	#endregion
 }

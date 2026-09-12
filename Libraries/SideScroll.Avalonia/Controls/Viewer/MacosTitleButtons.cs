@@ -26,18 +26,9 @@ public class MacosTitleButtons : TemplatedControl
 		ZoomButton = e.NameScope.Find<Button>("ZoomButton");
 
 		// Attach handlers directly
-		if (CloseButton != null)
-		{
-			CloseButton.Click += CloseWindow;
-		}
-		if (MinimizeButton != null)
-		{
-			MinimizeButton.Click += MinimizeWindow;
-		}
-		if (ZoomButton != null)
-		{
-			ZoomButton.Click += MaximizeWindow;
-		}
+		CloseButton?.Click += CloseWindow;
+		MinimizeButton?.Click += MinimizeWindow;
+		ZoomButton?.Click += MaximizeWindow;
 	}
 
 	private void CloseWindow(object? sender, RoutedEventArgs e)

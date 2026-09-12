@@ -258,10 +258,7 @@ public class TabImageButton : Button, IDisposable
 	/// <summary>Registers this button's invocation as the default action on the owning <see cref="TabInstance"/>.</summary>
 	public void SetDefault()
 	{
-		if (TabInstance != null)
-		{
-			TabInstance.DefaultAction = async () => await InvokeAsync();
-		}
+		TabInstance?.DefaultAction = async () => await InvokeAsync();
 	}
 
 	/// <summary>Invokes the button action, optionally rate-limiting rapid repeated clicks by <see cref="MinWaitTime"/>.</summary>

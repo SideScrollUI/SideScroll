@@ -35,10 +35,7 @@ public class ToolbarToggleButton : ToolbarButton
 
 		SetImage();
 
-		if (ListProperty != null)
-		{
-			ListProperty.PropertyChanged += ListProperty_PropertyChanged;
-		}
+		ListProperty?.PropertyChanged += ListProperty_PropertyChanged;
 	}
 
 	public ToolbarToggleButton(TabControlToolbar toolbar, string tooltip, IResourceView onImageResource, IResourceView offImageResource, bool isChecked, string? label = null) :
@@ -87,10 +84,7 @@ public class ToolbarToggleButton : ToolbarButton
 		if (!IsEnabled || IsActive) return;
 
 		IsChecked = !IsChecked;
-		if (ListProperty != null)
-		{
-			ListProperty.Value = IsChecked;
-		}
+		ListProperty?.Value = IsChecked;
 		SetImage();
 
 		await base.InvokeAsync(false);

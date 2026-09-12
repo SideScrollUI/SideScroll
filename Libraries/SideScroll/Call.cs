@@ -559,7 +559,7 @@ public class Call
 		var results = new KeyValuePair<TItem, TResult?>[items.Count];
 		int startedCount = 0;
 
-		foreach (var (index, item) in items.WithIndex())
+		foreach (var (index, item) in items.Index())
 		{
 			if (await TryWaitAsync(rateLimiter) is not { } limitToken) break;
 
@@ -606,7 +606,7 @@ public class Call
 		var tasks = new List<Task>();
 		var results = new KeyValuePair<TItem, TResult?>[items.Count];
 		int startedCount = 0;
-		foreach (var (index, item) in items.WithIndex())
+		foreach (var (index, item) in items.Index())
 		{
 			if (await TryWaitAsync(rateLimiter) is not { } limitToken) break;
 
@@ -654,7 +654,7 @@ public class Call
 		var tasks = new List<Task>();
 		var results = new KeyValuePair<TItem, TResult?>[items.Count];
 		int startedCount = 0;
-		foreach (var (index, item) in items.WithIndex())
+		foreach (var (index, item) in items.Index())
 		{
 			if (await TryWaitAsync(rateLimiter) is not { } limitToken) break;
 

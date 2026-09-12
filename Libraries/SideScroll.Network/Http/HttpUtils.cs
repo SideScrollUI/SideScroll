@@ -14,40 +14,37 @@ public static class HttpUtils
 	/// <summary>Gets or sets the read buffer size in bytes used when streaming content with progress reporting.</summary>
 	public static int ReadBufferSize
 	{
-		get => _readBufferSize;
+		get;
 		set
 		{
 			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(ReadBufferSize));
-			_readBufferSize = value;
+			field = value;
 		}
-	}
-	private static int _readBufferSize = 100_000;
+	} = 100_000;
 
 	/// <summary>Gets or sets the maximum number of retry attempts for a request before returning <c>null</c>.</summary>
 	public static int MaxAttempts
 	{
-		get => _maxAttempts;
+		get;
 		set
 		{
 			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(MaxAttempts));
-			_maxAttempts = value;
+			field = value;
 		}
-	}
-	private static int _maxAttempts = 5;
+	} = 5;
 
 	/// <summary>Gets or sets the base delay between retry attempts; doubled on each subsequent attempt.</summary>
 	public static TimeSpan BaseRetryDelay
 	{
-		get => _baseRetryDelay;
+		get;
 		set
 		{
 			if (value < TimeSpan.Zero)
 				throw new ArgumentOutOfRangeException(nameof(BaseRetryDelay), value, "Retry delay cannot be negative.");
 
-			_baseRetryDelay = value;
+			field = value;
 		}
-	}
-	private static TimeSpan _baseRetryDelay = TimeSpan.FromMilliseconds(500); // < ^ MaxAttempts
+	} = TimeSpan.FromMilliseconds(500); // < ^ MaxAttempts
 
 	/// <summary>Gets or sets the shared <see cref="HttpClient"/> used for HEAD requests.</summary>
 	public static HttpClient Client { get; set; } = new();

@@ -177,14 +177,13 @@ public class ItemQueueCollection<T> : ItemCollection<T>
 	/// </summary>
 	public int MaxCount
 	{
-		get => _maxCount;
+		get;
 		set
 		{
-			_maxCount = Math.Max(0, value);
+			field = Math.Max(0, value);
 			TrimToMaxCount();
 		}
-	}
-	private int _maxCount = 100;
+	} = 100;
 
 	/// <summary>
 	/// Inserts an item, removing the oldest items if MaxCount is exceeded

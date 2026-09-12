@@ -37,14 +37,13 @@ public class PropertyTest : INotifyPropertyChanged
 	[EditColumn]
 	public bool Boolean
 	{
-		get => _boolean;
+		get;
 		set
 		{
-			_boolean = value;
+			field = value;
 			NotifyPropertyChangedContext(nameof(Boolean));
 		}
 	}
-	private bool _boolean;
 
 	public event PropertyChangedEventHandler? PropertyChanged;
 

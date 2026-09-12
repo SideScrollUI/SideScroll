@@ -37,8 +37,8 @@ public class TabSampleDataGridDataTable : ITab
 			if (obj is DataRowView dataRowView)
 			{
 				return dataRowView.Row.ItemArray
-					.WithIndex()
-					.Select(x => new ListPair(dataRowView.DataView.Table!.Columns[x.index], x.item))
+					.Index()
+					.Select(x => new ListPair(dataRowView.DataView.Table!.Columns[x.Index], x.Item))
 					.ToList();
 			}
 

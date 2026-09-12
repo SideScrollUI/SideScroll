@@ -117,7 +117,7 @@ public class ItemCollectionUI<T> : ObservableCollection<T>, IList, IItemCollecti
 	/// </summary>
 	public bool UsePost => Context != null && (PostOnly || Context != SynchronizationContext.Current);
 
-	private readonly object _lock = new();
+	private readonly Lock _lock = new();
 
 	/// <summary>Initializes an empty <see cref="ItemCollectionUI{T}"/>.</summary>
 	public ItemCollectionUI() { }

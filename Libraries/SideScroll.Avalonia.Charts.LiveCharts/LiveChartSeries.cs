@@ -41,14 +41,13 @@ public class LiveChartSeries : IDisposable //: ChartSeries<ISeries>
 	/// </remarks>
 	public static int MaxBins
 	{
-		get => _maxBins;
+		get;
 		set
 		{
 			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(MaxBins));
-			_maxBins = value;
+			field = value;
 		}
-	}
-	private static int _maxBins = 10_000;
+	} = 10_000;
 
 	/// <summary>Gets the parent chart control.</summary>
 	public TabLiveChart Chart { get; }

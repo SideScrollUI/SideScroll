@@ -25,14 +25,13 @@ public static class DataGridExtensions
 	/// <exception cref="ArgumentOutOfRangeException">The value is negative</exception>
 	public static int MaxValueLength
 	{
-		get => _maxValueLength;
+		get;
 		set
 		{
 			ArgumentOutOfRangeException.ThrowIfNegative(value, nameof(MaxValueLength));
-			_maxValueLength = value;
+			field = value;
 		}
-	}
-	private static int _maxValueLength = 10_000;
+	} = 10_000;
 
 	/// <summary>
 	/// Converts all values from a specific column to a string table (one value per line)

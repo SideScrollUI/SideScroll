@@ -180,10 +180,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 
 		_pointerMovedSubscriber = new(TabLiveChart_OnPointerChanged);
 		PointerMovedEventSource.WeakEvent.Subscribe(PointerMovedEventSource, _pointerMovedSubscriber);
-		if (ChartView.TimeWindow != null)
-		{
-			ChartView.TimeWindow.OnSelectionChanged += TimeWindow_OnSelectionChanged;
-		}
+		ChartView.TimeWindow?.OnSelectionChanged += TimeWindow_OnSelectionChanged;
 
 		if (UseDateTimeAxis)
 		{
@@ -807,10 +804,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 
 	private void StopSelecting()
 	{
-		if (_zoomSection != null)
-		{
-			_zoomSection.IsVisible = false;
-		}
+		_zoomSection?.IsVisible = false;
 		_startDataPoint = null;
 		_selecting = false;
 	}
@@ -995,10 +989,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 
 	private void ClearListeners()
 	{
-		if (Legend != null)
-		{
-			Legend.OnVisibleSeriesChanged -= Legend_OnVisibleSeriesChanged;
-		}
+		Legend?.OnVisibleSeriesChanged -= Legend_OnVisibleSeriesChanged;
 
 		Chart.PointerPressed -= TabLiveChart_PointerPressed;
 		Chart.PointerReleased -= TabLiveChart_PointerReleased;
@@ -1013,10 +1004,7 @@ public class TabLiveChart : TabChart<ISeries>, IDisposable
 		Chart.EffectiveViewportChanged -= Chart_EffectiveViewportChanged;
 		Chart.SizeChanged -= Chart_SizeChanged;
 
-		if (ChartView.TimeWindow != null)
-		{
-			ChartView.TimeWindow.OnSelectionChanged -= TimeWindow_OnSelectionChanged;
-		}
+		ChartView.TimeWindow?.OnSelectionChanged -= TimeWindow_OnSelectionChanged;
 	}
 
 	public void Dispose()

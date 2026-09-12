@@ -360,10 +360,7 @@ public class TabAvaloniaEdit : Border, IDisposable
 	/// </remarks>
 	public void Dispose()
 	{
-		if (ListProperty != null)
-		{
-			ListProperty.PropertyChanged -= ListProperty_PropertyChanged;
-		}
+		ListProperty?.PropertyChanged -= ListProperty_PropertyChanged;
 
 		GC.SuppressFinalize(this);
 	}

@@ -39,6 +39,8 @@ public class HttpMemoryCache : IDisposable
 	{
 		IncludeFields = true,
 		PropertyNameCaseInsensitive = true,
+		// Reject duplicate properties rather than silently keeping the last one
+		AllowDuplicateProperties = false,
 	};
 
 	/// <summary>

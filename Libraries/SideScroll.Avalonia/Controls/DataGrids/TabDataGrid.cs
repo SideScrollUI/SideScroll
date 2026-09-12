@@ -461,10 +461,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 		{
 			TabInstance.SaveTabSettings(); // selection has probably changed
 		}
-		if (bookmark != null)
-		{
-			bookmark.Changed = string.Join(",", TabDataSettings.SelectedRows);
-		}
+		bookmark?.Changed = string.Join(",", TabDataSettings.SelectedRows);
 	}
 
 	// Single click deselect
@@ -1157,10 +1154,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 			TabDataSettings.Filter = value;
 			_filter = new Filter(value);
 
-			if (TabModel.SearchFilter != null)
-			{
-				TabModel.SearchFilter.Filter = _filter;
-			}
+			TabModel.SearchFilter?.Filter = _filter;
 
 			if (_filter.RootNode != null)
 			{

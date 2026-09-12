@@ -41,14 +41,13 @@ public class TaskInstance : INotifyPropertyChanged, IDisposable
 	[HiddenColumn]
 	public Action? OnComplete { get; set; }
 
-	private string? _label;
 	/// <summary>
 	/// Gets or sets the task label, falls back to the Creator's label if not set
 	/// </summary>
 	public string? Label
 	{
-		get => _label ?? Creator?.Label;
-		set => _label = value;
+		get => field ?? Creator?.Label;
+		set;
 	}
 
 	/// <summary>
@@ -239,17 +238,16 @@ public class TaskInstance : INotifyPropertyChanged, IDisposable
 	[Formatted]
 	public double Percent
 	{
-		get => _percent;
+		get;
 		set
 		{
-			if (_percent == value)
+			if (field == value)
 				return;
 
-			_percent = value;
+			field = value;
 			NotifyPropertyChanged();
 		}
 	}
-	private double _percent;
 
 	/// <summary>
 	/// Gets the elapsed time since the task started
@@ -331,7 +329,9 @@ public class TaskInstance : INotifyPropertyChanged, IDisposable
 			lock (SubTasks)
 			{
 				foreach (TaskInstance subTask in SubTasks)
+				{
 					totalPercent += subTask.Percent;
+				}
 			}
 			Percent = totalPercent / NumSubTasks;
 		}

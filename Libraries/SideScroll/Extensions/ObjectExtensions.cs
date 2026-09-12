@@ -21,14 +21,13 @@ public static class ObjectExtensions
 	/// <exception cref="ArgumentOutOfRangeException">The value is negative</exception>
 	public static int DefaultMaxFormattedLength
 	{
-		get => _defaultMaxFormattedLength;
+		get;
 		set
 		{
 			ArgumentOutOfRangeException.ThrowIfNegative(value, nameof(DefaultMaxFormattedLength));
-			_defaultMaxFormattedLength = value;
+			field = value;
 		}
-	}
-	private static int _defaultMaxFormattedLength = 500;
+	} = 500;
 
 	/// <summary>
 	/// Formats an object as a human-readable string with optional length limit. Handles various types intelligently:
@@ -200,10 +199,11 @@ public static class ObjectExtensions
 	}
 
 	/// <summary>
-	/// Adds an index to each item in an enumerable sequence (Note: .NET 9 adds .Index() support to replace this)
+	/// Adds an index to each item in an enumerable sequence
 	/// </summary>
+	[Obsolete("Use Enumerable.Index() instead, which .NET 9 added. Its tuple elements are named Index and Item rather than index and item.")]
 	public static IEnumerable<(int index, T item)> WithIndex<T>(this IEnumerable<T> self)
-		=> self.Select((item, index) => (index, item));
+		=> self.Index();
 
 	/// <summary>
 	/// Converts an object to a unique string representation suitable for identification. Attempts to find the most meaningful identifier by checking in order:

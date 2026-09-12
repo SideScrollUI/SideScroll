@@ -20,14 +20,13 @@ public abstract class SerializerMemory
 	/// </remarks>
 	public static long MaxDecompressedSize
 	{
-		get => _maxDecompressedSize;
+		get;
 		set
 		{
 			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(MaxDecompressedSize));
-			_maxDecompressedSize = value;
+			field = value;
 		}
-	}
-	private static long _maxDecompressedSize = 100_000_000;
+	} = 100_000_000;
 
 	/// <summary>
 	/// Gets or sets the memory stream used for serialization

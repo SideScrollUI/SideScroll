@@ -76,7 +76,7 @@ public class HttpCache : IDisposable
 	private readonly Stream _indexStream;
 	private readonly Stream _dataStream;
 
-	private readonly object _entryLock = new();
+	private readonly Lock _entryLock = new();
 	private readonly bool _writeable;
 	private bool _disposed;
 

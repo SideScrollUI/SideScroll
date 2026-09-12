@@ -23,10 +23,9 @@ public class ScreenCapture : Grid, IDisposable
 {
 	public static int MinClipboardSize
 	{
-		get => _minClipboardSize;
-		set => _minClipboardSize = Math.Max(1, value);
-	}
-	private static int _minClipboardSize = 10;
+		get;
+		set => field = Math.Max(1, value);
+	} = 10;
 
 	private static RenderTargetBitmap? _clipboardBitmap;
 
@@ -324,10 +323,8 @@ public class ScreenCapture : Grid, IDisposable
 			_contentGrid.PointerMoved -= ScreenCapture_PointerMoved;
 		}
 
-		if (_backgroundImage != null)
-			_backgroundImage.Source = null;
-		if (_selectionImage != null)
-			_selectionImage.Source = null;
+		_backgroundImage?.Source = null;
+		_selectionImage?.Source = null;
 
 		_selectionBitmap?.Dispose();
 		_selectionBitmap = null;

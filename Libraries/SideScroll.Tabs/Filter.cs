@@ -485,12 +485,11 @@ public class Filter
 	/// </summary>
 	public static int MaxSearchTextValues
 	{
-		get => _maxSearchTextValues;
+		get;
 		// A cap below one collects nothing, not even the row's own label, so every search would
 		// report no matches at all
-		set => _maxSearchTextValues = Math.Max(1, value);
-	}
-	private static int _maxSearchTextValues = 1_000;
+		set => field = Math.Max(1, value);
+	} = 1_000;
 
 	private static void GetItemSearchText(object obj, IReadOnlyList<PropertyInfo> columnProperties, List<string> uppercaseValues, int depth = MaxSearchTextDepth)
 	{

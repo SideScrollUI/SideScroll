@@ -38,14 +38,13 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 	/// <summary>Gets the polygon shape used as the color swatch checkbox for this legend item.</summary>
 	protected Polygon? Polygon;
 
-	private int _index;
 	/// <summary>Gets or sets the 1-based display rank shown as a prefix in the legend label when ordering is enabled.</summary>
 	public int Index
 	{
-		get => _index;
+		get;
 		set
 		{
-			_index = value;
+			field = value;
 			UpdateTitleText();
 		}
 	}
@@ -54,18 +53,17 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 	/// <summary>Gets or sets the aggregate total value for this series.</summary>
 	public double? Total { get; set; }
 
-	private bool _isSelected = true;
 	/// <summary>Gets or sets whether this series is selected (visible). Updates the color swatch fill accordingly.</summary>
 	public bool IsSelected
 	{
-		get => _isSelected;
+		get;
 		set
 		{
 			ChartSeries.IsSelected = value;
-			_isSelected = value;
+			field = value;
 			SetFilled(value);
 		}
-	}
+	} = true;
 
 	private readonly SolidColorBrush _colorBrush;
 
@@ -102,10 +100,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 
 	private void SetFilled(bool filled)
 	{
-		if (Polygon != null)
-		{
-			Polygon.Fill = filled && Count > 0 ? _colorBrush : Brushes.Transparent;
-		}
+		Polygon?.Fill = filled && Count > 0 ? _colorBrush : Brushes.Transparent;
 	}
 
 	/// <summary>Refreshes the point count, total value, and swatch fill from the underlying series data.</summary>
@@ -117,10 +112,7 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 			IsSelected = true; // Now has points
 		}
 		Count = ChartSeries.ListSeries.List.Count;
-		if (TextBlockTotal != null)
-		{
-			TextBlockTotal.Text = Total?.FormattedShortDecimal();
-		}
+		TextBlockTotal?.Text = Total?.FormattedShortDecimal();
 		UpdateCheckBox();
 	}
 
@@ -214,44 +206,36 @@ public abstract class TabChartLegendItem<TSeries> : Grid
 		Children.Add(TextBlockTotal);
 	}
 
-	private bool _highlight;
-
 	/// <summary>Gets or sets whether this legend item is highlighted (hovered). When highlighted, the series color is shown at full intensity and others are faded.</summary>
 	public bool Highlight
 	{
-		get => _highlight;
+		get;
 		set
 		{
-			if (value == _highlight)
+			if (value == field)
 				return;
 
-			_highlight = value;
-			if (_highlight)
+			field = value;
+			if (field)
 			{
 				Polygon!.Points = PolygonPointsLarge;
 				SetFilled(true);
-				_highlight = true;
+				field = true;
 				TextBlock!.Foreground = SideScrollTheme.ChartLabelForegroundHighlight;
-				if (TextBlockTotal != null)
-				{
-					TextBlockTotal.Foreground = SideScrollTheme.ChartLabelForegroundHighlight;
-				}
+				TextBlockTotal?.Foreground = SideScrollTheme.ChartLabelForegroundHighlight;
 			}
 			else
 			{
 				Polygon!.Points = PolygonPointsSmall;
-				_highlight = false;
+				field = false;
 				SetFilled(IsSelected);
 				TextBlock!.Foreground = SideScrollTheme.ChartLabelForeground;
-				if (TextBlockTotal != null)
-				{
-					TextBlockTotal.Foreground = SideScrollTheme.ChartLabelForeground;
-				}
+				TextBlockTotal?.Foreground = SideScrollTheme.ChartLabelForeground;
 			}
 
 			UpdateVisible();
 
-			Legend.UpdateHighlight(_highlight);
+			Legend.UpdateHighlight(field);
 		}
 	}
 

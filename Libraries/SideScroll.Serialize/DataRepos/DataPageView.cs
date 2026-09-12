@@ -55,14 +55,13 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 	/// </summary>
 	public static int DefaultPageSize
 	{
-		get => _defaultPageSize;
+		get;
 		set
 		{
 			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value, nameof(DefaultPageSize));
-			_defaultPageSize = value;
+			field = value;
 		}
-	}
-	private static int _defaultPageSize = 100;
+	} = 100;
 
 	/// <summary>
 	/// Gets the associated data repository instance
@@ -81,29 +80,28 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 	/// </remarks>
 	public bool Ascending
 	{
-		get => _ascending;
+		get;
 		set
 		{
-			if (_ascending == value) return;
+			if (field == value) return;
 
-			_ascending = value;
+			field = value;
 			Refresh();
 		}
-	}
-	private bool _ascending = ascending;
+	} = ascending;
 
 	/// <summary>
 	/// Gets or sets the number of items per page
 	/// </summary>
 	public int PageSize
 	{
-		get => _pageSize;
+		get;
 		set
 		{
 			ValidatePageSize(value, nameof(PageSize));
-			if (_pageSize == value) return;
+			if (field == value) return;
 
-			_pageSize = value;
+			field = value;
 			NotifyPropertyChanged();
 			NotifyPropertyChanged(nameof(PageCount));
 
@@ -120,8 +118,7 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 			}
 			NotifyPropertyChanged(nameof(HasNext));
 		}
-	}
-	private int _pageSize = ValidatePageSize(pageSize ?? DefaultPageSize, nameof(pageSize));
+	} = ValidatePageSize(pageSize ?? DefaultPageSize, nameof(pageSize));
 
 	/// <summary>
 	/// Gets the total number of items, loading them if they haven't been already
