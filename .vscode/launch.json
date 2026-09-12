@@ -7,7 +7,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build SideScroll",
-            "program": "${workspaceFolder}/Programs/SideScroll.Demo.Avalonia.Desktop/bin/Debug/net8.0/SideScroll.Demo.Avalonia.Desktop.dll",
+            "program": "${workspaceFolder}/Programs/SideScroll.Demo.Avalonia.Desktop/bin/Debug/net10.0/SideScroll.Demo.Avalonia.Desktop.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Programs/SideScroll.Demo.Avalonia.Desktop",
             "stopAtEntry": false,

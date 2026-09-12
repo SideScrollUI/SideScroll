@@ -1,8 +1,8 @@
 # Development
 
-## Install .NET 8 SDK
+## Install .NET 10 SDK
 
-- [Download .NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+- [Download .NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
 
 ## Git Clone
 

@@ -2,7 +2,7 @@
 
 ## Libraries
 
-- All libraries use .NET 8.0
+- All libraries use .NET 10.0
 
 ### Core Libraries
 

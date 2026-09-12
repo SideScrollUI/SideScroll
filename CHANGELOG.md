@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 ### Changed
+- Updated every project from .NET 8 to .NET 10, including the `net10.0-browser` WebAssembly targets, so the packages now require a .NET 10 runtime. `Microsoft.Extensions.Caching.Memory` and `Microsoft.JSInterop` moved to 10.0.11, and the explicit `System.Text.Json` reference was dropped because it ships in the .NET 10 shared framework. CI installs the `wasm-tools` workload rather than `wasm-tools-net8`. `SchemaObject`'s derived `Type` overrides carry a `[JsonIgnore]` of their own now — they inherited one from the abstract declaration under System.Text.Json 8, but 10 rejects a polymorphic type whose derived property collides with its own `Type` discriminator, which threw `InvalidOperationException` out of every schema export
 
 ## [0.25] - 2026-09-02
 

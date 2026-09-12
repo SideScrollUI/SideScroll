@@ -22,7 +22,7 @@ public class DataGridButtonColumnTests
 	{
 		public string Name { get; set; } = name;
 
-		public override string ToString() => name;
+		public override string ToString() => Name;
 	}
 
 	private readonly List<Item> _invoked = [];

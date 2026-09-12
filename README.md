@@ -71,7 +71,7 @@ The demos run entirely in WebAssembly using Avalonia's browser support—no inst
 
 ### Prerequisites
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or later
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) or later
 - Git
 - Your preferred IDE:
   - [Visual Studio 2026](https://visualstudio.microsoft.com/) (Windows)
@@ -209,7 +209,7 @@ We welcome contributions! Whether it's bug reports, feature requests, documentat
 ## 🔧 Technology Stack
 
 - **UI Framework:** [Avalonia UI 11.3+](https://avaloniaui.net/)
-- **Runtime:** .NET 8.0+
+- **Runtime:** .NET 10.0+
 - **Charting:** [LiveCharts 2](https://livecharts.dev/)
 - **Text Editing:** [AvaloniaEdit](https://github.com/AvaloniaUI/AvaloniaEdit)
 - **Testing:** [NUnit](https://nunit.org/)
