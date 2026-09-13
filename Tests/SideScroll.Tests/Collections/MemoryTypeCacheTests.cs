@@ -15,8 +15,9 @@ public class MemoryTypeCacheTests : BaseTest
 	[Test, Description("Cache duration should expire items after specified time")]
 	public async Task CacheDuration_ShouldExpireItems()
 	{
-		// Arrange: Create cache with 100ms expiration
-		var cache = new MemoryTypeCache<string>(maxItems: 100, cacheDuration: TimeSpan.FromMilliseconds(10));
+		// Long enough that a slow first call can't expire the value before it's read back. With a 10ms
+		// duration a loaded CI runner missed the window between Set() and TryGetValue()
+		var cache = new MemoryTypeCache<string>(maxItems: 100, cacheDuration: TimeSpan.FromMilliseconds(500));
 		string key = "test-key";
 		string value = "test-value";
 
@@ -28,11 +29,17 @@ public class MemoryTypeCacheTests : BaseTest
 		Assert.That(foundImmediately, Is.True, "Value should be found immediately after setting");
 		Assert.That(retrievedValue, Is.EqualTo(value));
 
-		// Wait for cache to expire (10ms + buffer)
-		await Task.Delay(20);
+		// Poll rather than sleeping a fixed amount, so the test ends as soon as the value expires
+		// instead of depending on how promptly a delay returns
+		DateTime deadline = DateTime.UtcNow.AddSeconds(10);
+		bool foundAfterExpiry;
+		string? expiredValue;
+		while ((foundAfterExpiry = cache.TryGetValue(key, out expiredValue)) && DateTime.UtcNow < deadline)
+		{
+			await Task.Delay(25);
+		}
 
 		// Assert: Value should be expired and not found
-		bool foundAfterExpiry = cache.TryGetValue(key, out string? expiredValue);
 		Assert.That(foundAfterExpiry, Is.False, "Value should not be found after cache duration expires");
 		Assert.That(expiredValue, Is.Null);
 	}
