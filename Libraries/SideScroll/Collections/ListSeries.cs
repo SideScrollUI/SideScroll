@@ -331,7 +331,8 @@ public class ListSeries
 	{
 		get
 		{
-			if (XPropertyInfo?.PropertyType != typeof(DateTime))
+			// The non-nullable type, so a DateTime? X axis is a time series like a DateTime one
+			if (XPropertyInfo?.PropertyType.GetNonNullableType() != typeof(DateTime))
 				return null;
 
 			List<TimeRangeValue> timeRangeValues = [];
@@ -343,7 +344,10 @@ public class ListSeries
 					continue;
 				}
 
-				DateTime timestamp = (DateTime)XPropertyInfo.GetValue(obj)!;
+				// Skipped like a null Y value below, there's no point on the axis to put it at
+				if (XPropertyInfo.GetValue(obj) is not DateTime timestamp)
+					continue;
+
 				double value = 1;
 				if (YPropertyInfo != null)
 				{
