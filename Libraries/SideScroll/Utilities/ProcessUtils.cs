@@ -123,22 +123,8 @@ public static class ProcessUtils
 
 			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
 			{
-				folder = folder.Replace('/', '\\');
-
-				string argument = '"' + folder + '"';
-				if (selection != null && !Path.IsPathRooted(selection))
-				{
-					// Ignore bad selections. Path.Combine() discards the folder when the selection is
-					// rooted, which would select a file somewhere else entirely
-					string fullPath = Path.Combine(folder, selection);
-					if (File.Exists(fullPath))
-					{
-						argument = "/select,\"" + fullPath + "\"";
-					}
-				}
-
 				// Only started, so release the handle the returned Process holds
-				Process.Start("explorer.exe", argument)?.Dispose();
+				Process.Start("explorer.exe", GetExplorerArgument(folder, selection))?.Dispose();
 			}
 			else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 			{
@@ -153,6 +139,38 @@ public static class ProcessUtils
 		{
 			Debug.WriteLine(e);
 		}
+	}
+
+	/// <summary>
+	/// Builds the argument explorer.exe is started with, quoted so a path with spaces stays one argument
+	/// </summary>
+	/// <remarks>
+	/// Windows argument parsing treats a backslash before a quote as an escape, so a folder ending
+	/// in a separator, <c>"C:\Users\Public\"</c>, reached explorer as <c>C:\Users\Public"</c> and it
+	/// opened its default folder instead. The separator is trimmed, and a root, which keeps its
+	/// separator, has it doubled so it survives the quote
+	/// </remarks>
+	internal static string GetExplorerArgument(string folder, string? selection)
+	{
+		folder = folder.Replace('/', '\\');
+
+		if (selection != null && !Path.IsPathRooted(selection))
+		{
+			// Ignore bad selections. Path.Combine() discards the folder when the selection is
+			// rooted, which would select a file somewhere else entirely
+			string fullPath = Path.Combine(folder, selection);
+			if (File.Exists(fullPath))
+			{
+				return "/select,\"" + fullPath + "\"";
+			}
+		}
+
+		folder = Path.TrimEndingDirectorySeparator(folder);
+		if (folder.EndsWith('\\'))
+		{
+			folder += '\\';
+		}
+		return '"' + folder + '"';
 	}
 
 	/// <summary>

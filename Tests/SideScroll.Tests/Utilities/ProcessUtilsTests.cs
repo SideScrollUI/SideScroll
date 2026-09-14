@@ -18,6 +18,33 @@ public class ProcessUtilsTests : BaseTest
 		Assert.DoesNotThrow(() => ProcessUtils.OpenFolder("C:\\this_folder_should_not_exist_xyz_123"));
 	}
 
+	[Test, Platform("Win"), Description(
+		"A backslash before the closing quote escapes it, so a folder ending in a separator reached " +
+		"explorer as C:\\Users\\Public\" and it opened its default folder instead")]
+	public void GetExplorerArgument_TrimsATrailingSeparator()
+	{
+		Assert.That(ProcessUtils.GetExplorerArgument(@"C:\Users\Public\", null), Is.EqualTo(@"""C:\Users\Public"""));
+		Assert.That(ProcessUtils.GetExplorerArgument(@"C:\Users\Public", null), Is.EqualTo(@"""C:\Users\Public"""));
+		Assert.That(ProcessUtils.GetExplorerArgument("C:/Users/Public/", null), Is.EqualTo(@"""C:\Users\Public"""));
+	}
+
+	[Test, Platform("Win"), Description("A root keeps its separator, so it's doubled to survive the quote")]
+	public void GetExplorerArgument_DoublesARootSeparator()
+	{
+		Assert.That(ProcessUtils.GetExplorerArgument(@"C:\", null), Is.EqualTo(@"""C:\\"""));
+	}
+
+	[Test, Platform("Win")]
+	public void GetExplorerArgument_SelectsAFileInAFolderWithATrailingSeparator()
+	{
+		string folder = Path.Combine(Environment.CurrentDirectory, "ExplorerArgument") + '\\';
+		Directory.CreateDirectory(folder);
+		string filePath = Path.Combine(folder, "file.txt");
+		File.WriteAllText(filePath, "");
+
+		Assert.That(ProcessUtils.GetExplorerArgument(folder, "file.txt"), Is.EqualTo("/select,\"" + filePath + '"'));
+	}
+
 	[Test]
 	public void GetDotnetRuntimes_RunsSuccessfully()
 	{
