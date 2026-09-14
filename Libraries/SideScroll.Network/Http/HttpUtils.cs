@@ -75,8 +75,8 @@ public static class HttpUtils
 		/// <summary>Gets or sets the total content length in bytes.</summary>
 		public long TotalLength { get; set; }
 
-		/// <summary>Gets the download completion percentage (0–100).</summary>
-		public double Percent => 100.0 * Downloaded / TotalLength;
+		/// <summary>Gets the download completion percentage (0–100). An empty body has nothing left to download, so it reports complete rather than NaN.</summary>
+		public double Percent => TotalLength == 0 ? 100 : 100.0 * Downloaded / TotalLength;
 	}
 
 	/// <summary>Synchronously fetches <paramref name="uri"/> and returns the decoded response body, or <c>null</c> on failure.</summary>

@@ -52,4 +52,20 @@ public class HttpUtilsTests : BaseTest
 			Assert.Throws<ArgumentOutOfRangeException>(() => HttpCall.SleepMilliseconds = -1);
 		});
 	}
+
+	[Test, Description("A Content-Length of 0 divided to NaN, so a progress bar bound to it showed nothing rather than complete")]
+	public void ProgressPercentOfAnEmptyBodyIsComplete()
+	{
+		var progress = new HttpUtils.HttpGetProgress { Downloaded = 0, TotalLength = 0 };
+
+		Assert.That(progress.Percent, Is.EqualTo(100));
+	}
+
+	[Test]
+	public void ProgressPercentIsTheDownloadedFraction()
+	{
+		var progress = new HttpUtils.HttpGetProgress { Downloaded = 25, TotalLength = 200 };
+
+		Assert.That(progress.Percent, Is.EqualTo(12.5));
+	}
 }
