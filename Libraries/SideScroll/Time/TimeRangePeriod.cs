@@ -92,9 +92,11 @@ public class TimeRangePeriod : ITags
 			Dictionary<string, List<object?>> valuesByName = [];
 			foreach (Tag tag in AllTags)
 			{
-				if (lookup.TryGetValue(tag.Name!, out Tag? tagBin))
+				// Tag.Name is settable and new Tag() leaves it null, which a Dictionary rejects as a key
+				string name = tag.Name ?? "";
+				if (lookup.TryGetValue(name, out Tag? tagBin))
 				{
-					List<object?> values = valuesByName[tag.Name!];
+					List<object?> values = valuesByName[name];
 					if (!values.Any(value => Equals(value, tag.Value)))
 					{
 						values.Add(tag.Value);
@@ -104,8 +106,8 @@ public class TimeRangePeriod : ITags
 				}
 				else
 				{
-					lookup.Add(tag.Name!, new Tag(tag));
-					valuesByName[tag.Name!] = [tag.Value];
+					lookup.Add(name, new Tag(tag));
+					valuesByName[name] = [tag.Value];
 				}
 			}
 			return lookup.Values.ToList();

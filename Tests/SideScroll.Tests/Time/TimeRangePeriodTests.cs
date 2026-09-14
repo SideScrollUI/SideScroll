@@ -307,6 +307,24 @@ public class TimeRangePeriodTests : BaseTest
 		Assert.That(period.Tags[0].Value, Is.EqualTo("1, 2"));
 	}
 
+	[Test, Description("Tag.Name is settable and new Tag() leaves it null, which the aggregation used as a dictionary key")]
+	public void TagsAcceptAnUnnamedTag()
+	{
+		TimeRangePeriod period = new()
+		{
+			AllTags =
+			[
+				new Tag { Value = 1 },
+				new Tag("Status", 2),
+			],
+		};
+
+		List<Tag> tags = null!;
+		Assert.DoesNotThrow(() => tags = period.Tags);
+		Assert.That(tags, Has.Count.EqualTo(2));
+		Assert.That(tags.Single(tag => tag.Name == null).Value, Is.EqualTo(1));
+	}
+
 	[Test]
 	public void PeriodSumsDifferentlyAlignedTimeWindows()
 	{
