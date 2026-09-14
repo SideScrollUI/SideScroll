@@ -224,8 +224,14 @@ public class DataPageView<T>(DataRepoInstance<T> dataRepoInstance, bool ascendin
 	/// <summary>
 	/// Gets or sets the synchronization context for property change notifications
 	/// </summary>
+	/// <remarks>
+	/// Not falling back to a new SynchronizationContext when there's none to capture. Posting to a
+	/// bare one queues to the thread pool, and page views are created from tab loads, which run
+	/// off the UI thread, so every later change was raised there. A null context raises them on
+	/// the calling thread
+	/// </remarks>
 	[Hidden]
-	public SynchronizationContext? Context { get; set; } = SynchronizationContext.Current ?? new();
+	public SynchronizationContext? Context { get; set; } = SynchronizationContext.Current;
 
 	/// <summary>
 	/// Gets the enumerable collection of file paths

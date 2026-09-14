@@ -392,9 +392,9 @@ public class TaskInstance : INotifyPropertyChanged, IDisposable
 
 		_stopwatch.Stop(); // Both Send and Post adds some delay
 
-		if (Creator != null)
+		if (Creator?.Context is { } context)
 		{
-			Creator.Context!.Post(OnFinished, null);
+			context.Post(OnFinished, null);
 		}
 		else
 		{

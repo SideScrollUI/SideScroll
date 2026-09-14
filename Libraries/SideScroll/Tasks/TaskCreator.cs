@@ -137,7 +137,10 @@ public abstract class TaskCreator : INotifyPropertyChanged
 	/// </summary>
 	public TaskInstance Create(Call call)
 	{
-		Context ??= SynchronizationContext.Current ?? new();
+		// Not falling back to a new SynchronizationContext when there's none to capture. Posting to
+		// a bare one queues to the thread pool, so a task created off the UI thread raised every
+		// change there. A null context leaves them on the calling thread
+		Context ??= SynchronizationContext.Current;
 		call.Log.Settings!.Context = Context;
 
 		TaskInstance taskInstance = new()

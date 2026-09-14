@@ -44,6 +44,31 @@ public class DataRepoTests : SerializeBaseTest
 		Assert.That(items.SortedValues, Is.EqualTo(new[] { 1, 2 }));
 	}
 
+	[Test, Description(
+		"With no context to capture, the page view fell back to a bare SynchronizationContext, whose " +
+		"Post() queues to the thread pool, so every change was raised there rather than on the caller")]
+	public void DataPageViewWithoutAnAmbientContextRaisesChangesInPlace()
+	{
+		SynchronizationContext? original = SynchronizationContext.Current;
+		SynchronizationContext.SetSynchronizationContext(null);
+		try
+		{
+			DataPageView<int> pageView = OpenRepo().LoadPageView(Call);
+
+			Assert.That(pageView.Context, Is.Null);
+
+			int? raisedOnThread = null;
+			pageView.PropertyChanged += (_, _) => raisedOnThread = Environment.CurrentManagedThreadId;
+			pageView.PageIndex = 0;
+
+			Assert.That(raisedOnThread, Is.EqualTo(Environment.CurrentManagedThreadId));
+		}
+		finally
+		{
+			SynchronizationContext.SetSynchronizationContext(original);
+		}
+	}
+
 	[Test, Description("The list gained the duplicate before the lookup threw, so the two disagreed until the collection was cleared")]
 	public void DataItemCollectionRejectsADuplicateKeyWithoutAddingIt()
 	{
