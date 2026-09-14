@@ -479,6 +479,15 @@ public abstract class TypeRepo : IDisposable
 			else if (objectType == ObjectType.DerivedType)
 			{
 				int typeIndex = Reader.ReadInt16(); // not saved for sealed classes
+
+				// The same range check LoadObjectRef() applies, the index is read from the data.
+				// The object index is still consumed so the stream stays aligned
+				if (typeIndex < 0 || typeIndex >= Serializer.TypeRepos.Count)
+				{
+					Reader.ReadInt32();
+					return null;
+				}
+
 				typeRef.TypeRepo = Serializer.TypeRepos[typeIndex];
 				/*if (typeRef.typeRepo.typeSchema.type.IsPrimitive)
 				{
@@ -686,14 +695,21 @@ public abstract class TypeRepo : IDisposable
 	/// <summary>
 	/// Loads an object and all its dependencies immediately
 	/// </summary>
+	/// <remarks>
+	/// Goes through <see cref="LoadObject(int)"/> for its checks. This is what a lazy property
+	/// getter calls, and it indexed the array itself, so an index a truncated or edited file put
+	/// out of range threw from inside the getter where the eager load returns null
+	/// </remarks>
 	public object? LoadFullObject(int objectIndex)
 	{
-		if (ObjectsLoaded[objectIndex] is { } existingObject)
-			return existingObject;
+		bool alreadyLoaded = objectIndex >= 0 && objectIndex < ObjectsLoaded.Length && ObjectsLoaded[objectIndex] != null;
 
-		object? obj = CreateObject(objectIndex);
+		object? obj = LoadObject(objectIndex);
 
-		Serializer.ProcessLoadQueue();
+		if (obj != null && !alreadyLoaded)
+		{
+			Serializer.ProcessLoadQueue();
+		}
 
 		return obj;
 	}

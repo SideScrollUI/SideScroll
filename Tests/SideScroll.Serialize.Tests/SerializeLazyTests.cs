@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using SideScroll.Serialize.Atlas;
+using SideScroll.Serialize.Atlas.TypeRepos;
 using System.Reflection;
 
 namespace SideScroll.Serialize.Tests;
@@ -37,6 +38,50 @@ public class SerializeLazyTests : SerializeBaseTest
 		Parent output = _serializerFile.Load<Parent>(Call, true)!;
 
 		Assert.That(output.Child!.UintTest, Is.EqualTo(input.Child!.UintTest));
+	}
+
+	public class GenericParent<T>
+	{
+		public virtual Child? Child { get; set; }
+		public T? Value { get; set; }
+	}
+
+	[Test, Description(
+		"The dynamic assembly name was built from the type's FullName, which for a generic type " +
+		"carries its arguments in brackets that AssemblyName parses as attributes and rejects")]
+	public void SerializeLazyGenericType()
+	{
+		var input = new GenericParent<int>
+		{
+			Child = new Child { UintTest = 3 },
+			Value = 7,
+		};
+
+		_serializerFile!.Save(Call, input);
+		GenericParent<int>? output = _serializerFile.Load<GenericParent<int>>(Call, true);
+
+		Assert.That(output, Is.Not.Null);
+		Assert.That(output!.Value, Is.EqualTo(7));
+		Assert.That(output.Child!.UintTest, Is.EqualTo(3));
+	}
+
+	[Test, Description(
+		"LoadFullObject(), which a lazy property getter calls, indexed the loaded objects itself, so " +
+		"an index a damaged file put out of range threw from the getter where the eager path returns null")]
+	public void LazyReferenceWithAnInvalidIndexLoadsAsNull()
+	{
+		var memory = new SerializerMemoryAtlas();
+		memory.Save(Call, new Parent { Child = new Child() });
+		memory.Stream.Seek(0, SeekOrigin.Begin);
+
+		var serializer = new Serializer();
+		using var reader = new BinaryReader(memory.Stream, System.Text.Encoding.Default, true);
+		serializer.Load(Call, reader);
+		TypeRepo repo = serializer.TypeRepos.First(r => r.Type == typeof(Child));
+
+		Assert.That(new Atlas.TypeRef { TypeRepo = repo, Index = 999 }.Load(), Is.Null);
+		Assert.That(repo.LoadFullObject(-1), Is.Null);
+		Assert.That(repo.LoadFullObject(0), Is.Not.Null, "a valid index still loads");
 	}
 
 	[Test, Description("Serialize Lazy Null Properties")]
