@@ -34,7 +34,9 @@ public class DateTimeValueConverter : IValueConverter
 					return PreviousTimeText;
 				}
 			}
-			return PreviousDateTime?.ToString("H:mm:ss") ?? "";
+			// Invariant, so the separator is the colon TryParseTimeSpan() requires. The colon in a
+			// custom format is the culture's time separator, which is a period under fi-FI and others
+			return PreviousDateTime?.ToString("H:mm:ss", CultureInfo.InvariantCulture) ?? "";
 		}
 		else if (targetType == typeof(DateTime) || targetType == typeof(DateTime?))
 		{

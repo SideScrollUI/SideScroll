@@ -95,6 +95,29 @@ public class DateTimeValueConverterTests
 		Assert.That(((DateTime)result!).TimeOfDay, Is.EqualTo(new TimeSpan(14, 45, 0)));
 	}
 
+	[Test, Description(
+		"The time was formatted with the current culture's separator, a period under fi-FI, while " +
+		"ConvertBack() parses only a colon, so the picker rejected the text it had itself filled in")]
+	public void TheTimeTextUsesAColonUnderEveryCulture()
+	{
+		CultureInfo original = CultureInfo.CurrentCulture;
+		CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("fi-FI");
+		try
+		{
+			var converter = new DateTimeValueConverter();
+
+			object? text = converter.Convert(BoundDateTime, typeof(string), null, CultureInfo.CurrentCulture);
+			Assert.That(text, Is.EqualTo("8:30:00"));
+
+			object? result = converter.ConvertBack(text, typeof(DateTime), null, CultureInfo.CurrentCulture);
+			Assert.That(result, Is.EqualTo(BoundDateTime), "its own text parses back");
+		}
+		finally
+		{
+			CultureInfo.CurrentCulture = original;
+		}
+	}
+
 	[Test, Description("The date branch of the import still round trips its text")]
 	public void ConvertingADateTimeReturnsItsTimeText()
 	{
