@@ -33,6 +33,12 @@ public class FileUtilsTests : BaseTest
 		Assert.That(FileUtils.IsFileOpen("not_a_file"), Is.False);
 	}
 
+	[Test, Description("Opening a directory as a file throws UnauthorizedAccessException, which escaped a method that answers with a bool")]
+	public void IsFileOpenDirectory()
+	{
+		Assert.That(FileUtils.IsFileOpen(Environment.CurrentDirectory), Is.False);
+	}
+
 	[Test]
 	public void IsTextFile_ExtensionCheckIsCaseInsensitive()
 	{

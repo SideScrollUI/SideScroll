@@ -211,6 +211,12 @@ public static class FileUtils
 		{
 			return true;
 		}
+		catch (UnauthorizedAccessException)
+		{
+			// A directory, or a file the process can't read. Neither is a file another process
+			// holds open, and a method answering with a bool shouldn't throw for a path it's asked about
+			return false;
+		}
 	}
 
 	/// <summary>
