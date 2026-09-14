@@ -89,8 +89,15 @@ public class DataItemCollection<T> : ItemCollection<DataItem<T>>
 	/// <summary>
 	/// Adds a data item to the collection
 	/// </summary>
+	/// <exception cref="ArgumentException">An item with the same key is already in the collection</exception>
 	public new void Add(DataItem<T> dataItem)
 	{
+		// Checked before touching either, the list used to gain the item before the lookup threw
+		if (Lookup.ContainsKey(dataItem.Key))
+		{
+			throw new ArgumentException($"An item with the key '{dataItem.Key}' has already been added", nameof(dataItem));
+		}
+
 		base.Add(dataItem);
 		Lookup.Add(dataItem.Key, dataItem);
 	}

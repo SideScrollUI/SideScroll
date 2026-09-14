@@ -44,6 +44,19 @@ public class DataRepoTests : SerializeBaseTest
 		Assert.That(items.SortedValues, Is.EqualTo(new[] { 1, 2 }));
 	}
 
+	[Test, Description("The list gained the duplicate before the lookup threw, so the two disagreed until the collection was cleared")]
+	public void DataItemCollectionRejectsADuplicateKeyWithoutAddingIt()
+	{
+		var items = new DataItemCollection<int> { { "a", 1 } };
+
+		ArgumentException exception = Assert.Throws<ArgumentException>(() => items.Add("a", 2))!;
+
+		Assert.That(exception.Message, Does.Contain("'a'"));
+		Assert.That(items, Has.Count.EqualTo(1));
+		Assert.That(items.Lookup, Has.Count.EqualTo(1));
+		Assert.That(items.Values, Is.EqualTo(new[] { 1 }));
+	}
+
 	private class OrderByItem
 	{
 		public int Value { get; set; }
