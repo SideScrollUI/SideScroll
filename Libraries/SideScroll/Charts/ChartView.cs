@@ -243,7 +243,11 @@ public class ChartView
 
 		if (!_dimensions.TryGetValue(name, out IList? dimensionList))
 		{
-			dimensionList = (IList)Activator.CreateInstance(SourceList!.GetType())!;
+			// A List of the element type rather than an instance of the source's own type: an array
+			// has no parameterless constructor, and a collection seeded by its constructor would
+			// start every dimension with those items
+			Type elementType = SourceList!.GetType().GetElementTypeForAll() ?? typeof(object);
+			dimensionList = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(elementType))!;
 			_dimensions.Add(name, dimensionList);
 
 			var listSeries = new ListSeries(name, dimensionList, _xPropertyName, _yPropertyName)
