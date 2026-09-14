@@ -195,7 +195,11 @@ public class LazyClass
 	private TypeBuilder GetTypeBuilder()
 	{
 		string typeSignature = "Lazy." + OriginalType.FullName;
-		AssemblyName assemblyName = new(typeSignature);
+
+		// Assigned rather than parsed. A generic type's FullName carries its arguments as
+		// [[System.Int32, System.Private.CoreLib, Version=...]], which the string constructor reads
+		// as assembly-name attributes and rejects
+		AssemblyName assemblyName = new() { Name = typeSignature };
 		AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
 		ModuleBuilder moduleBuilder = assemblyBuilder.DefineDynamicModule("Lazy");
 		TypeBuilder typeBuilder = moduleBuilder.DefineType(typeSignature,
