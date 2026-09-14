@@ -146,12 +146,14 @@ public class CompressionUtils
 		long totalSize = 0;
 		foreach (ZipArchiveEntry entry in archive.Entries)
 		{
-			totalSize += entry.Length;
-			if (totalSize > MaxExtractedSize)
+			// Compared before adding. A ZIP64 directory declares each length as a 64-bit value, so
+			// two entries claiming near long.MaxValue summed to a negative that passed the check
+			if (entry.Length < 0 || entry.Length > MaxExtractedSize - totalSize)
 			{
 				throw new InvalidDataException(
 					$"Archive expands past the {MaxExtractedSize} bytes allowed: {fileToDecompress.Name}");
 			}
+			totalSize += entry.Length;
 		}
 	}
 
