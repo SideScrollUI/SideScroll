@@ -160,6 +160,50 @@ public class TaskInstanceTests : BaseTest
 		AssertTaskFailed(task, "Expected");
 	}
 
+	[Test, Description(
+		"The delegate constructors derived the label from Method.Name, which for a lambda or a local " +
+		"function is the compiler's mangled name, and that is what the toolbar showed")]
+	public void DelegateLabelsComeFromTheSourceName()
+	{
+		static async Task LoadAllAsync(Call call) => await Task.CompletedTask;
+
+		var lambda = new TaskDelegate(call => { });
+		var asyncLambda = new TaskDelegateAsync(async call => await Task.CompletedTask);
+		var localFunction = new TaskDelegateAsync(LoadAllAsync);
+		var methodGroup = new TaskDelegate(OrdinaryMethod);
+
+		Assert.That(lambda.Label, Is.EqualTo(nameof(DelegateLabelsComeFromTheSourceName)), "a lambda is labelled by its enclosing method");
+		Assert.That(asyncLambda.Label, Is.EqualTo("Delegate Labels Come From The Source Name"));
+		Assert.That(localFunction.Label, Is.EqualTo("Load All"));
+		Assert.That(methodGroup.Label, Is.EqualTo(nameof(OrdinaryMethod)));
+	}
+
+	private static void OrdinaryMethod(Call call) { }
+
+	[Test, Description(
+		"With no context to capture, Create() fell back to a bare SynchronizationContext, whose Post() " +
+		"queues to the thread pool, so a task created off the UI thread raised every change there")]
+	public void TaskCreatorWithoutAnAmbientContextFinishesInPlace()
+	{
+		SynchronizationContext? original = SynchronizationContext.Current;
+		SynchronizationContext.SetSynchronizationContext(null);
+		try
+		{
+			var creator = new TestTaskCreator();
+			var call = new Call();
+
+			TaskInstance task = creator.Create(call);
+			Assert.That(creator.Context, Is.Null);
+
+			task.SetFinished();
+			Assert.That(task.Finished, Is.True, "OnFinished() ran on the calling thread rather than being posted");
+		}
+		finally
+		{
+			SynchronizationContext.SetSynchronizationContext(original);
+		}
+	}
+
 	[Test]
 	public void TaskCreatorRun_SynchronousActionCompletesWithoutTask()
 	{

@@ -38,7 +38,7 @@ public class TaskDelegateAsync : TaskCreator
 	/// </summary>
 	public TaskDelegateAsync(CallActionAsync callAction, bool useBackgroundThread = false, bool showTask = false, string? description = null)
 	{
-		Label = callAction.Method.Name.TrimEnd("Async").WordSpaced();
+		Label = callAction.Method.GetSourceName().TrimEnd("Async").WordSpaced();
 		CallAction = callAction;
 		UseTask = true;
 		UseBackgroundThread = useBackgroundThread;

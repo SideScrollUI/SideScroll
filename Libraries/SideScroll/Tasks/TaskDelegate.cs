@@ -1,3 +1,5 @@
+using SideScroll.Extensions;
+
 namespace SideScroll.Tasks;
 
 /// <summary>
@@ -36,7 +38,7 @@ public class TaskDelegate : TaskCreator
 	/// </summary>
 	public TaskDelegate(CallAction callAction, bool useTask = false, bool showTask = false, string? description = null)
 	{
-		Label = callAction.Method.Name;
+		Label = callAction.Method.GetSourceName();
 		Action = callAction;
 		UseTask = useTask;
 		UseBackgroundThread = useTask;

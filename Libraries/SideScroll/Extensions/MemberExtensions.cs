@@ -9,6 +9,34 @@ namespace SideScroll.Extensions;
 public static class MemberExtensions
 {
 	/// <summary>
+	/// Returns the name a method has in source: the declared name for an ordinary method, the local function's own name for a compiler-generated local function, and the enclosing method's name for a lambda
+	/// </summary>
+	/// <remarks>
+	/// The compiler names a lambda <c>&lt;Outer&gt;b__0_1</c> and a local function <c>&lt;Outer&gt;g__Name|0_1</c>,
+	/// which is what a task built from either showed as its label
+	/// </remarks>
+	public static string GetSourceName(this MethodInfo methodInfo)
+	{
+		string name = methodInfo.Name;
+		if (!name.StartsWith('<'))
+			return name;
+
+		// A local function's name sits between g__ and |
+		int localStart = name.IndexOf(">g__", StringComparison.Ordinal);
+		if (localStart >= 0)
+		{
+			localStart += 4;
+			int localEnd = name.IndexOf('|', localStart);
+			return localEnd > localStart ? name[localStart..localEnd] : name[localStart..];
+		}
+
+		// A lambda carries only the enclosing method, which top-level statements nest as <<Main>$>
+		int outerStart = name.LastIndexOf('<') + 1;
+		int outerEnd = name.IndexOf('>', outerStart);
+		return outerEnd > outerStart ? name[outerStart..outerEnd] : name;
+	}
+
+	/// <summary>
 	/// Determines whether a field should be visible as a row in data displays (excludes constants, debug-only fields, and [Hidden]/[HiddenRow] fields)
 	/// </summary>
 	public static bool IsRowVisible(this FieldInfo fieldInfo)

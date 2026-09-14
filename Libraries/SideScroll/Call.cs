@@ -471,7 +471,7 @@ public class Call
 		int? maxRequestsPerSecond = null)
 	{
 		return await RunAsync(
-			func.Method.Name.TrimEnd("Async").WordSpaced(),
+			func.Method.GetSourceName().TrimEnd("Async").WordSpaced(),
 			func,
 			items,
 			maxConcurrentRequests,
@@ -489,7 +489,7 @@ public class Call
 		int? maxRequestsPerSecond = null)
 	{
 		return await RunAsync(
-			func.Method.Name.TrimEnd("Async").WordSpaced(),
+			func.Method.GetSourceName().TrimEnd("Async").WordSpaced(),
 			func,
 			items,
 			param1,
@@ -509,7 +509,7 @@ public class Call
 		int? maxRequestsPerSecond = null)
 	{
 		return await RunAsync(
-			func.Method.Name.TrimEnd("Async").WordSpaced(),
+			func.Method.GetSourceName().TrimEnd("Async").WordSpaced(),
 			func,
 			items,
 			param1,
