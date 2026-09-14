@@ -146,6 +146,11 @@ public class SerializerKeyValueStore : SerializerFile
 	}
 
 	/// <inheritdoc/>
+	/// <remarks>
+	/// A header that can't be read is logged and treated as absent, the way LoadInternal() treats
+	/// unreadable data. The group listings call this for every item in a LINQ Select, so one
+	/// damaged entry used to fail the listing of all of them
+	/// </remarks>
 	public override SerializerHeader LoadHeader(Call call)
 	{
 		string? json = Store.Get(StorageKeys.HeaderKey(BasePath));
@@ -154,12 +159,20 @@ public class SerializerKeyValueStore : SerializerFile
 			return new SerializerHeader { Name = Name };
 		}
 
-		StorageHeader? header = JsonSerializer.Deserialize<StorageHeader>(json);
-		return new SerializerHeader
+		try
 		{
-			Version = header?.Version is { } version ? checked((ushort)version) : null,
-			Name = header?.Name,
-		};
+			StorageHeader? header = JsonSerializer.Deserialize<StorageHeader>(json);
+			return new SerializerHeader
+			{
+				Version = header?.Version is { } version ? checked((ushort)version) : null,
+				Name = header?.Name,
+			};
+		}
+		catch (Exception e)
+		{
+			call.Log.Add(e, new Tag("Key", StorageKeys.HeaderKey(BasePath)));
+			return new SerializerHeader { Name = Name };
+		}
 	}
 
 	/// <summary>Returns whether data is stored for a logical path</summary>

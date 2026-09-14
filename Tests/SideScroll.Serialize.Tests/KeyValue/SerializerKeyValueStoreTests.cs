@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SideScroll.Logs;
 using SideScroll.Serialize.Atlas;
 using SideScroll.Serialize.KeyValue;
 using SideScroll.Tasks;
@@ -177,5 +178,20 @@ public class SerializerKeyValueStoreTests : SerializeBaseTest
 
 		Assert.That(keys, Has.Count.EqualTo(2));
 		Assert.That(keys.All(key => key.StartsWith(StorageKeys.DataPrefix, StringComparison.Ordinal)), Is.True);
+	}
+
+	[TestCase("{ invalid json", Description = "Not JSON")]
+	[TestCase("""{"Version": 70000, "Name": "saved name"}""", Description = "A version past what the header holds")]
+	public void AnUnreadableHeaderIsLoggedAndTreatedAsAbsent(string storedHeader)
+	{
+		SerializerKeyValueStore serializer = CreateSerializer();
+		_store.Poke(StorageKeys.HeaderKey("Project/Data"), storedHeader);
+		var call = new Call();
+
+		SerializerHeader header = serializer.LoadHeader(call);
+
+		Assert.That(header.Name, Is.EqualTo("name"), "the same fallback as no stored header");
+		Assert.That(header.Version, Is.Null);
+		Assert.That(call.Log.Items.Any(item => item.Level == LogLevel.Error), Is.True, "the failure is logged");
 	}
 }
