@@ -2,6 +2,7 @@ using SideScroll.Attributes;
 using SideScroll.Extensions;
 using SideScroll.Logs;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
@@ -55,6 +56,20 @@ public class TypeSchema
 		typeof(Dictionary<,>),
 		typeof(SortedDictionary<,>),
 		typeof(HashSet<>),
+		typeof(SortedSet<>),
+		typeof(Queue<>),
+		typeof(Stack<>),
+		typeof(LinkedList<>),
+		typeof(ReadOnlyCollection<>),
+		typeof(KeyValuePair<,>),
+		typeof(ValueTuple<>),
+		typeof(ValueTuple<,>),
+		typeof(ValueTuple<,,>),
+		typeof(ValueTuple<,,,>),
+		typeof(ValueTuple<,,,,>),
+		typeof(ValueTuple<,,,,,>),
+		typeof(ValueTuple<,,,,,,>),
+		typeof(ValueTuple<,,,,,,,>),
 	];
 
 	/// <summary>

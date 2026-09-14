@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Fixed
+- A public-only Atlas export, which is what every bookmark link is, now keeps `SortedSet<>`, `Queue<>`, `Stack<>`, `LinkedList<>`, `ReadOnlyCollection<>`, `KeyValuePair<,>`, and `ValueTuple` members. None of them were in `TypeSchema.PublicGenericTypes`, so a `[PublicData]` class holding one exported the member as null (or the default for the two structs) with only a log warning to say so, while a private round trip of the same object kept it. The element types are still checked on their own, so this doesn't widen what a link can carry
 
 ### Changed
 - Updated every project from .NET 8 to .NET 10, including the `net10.0-browser` WebAssembly targets, so the packages now require a .NET 10 runtime. `Microsoft.Extensions.Caching.Memory` and `Microsoft.JSInterop` moved to 10.0.11, and `SideScroll.Tabs` no longer references the `System.Text.Json` package, which .NET 10 ships in the shared framework. Building the browser projects from source needs the `wasm-tools` workload rather than `wasm-tools-net8`

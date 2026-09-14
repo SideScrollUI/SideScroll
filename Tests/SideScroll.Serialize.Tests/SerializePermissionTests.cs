@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using SideScroll.Attributes;
 using SideScroll.Serialize.Atlas;
+using System.Collections.ObjectModel;
 
 namespace SideScroll.Serialize.Tests;
 
@@ -302,5 +303,47 @@ public class SerializePermissionTests : SerializeBaseTest
 
 		Assert.That(output.PublicField, Is.EqualTo(input.PublicField));
 		Assert.That(output.NormalField, Is.Null);
+	}
+
+	[PublicData]
+	public class PublicCollectionsContainer
+	{
+		public SortedSet<string>? SortedSet { get; set; }
+		public Queue<string>? Queue { get; set; }
+		public Stack<string>? Stack { get; set; }
+		public LinkedList<string>? LinkedList { get; set; }
+		public ReadOnlyCollection<string>? ReadOnlyCollection { get; set; }
+		public KeyValuePair<string, int> KeyValuePair { get; set; }
+		public (string Name, int Count) Tuple { get; set; }
+	}
+
+	[Test, Description(
+		"The collections the serializer supports weren't all in PublicGenericTypes, so a public-only " +
+		"export wrote each missing one as null and reloaded the structs as their defaults")]
+	public void SerializePublicOnlyKeepsSupportedGenericTypes()
+	{
+		string[] values = ["alpha", "beta", "gamma"];
+		var input = new PublicCollectionsContainer
+		{
+			SortedSet = new SortedSet<string>(values),
+			Queue = new Queue<string>(values),
+			Stack = new Stack<string>(values),
+			LinkedList = new LinkedList<string>(values),
+			ReadOnlyCollection = new ReadOnlyCollection<string>(values),
+			KeyValuePair = new KeyValuePair<string, int>("key", 7),
+			Tuple = ("name", 3),
+		};
+
+		_serializer.PublicOnly = true;
+		_serializer.Save(Call, input);
+		var output = _serializer.Load<PublicCollectionsContainer>(Call);
+
+		Assert.That(output.SortedSet, Is.EqualTo(values));
+		Assert.That(output.Queue, Is.EqualTo(values));
+		Assert.That(output.Stack, Is.EqualTo(values.Reverse()));
+		Assert.That(output.LinkedList, Is.EqualTo(values));
+		Assert.That(output.ReadOnlyCollection, Is.EqualTo(values));
+		Assert.That(output.KeyValuePair, Is.EqualTo(input.KeyValuePair));
+		Assert.That(output.Tuple, Is.EqualTo(input.Tuple));
 	}
 }
