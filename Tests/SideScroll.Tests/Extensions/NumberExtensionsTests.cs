@@ -118,6 +118,16 @@ public class NumberExtensionsTests : BaseTest
 		Assert.That(0.000000987654m.RoundToSignificantFigures(2), Is.EqualTo(0.00000099m));
 	}
 
+	[Test, Description(
+		"The shift overflowed the 28 decimal places a decimal holds for a small enough value or a high " +
+		"enough precision, where the double overload returns the input")]
+	public void RoundToSignificantFigures_Decimal_ReturnsTheInputWhenItCantBeShifted()
+	{
+		Assert.That(0.0000000000000000000000000001m.RoundToSignificantFigures(3), Is.EqualTo(0.0000000000000000000000000001m));
+		Assert.That(0.0000000001m.RoundToSignificantFigures(20), Is.EqualTo(0.0000000001m));
+		Assert.That(decimal.MaxValue.RoundToSignificantFigures(1), Is.EqualTo(decimal.MaxValue), "rounding up would carry past the range");
+	}
+
 	[TestCase(0)]
 	[TestCase(-1)]
 	public void RoundToSignificantFigures_RejectsNonPositivePrecision(int significantFigures)

@@ -134,10 +134,18 @@ public static class NumberExtensions
 		int d = (int)Math.Floor(Math.Log10((double)Math.Abs(num)));
 		int power = significantFigures - d - 1;
 
-		decimal magnitude = (decimal)Math.Pow(10, power);
-		decimal shifted = Math.Round(num * magnitude, 0, MidpointRounding.AwayFromZero);
-		decimal ret = shifted / magnitude;
-
-		return ret;
+		try
+		{
+			decimal magnitude = (decimal)Math.Pow(10, power);
+			decimal shifted = Math.Round(num * magnitude, 0, MidpointRounding.AwayFromZero);
+			return shifted / magnitude;
+		}
+		catch (OverflowException)
+		{
+			// The shift needs more than the 28 decimal places a decimal holds, for a value small
+			// enough or a precision high enough, or rounding carried the result past the range.
+			// Already as precise as it can be, return it the way the double overload does
+			return num;
+		}
 	}
 }
