@@ -127,4 +127,48 @@ public class TimeZoneViewTests : BaseTest
 		Assert.That(alpha.CompareTo(zulu), Is.LessThan(0));
 		Assert.That(zulu.CompareTo(alpha), Is.GreaterThan(0));
 	}
+
+	private static TimeZoneView CreateOffsetView()
+	{
+		// An offset the local zone can't have, so a relabelled value would visibly move
+		TimeZoneInfo customZone = TimeZoneInfo.CreateCustomTimeZone(
+			"SideScroll-Offset-Zone",
+			TimeSpan.FromHours(7),
+			"SideScroll Offset Zone",
+			"SideScroll Offset Zone");
+		return new TimeZoneView("Offset", "Offset Zone", customZone);
+	}
+
+	[Test, Description(
+		"The named zone and Local branches relabelled a UTC value as wall-clock time in their zone " +
+		"and shifted it by the offset, so converting a value to a zone and back moved it")]
+	public void ConvertTimeToUtc_UtcInput_IsUnchangedForEveryZone()
+	{
+		DateTime utc = new(2026, 6, 15, 12, 0, 0, DateTimeKind.Utc);
+
+		foreach (TimeZoneView view in new[] { CreateOffsetView(), TimeZoneView.Local, TimeZoneView.Utc })
+		{
+			DateTime result = view.ConvertTimeToUtc(utc);
+
+			Assert.That(result, Is.EqualTo(utc), view.Name);
+			Assert.That(result.Kind, Is.EqualTo(DateTimeKind.Utc), view.Name);
+			Assert.That(view.ConvertTimeToUtc(view.Convert(utc)), Is.EqualTo(utc), view.Name + " round trip");
+		}
+	}
+
+	[Test, Description("A value marked Local is the machine's local time, not the named zone's")]
+	public void ConvertTimeToUtc_LocalInput_UsesTheLocalZoneNotTheViews()
+	{
+		DateTime local = new(2026, 6, 15, 12, 0, 0, DateTimeKind.Local);
+
+		Assert.That(CreateOffsetView().ConvertTimeToUtc(local), Is.EqualTo(local.ToUniversalTime()));
+	}
+
+	[Test, Description("An unspecified value is still read as wall-clock time in the view's zone")]
+	public void ConvertTimeToUtc_UnspecifiedInput_IsReadInTheViewsZone()
+	{
+		DateTime wallClock = new(2026, 6, 15, 12, 0, 0, DateTimeKind.Unspecified);
+
+		Assert.That(CreateOffsetView().ConvertTimeToUtc(wallClock), Is.EqualTo(new DateTime(2026, 6, 15, 5, 0, 0, DateTimeKind.Utc)));
+	}
 }

@@ -100,41 +100,34 @@ public class TimeZoneView : IComparable
 	/// <summary>
 	/// Converts a DateTime to UTC using this time zone as the source
 	/// </summary>
+	/// <remarks>
+	/// A value that already carries its kind is converted by that kind whatever zone the view is
+	/// for. Only an unspecified value is read as wall-clock time in this zone; the Local and named
+	/// zone branches used to relabel a UTC value that way and shift it by the zone's offset
+	/// </remarks>
 	public DateTime ConvertTimeToUtc(DateTime dateTime)
 	{
-		if (TimeZoneInfo == null)
+		if (dateTime.Kind == DateTimeKind.Utc)
 		{
-			return dateTime.Kind switch
-			{
-				DateTimeKind.Utc => dateTime,
-				DateTimeKind.Local => dateTime.ToUniversalTime(),
-				_ => DateTime.SpecifyKind(dateTime, DateTimeKind.Utc),
-			};
+			return dateTime;
 		}
 
-		if (IsUtc)
+		if (dateTime.Kind == DateTimeKind.Local)
 		{
-			if (dateTime.Kind == DateTimeKind.Utc)
-			{
-				return dateTime;
-			}
+			return dateTime.ToUniversalTime();
+		}
 
-			if (dateTime.Kind == DateTimeKind.Local)
-			{
-				return dateTime.ToUniversalTime();
-			}
-
+		if (TimeZoneInfo == null || IsUtc)
+		{
 			return DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
 		}
 
 		if (IsLocal)
 		{
-			dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Local);
-			return dateTime.ToUniversalTime();
+			return DateTime.SpecifyKind(dateTime, DateTimeKind.Local).ToUniversalTime();
 		}
 
-		dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
-		return System.TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo!);
+		return System.TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo);
 	}
 
 	/// <summary>
