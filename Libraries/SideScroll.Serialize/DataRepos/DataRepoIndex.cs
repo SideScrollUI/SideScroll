@@ -21,19 +21,27 @@ public class DataRepoIndex<T>(DataRepoInstance<T> dataRepoInstance, int? maxItem
 	/// <summary>
 	/// Gets or sets the maximum number of items to retain in the index
 	/// </summary>
+	/// <remarks>
+	/// Null is unlimited. Zero is rejected along with negatives: Save() adds to the index before
+	/// writing the data, so a limit of zero pruned every entry as it was added and then wrote data
+	/// that no listing would ever show
+	/// </remarks>
+	/// <exception cref="ArgumentOutOfRangeException">The value is zero or negative</exception>
 	public int? MaxItems
 	{
 		get;
 		set
 		{
-			ArgumentOutOfRangeException.ThrowIfNegative(value ?? 0);
-			field = value;
+			field = ValidateMaxItems(value);
 		}
 	} = ValidateMaxItems(maxItems);
 
 	private static int? ValidateMaxItems(int? value)
 	{
-		ArgumentOutOfRangeException.ThrowIfNegative(value ?? 0);
+		if (value is { } maxItems)
+		{
+			ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maxItems, nameof(MaxItems));
+		}
 		return value;
 	}
 

@@ -499,15 +499,21 @@ public class DataRepoTests : SerializeBaseTest
 		Assert.That(pageItems.Select(item => item.Key), Is.EqualTo(new[] { "first-key", "second-key" }));
 	}
 
-	[Test, Description("DataRepo indices reject negative retention limits")]
-	public void DataRepoIndexRejectsNegativeMaxItems()
+	[Test, Description(
+		"DataRepo indices reject negative and zero retention limits. Zero was accepted, and since " +
+		"Save() adds to the index before writing the data, it pruned every item as it was added and " +
+		"then wrote data no listing would show")]
+	public void DataRepoIndexRejectsNonPositiveMaxItems()
 	{
 		DataRepoInstance<int> instance = OpenRepo();
 
 		Assert.Throws<ArgumentOutOfRangeException>(() => new DataRepoIndex<int>(instance, -1));
+		Assert.Throws<ArgumentOutOfRangeException>(() => new DataRepoIndex<int>(instance, 0));
 
 		var index = new DataRepoIndex<int>(instance);
 		Assert.Throws<ArgumentOutOfRangeException>(() => index.MaxItems = -1);
+		Assert.Throws<ArgumentOutOfRangeException>(() => index.MaxItems = 0);
+		Assert.DoesNotThrow(() => index.MaxItems = null, "null is unlimited");
 	}
 
 	[Test, Description("Items deleted by CleanupCache are pruned from the index on load")]
