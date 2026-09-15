@@ -2059,4 +2059,45 @@ public class JsonConverterTests : SerializeBaseTest
 	}
 
 	#endregion
+
+	#region Malformed Type Names
+
+	public class TypeMemberContainer
+	{
+		public Type? Type { get; set; }
+	}
+
+	[Test, Description(
+		"throwOnError: false only covers a type that isn't found. A $type whose assembly part doesn't " +
+		"parse threw FileLoadException, which failed the whole import rather than leaving the member null")]
+	public void ObjectMemberWithAMalformedTypeNameFallsThrough()
+	{
+		string json = """{"StringObject":{"$type":"Foo, Bar, Version=abc","$value":1}}""";
+
+		ObjectContainerPublicTypes? output = null;
+		Assert.DoesNotThrow(() => output = JsonSerializer.Deserialize<ObjectContainerPublicTypes>(json, JsonConverters.PublicSerializerOptions));
+
+		Assert.That(output!.StringObject, Is.InstanceOf<Dictionary<string, object?>>(), "the untyped read, the same as an unknown type");
+	}
+
+	[Test]
+	public void TypeMemberWithAMalformedTypeNameIsNull()
+	{
+		string json = """{"Type":"Foo, Bar, Version=abc"}""";
+
+		TypeMemberContainer? output = null;
+		Assert.DoesNotThrow(() => output = JsonSerializer.Deserialize<TypeMemberContainer>(json, JsonConverters.PublicSerializerOptions));
+
+		Assert.That(output!.Type, Is.Null);
+	}
+
+	[Test, Description("Control: a well-formed name that isn't found still resolves to null the same way")]
+	public void TypeMemberWithAnUnknownTypeNameIsNull()
+	{
+		TypeMemberContainer? output = JsonSerializer.Deserialize<TypeMemberContainer>("""{"Type":"Nope, Nope"}""", JsonConverters.PublicSerializerOptions);
+
+		Assert.That(output!.Type, Is.Null);
+	}
+
+	#endregion
 }

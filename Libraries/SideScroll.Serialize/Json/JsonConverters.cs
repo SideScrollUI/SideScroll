@@ -194,6 +194,26 @@ public static class JsonConverters
 		}
 	}
 
+	/// <summary>
+	/// Resolves a type name from json, returning null for one that can't be resolved for any reason
+	/// </summary>
+	/// <remarks>
+	/// throwOnError: false only covers a type that isn't found. A name whose assembly part doesn't
+	/// parse, "Foo, Bar, Version=abc", throws FileLoadException from every overload, which failed
+	/// the whole import for a hand-edited or garbled link rather than leaving that one member null
+	/// </remarks>
+	internal static Type? TryGetType(string typeName)
+	{
+		try
+		{
+			return Type.GetType(typeName, throwOnError: false);
+		}
+		catch (Exception)
+		{
+			return null;
+		}
+	}
+
 	private static void IgnoreProtectedDataAttributeModifier(JsonTypeInfo typeInfo)
 	{
 		if (typeInfo.Kind != JsonTypeInfoKind.Object)
@@ -413,7 +433,7 @@ public class ObjectJsonConverter : JsonConverter<object>
 			string? typeName = typeProperty.GetString();
 			if (typeName != null)
 			{
-				Type? actualType = Type.GetType(typeName, throwOnError: false);
+				Type? actualType = JsonConverters.TryGetType(typeName);
 				if (actualType != null && IsAllowedType(actualType))
 				{
 					try
@@ -495,7 +515,7 @@ public class TypeJsonConverter : JsonConverter<Type>
 	{
 		if (reader.GetString() is { } typeName)
 		{
-			return Type.GetType(typeName, throwOnError: false);
+			return JsonConverters.TryGetType(typeName);
 		}
 		return null;
 	}
