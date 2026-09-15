@@ -181,7 +181,8 @@ public class LiveChartSeries : IDisposable //: ChartSeries<ISeries>
 			}
 			else
 			{
-				if (ListSeries.XPropertyInfo?.PropertyType == typeof(DateTime))
+				// The non-nullable type, a DateTime? axis is plotted in ticks like a DateTime one
+				if (ListSeries.XPropertyInfo?.PropertyType.GetNonNullableType() == typeof(DateTime))
 				{
 					var startTime = new DateTime((long)liveChartPoint.X!, DateTimeKind.Utc);
 					if (ListSeries.PeriodDuration is { } timeSpan)
