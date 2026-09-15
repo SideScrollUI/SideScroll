@@ -71,6 +71,15 @@ public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : T
 		{
 			writer.Write(us);
 		}
+		// Native-sized, so stored as 64 bits the way float is stored as a double
+		else if (obj is nint n)
+		{
+			writer.Write((long)n);
+		}
+		else if (obj is nuint un)
+		{
+			writer.Write((ulong)un);
+		}
 		else
 		{
 			throw new SerializerException("Unhandled primitive type", new Tag("Type", Type));
@@ -132,6 +141,15 @@ public class TypeRepoPrimitive(Serializer serializer, TypeSchema typeSchema) : T
 		else if (Type == typeof(char))
 		{
 			obj = Reader!.ReadChar();
+		}
+		// Checked, a value saved on a 64-bit platform can be outside a 32-bit one's range
+		else if (Type == typeof(nint))
+		{
+			obj = checked((nint)Reader!.ReadInt64());
+		}
+		else if (Type == typeof(nuint))
+		{
+			obj = checked((nuint)Reader!.ReadUInt64());
 		}
 		else
 		{

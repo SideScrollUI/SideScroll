@@ -151,4 +151,28 @@ public class SerializePrimitivesTests : SerializeBaseTest
 
 		Assert.That(output, Is.EqualTo(input));
 	}
+
+	public class NativeIntContainer
+	{
+		public nint Signed { get; set; }
+		public nuint Unsigned { get; set; }
+	}
+
+	[Test, Description(
+		"CanAssign() claimed every primitive but SaveObject() handled twelve, so a native-sized " +
+		"integer member failed the save with an unhandled primitive type")]
+	public void SerializeNativeInts()
+	{
+		var input = new NativeIntContainer
+		{
+			Signed = -123456789,
+			Unsigned = 987654321,
+		};
+
+		_serializer.Save(Call, input);
+		NativeIntContainer output = _serializer.Load<NativeIntContainer>(Call);
+
+		Assert.That(output.Signed, Is.EqualTo(input.Signed));
+		Assert.That(output.Unsigned, Is.EqualTo(input.Unsigned));
+	}
 }
