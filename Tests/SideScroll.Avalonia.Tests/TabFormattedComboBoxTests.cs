@@ -177,4 +177,17 @@ public class TabFormattedComboBoxTests
 		// The bound object has to stay reachable, it's what would be holding the combo box
 		GC.KeepAlive(testItem);
 	}
+
+	// The dedupe called ToString() on each choice, so a list offering null as the choice for no
+	// value threw NullReferenceException while the form or toolbar was being built
+	[Test]
+	public void FormattedItemCreateKeepsANullChoice()
+	{
+		List<FormattedItem>? items = null;
+		Assert.DoesNotThrow(() => items = FormattedItem.Create(new object?[] { "a", null, "b", null }));
+
+		Assert.That(items, Has.Count.EqualTo(3), "the two nulls are one choice");
+		Assert.That(items!.Count(item => item.Object == null), Is.EqualTo(1));
+		Assert.That(items!.Select(item => item.Object), Is.EqualTo(new object?[] { "a", null, "b" }));
+	}
 }

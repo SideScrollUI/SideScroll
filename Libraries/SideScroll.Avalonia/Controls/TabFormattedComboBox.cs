@@ -244,11 +244,11 @@ public class FormattedItem(object? obj)
 	/// <summary>Returns the formatted display string of the wrapped object.</summary>
 	public override string? ToString() => Object.Formatted();
 
-	/// <summary>Creates a list of <see cref="FormattedItem"/> wrappers from the given enumerable, de-duplicating by <see cref="object.ToString"/>.</summary>
+	/// <summary>Creates a list of <see cref="FormattedItem"/> wrappers from the given enumerable, de-duplicating by <see cref="object.ToString"/>. A null item is kept as the choice for no value.</summary>
 	public static List<FormattedItem>? Create(IEnumerable? items)
 	{
-		return items?.Cast<object>()
-			.DistinctBy(obj => obj.ToString())
+		return items?.Cast<object?>()
+			.DistinctBy(obj => obj?.ToString())
 			.Select(obj => new FormattedItem(obj))
 			.ToList();
 	}
