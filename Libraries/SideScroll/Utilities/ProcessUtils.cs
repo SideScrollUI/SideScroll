@@ -86,16 +86,31 @@ public static class ProcessUtils
 		}
 		else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 		{
-			Process.Start("xdg-open", url)?.Dispose();
+			Process.Start(CreateStartInfo("xdg-open", url))?.Dispose();
 		}
 		else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 		{
-			Process.Start("open", url)?.Dispose();
+			Process.Start(CreateStartInfo("open", url))?.Dispose();
 		}
 		else
 		{
 			throw new Exception("Unknown platform");
 		}
+	}
+
+	/// <summary>
+	/// Creates the start info for a program taking a single argument, passed as one value whatever it contains
+	/// </summary>
+	/// <remarks>
+	/// Process.Start(fileName, arguments) takes an arguments string, which is tokenized on unquoted
+	/// whitespace and quotes before the child sees it, so a url or path with a space in it arrived
+	/// as two arguments and the rest was dropped. ArgumentList escapes the value instead
+	/// </remarks>
+	internal static ProcessStartInfo CreateStartInfo(string fileName, string argument)
+	{
+		ProcessStartInfo startInfo = new(fileName);
+		startInfo.ArgumentList.Add(argument);
+		return startInfo;
 	}
 
 	/// <summary>
@@ -128,11 +143,11 @@ public static class ProcessUtils
 			}
 			else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
 			{
-				Process.Start("open", folder)?.Dispose();
+				Process.Start(CreateStartInfo("open", folder))?.Dispose();
 			}
 			else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 			{
-				Process.Start("xdg-open", folder)?.Dispose();
+				Process.Start(CreateStartInfo("xdg-open", folder))?.Dispose();
 			}
 		}
 		catch (Exception e)

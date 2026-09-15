@@ -28,6 +28,21 @@ public class ProcessUtilsTests : BaseTest
 		Assert.That(ProcessUtils.GetExplorerArgument("C:/Users/Public/", null), Is.EqualTo(@"""C:\Users\Public"""));
 	}
 
+	[Test, Description(
+		"The Linux and macOS branches of OpenBrowser() and OpenFolder() passed the value through the " +
+		"arguments string, which is split on whitespace and quotes before the child sees it")]
+	public void CreateStartInfoPassesTheValueAsOneArgument()
+	{
+		string url = "file:///home/me/my docs/page \"quoted\".html";
+
+		var startInfo = ProcessUtils.CreateStartInfo("xdg-open", url);
+
+		Assert.That(startInfo.FileName, Is.EqualTo("xdg-open"));
+		Assert.That(startInfo.ArgumentList, Is.EqualTo(new[] { url }), "one argument, spaces and quotes intact");
+		Assert.That(startInfo.Arguments, Is.Empty, "not the tokenized string form");
+		Assert.That(startInfo.UseShellExecute, Is.False);
+	}
+
 	[Test, Platform("Win"), Description("A root keeps its separator, so it's doubled to survive the quote")]
 	public void GetExplorerArgument_DoublesARootSeparator()
 	{
