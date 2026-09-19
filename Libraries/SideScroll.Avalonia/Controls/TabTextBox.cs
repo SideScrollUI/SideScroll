@@ -13,6 +13,7 @@ using SideScroll.Avalonia.Utilities;
 using SideScroll.Tabs.Lists;
 using SideScroll.Utilities;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Reflection;
 
 namespace SideScroll.Avalonia.Controls;
@@ -31,6 +32,16 @@ public class TabTextBox : TextBox
 
 	/// <summary>Gets or sets whether pressing Enter without a modifier key inserts a new line (requires <see cref="TextBox.AcceptsReturn"/> to also be <c>true</c>).</summary>
 	public bool AcceptsPlainEnter { get; set; }
+
+	/// <summary>
+	/// Gets or sets the characters that can be typed, or <c>null</c> to allow any. Defaults to the characters the bound
+	/// property's type can parse, unless an <see cref="AllowedCharsAttribute"/> overrides them.
+	/// </summary>
+	/// <remarks>
+	/// Only typed input is filtered. Pasted and assigned text is left to the binding's validation,
+	/// since silently dropping part of a paste can produce a value the user never entered
+	/// </remarks>
+	public string? AllowedChars { get; set; }
 
 	/// <summary>Returns the string representation of the bound property.</summary>
 	public override string? ToString() => Property?.ToString();
@@ -94,6 +105,7 @@ public class TabTextBox : TextBox
 		}
 
 		SetWatermark(property);
+		SetAllowedChars(property);
 
 		if (property.PropertyInfo.GetCustomAttribute<WordWrapAttribute>() != null)
 		{
@@ -216,6 +228,90 @@ public class TabTextBox : TextBox
 		return mostDerived;
 	}
 
+	private void SetAllowedChars(ListProperty property)
+	{
+		if (property.GetCustomAttribute<AllowedCharsAttribute>() is { } allowedCharsAttribute)
+		{
+			AllowedChars = allowedCharsAttribute.Chars;
+		}
+		else
+		{
+			AllowedChars = GetAllowedChars(property.UnderlyingType, NumberFormatInfo.CurrentInfo);
+		}
+
+		if (property.UnderlyingType == typeof(char))
+		{
+			MaxLength = 1;
+		}
+	}
+
+	/// <summary>
+	/// Returns the characters a value of <paramref name="type"/> can be typed with, or null when any can be
+	/// </summary>
+	/// <remarks>
+	/// This allows characters rather than checking that the text parses, so the partial values typed along
+	/// the way like "-" and "1." can still be entered. The separators come from <paramref name="numberFormat"/>
+	/// to match the culture the binding's converter parses with. A floating point type's NaN and Infinity
+	/// symbols aren't included, since their letters would allow most words
+	/// </remarks>
+	internal static string? GetAllowedChars(Type type, NumberFormatInfo numberFormat)
+	{
+		const string Digits = AllowedCharsAttribute.Digits;
+
+		// An enum's type code is its underlying integer's, but it's entered by name
+		if (type.IsEnum)
+			return null;
+
+		// Parsing accepts '-' for a culture whose negative sign is another character, like U+2212
+		string negativeSign = "-" + numberFormat.NegativeSign;
+
+		switch (Type.GetTypeCode(type))
+		{
+			case TypeCode.Byte:
+			case TypeCode.UInt16:
+			case TypeCode.UInt32:
+			case TypeCode.UInt64:
+				return Digits;
+
+			case TypeCode.SByte:
+			case TypeCode.Int16:
+			case TypeCode.Int32:
+			case TypeCode.Int64:
+				return Digits + negativeSign;
+
+			case TypeCode.Single:
+			case TypeCode.Double:
+				return Digits + negativeSign + numberFormat.PositiveSign + "eE" +
+					numberFormat.NumberDecimalSeparator + numberFormat.NumberGroupSeparator;
+
+			case TypeCode.Decimal:
+				return Digits + negativeSign + numberFormat.PositiveSign +
+					numberFormat.NumberDecimalSeparator + numberFormat.NumberGroupSeparator;
+		}
+
+		if (type == typeof(nuint))
+			return Digits;
+
+		if (type == typeof(nint))
+			return Digits + negativeSign;
+
+		return null;
+	}
+
+	/// <summary>Returns whether every character in <paramref name="text"/> is in <paramref name="allowedChars"/>, which allows any when null</summary>
+	internal static bool IsAllowed(string? text, string? allowedChars)
+	{
+		if (text == null || allowedChars == null)
+			return true;
+
+		foreach (char c in text)
+		{
+			if (!allowedChars.Contains(c))
+				return false;
+		}
+		return true;
+	}
+
 	private void BindProperty(ListProperty property)
 	{
 		var binding = new Binding(property.PropertyInfo.Name)
@@ -273,6 +369,17 @@ public class TabTextBox : TextBox
 		{
 			base.UpdateDataValidation(property, state, error);
 		}
+	}
+
+	protected override void OnTextInput(TextInputEventArgs e)
+	{
+		if (!IsAllowed(e.Text, AllowedChars))
+		{
+			e.Handled = true;
+			return;
+		}
+
+		base.OnTextInput(e);
 	}
 
 	protected override void OnKeyDown(KeyEventArgs e)

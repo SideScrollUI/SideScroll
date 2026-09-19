@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `TabTextBox` only accepts typed characters the bound property's type can parse: digits for the unsigned integers, a negative sign as well for the signed ones, and the current culture's signs, separators, and `e`/`E` for `float` and `double`. A `char` property is limited to one character. The new `[AllowedChars]` attribute overrides the type's default with a literal set, with `Digits`, `Hex`, `Letters`, and `Identifier` constants to build one from, and `TabTextBox.AllowedChars` sets it directly. Only typing is filtered, so pasted text still goes through the binding's validation, and `NaN` and `Infinity` can no longer be typed into a floating point field
 
 ### Fixed
 - A public-only Atlas export, which is what every bookmark link is, now keeps `SortedSet<>`, `Queue<>`, `Stack<>`, `LinkedList<>`, `ReadOnlyCollection<>`, `KeyValuePair<,>`, and `ValueTuple` members. None of them were in `TypeSchema.PublicGenericTypes`, so a `[PublicData]` class holding one exported the member as null (or the default for the two structs) with only a log warning to say so, while a private round trip of the same object kept it. The element types are still checked on their own, so this doesn't widen what a link can carry

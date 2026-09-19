@@ -172,6 +172,48 @@ public class PasswordCharAttribute(char c) : Attribute
 }
 
 /// <summary>
+/// Restricts the characters that can be typed into the property's text box.
+/// </summary>
+/// <param name="chars">Every character that can be typed, as a literal set rather than a pattern.</param>
+/// <remarks>
+/// <b>Apply to:</b> Properties.
+/// <para>
+/// Numeric properties are already restricted to the characters their type can parse, which this overrides.
+/// Only typed input is filtered, so pasted text can still contain other characters. Use a validation
+/// attribute like <c>[RegularExpression]</c> to check the value as a whole.
+/// </para>
+/// </remarks>
+/// <example>
+/// <code>
+/// public class Device
+/// {
+///     [AllowedChars(AllowedCharsAttribute.Hex + ":")]
+///     public string MacAddress { get; set; } = "";
+/// }
+/// </code>
+/// </example>
+[AttributeUsage(AttributeTargets.Property)]
+public class AllowedCharsAttribute(string chars) : Attribute
+{
+	/// <summary>The digits 0-9.</summary>
+	public const string Digits = "0123456789";
+
+	/// <summary>The digits 0-9 and the letters a-f in either case.</summary>
+	public const string Hex = Digits + "abcdefABCDEF";
+
+	/// <summary>The letters a-z in either case.</summary>
+	public const string Letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+	/// <summary>The letters, digits, and underscore that make up an identifier.</summary>
+	public const string Identifier = Letters + Digits + "_";
+
+	/// <summary>
+	/// The characters that can be typed.
+	/// </summary>
+	public string Chars => chars;
+}
+
+/// <summary>
 /// Binds the property to a list of selectable items from another member.
 /// </summary>
 /// <param name="propertyName">The name of the member containing the list of selectable items.</param>
