@@ -39,6 +39,18 @@ public class TypeSchema
 	];
 
 	/// <summary>
+	/// Gets or sets the set of base types whose derived types are all considered public
+	/// </summary>
+	/// <remarks>
+	/// <see cref="PublicTypes"/> matches exact types only, so it can't cover a family of external types
+	/// that can't be marked with <see cref="PublicDataAttribute"/>. For example, every AWS SDK service
+	/// declares its own enum-like subclasses of ConstantClass: registering the base covers all of them,
+	/// and a custom <see cref="TypeRepos.TypeRepo"/> serializes them by value.
+	/// Every type assignable to a registered base becomes public, so register only narrow base types
+	/// </remarks>
+	public static HashSet<Type> PublicBaseTypes { get; set; } = [];
+
+	/// <summary>
 	/// Gets or sets the set of types that are considered private by default
 	/// </summary>
 	public static HashSet<Type> PrivateTypes { get; set; } =
@@ -465,6 +477,12 @@ public class TypeSchema
 
 		if (typeof(Type).IsAssignableFrom(Type))
 			return true;
+
+		foreach (Type publicBaseType in PublicBaseTypes)
+		{
+			if (publicBaseType.IsAssignableFrom(Type))
+				return true;
+		}
 
 		if (Type.IsGenericType)
 		{
