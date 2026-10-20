@@ -1,3 +1,4 @@
+using SideScroll.Extensions;
 using SideScroll.Tabs.Bookmarks.Models;
 
 namespace SideScroll.Tabs.Headless;
@@ -27,11 +28,13 @@ public class HeadlessTabViewer(Project project, HeadlessTabOptions? options = nu
 	/// the root <see cref="HeadlessTabView"/>. Child views are not selected automatically; call
 	/// <see cref="HeadlessTabView.SelectAllItemsAsync"/> or <see cref="HeadlessTabView.SelectItemsAsync(SideScroll.Call, System.Collections.IList)"/>
 	/// to traverse children, or use <see cref="LoadAndTraverseAsync"/> for a one-step operation.
+	/// The root is named <paramref name="label"/> when given, otherwise after the tab itself.
+	/// A name the tab sets on its model while loading still takes precedence.
 	/// </summary>
-	public async Task<HeadlessTabView> LoadTabAsync(Call call, ITab tab)
+	public async Task<HeadlessTabView> LoadTabAsync(Call call, ITab tab, string? label = null)
 	{
 		TabInstance tabInstance = tab.Create();
-		tabInstance.Model.Name = "Start";
+		tabInstance.Model.Name = label ?? GetTabLabel(tab);
 		tabInstance.iTab = tab;
 		tabInstance.Project = Project;
 
@@ -50,7 +53,7 @@ public class HeadlessTabViewer(Project project, HeadlessTabOptions? options = nu
 	/// </summary>
 	public async Task<HeadlessTabView> LoadAndTraverseAsync(Call call, ITab tab, Bookmark? bookmark = null)
 	{
-		HeadlessTabView rootView = await LoadTabAsync(call, tab);
+		HeadlessTabView rootView = await LoadTabAsync(call, tab, bookmark?.Name);
 
 		// Enforce the optional time budget: cancel the task's token after MaxTime. Sub-task timers
 		// created during traversal share this token source, so the whole traversal observes it.
@@ -68,5 +71,17 @@ public class HeadlessTabViewer(Project project, HeadlessTabOptions? options = nu
 			await rootView.SelectAllItemsRecursiveAsync(call, Options.MaxDepth);
 		}
 		return rootView;
+	}
+
+	// Uses the tab's own ToString() when it overrides one, otherwise its spaced type name
+	private static string GetTabLabel(ITab tab)
+	{
+		Type type = tab.GetType();
+		string? label = tab.ToString();
+		if (string.IsNullOrEmpty(label) || label == type.ToString())
+		{
+			return type.Name.WordSpaced();
+		}
+		return label;
 	}
 }

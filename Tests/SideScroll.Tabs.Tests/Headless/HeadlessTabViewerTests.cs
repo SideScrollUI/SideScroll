@@ -166,6 +166,51 @@ public class HeadlessTabViewerTests : BaseTest
 		Assert.That(rootView.Model.Name, Is.EqualTo("AsyncRoot"));
 	}
 
+	/// <summary>Tab that leaves the model name alone and doesn't override ToString().</summary>
+	private class UnnamedTab : ITab
+	{
+		public TabInstance Create() => new();
+	}
+
+	/// <summary>Tab that leaves the model name alone but overrides ToString().</summary>
+	private class ToStringTab : ITab
+	{
+		public override string ToString() => "Custom Title";
+
+		public TabInstance Create() => new();
+	}
+
+	[Test, Description("A root tab that doesn't name its model is labelled by its type name instead of \"Start\".")]
+	public async Task LoadTabAsync_UnnamedTab_UsesTypeName()
+	{
+		var viewer = new HeadlessTabViewer(new Project());
+
+		HeadlessTabView rootView = await viewer.LoadTabAsync(Call, new UnnamedTab());
+
+		Assert.That(rootView.Label, Is.EqualTo("Unnamed Tab"));
+	}
+
+	[Test, Description("A root tab that doesn't name its model is labelled by its ToString() override.")]
+	public async Task LoadTabAsync_UnnamedTab_UsesToString()
+	{
+		var viewer = new HeadlessTabViewer(new Project());
+
+		HeadlessTabView rootView = await viewer.LoadTabAsync(Call, new ToStringTab());
+
+		Assert.That(rootView.Label, Is.EqualTo("Custom Title"));
+	}
+
+	[Test, Description("A root tab that doesn't name its model is labelled by the bookmark's name.")]
+	public async Task LoadAndTraverseAsync_WithBookmark_UsesBookmarkName()
+	{
+		var viewer = new HeadlessTabViewer(new Project());
+		var bookmark = new Bookmark { Name = "Saved View" };
+
+		HeadlessTabView rootView = await viewer.LoadAndTraverseAsync(Call, new ToStringTab(), bookmark);
+
+		Assert.That(rootView.Label, Is.EqualTo("Saved View"));
+	}
+
 	// ─── SelectAllItemsAsync / SelectItemsAsync with ITab children ─────────
 
 	[Test]
