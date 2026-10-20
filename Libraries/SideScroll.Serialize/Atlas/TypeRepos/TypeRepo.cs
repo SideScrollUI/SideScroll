@@ -480,8 +480,8 @@ public abstract class TypeRepo : IDisposable
 			{
 				int typeIndex = Reader.ReadInt16(); // not saved for sealed classes
 
-				// The same range check LoadObjectRef() applies, the index is read from the data.
-				// The object index is still consumed so the stream stays aligned
+				// The same range check LoadObjectRef() and SkipObjectRef() apply, the index is read from the data.
+				// An object index is assumed to follow, since the type that would say otherwise is unknown
 				if (typeIndex < 0 || typeIndex >= Serializer.TypeRepos.Count)
 				{
 					Reader.ReadInt32();
@@ -523,6 +523,14 @@ public abstract class TypeRepo : IDisposable
 			else if (objectType == ObjectType.DerivedType)
 			{
 				int typeIndex = Reader.ReadInt16(); // not saved for sealed classes
+
+				// The index is read from the data, see LoadLazyObjectRef()
+				if (typeIndex < 0 || typeIndex >= Serializer.TypeRepos.Count)
+				{
+					Reader.ReadInt32(); // objectIndex
+					return null;
+				}
+
 				TypeRepo typeRepo = Serializer.TypeRepos[typeIndex];
 
 				// Use the schema, Type is null when it can't be found
@@ -566,8 +574,13 @@ public abstract class TypeRepo : IDisposable
 			if (objectType == ObjectType.DerivedType)
 			{
 				int typeIndex = Reader.ReadInt16();
+
+				// The index is read from the data, see LoadLazyObjectRef()
 				if (typeIndex < 0 || typeIndex >= Serializer.TypeRepos.Count)
+				{
+					Reader.ReadInt32(); // objectIndex
 					return null;
+				}
 
 				TypeRepo typeRepo = Serializer.TypeRepos[typeIndex];
 				if (typeRepo.TypeSchema.IsPrimitive) // object ref can point to primitives
