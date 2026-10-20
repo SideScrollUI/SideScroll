@@ -101,6 +101,14 @@ public class ListSeries
 	public SeriesType SeriesType { get; set; } = SeriesType.Sum;
 
 	/// <summary>
+	/// Gets or sets whether periods with no values count as zero when averaging (default true).
+	/// Leave true for metrics that only report non-zero periods, like errors or throttles. Set false
+	/// for sampled measurements, where an empty period means nothing was measured, so only the
+	/// periods that have values are averaged
+	/// </summary>
+	public bool MissingPeriodsAreZero { get; set; } = true;
+
+	/// <summary>
 	/// Gets or sets the calculated total value
 	/// </summary>
 	public double? Total { get; set; }
@@ -254,7 +262,7 @@ public class ListSeries
 			SeriesType.Sum => TimeRangePeriod.TotalSum(timeRangeValues, timeWindow, PeriodDuration.Value),
 			SeriesType.Minimum => TimeRangePeriod.TotalMinimum(timeRangeValues, timeWindow),
 			SeriesType.Maximum => TimeRangePeriod.TotalMaximum(timeRangeValues, timeWindow),
-			_ => TimeRangePeriod.TotalAverage(timeRangeValues, timeWindow, PeriodDuration.Value),
+			_ => TimeRangePeriod.TotalAverage(timeRangeValues, timeWindow, PeriodDuration.Value, MissingPeriodsAreZero),
 		};
 	}
 

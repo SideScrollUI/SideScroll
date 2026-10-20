@@ -259,6 +259,47 @@ public class TimeRangePeriodTests : BaseTest
 		Assert.That(series.Total, Is.EqualTo(50.75));
 	}
 
+	// A minute of 1 second periods with a point every other second, so half the periods are empty
+	private static ListSeries CreateSparseAverageSeries(TimeSpan periodDuration)
+	{
+		List<TimeRangeValue> values = [];
+		for (int i = 0; i < 30; i++)
+		{
+			DateTime time = StartTime.AddSeconds(i * 2);
+			values.Add(new TimeRangeValue(time, time, 600));
+		}
+
+		return new ListSeries(values)
+		{
+			PeriodDuration = periodDuration,
+			SeriesType = SeriesType.Average,
+		};
+	}
+
+	[Test, Description("Sampled series average only the periods that have values")]
+	public void TotalAverageSkipsPeriodsWithoutValues()
+	{
+		TimeSpan periodDuration = TimeSpan.FromSeconds(1);
+		TimeWindow timeWindow = new(StartTime, StartTime.AddMinutes(1));
+
+		ListSeries series = CreateSparseAverageSeries(periodDuration);
+		series.MissingPeriodsAreZero = false;
+
+		Assert.That(series.CalculateTotal(timeWindow), Is.EqualTo(600));
+	}
+
+	[Test, Description("By default periods without values count as zero, averaging across the window")]
+	public void TotalAverageCountsPeriodsWithoutValuesAsZero()
+	{
+		TimeSpan periodDuration = TimeSpan.FromSeconds(1);
+		TimeWindow timeWindow = new(StartTime, StartTime.AddMinutes(1));
+
+		ListSeries series = CreateSparseAverageSeries(periodDuration);
+
+		// 30 of the 60 periods have values
+		Assert.That(series.CalculateTotal(timeWindow), Is.EqualTo(300));
+	}
+
 	[Test, Description("A point exactly at the inclusive window start participates in min and max totals")]
 	public void TotalMinMaxIncludePointAtWindowStart()
 	{

@@ -233,9 +233,14 @@ public class TimeRangePeriod : ITags
 	}
 
 	/// <summary>
-	/// Calculates the total average value across all periods
+	/// Calculates the duration weighted average value across all periods
 	/// </summary>
-	public static double TotalAverage(IEnumerable<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration)
+	/// <param name="timeRangeValues">Series of TimeRangeValues to average</param>
+	/// <param name="timeWindow">Specifies the Start to End times to average over</param>
+	/// <param name="periodDuration">Individual period durations to aggregate values for</param>
+	/// <param name="missingPeriodsAreZero">Whether periods with no values count as zero in the average,
+	/// rather than averaging only the periods that have values</param>
+	public static double TotalAverage(IEnumerable<TimeRangeValue> timeRangeValues, TimeWindow timeWindow, TimeSpan periodDuration, bool missingPeriodsAreZero = true)
 	{
 		var periods = Periods(timeRangeValues, timeWindow, periodDuration);
 		if (periods == null)
@@ -251,7 +256,13 @@ public class TimeRangePeriod : ITags
 		if (totalDuration.Ticks == 0)
 			return 0;
 
-		totalDuration = totalDuration.Max(timeWindow.Duration);
+		// Padding the denominator out to the full window counts empty periods as zero, which suits a
+		// metric that only reports non-zero periods. For a sampled measurement the empty periods were
+		// never measured, and padding would scale its average down by the fraction left empty
+		if (missingPeriodsAreZero)
+		{
+			totalDuration = totalDuration.Max(timeWindow.Duration);
+		}
 
 		return totalSum / totalDuration.Ticks;
 	}
