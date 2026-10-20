@@ -122,11 +122,12 @@ public class TabTextBoxTests
 	[TestCase(typeof(uint))]
 	[TestCase(typeof(ulong))]
 	[TestCase(typeof(nuint))]
-	public void UnsignedIntegersAllowOnlyDigits(Type type)
+	public void UnsignedIntegersAllowDigitsAndThePositiveSign(Type type)
 	{
 		string? allowedChars = TabTextBox.GetAllowedChars(type, Invariant);
 
 		Assert.That(TabTextBox.IsAllowed("0123456789", allowedChars), Is.True);
+		Assert.That(TabTextBox.IsAllowed("+5", allowedChars), Is.True);
 		Assert.That(TabTextBox.IsAllowed("-", allowedChars), Is.False);
 		Assert.That(TabTextBox.IsAllowed(".", allowedChars), Is.False);
 		Assert.That(TabTextBox.IsAllowed("a", allowedChars), Is.False);
@@ -142,6 +143,7 @@ public class TabTextBoxTests
 		string? allowedChars = TabTextBox.GetAllowedChars(type, Invariant);
 
 		Assert.That(TabTextBox.IsAllowed("-123", allowedChars), Is.True);
+		Assert.That(TabTextBox.IsAllowed("+123", allowedChars), Is.True);
 		Assert.That(TabTextBox.IsAllowed(".", allowedChars), Is.False);
 		Assert.That(TabTextBox.IsAllowed("e", allowedChars), Is.False);
 	}
@@ -181,6 +183,33 @@ public class TabTextBoxTests
 
 		Assert.That(TabTextBox.IsAllowed("1'234,5", allowedChars), Is.True);
 		Assert.That(TabTextBox.IsAllowed(".", allowedChars), Is.False);
+	}
+
+	[TestCase(" ")]
+	[TestCase(" ")]
+	[Description("Parsing matches a plain space for a no-break space group separator")]
+	public void SpaceIsAllowedForANoBreakSpaceGroupSeparator(string groupSeparator)
+	{
+		var numberFormat = new NumberFormatInfo
+		{
+			NumberDecimalSeparator = ",",
+			NumberGroupSeparator = groupSeparator,
+		};
+
+		foreach (Type type in new[] { typeof(double), typeof(decimal) })
+		{
+			string? allowedChars = TabTextBox.GetAllowedChars(type, numberFormat);
+
+			Assert.That(TabTextBox.IsAllowed("1 234,5", allowedChars), Is.True, type.Name);
+			Assert.That(TabTextBox.IsAllowed(groupSeparator, allowedChars), Is.True, type.Name);
+			Assert.That(double.Parse("1 234,5", numberFormat), Is.EqualTo(1234.5), "the parser accepts the space");
+		}
+	}
+
+	[Test, Description("A space is only added for a no-break space group separator")]
+	public void SpaceIsNotAllowedForOtherGroupSeparators()
+	{
+		Assert.That(TabTextBox.IsAllowed(" ", TabTextBox.GetAllowedChars(typeof(double), Invariant)), Is.False);
 	}
 
 	[Test, Description("Parsing accepts '-' for a culture whose negative sign is another character")]

@@ -265,35 +265,46 @@ public class TabTextBox : TextBox
 		// Parsing accepts '-' for a culture whose negative sign is another character, like U+2212
 		string negativeSign = "-" + numberFormat.NegativeSign;
 
+		// Every integer parses a leading positive sign, the unsigned ones included
+		string positiveSign = numberFormat.PositiveSign;
+
+		// Parsing matches a plain space for a no-break space group separator, like fr-FR's U+202F,
+		// which a keyboard doesn't type
+		string groupSeparator = numberFormat.NumberGroupSeparator;
+		if (groupSeparator is " " or " ")
+		{
+			groupSeparator += " ";
+		}
+
 		switch (Type.GetTypeCode(type))
 		{
 			case TypeCode.Byte:
 			case TypeCode.UInt16:
 			case TypeCode.UInt32:
 			case TypeCode.UInt64:
-				return Digits;
+				return Digits + positiveSign;
 
 			case TypeCode.SByte:
 			case TypeCode.Int16:
 			case TypeCode.Int32:
 			case TypeCode.Int64:
-				return Digits + negativeSign;
+				return Digits + negativeSign + positiveSign;
 
 			case TypeCode.Single:
 			case TypeCode.Double:
-				return Digits + negativeSign + numberFormat.PositiveSign + "eE" +
-					numberFormat.NumberDecimalSeparator + numberFormat.NumberGroupSeparator;
+				return Digits + negativeSign + positiveSign + "eE" +
+					numberFormat.NumberDecimalSeparator + groupSeparator;
 
 			case TypeCode.Decimal:
-				return Digits + negativeSign + numberFormat.PositiveSign +
-					numberFormat.NumberDecimalSeparator + numberFormat.NumberGroupSeparator;
+				return Digits + negativeSign + positiveSign +
+					numberFormat.NumberDecimalSeparator + groupSeparator;
 		}
 
 		if (type == typeof(nuint))
-			return Digits;
+			return Digits + positiveSign;
 
 		if (type == typeof(nint))
-			return Digits + negativeSign;
+			return Digits + negativeSign + positiveSign;
 
 		return null;
 	}
