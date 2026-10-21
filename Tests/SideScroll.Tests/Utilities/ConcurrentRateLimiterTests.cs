@@ -93,7 +93,7 @@ public class ConcurrentRateLimiterTests : BaseTest
 
 		// Cancelled well inside the ~100ms refill, so the wait is rate limited when it's cancelled
 		using var cancellation = new CancellationTokenSource(TimeSpan.FromMilliseconds(10));
-		Assert.ThrowsAsync<OperationCanceledException>(async () =>
+		await Assert.ThrowsAsync<OperationCanceledException>(async () =>
 			await limiter.WaitAsync(cancellation.Token));
 
 		// This needs the concurrency slot released by the cancelled wait. A rate token should
@@ -113,7 +113,7 @@ public class ConcurrentRateLimiterTests : BaseTest
 
 		using IDisposable nextRelease = await limiter.WaitAsync();
 		using var cancellation = new CancellationTokenSource(TimeSpan.FromMilliseconds(20));
-		Assert.ThrowsAsync<OperationCanceledException>(async () =>
+		await Assert.ThrowsAsync<OperationCanceledException>(async () =>
 			await limiter.WaitAsync(cancellation.Token));
 	}
 
@@ -126,7 +126,7 @@ public class ConcurrentRateLimiterTests : BaseTest
 
 		limiter.Dispose();
 
-		Assert.ThrowsAsync<OperationCanceledException>(async () =>
+		await Assert.ThrowsAsync<OperationCanceledException>(async () =>
 			await waiting.WaitAsync(TimeSpan.FromSeconds(1)));
 		Assert.DoesNotThrow(release.Dispose);
 	}

@@ -65,7 +65,7 @@ public class SerializerKeyValueStoreTests : SerializeBaseTest
 		SerializerKeyValueStore serializer = CreateSerializer();
 		_store.Unreachable = true;
 
-		Assert.Catch(() => serializer.Save(Call, "value"));
+		Assert.That(() => serializer.Save(Call, "value"), Throws.InstanceOf<Exception>());
 	}
 
 	[Test]

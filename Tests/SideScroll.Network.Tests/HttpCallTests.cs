@@ -74,7 +74,7 @@ public class HttpCallTests : BaseTest
 	[Test, Description(
 		"The cancel token reaches SendAsync now, and a cancelled call stops instead of working " +
 		"through every remaining retry")]
-	public void CancellingStopsTheRequest()
+	public async Task CancellingStopsTheRequest()
 	{
 		StubHandler handler = new(_ => Ok("unused"));
 		using HttpClient client = new(handler);
@@ -82,7 +82,7 @@ public class HttpCallTests : BaseTest
 
 		// ThrowsAsync, not Assert.That(async () => ...), which binds to the void TestDelegate and
 		// never awaits the returned task, so the constraint passes whatever happens
-		Assert.ThrowsAsync<TaskCanceledException>(
+		await Assert.ThrowsAsync<TaskCanceledException>(
 			async () => await httpCall.GetBytesAsync("http://localhost/x"));
 
 		// HttpClient dispatches to the handler before the cancelled token surfaces, so one request
@@ -91,14 +91,14 @@ public class HttpCallTests : BaseTest
 	}
 
 	[Test, Description("A read failure is retried rather than propagating, and the cause survives the final throw")]
-	public void AReadFailureRetriesAndKeepsItsCause()
+	public async Task AReadFailureRetriesAndKeepsItsCause()
 	{
 		StubHandler handler = new(_ => throw new IOException("read failed"));
 		using HttpClient client = new(handler);
 		var httpCall = new StubHttpCall(new Call(), client);
 
-		Exception exception = Assert.ThrowsAsync<Exception>(
-			async () => await httpCall.GetBytesAsync("http://localhost/x"))!;
+		Exception exception = (await Assert.ThrowsAsync<Exception>(
+			async () => await httpCall.GetBytesAsync("http://localhost/x")))!;
 
 		Assert.That(handler.RequestCount, Is.EqualTo(HttpCall.MaxAttempts));
 		Assert.That(exception.InnerException, Is.InstanceOf<IOException>(),

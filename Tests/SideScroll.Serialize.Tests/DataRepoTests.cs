@@ -636,7 +636,9 @@ public class DataRepoTests : SerializeBaseTest
 			Items = [new(0, null!)],
 		};
 
-		Assert.Catch(() => index.SaveIndices(broken), "A failed index write has to reach the caller.");
+		// Throws.InstanceOf rather than Assert.Catch, which NUnit 5.0.0 checks as an exact type
+		Assert.That(() => index.SaveIndices(broken), Throws.InstanceOf<Exception>(),
+			"A failed index write has to reach the caller.");
 
 		Assert.That(new FileInfo(index.PrimaryIndexPath).Length, Is.EqualTo(originalLength),
 			"The previous index is untouched.");

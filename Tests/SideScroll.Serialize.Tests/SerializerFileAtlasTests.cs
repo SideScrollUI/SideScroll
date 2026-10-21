@@ -90,9 +90,11 @@ public class SerializerFileAtlasTests : SerializeBaseTest
 		{
 			SerializerFileAtlas.SaveAttemptsMax = 2; // Keep the retry backoff short
 
-			// Reflection wraps the getter's exception, so assert it arrives rather than its type
-			Assert.Catch(
+			// Reflection wraps the getter's exception, so assert it arrives rather than its type.
+			// Throws.InstanceOf rather than Assert.Catch, which NUnit 5.0.0 checks as an exact type
+			Assert.That(
 				() => SerializerFileAtlas.CreateForFile(filePath).Save(Call, new ThrowsWhenSerialized()),
+				Throws.InstanceOf<Exception>(),
 				"A save that never succeeds has to reach the caller.");
 		}
 		finally
