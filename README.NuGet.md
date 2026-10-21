@@ -3,7 +3,7 @@
 [![Live Demo](https://img.shields.io/badge/demo-live-success)](https://sidescrollui.github.io/SideScroll/)
 [![NuGet](https://img.shields.io/nuget/v/SideScroll.svg)](https://www.nuget.org/packages/SideScroll)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/SideScrollUI/SideScroll/blob/main/LICENSE)
-[![.NET](https://img.shields.io/badge/.NET-8.0-purple.svg)](https://dotnet.microsoft.com/download)
+[![.NET](https://img.shields.io/badge/.NET-10.0-purple.svg)](https://dotnet.microsoft.com/download)
 [![Avalonia](https://img.shields.io/badge/Avalonia-11.3-blue.svg)](https://github.com/AvaloniaUI/Avalonia)
 
 **A cross-platform Avalonia UI framework for building fast, navigable, data-driven applications with automatically generated forms and smart tab navigation.**
