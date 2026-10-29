@@ -4,7 +4,7 @@
     - `git clone https://github.com/SideScrollUI/sidescroll.git`
 2. Install a C# IDE
    - Visual Studio 2026 recommended (community edition is fine)
-3. Open `SideScroll.sln` in IDE
+3. Open `SideScroll.slnx` in IDE
 4. Start SideScroll in Debugger
     - It's recommended to always run it in debug mode
   

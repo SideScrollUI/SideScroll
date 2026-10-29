@@ -1,6 +1,6 @@
 {
   "solution": {
-    "path": "SideScroll.sln",
+    "path": "SideScroll.slnx",
     "projects": [
       "Libraries\\SideScroll\\SideScroll.csproj",
       "Libraries\\SideScroll.Avalonia\\SideScroll.Avalonia.csproj",

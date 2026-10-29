@@ -29,7 +29,7 @@
     - make sure to restart after
 
 
-`dotnet restore SideScroll.sln`
+`dotnet restore SideScroll.slnx`
 
 - Files
   - Make sure the `launch.preLaunchTask` matches the `tasks.label`

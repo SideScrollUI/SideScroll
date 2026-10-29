@@ -6,7 +6,7 @@
         // Includes Avalonia, Web Servers, and Core Libraries
         {
             "label": "build SideScroll",
-            "command": "dotnet build SideScroll.sln",
+            "command": "dotnet build SideScroll.slnx",
             "type": "shell",
             "group": "build",
             "presentation": {
