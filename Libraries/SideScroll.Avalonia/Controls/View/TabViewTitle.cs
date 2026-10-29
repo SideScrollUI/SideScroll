@@ -142,11 +142,11 @@ public class TabViewTitle : Border, IDisposable
 
 	public void Dispose()
 	{
-		if (ContextMenu != null)
+		if (ContextMenu is IDisposable contextMenu)
 		{
-			ContextMenu.ItemsSource = null;
-			ContextMenu = null;
+			contextMenu.Dispose(); // Clears the TabViewContextMenu's items and its references to the view and instance
 		}
+		ContextMenu = null;
 		Child = null;
 	}
 }

@@ -1021,6 +1021,7 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 					return;
 			}
 
+			bool hadSelection = dataGridSelectedItems.Count > 0;
 			_disableSaving++;
 
 			// datagrid has a bug and doesn't reselect cleared records correctly
@@ -1035,17 +1036,25 @@ public class TabDataGrid : Grid, ITabSelector, ITabItemSelector, ITabDataSelecto
 
 			_ignoreSelectionChanged = false;
 
+			int addedCount = 0;
 			foreach (object obj in value)
 			{
 				if (List!.Contains(obj))
 				{
 					DataGrid.SelectedItems.Add(obj);
+					addedCount++;
 				}
 			}
 			DataGrid.InvalidateVisual(); // required for autoselection to work
 			if (value.Count > 0)
 			{
 				Dispatcher.UIThread.Post(() => ScrollIntoView(value[0]), DispatcherPriority.ApplicationIdle);
+
+				if (addedCount == 0 && hadSelection)
+				{
+					// Nothing was reselected after the suppressed Clear(), so raise the event it would have raised
+					UpdateSelection();
+				}
 			}
 			_disableSaving--;
 		}

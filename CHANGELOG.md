@@ -8,8 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- `TabProgressBar`, a `ProgressBar` that turns `IsIndeterminate` off when it leaves the logical tree and back on if it's attached again. Avalonia keeps an indeterminate bar's infinite animation subscribed to the global clock after the control is detached, which otherwise keeps the bar and everything reachable from it alive
 
 ### Fixed
+- `TabView` shows its loading state with a `TabProgressBar` and disposes the loading `TabViewTitle` when the loading controls are cleared. Avalonia keeps an indeterminate progress bar's infinite animation subscribed to the global clock after the control is detached, so every tab that ever showed the loading state stayed reachable through the animation, the loading grid, and the title's reference back to the view, along with all the controls, charts, and logs the view owned. `TabViewTitle.Dispose()` also disposes the title's `TabViewContextMenu`, which clears the menu's own references back to the view and instance, and a `ShowLoading()` posted before the view was disposed no longer rebuilds the loading controls on it
+- `TabView` gives its `TabInstance.SelectedItems` a copy of the selection instead of the selector's own list. A data grid's `SelectedItems` is the `DataGrid`'s live collection, which references the `DataGrid`, so an instance kept the previous load's grid, its visual tree, and every child tab that was open under it alive after the view reloaded or closed. The copy is refreshed when the selection changes and cleared with the view's controls, and `TabDataGrid` now raises its selection changed event when a selection it's given matches none of its rows, since the copy would otherwise keep reporting the rows that were just deselected
 
 ### Changed
 

@@ -101,6 +101,8 @@ public class TabView : Grid, IDisposable
 	private TabSplitGrid? _tabChildControls;
 	private Panel? _fillerPanel; // GridSplitter doesn't work without control on right side
 
+	private TabViewTitle? _loadingTitle; // References this view, so it is disposed with the other controls
+
 	/// <summary>
 	/// Raised each time this tab's child controls have been created and <see cref="TabInstance.ChildTabInstances"/>
 	/// has been updated. Fires again when the selection changes or async data adds new children.
@@ -474,6 +476,7 @@ public class TabView : Grid, IDisposable
 			AddTasks();
 		AddData();
 
+		UpdateSelectedItems();
 		UpdateChildControls();
 	}
 
@@ -627,6 +630,9 @@ public class TabView : Grid, IDisposable
 	/// <summary>Replaces the tab content with an indeterminate progress bar and optional loading message.</summary>
 	public void ShowLoading()
 	{
+		// Posted, so it can arrive after the view was disposed
+		if (_disposedValue) return;
+
 		ClearControls(true);
 
 		// This will get cleared when the view reloads
@@ -640,13 +646,15 @@ public class TabView : Grid, IDisposable
 			MaxWidth = 350,
 		};
 
-		TabViewTitle title = new(this, Model.Name)
+		_loadingTitle = new TabViewTitle(this, Model.Name)
 		{
 			VerticalAlignment = VerticalAlignment.Top,
 		};
-		containerGrid.Children.Add(title);
+		containerGrid.Children.Add(_loadingTitle);
 
-		ProgressBar progressBar = new()
+		// Stops its own indeterminate animation when cleared, which would otherwise keep this grid,
+		// the title, and through it the whole view alive after loading finishes
+		TabProgressBar progressBar = new()
 		{
 			IsIndeterminate = true,
 			Height = 3,
@@ -835,21 +843,26 @@ public class TabView : Grid, IDisposable
 		_fillerPanel?.Width = GetFillerPanelWidth();
 	}
 
-	private void UpdateChildControls(bool recreate = false)
+	private static List<object?>? CopyItems(IList? items) => items?.Cast<object?>().ToList();
+
+	// Called when the selection changes rather than from UpdateChildControls(), which the dispatch loader
+	// re-runs every 10 ms until the children can show
+	private void UpdateSelectedItems()
 	{
 		// These need to be set regardless of if the children show
+		// Copied, since a DataGrid's SelectedItems references the DataGrid, and the instance outlives this view's controls
 		if (TabDatas.Count > 0)
 		{
-			Instance.SelectedItems = TabDatas[0].SelectedItems;
+			Instance.SelectedItems = CopyItems(TabDatas[0].SelectedItems);
 		}
-		else
+		else if (CustomTabControls.FirstOrDefault() is { } tabSelector)
 		{
-			if (CustomTabControls.FirstOrDefault() is { } tabSelector)
-			{
-				Instance.SelectedItems = tabSelector.SelectedItems;
-			}
+			Instance.SelectedItems = CopyItems(tabSelector.SelectedItems);
 		}
+	}
 
+	private void UpdateChildControls(bool recreate = false)
+	{
 		if (!ShowChildren)
 		{
 			_updateChildControls = true;
@@ -1014,6 +1027,7 @@ public class TabView : Grid, IDisposable
 
 	private void ParentListSelectionChanged(object? sender, TabSelectionChangedEventArgs e)
 	{
+		UpdateSelectedItems();
 		UpdateChildControls(e.Recreate);
 
 		Instance.SelectionChanged(sender, e);
@@ -1034,6 +1048,9 @@ public class TabView : Grid, IDisposable
 		}
 		TabDatas.Clear();
 
+		// The snapshot came from the selectors just disposed
+		Instance.SelectedItems = null;
+
 		if (TabActions != null)
 		{
 			//tabActions.Dispose();
@@ -1051,6 +1068,12 @@ public class TabView : Grid, IDisposable
 		{
 			_tabTitle.Dispose();
 			_tabTitle = null;
+		}
+
+		if (_loadingTitle != null)
+		{
+			_loadingTitle.Dispose();
+			_loadingTitle = null;
 		}
 
 		if (_tabParentControls != null)
