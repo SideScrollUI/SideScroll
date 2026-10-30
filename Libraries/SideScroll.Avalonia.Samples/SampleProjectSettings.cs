@@ -20,7 +20,7 @@ public class SampleProjectSettings : ProjectSettings
 		Name = "SideScroll",
 		LinkType = "sidescroll",
 		Version = ProgramVersion(),
-		DataVersion = new Version(0, 26, 0),
+		DataVersion = new Version(0, 27, 0),
 		CustomTitleIcon = Logo.Svg.SideScrollTranslucent,
 	};
 }
